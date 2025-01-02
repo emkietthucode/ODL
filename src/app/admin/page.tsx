@@ -1,4 +1,8 @@
+"use client"
+import useInsertCountryModal from "../../../hooks/useInsertCountryModal";
+
 const CountryDashboard = () => {
+    const insertCountryModal = useInsertCountryModal();
     return ( 
         <div className="flex flex-col min-h-screen">
             <div className="bg-light-purple-admin p-8 flex justify-between items-center">
@@ -7,9 +11,9 @@ const CountryDashboard = () => {
                     <input
                     type="text"
                     placeholder="Search"
-                    className="border w-[500px] rounded-full px-4 py-2"
+                    className="border w-full sm:w-[200px] md:w-[300px] lg:w-[400px] max-w-full rounded-full px-4 py-2"
                     />
-                    <button className="bg-blue-500 w-[120px] text-white px-4 py-2 rounded-md">
+                    <button onClick={insertCountryModal.onOpen} className="bg-blue-500 w-[120px] text-white px-4 py-2 rounded-md">
                     + Thêm
                     </button>
                 </div>
