@@ -6,8 +6,8 @@ import Modal from "./Modal";
 import Input from "@/components/input";
 import { FieldValues,SubmitHandler,useForm } from "react-hook-form";
 import { useState } from "react";
-import {toast} from "react-hot-toast";
 import { Button } from "./ui/button";
+import {toast} from "react-hot-toast";
 //import { useUser } from "@/hooks/useUser";
 //import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
@@ -36,12 +36,11 @@ const InsertCountryModal = () => {
         try {
             setIsLoading(true);
             console.log(values);
-            toast.error("Missing file");
 
             const flagFile = values.flag?.[0];
 
             if (!flagFile /*|| !user*/){
-                toast.error("Missing file");
+                toast.error("Thêm mới không thành công.")    
                 return;
             }
             //const uniqueID = uniqid();
@@ -94,12 +93,12 @@ const InsertCountryModal = () => {
 
             router.refresh();
             setIsLoading(false);
-            toast.success("Song created")
+            toast.success("Thêm quốc gia mới thành công.");
             reset();
             insertCountryModal.onClose();
 
         } catch (error) {
-            toast.error("Something went wrong")
+            toast.error("Thêm mới không thành công.")
         } finally{
             setIsLoading(false);
         }

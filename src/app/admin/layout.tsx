@@ -1,6 +1,6 @@
-import NavBar from "@/components/navbar";
 import SideBar from "@/components/sidebar";
 import ModalProvider from "../../../providers/modal-provider";
+import ToasterProvider from "../../../providers/toaster-provider";
 
 const AdminDashboard = ({
     children
@@ -14,6 +14,7 @@ const AdminDashboard = ({
           <div className="grow border-l-2 border-light-purple">
             {children}
           </div>
+          <ToasterProvider/>
         </div>
     );
 }
