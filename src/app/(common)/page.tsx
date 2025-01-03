@@ -1,5 +1,5 @@
 import ScrollToTopButton from '@/components/scroll-to-top-button'
-import { Button } from '../components/ui/button'
+import { Button } from '@/components/ui/button'
 
 const Home = () => {
   return (
