@@ -1,38 +1,78 @@
+import Link from 'next/link'
+import { Button, buttonVariants } from './ui/button'
+import { FaFacebookF } from 'react-icons/fa'
+import { FaInstagram } from 'react-icons/fa'
+import { FaYoutube } from 'react-icons/fa'
+import { twMerge } from 'tailwind-merge'
+
 const Footer = () => {
-    return (  
-        <footer className="bg-light-purple py-8">
-        <div className="container mx-auto flex justify-between text-gray-600">
-          <div>
-            <h2 className="font-bold mb-2">Address</h2>
-            <p>227 Nguyen Van Cu Street, Ward 4, District 5, HCMC</p>
-          </div>
-          <div>
-            <h2 className="font-bold mb-2">Info</h2>
-            <ul>
-              <li>Take a Test</li>
-              <li>Learn</li>
-              <li>Country Setting</li>
-              <li>About Us</li>
-              <li>Feedback</li>
-              <li>Contacts</li>
-            </ul>
-          </div>
-          <div>
-            <h2 className="font-bold mb-2">Contact us</h2>
-            <p>+1 891 989-11-91</p>
-            <p>help@odl.com</p>
-            <div className="flex space-x-2 mt-2">
-              <a href="#" className="text-gray-500 hover:text-purple">Instagram</a>
-              <a href="#" className="text-gray-500 hover:text-purple">Facebook</a>
-              <a href="#" className="text-gray-500 hover:text-purple">YouTube</a>
-            </div>
-          </div>
+  return (
+    <footer className="w-full bg-light-purple p-[60px]">
+      <div className="w-full h-0.5 bg-white mt-9"></div>
+
+      <div className="flex justify-between gap-6">
+        <div className="text-[#60548A] flex-1">
+          <h4 className="font-medium mt-6 mb-5">Địa chỉ</h4>
+          <ul className="max-w-[280px]">
+            <li className="opacity-60 font-normal">
+              227 Đường Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh
+            </li>
+          </ul>
         </div>
-        <div className="text-center text-gray-500 mt-8">
-          © 2024 — Copyright
+
+        <div className="text-[#60548A] flex-1">
+          <h4 className="font-medium mt-6 mb-5">Thông tin</h4>
+          <ul>
+            <li className="opacity-60 font-normal">Làm bài thi thử</li>
+            <li className="opacity-60 font-normal">Học lý thuyết</li>
+            <li className="opacity-60 font-normal">Chọn quốc gia</li>
+            <li className="opacity-60 font-normal">Đánh giá</li>
+            <li className="opacity-60 font-normal">Về chúng tôi</li>
+          </ul>
         </div>
-      </footer>
-    );
+
+        <div className="text-[#60548A] flex-1">
+          <h4 className="font-medium mt-6 mb-5">Liên hệ</h4>
+          <ul>
+            <li className="opacity-60 font-normal">+1 891 989-11-91</li>
+            <li className="opacity-60 font-normal">help@odl.com</li>
+          </ul>
+        </div>
+
+        <div className="flex text-[#60548A] opacity-80 gap-2 mt-6">
+          <Link
+            href="/"
+            className={twMerge(
+              buttonVariants({ variant: 'outline' }),
+              'rounded-full p-2 aspect-square'
+            )}
+          >
+            <FaFacebookF />
+          </Link>
+
+          <Link
+            href="/"
+            className={twMerge(
+              buttonVariants({ variant: 'outline' }),
+              'rounded-full p-2 aspect-square'
+            )}
+          >
+            <FaInstagram />
+          </Link>
+
+          <Link
+            href="/"
+            className={twMerge(
+              buttonVariants({ variant: 'outline' }),
+              'rounded-full p-2 aspect-square'
+            )}
+          >
+            <FaYoutube />
+          </Link>
+        </div>
+      </div>
+    </footer>
+  )
 }
- 
-export default Footer;
+
+export default Footer
