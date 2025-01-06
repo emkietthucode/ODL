@@ -1,5 +1,5 @@
 "use client"
-import useInsertCountryModal from "../../../hooks/useInsertCountryModal";
+import useInsertCountryModal from "../../../../hooks/useInsertCountryModal";
 
 const CountryDashboard = () => {
     const insertCountryModal = useInsertCountryModal();
