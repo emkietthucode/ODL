@@ -26,43 +26,43 @@ const SideBar = () => {
             icon: CountryIcon,
             hoverIcon: CountryHoverIcon,
             label: "Quốc gia",
-            active: pathname === '/admin',
-            href: '/admin'
+            active: pathname === '/admin/countries',
+            href: '/admin/countries'
         },
         {
             icon: StateIcon,
             hoverIcon: StateHoverIcon,
             label: "Tiểu bang",
-            active: pathname === '/states',
-            href: '/states'
+            active: pathname === '/admin/states',
+            href: '/admin/states'
         },
         {
             icon: LicenseIcon,
             hoverIcon: LicenseHoverIcon,
             label: "Hạng bằng",
-            active: pathname === '/licenses',
-            href: '/licenses'
+            active: pathname === '/admin/licenses',
+            href: '/admin/licenses'
         },
         {
             icon: TestIcon,
             hoverIcon: TestHoverIcon,
             label: "Đề thi",
-            active: pathname === '/tests',
-            href: '/tests'
+            active: pathname === '/admin/tests',
+            href: '/admin/tests'
         },
         {
             icon: UserIcon,
             hoverIcon: UserHoverIcon,
             label: "Người dùng",
-            active: pathname === '/users',
-            href: '/users'
+            active: pathname === '/admin/users',
+            href: '/admin/users'
         },
         {
             icon: PathIcon,
             hoverIcon: PathHoverIcon,
             label: "Lộ trình",
-            active: pathname === '/learning-paths',
-            href: '/learning-paths'
+            active: pathname === '/admin/learning-paths',
+            href: '/admin/learning-paths'
         }
     ],[pathname]);
 

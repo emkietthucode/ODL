@@ -1,72 +1,148 @@
-"use client"
-import useInsertCountryModal from "../../../../hooks/useInsertCountryModal";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+'use client'
+import useInsertCountryModal from '../../../../hooks/useInsertCountryModal'
+import { useState, useEffect } from 'react'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { Button } from '@/components/ui/button'
+import { ChevronLeft, ChevronRight, Pencil, Trash2 } from 'lucide-react'
+import supabase from '@/utils/supabase/supabase'
+import toast from 'react-hot-toast'
+import { get } from 'http'
+import { KhuVuc } from '../../../../types'
 
-const CountryDashboard = () => {
-    const insertCountryModal = useInsertCountryModal();
-    return ( 
-        <div className="flex flex-col min-h-screen">
-            <div className="bg-light-purple-admin p-8 flex justify-between items-center">
-                <h1 className="text-purple text-2xl font-bold ml-10">QUỐC GIA</h1>
-                <div className="flex items-center space-x-4">
-                    <input
-                    type="text"
-                    placeholder="Search"
-                    className="border w-full sm:w-[200px] md:w-[300px] lg:w-[400px] max-w-full rounded-full px-4 py-2"
-                    />
-                    <button onClick={insertCountryModal.onOpen} className="bg-blue-500 w-[120px] text-white px-4 py-2 rounded-md">
-                    + Thêm
-                    </button>
-                </div>
-            </div>
+const ITEMS_PER_PAGE = 10
 
-            <div className="bg-gray-50 grow">
-                Table
-            {/* <table className="min-w-full">
-                <thead>
-                <tr className="bg-gray-100">
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ID
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    QUỐC GIA
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    NGÔN NGỮ
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    QUỐC KỲ
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    TÙY CHỈNH
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td className="px-6 py-4 whitespace-nowrap">001</td>
-                    <td className="px-6 py-4 whitespace-nowrap">Việt Nam</td>
-                    <td className="px-6 py-4 whitespace-nowrap">Tiếng Việt</td>
-                    <td className="px-6 py-4 whitespace-nowrap"></td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                    <button className="text-blue-500 mr-4">Chỉnh sửa</button>
-                    <button className="text-red-500">Xóa</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td className="px-6 py-4 whitespace-nowrap">002</td>
-                    <td className="px-6 py-4 whitespace-nowrap">Úc</td>
-                    <td className="px-6 py-4 whitespace-nowrap">Tiếng Anh</td>
-                    <td className="px-6 py-4 whitespace-nowrap"></td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                    <button className="text-blue-500 mr-4">Chỉnh sửa</button>
-                    <button className="text-red-500">Xóa</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table> */}
-            </div>        
-        </div>        
-    );
+export default function CountryDashboard() {
+  const insertCountryModal = useInsertCountryModal()
+  const [searchText, setSearchText] = useState('')
+  const [khuVuc, setKhuVuc] = useState<KhuVuc[]>([])
+  const [totalPages, setTotalPages] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const getKhuVuc = async (searchText: string) => {
+    const { data, error } = await supabase.rpc('search_khu_vuc_proc', {
+      search_text: searchText,
+    })
+    if (error) {
+      return toast.error(error.message)
+    }
+    setKhuVuc(data)
+    setTotalPages(Math.ceil(data.length / ITEMS_PER_PAGE))
+  }
+
+  useEffect(() => {
+    getKhuVuc(searchText)
+  }, [])
+
+  const getCurrentPageData = () => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+    const endIndex = startIndex + ITEMS_PER_PAGE
+    return khuVuc.slice(startIndex, endIndex)
+  }
+  console.log(khuVuc)
+
+  const handleEdit = (id: string) => {
+    console.log(`Edit item with id: ${id}`)
+    // Implement edit logic here
+  }
+
+  const handleDelete = (id: string) => {
+    console.log(`Delete item with id: ${id}`)
+    // Implement delete logic here
+  }
+  return (
+    <div className="flex flex-col min-h-screen">
+      <div className="bg-light-purple-admin p-8 flex justify-between items-center">
+        <h1 className="text-purple text-2xl font-bold ml-10">QUỐC GIA</h1>
+        <div className="flex items-center space-x-4">
+          <input
+            type="text"
+            placeholder="Search"
+            className="border w-full sm:w-[200px] md:w-[300px] lg:w-[400px] max-w-full rounded-full px-4 py-2"
+          />
+          <button
+            onClick={insertCountryModal.onOpen}
+            className="bg-blue-500 w-[120px] text-white px-4 py-2 rounded-md"
+          >
+            + Thêm
+          </button>
+        </div>
+      </div>
+      <div className="container mx-auto p-5">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <Table>
+            <TableHeader className="bg-gray-50">
+              <TableRow className="border-b border-gray-100">
+                <TableHead className="px-8 font-bold text-black w-[28%]">
+                  QUỐC GIA
+                </TableHead>
+                <TableHead className="font-bold text-black w-[28%]">
+                  NGÔN NGỮ
+                </TableHead>
+                <TableHead className="font-bold text-black w-[28%]">
+                  QUỐC KỲ
+                </TableHead>
+                <TableHead className="font-bold w-[10%]"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {getCurrentPageData().map((item: KhuVuc) => (
+                <TableRow key={item.id} className="border-b border-gray-100">
+                  <TableCell className="px-8">{item.ten_khu_vuc}</TableCell>
+                  <TableCell>{item.ngon_ngu}</TableCell>
+                  <TableCell>{item.quoc_ky}</TableCell>
+                  <TableCell className="pr-8 text-right">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleEdit(item.id)}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDelete(item.id)}
+                    >
+                      <Trash2 className="h-4 w-4 text-red-600" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <div className="flex gap-5 justify-center items-center p-4 border-t border-gray-100">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <span className="text-sm">
+              {currentPage}/{totalPages}
+            </span>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
- 
-export default CountryDashboard;
