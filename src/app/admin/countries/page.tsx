@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
-import useInsertCountryModal from '../../../../hooks/useInsertCountryModal'
+import useInsertCountryModal from '../../../hooks/useInsertCountryModal'
 import { useState, useEffect } from 'react'
 import {
   Table,
@@ -15,7 +15,7 @@ import { ChevronLeft, ChevronRight, Pencil, Trash2 } from 'lucide-react'
 import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
 import { get } from 'http'
-import { KhuVuc } from '../../../../types'
+import { KhuVuc } from '../../../types/types'
 
 const ITEMS_PER_PAGE = 10
 

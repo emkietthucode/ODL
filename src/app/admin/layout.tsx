@@ -1,6 +1,6 @@
 import SideBar from '@/components/sidebar'
-import ModalProvider from '../../../providers/modal-provider'
-import ToasterProvider from '../../../providers/toaster-provider'
+import ModalProvider from '@/providers/modal-provider'
+import ToasterProvider from '@/providers/toaster-provider'
 
 const AdminDashboard = ({ children }: { children: React.ReactNode }) => {
   return (
