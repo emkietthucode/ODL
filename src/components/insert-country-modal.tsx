@@ -1,6 +1,6 @@
 'use client'
 
-//import uniqid from "uniqid";
+import { v4 as uuidv4 } from 'uuid'
 import useInsertCountryModal from '../hooks/useInsertCountryModal'
 import Modal from './Modal'
 import Input from '@/components/input'
@@ -8,8 +8,7 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import { useState } from 'react'
 import { Button } from './ui/button'
 import { toast } from 'react-hot-toast'
-//import { useUser } from "@/hooks/useUser";
-//import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import supabase from '@/utils/supabase/supabase'
 import { useRouter } from 'next/navigation'
 
 const InsertCountryModal = () => {
@@ -42,59 +41,37 @@ const InsertCountryModal = () => {
       setIsLoading(true)
       console.log(values)
 
-      const flagFile = values.flag?.[1]
+      const flagFile = values.flag?.[0]
 
       if (!values.countryName || !values.language || !flagFile) {
         console.log('Error')
         return toast.error('Vui lòng điền đầy đủ thông tin.')
       }
-      //const uniqueID = uniqid();
+      const uniqueID = uuidv4()
 
-      // const {
-      //     data: songData,
-      //     error: songError
-      // } = await supabaseClient
-      //     .storage
-      //     .from('songs')
-      //     .upload(`song-${values.title}-${uniqueID}`,songFile,{
-      //         cacheControl:'3600',
-      //         upsert: false
-      //     })
-      // if (songError){
-      //     setIsLoading(false);
-      //     return toast.error("Failed song upload.")
-      // }
+      const { data: imageData, error: imageError } = await supabase.storage
+        .from('quoc_ky')
+        .upload(`quoc-ky-${uniqueID}`, flagFile, {
+          cacheControl: '3600',
+          upsert: false,
+        })
 
-      // const {
-      //     data: imageData,
-      //     error: imageError
-      // } = await supabaseClient
-      //     .storage
-      //     .from('images')
-      //     .upload(`image-${values.title}-${uniqueID}`,imageFile ,{
-      //         cacheControl:'3600',
-      //         upsert: false
-      //     })
-      // if (imageError){
-      //     setIsLoading(false);
-      //     return toast.error("Failed image upload.")
-      // }
+      if (imageError) {
+        setIsLoading(false)
+        console.log(imageError)
+        return toast.error('Lỗi khi thêm quốc kỳ.')
+      }
 
-      // const {
-      //     error: supabaseError
-      // } = await supabaseClient
-      //     .from('songs')
-      //     .insert({
-      //         user_id: user.id,
-      //         title: values.title,
-      //         author: values.author,
-      //         image_path: imageData.path,
-      //         song_path: songData.path
-      //     })
-      // if (supabaseError){
-      //     setIsLoading(false);
-      //     return toast.error(supabaseError.message)
-      // }
+      const { data, error } = await supabase.rpc('insert_khu_vuc', {
+        p_id: uniqueID,
+        p_ten_khu_vuc: values.countryName,
+        p_ngon_ngu: values.language,
+        p_quoc_ky: imageData.path,
+      })
+
+      if (error) {
+        return toast.error('Thêm quốc gia không thành công.')
+      }
 
       router.refresh()
       setIsLoading(false)
