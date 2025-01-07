@@ -19,6 +19,7 @@ import { FaGoogle } from 'react-icons/fa'
 import Image from 'next/image'
 
 import GoogleIcon from '../../../../public/icons/google-icon.svg'
+import { signInWithGoogle } from '../actions'
 
 interface LoginFormProps {
   onSubmit: (data: LoginFormType) => void
@@ -65,7 +66,10 @@ function LoginForm({ onSubmit }: LoginFormProps) {
 
         <div className="flex justify-between my-4">
           <div className="flex items-center space-x-2">
-            <Checkbox id="remember" color="red" />
+            <Checkbox
+              id="remember"
+              className="data-[state=checked]:bg-purple"
+            />
             <label htmlFor="remember" className="text-sm">
               Remember me
             </label>
@@ -88,6 +92,7 @@ function LoginForm({ onSubmit }: LoginFormProps) {
           type="button"
           variant="outline"
           className="w-full py-6 rounded-[20px] border-black text-purple relative"
+          onClick={signInWithGoogle}
         >
           {/* <FaGoogle className="absolute left-4" /> */}
           <Image
