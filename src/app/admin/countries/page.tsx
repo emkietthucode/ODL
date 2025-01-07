@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
-import useInsertCountryModal from '../../../hooks/useInsertCountryModal'
+import useInsertCountryModal from '@/hooks/useInsertCountryModal'
+import useUpdateCountryModal from '@/hooks/useUpdateCountryModal'
 import { useState, useEffect } from 'react'
 import {
   Table,
@@ -25,6 +26,7 @@ const ITEMS_PER_PAGE = 10
 
 export default function CountryDashboard() {
   const insertCountryModal = useInsertCountryModal()
+  const { onOpen, refreshTrigger } = useUpdateCountryModal()
   const [searchText, setSearchText] = useState('')
   const [khuVuc, setKhuVuc] = useState<KhuVuc[]>([])
   const [totalPages, setTotalPages] = useState(0)
@@ -53,7 +55,7 @@ export default function CountryDashboard() {
     })
     router.push(url)
     getKhuVuc(debounceValue)
-  }, [debounceValue, router])
+  }, [debounceValue, router, refreshTrigger])
 
   const getCurrentPageData = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
@@ -66,11 +68,6 @@ export default function CountryDashboard() {
       .from('quoc_ky')
       .getPublicUrl(`quoc-ky-${item.id}`)
     return quoc_ky.publicUrl
-  }
-
-  const handleEdit = (id: string) => {
-    console.log(`Edit item with id: ${id}`)
-    // Implement edit logic here
   }
 
   const handleDelete = (id: string) => {
@@ -122,15 +119,17 @@ export default function CountryDashboard() {
                     <Image
                       src={getQuocKy(item)}
                       alt=""
-                      width={40}
-                      height={20}
+                      width="30"
+                      height="20"
+                      sizes="100vw"
+                      className="w-[30px] h-[20px]"
                     />
                   </TableCell>
                   <TableCell className="pr-8 text-right">
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleEdit(item.id)}
+                      onClick={() => onOpen(item)}
                     >
                       <Pencil className="h-4 w-4" />
                     </Button>

@@ -1,6 +1,7 @@
 'use client'
 
 import InsertCountryModal from '@/components/insert-country-modal'
+import UpdateCountryModal from '@/components/update-country-modal'
 import { useEffect, useState } from 'react'
 
 const ModalProvider = () => {
@@ -17,6 +18,7 @@ const ModalProvider = () => {
   return (
     <>
       <InsertCountryModal />
+      <UpdateCountryModal />
     </>
   )
 }
