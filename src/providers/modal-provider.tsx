@@ -2,6 +2,7 @@
 
 import InsertCountryModal from '@/components/insert-country-modal'
 import UpdateCountryModal from '@/components/update-country-modal'
+import DeleteCountryModal from '@/components/delete-country-modal'
 import { useEffect, useState } from 'react'
 
 const ModalProvider = () => {
@@ -19,6 +20,7 @@ const ModalProvider = () => {
     <>
       <InsertCountryModal />
       <UpdateCountryModal />
+      <DeleteCountryModal />
     </>
   )
 }

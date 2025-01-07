@@ -21,6 +21,7 @@ import { KhuVuc } from '@/types/types'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import useDeleteCountryModal from '@/hooks/useDeleteCountryModal'
 
 const ITEMS_PER_PAGE = 10
 
@@ -28,6 +29,8 @@ export default function CountryDashboard() {
   const insertCountryModal = useInsertCountryModal()
   const { onOpen: updateOnOpen, refreshTrigger: updateRefreshTrigger } =
     useUpdateCountryModal()
+  const { onOpen: deleteOnOpen, refreshTrigger: deleteRefreshTrigger } =
+    useDeleteCountryModal()
   const [searchText, setSearchText] = useState('')
   const [khuVuc, setKhuVuc] = useState<KhuVuc[]>([])
   const [totalPages, setTotalPages] = useState(0)
@@ -56,7 +59,7 @@ export default function CountryDashboard() {
     })
     router.push(url)
     getKhuVuc(debounceValue)
-  }, [debounceValue, router, updateRefreshTrigger])
+  }, [debounceValue, router, updateRefreshTrigger, deleteRefreshTrigger])
 
   const getCurrentPageData = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
@@ -137,7 +140,7 @@ export default function CountryDashboard() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleDelete(item.id)}
+                      onClick={() => deleteOnOpen(item)}
                     >
                       <Trash2 className="h-4 w-4 text-red-600" />
                     </Button>
