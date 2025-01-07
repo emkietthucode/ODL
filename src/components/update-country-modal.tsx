@@ -1,6 +1,5 @@
 'use client'
 
-import { v4 as uuidv4 } from 'uuid'
 import useUpdateCountryModal from '@/hooks/useUpdateCountryModal'
 import Modal from './Modal'
 import Input from '@/components/input'
@@ -9,8 +8,6 @@ import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import { toast } from 'react-hot-toast'
 import supabase from '@/utils/supabase/supabase'
-import { useRouter } from 'next/navigation'
-import { KhuVuc } from '@/types/types'
 
 const UpdateCountryModal = () => {
   const {
@@ -22,7 +19,6 @@ const UpdateCountryModal = () => {
   const [isLoading, setIsLoading] = useState(false)
   //const {user} = useUser();
   //const supabaseClient = useSupabaseClient();
-  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -93,7 +89,6 @@ const UpdateCountryModal = () => {
         return toast.error('Cập nhật quốc gia không thành công.')
       }
 
-      router.refresh()
       setIsLoading(false)
       toast.success('Cập nhật quốc gia mới thành công.')
       triggerRefresh()

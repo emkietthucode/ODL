@@ -9,7 +9,6 @@ import { useState } from 'react'
 import { Button } from './ui/button'
 import { toast } from 'react-hot-toast'
 import supabase from '@/utils/supabase/supabase'
-import { useRouter } from 'next/navigation'
 
 const InsertCountryModal = () => {
   const [isLoading, setIsLoading] = useState(false)
