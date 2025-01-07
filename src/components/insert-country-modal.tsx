@@ -14,9 +14,6 @@ import { useRouter } from 'next/navigation'
 const InsertCountryModal = () => {
   const [isLoading, setIsLoading] = useState(false)
   const insertCountryModal = useInsertCountryModal()
-  //const {user} = useUser();
-  //const supabaseClient = useSupabaseClient();
-  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -73,9 +70,9 @@ const InsertCountryModal = () => {
         return toast.error('Thêm quốc gia không thành công.')
       }
 
-      router.refresh()
       setIsLoading(false)
       toast.success('Thêm quốc gia mới thành công.')
+      insertCountryModal.triggerRefresh()
       reset()
       insertCountryModal.onClose()
     } catch (error) {

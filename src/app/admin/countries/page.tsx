@@ -26,7 +26,8 @@ import useDeleteCountryModal from '@/hooks/useDeleteCountryModal'
 const ITEMS_PER_PAGE = 10
 
 export default function CountryDashboard() {
-  const insertCountryModal = useInsertCountryModal()
+  const { onOpen: insertOnOpen, refreshTrigger: insertRefreshTrigger } =
+    useInsertCountryModal()
   const { onOpen: updateOnOpen, refreshTrigger: updateRefreshTrigger } =
     useUpdateCountryModal()
   const { onOpen: deleteOnOpen, refreshTrigger: deleteRefreshTrigger } =
@@ -59,7 +60,13 @@ export default function CountryDashboard() {
     })
     router.push(url)
     getKhuVuc(debounceValue)
-  }, [debounceValue, router, updateRefreshTrigger, deleteRefreshTrigger])
+  }, [
+    debounceValue,
+    router,
+    updateRefreshTrigger,
+    deleteRefreshTrigger,
+    insertRefreshTrigger,
+  ])
 
   const getCurrentPageData = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
@@ -74,10 +81,6 @@ export default function CountryDashboard() {
     return quoc_ky.publicUrl
   }
 
-  const handleDelete = (id: string) => {
-    console.log(`Delete item with id: ${id}`)
-    // Implement delete logic here
-  }
   return (
     <div className="flex flex-col min-h-screen">
       <div className="bg-light-purple-admin p-8 flex justify-between items-center">
@@ -90,7 +93,7 @@ export default function CountryDashboard() {
             onChange={(e) => setSearchText(e.target.value)}
           />
           <button
-            onClick={insertCountryModal.onOpen}
+            onClick={insertOnOpen}
             className="bg-blue-500 w-[120px] text-white px-4 py-2 rounded-md"
           >
             + Thêm
