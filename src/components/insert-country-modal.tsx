@@ -18,7 +18,12 @@ const InsertCountryModal = () => {
   //const {user} = useUser();
   //const supabaseClient = useSupabaseClient();
   const router = useRouter()
-  const { register, handleSubmit, reset } = useForm<FieldValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FieldValues>({
     defaultValues: {
       countryName: '',
       language: '',
@@ -37,11 +42,11 @@ const InsertCountryModal = () => {
       setIsLoading(true)
       console.log(values)
 
-      const flagFile = values.flag?.[0]
+      const flagFile = values.flag?.[1]
 
-      if (!flagFile /*|| !user*/) {
-        toast.error('Thêm mới không thành công.')
-        return
+      if (!values.countryName || !values.language || !flagFile) {
+        console.log('Error')
+        return toast.error('Vui lòng điền đầy đủ thông tin.')
       }
       //const uniqueID = uniqid();
 
@@ -113,12 +118,14 @@ const InsertCountryModal = () => {
         <Input
           id="countryName"
           disabled={isLoading}
+          error={!!errors.countryName}
           {...register('countryName', { required: true })}
           placeholder="Tên quốc gia"
         />
         <Input
           id="language"
           disabled={isLoading}
+          error={!!errors.language}
           {...register('language', { required: true })}
           placeholder="Ngôn ngữ"
         />
@@ -128,8 +135,9 @@ const InsertCountryModal = () => {
             id="flag"
             type="file"
             disabled={isLoading}
+            error={!!errors.flag}
             accept="image/*"
-            {...register('flag', { required: false })}
+            {...register('flag', { required: true })}
           />
         </div>
         <Button
