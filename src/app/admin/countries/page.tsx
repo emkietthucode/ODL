@@ -14,8 +14,11 @@ import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight, Pencil, Trash2 } from 'lucide-react'
 import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
-import { get } from 'http'
-import { KhuVuc } from '../../../types/types'
+import qs from 'query-string'
+import useDebounce from '@/hooks/useDebounce'
+import { KhuVuc } from '@/types/types'
+import { Input } from '@/components/ui/input'
+import { useRouter } from 'next/navigation'
 
 const ITEMS_PER_PAGE = 10
 
@@ -25,10 +28,12 @@ export default function CountryDashboard() {
   const [khuVuc, setKhuVuc] = useState<KhuVuc[]>([])
   const [totalPages, setTotalPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
+  const router = useRouter()
+  const debounceValue = useDebounce<string>(searchText, 500)
 
-  const getKhuVuc = async (searchText: string) => {
+  const getKhuVuc = async (debounceValue: string) => {
     const { data, error } = await supabase.rpc('search_khu_vuc_proc', {
-      search_text: searchText,
+      search_text: debounceValue,
     })
     if (error) {
       return toast.error(error.message)
@@ -38,8 +43,16 @@ export default function CountryDashboard() {
   }
 
   useEffect(() => {
-    getKhuVuc(searchText)
-  }, [])
+    const query = {
+      searchInput: debounceValue,
+    }
+    const url = qs.stringifyUrl({
+      url: '/admin/countries',
+      query: query,
+    })
+    router.push(url)
+    getKhuVuc(debounceValue)
+  }, [debounceValue, router])
 
   const getCurrentPageData = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
@@ -62,10 +75,11 @@ export default function CountryDashboard() {
       <div className="bg-light-purple-admin p-8 flex justify-between items-center">
         <h1 className="text-purple text-2xl font-bold ml-10">QUỐC GIA</h1>
         <div className="flex items-center space-x-4">
-          <input
+          <Input
             type="text"
             placeholder="Search"
-            className="border w-full sm:w-[200px] md:w-[300px] lg:w-[400px] max-w-full rounded-full px-4 py-2"
+            className="bg-white border w-full sm:w-[200px] md:w-[300px] lg:w-[400px] max-w-full rounded-full px-4 py-2"
+            onChange={(e) => setSearchText(e.target.value)}
           />
           <button
             onClick={insertCountryModal.onOpen}
