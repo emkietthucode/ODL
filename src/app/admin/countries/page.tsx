@@ -19,6 +19,7 @@ import useDebounce from '@/hooks/useDebounce'
 import { KhuVuc } from '@/types/types'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 const ITEMS_PER_PAGE = 10
 
@@ -59,7 +60,13 @@ export default function CountryDashboard() {
     const endIndex = startIndex + ITEMS_PER_PAGE
     return khuVuc.slice(startIndex, endIndex)
   }
-  console.log(khuVuc)
+
+  const getQuocKy = (item: KhuVuc): string => {
+    const { data: quoc_ky } = supabase.storage
+      .from('quoc_ky')
+      .getPublicUrl(`quoc-ky-${item.id}`)
+    return quoc_ky.publicUrl
+  }
 
   const handleEdit = (id: string) => {
     console.log(`Edit item with id: ${id}`)
@@ -111,7 +118,14 @@ export default function CountryDashboard() {
                 <TableRow key={item.id} className="border-b border-gray-100">
                   <TableCell className="px-8">{item.ten_khu_vuc}</TableCell>
                   <TableCell>{item.ngon_ngu}</TableCell>
-                  <TableCell>{item.quoc_ky}</TableCell>
+                  <TableCell>
+                    <Image
+                      src={getQuocKy(item)}
+                      alt=""
+                      width={40}
+                      height={20}
+                    />
+                  </TableCell>
                   <TableCell className="pr-8 text-right">
                     <Button
                       variant="ghost"
