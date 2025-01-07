@@ -26,7 +26,8 @@ const ITEMS_PER_PAGE = 10
 
 export default function CountryDashboard() {
   const insertCountryModal = useInsertCountryModal()
-  const { onOpen, refreshTrigger } = useUpdateCountryModal()
+  const { onOpen: updateOnOpen, refreshTrigger: updateRefreshTrigger } =
+    useUpdateCountryModal()
   const [searchText, setSearchText] = useState('')
   const [khuVuc, setKhuVuc] = useState<KhuVuc[]>([])
   const [totalPages, setTotalPages] = useState(0)
@@ -55,7 +56,7 @@ export default function CountryDashboard() {
     })
     router.push(url)
     getKhuVuc(debounceValue)
-  }, [debounceValue, router, refreshTrigger])
+  }, [debounceValue, router, updateRefreshTrigger])
 
   const getCurrentPageData = () => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
@@ -129,7 +130,7 @@ export default function CountryDashboard() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => onOpen(item)}
+                      onClick={() => updateOnOpen(item)}
                     >
                       <Pencil className="h-4 w-4" />
                     </Button>
