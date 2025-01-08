@@ -15,17 +15,19 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import PasswordInput from '@/components/password-input'
 import { Checkbox } from '@/components/ui/checkbox'
-import { FaGoogle } from 'react-icons/fa'
 import Image from 'next/image'
 
 import GoogleIcon from '../../../../public/icons/google-icon.svg'
 import { signInWithGoogle } from '../actions'
 
+import { Loader2 } from 'lucide-react'
+
 interface LoginFormProps {
   onSubmit: (data: LoginFormType) => void
+  isLoading: boolean
 }
 
-function LoginForm({ onSubmit }: LoginFormProps) {
+function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
   const form = useForm<LoginFormType>({
     defaultValues: {
       email: '',
@@ -82,15 +84,18 @@ function LoginForm({ onSubmit }: LoginFormProps) {
 
         <Button
           variant="main"
+          disabled={form.formState.isSubmitting || isLoading}
           className="w-full py-6 rounded-[20px] font-medium mb-3"
           type="submit"
         >
+          {isLoading && <Loader2 className="animate-spin" />}
           Log in
         </Button>
 
         <Button
           type="button"
           variant="outline"
+          disabled={form.formState.isSubmitting || isLoading}
           className="w-full py-6 rounded-[20px] border-black text-purple relative"
           onClick={signInWithGoogle}
         >
@@ -100,6 +105,7 @@ function LoginForm({ onSubmit }: LoginFormProps) {
             alt="Google icon"
             className="w-5 h-5 absolute left-4"
           />
+          {isLoading && <Loader2 className="animate-spin" />}
           Sign in with Google
         </Button>
       </form>

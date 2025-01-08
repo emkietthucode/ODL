@@ -1,6 +1,15 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+const PROTECTED_ROUTES = ['/admin/*']
+
+const PUBLIC_ROUTES = ['/auth/login', '/auth/register', '/']
+
+// Helper function to check if the path matches any of the patterns
+function matchesPattern(path: string, patterns: string[]): boolean {
+  return patterns.some((pattern) => path.startsWith(pattern))
+}
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
@@ -39,15 +48,32 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith('/login') &&
-    !request.nextUrl.pathname.startsWith('/auth')
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
+  // if (
+  //   !user &&
+  //   !request.nextUrl.pathname.startsWith('/auth/login') &&
+  //   !request.nextUrl.pathname.startsWith('/auth')
+  // ) {
+  //   // no user, potentially respond by redirecting the user to the login page
+  //   const url = request.nextUrl.clone()
+  //   url.pathname = '/auth/login'
+  //   return NextResponse.redirect(url)
+  // }
+
+  const path = request.nextUrl.pathname
+
+  if (matchesPattern(path, PROTECTED_ROUTES)) {
+    if (!user) {
+      const redirectUrl = new URL('/auth/login', request.url)
+      redirectUrl.searchParams.set('redirectTo', path)
+      return NextResponse.redirect(redirectUrl)
+    }
+  }
+
+  if (matchesPattern(path, ['/auth'])) {
+    if (user) {
+      const redirectUrl = new URL('/', request.url)
+      return NextResponse.redirect(redirectUrl)
+    }
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
