@@ -1,28 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import { useState, useEffect } from 'react'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import {
-  MoreHorizontal,
-  ChevronLeft,
-  ChevronRight,
-  Pencil,
-  Trash2,
-} from 'lucide-react'
 import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
 import qs from 'query-string'
@@ -30,16 +9,10 @@ import useDebounce from '@/hooks/useDebounce'
 import { HangBang } from '@/types/types'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import useInsertLicenceModal from '@/hooks/useInsertLicenceModal'
-import useUpdateCountryModal from '@/hooks/useUpdateCountryModal'
 import useDeleteLicenceModal from '@/hooks/useDeleteLicenceModal'
 import HangBangTable from '@/components/hang-bang-table'
 import useUpdateLicenceModal from '@/hooks/useUpdateLicenceModal'
-
-const ITEMS_PER_PAGE = 10
-const NEXT_PUBLIC_VIETNAM_UUID = process.env.VIETNAM_UUID
-const AUSTRALIA_UUID = process.env.AUSTRALIA_UUID
 
 export default function LicenceDashboard() {
   const { onOpen: insertOnOpen, refreshTrigger: insertRefreshTrigger } =
@@ -48,8 +21,6 @@ export default function LicenceDashboard() {
   const { refreshTrigger: deleteRefreshTrigger } = useDeleteLicenceModal()
   const [searchText, setSearchText] = useState('')
   const [hangBang, setHangBang] = useState<HangBang[]>([])
-  const [totalPages, setTotalPages] = useState(0)
-  const [currentPage, setCurrentPage] = useState(1)
   const router = useRouter()
   const debounceValue = useDebounce<string>(searchText, 500)
   const [flipCountry, setFlipCountry] = useState(false)
@@ -62,7 +33,6 @@ export default function LicenceDashboard() {
       return toast.error(error.message)
     }
     setHangBang(data)
-    setTotalPages(Math.ceil(data.length / ITEMS_PER_PAGE))
   }
 
   useEffect(() => {

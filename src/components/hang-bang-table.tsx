@@ -1,5 +1,5 @@
 // HangBangTable.tsx
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import {
   Table,
   TableBody,
