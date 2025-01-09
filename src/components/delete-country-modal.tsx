@@ -28,6 +28,14 @@ const DeleteCountryModal = () => {
 
   const handleDelete = async (id: string) => {
     try {
+      const { error: storageError } = await supabase.storage
+        .from('quoc_ky')
+        .remove([`quoc-ky-${id}`])
+
+      if (storageError) {
+        return toast.error('Xóa quốc gia không thành công.')
+      }
+
       const { data, error } = await supabase.rpc('delete_khu_vuc', {
         p_id: id,
       })

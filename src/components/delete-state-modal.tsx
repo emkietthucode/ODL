@@ -28,6 +28,14 @@ const DeleteStateModal = () => {
 
   const handleDelete = async (id: string) => {
     try {
+      const { error: storageError } = await supabase.storage
+        .from('quoc_ky')
+        .remove([`quoc-ky-${id}`])
+
+      if (storageError) {
+        return toast.error('Xóa tiểu bang không thành công.')
+      }
+
       const { data, error } = await supabase.rpc('delete_tieu_bang', {
         p_id: id,
       })
