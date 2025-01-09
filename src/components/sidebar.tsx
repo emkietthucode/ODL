@@ -41,8 +41,8 @@ const SideBar = () => {
         icon: LicenseIcon,
         hoverIcon: LicenseHoverIcon,
         label: 'Hạng bằng',
-        active: pathname === '/admin/licenses',
-        href: '/admin/licenses',
+        active: pathname === '/admin/licences',
+        href: '/admin/licences',
       },
       {
         icon: TestIcon,
