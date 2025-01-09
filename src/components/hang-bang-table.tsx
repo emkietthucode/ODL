@@ -1,5 +1,5 @@
 // HangBangTable.tsx
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import {
   Table,
   TableBody,
@@ -24,21 +24,21 @@ import {
 } from 'lucide-react'
 
 import { HangBang } from '@/types/types' // Adjust the path as necessary
+import useDeleteLicenceModal from '@/hooks/useDeleteLicenceModal'
+import useUpdateLicenceModal from '@/hooks/useUpdateLicenceModal'
 
 interface HangBangTableProps {
   data: HangBang[]
   itemsPerPage?: number
-  //onEdit: (item: HangBang) => void
-  //onDelete: (item: HangBang) => void
 }
 
 const HangBangTable: React.FC<HangBangTableProps> = ({
   data,
   itemsPerPage = 10,
-  //onEdit,
-  //onDelete,
 }) => {
   const [currentPage, setCurrentPage] = useState<number>(1)
+  const { onOpen: updateOnOpen } = useUpdateLicenceModal()
+  const { onOpen: deleteOnOpen } = useDeleteLicenceModal()
 
   const totalPages = useMemo(() => {
     return Math.ceil(data.length / itemsPerPage)
@@ -77,11 +77,11 @@ const HangBangTable: React.FC<HangBangTableProps> = ({
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => {}}>
+                    <DropdownMenuItem onClick={() => updateOnOpen(item)}>
                       <Pencil className="h-4 w-4 mr-2" />
                       Edit
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => {}}>
+                    <DropdownMenuItem onClick={() => deleteOnOpen(item)}>
                       <Trash2 className="h-4 w-4 mr-2 text-red-600" />
                       Delete
                     </DropdownMenuItem>

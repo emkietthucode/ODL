@@ -33,20 +33,19 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import useInsertLicenceModal from '@/hooks/useInsertLicenceModal'
 import useUpdateCountryModal from '@/hooks/useUpdateCountryModal'
-import useDeleteCountryModal from '@/hooks/useDeleteCountryModal'
+import useDeleteLicenceModal from '@/hooks/useDeleteLicenceModal'
 import HangBangTable from '@/components/hang-bang-table'
+import useUpdateLicenceModal from '@/hooks/useUpdateLicenceModal'
 
 const ITEMS_PER_PAGE = 10
 const NEXT_PUBLIC_VIETNAM_UUID = process.env.VIETNAM_UUID
 const AUSTRALIA_UUID = process.env.AUSTRALIA_UUID
 
-export default function CountryDashboard() {
+export default function LicenceDashboard() {
   const { onOpen: insertOnOpen, refreshTrigger: insertRefreshTrigger } =
     useInsertLicenceModal()
-  const { onOpen: updateOnOpen, refreshTrigger: updateRefreshTrigger } =
-    useUpdateCountryModal()
-  const { onOpen: deleteOnOpen, refreshTrigger: deleteRefreshTrigger } =
-    useDeleteCountryModal()
+  const { refreshTrigger: updateRefreshTrigger } = useUpdateLicenceModal()
+  const { refreshTrigger: deleteRefreshTrigger } = useDeleteLicenceModal()
   const [searchText, setSearchText] = useState('')
   const [hangBang, setHangBang] = useState<HangBang[]>([])
   const [totalPages, setTotalPages] = useState(0)
