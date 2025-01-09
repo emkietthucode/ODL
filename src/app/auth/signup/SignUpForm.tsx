@@ -12,13 +12,13 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 
-import { LoginFormSchema, LoginFormType } from '@/types/schemas/login'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import PasswordInput from '@/components/password-input'
-import { Checkbox } from '@/components/ui/checkbox'
-import { FaGoogle } from 'react-icons/fa'
+
 import Image from 'next/image'
+
+import { Loader2 } from 'lucide-react'
 
 import {
   Select,
@@ -33,13 +33,13 @@ import {
   SignUpFormSchema,
   SignUpFormType,
 } from '@/types/schemas/signup'
-import { FormInput } from 'lucide-react'
 
 interface SignUpFormProps {
   onSubmit: (data: SignUpFormType) => void
+  isLoading: boolean
 }
 
-function SignUpForm({ onSubmit }: SignUpFormProps) {
+function SignUpForm({ onSubmit, isLoading }: SignUpFormProps) {
   const form = useForm<SignUpFormType>({
     defaultValues: {
       email: '',
@@ -139,7 +139,12 @@ function SignUpForm({ onSubmit }: SignUpFormProps) {
           )}
         />
 
-        <Button variant="main" className="w-full my-8">
+        <Button
+          disabled={form.formState.isSubmitting || isLoading}
+          variant="main"
+          className="w-full my-8"
+        >
+          {isLoading && <Loader2 className="animate-spin" />}
           Continue
         </Button>
       </form>

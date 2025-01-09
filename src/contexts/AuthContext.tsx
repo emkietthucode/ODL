@@ -7,6 +7,7 @@ import { createContext, useEffect, useState } from 'react'
 interface AuthContextType {
   user: User | null
   loading: boolean
+  setUser: (user: User | null) => void
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -39,10 +40,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       subscription?.unsubscribe()
     }
-  }, [])
+  }, [supabase])
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, loading, setUser }}>
       {children}
     </AuthContext.Provider>
   )

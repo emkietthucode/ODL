@@ -8,6 +8,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form'
 
 import { LoginFormSchema, LoginFormType } from '@/types/schemas/login'
@@ -37,6 +38,8 @@ function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
     resolver: zodResolver(LoginFormSchema),
   })
 
+  const errors = form.formState.errors
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -45,9 +48,16 @@ function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel htmlFor={field.name} className="text-[#696F79]">
+                Email
+              </FormLabel>
+              {errors.email && (
+                <FormMessage className="text-red-500 mt-1">
+                  {errors.email.message}
+                </FormMessage>
+              )}
               <FormControl>
-                <Input {...field}></Input>
+                <Input id={field.name} {...field}></Input>
               </FormControl>
             </FormItem>
           )}
@@ -58,9 +68,16 @@ function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel htmlFor={field.name} className="text-[#696F79]">
+                Password
+              </FormLabel>
+              {errors.password && (
+                <FormMessage className="text-red-500 mt-1">
+                  {errors.password.message}
+                </FormMessage>
+              )}
               <FormControl>
-                <PasswordInput {...field}></PasswordInput>
+                <PasswordInput id={field.name} {...field}></PasswordInput>
               </FormControl>
             </FormItem>
           )}

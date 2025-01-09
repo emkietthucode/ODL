@@ -8,9 +8,16 @@ import { login } from '../actions'
 import Image from 'next/image'
 import LoginImage from '../../../../public/images/Login.png'
 import { useState } from 'react'
+import useAuth from '@/hooks/useAuth'
+import { redirect } from 'next/dist/server/api-utils'
+import { useRouter } from 'next/navigation'
+import { AuthError } from '@supabase/supabase-js'
 
 function Login() {
   const [isLoading, setIsloading] = useState(false)
+  const [error, setError] = useState('')
+  const { setUser } = useAuth()
+  const router = useRouter()
 
   const handleSubmit = async (values: LoginFormType) => {
     const formData = new FormData()
@@ -18,17 +25,29 @@ function Login() {
     formData.append('password', values.password)
 
     setIsloading(true)
+
     try {
-      await login(formData)
-    } catch (error) {
-      console.log(error)
+      const res = await login(formData)
+
+      if (res) {
+        setUser(res.user)
+      }
+
+      router.push('/')
+    } catch (error: AuthError | any) {
+      if (error.message === 'Invalid login credentials') {
+        setError('Wrong email or password')
+      } else {
+        setError('An error occurred! Please try again')
+      }
+    } finally {
+      setIsloading(false)
     }
-    setIsloading(false)
   }
 
   return (
     <div className="bg-[#F6F4FD] h-screen flex items-center justify-center">
-      <div className="flex max-w-3xl h-[560px] shadow-[10px_10px_20px_0px_rgba(0, 0, 0, 0.25)]">
+      <div className="flex max-w-3xl h-[580px] shadow-[10px_10px_20px_0px_rgba(0, 0, 0, 0.25)]">
         <Image
           src={LoginImage}
           alt="Login image"
@@ -37,18 +56,20 @@ function Login() {
         {/* <div className="w-[380px] h-full bg-blue-500"></div> */}
         <div className="w-[480px] h-full bg-white px-12 py-8">
           <h5 className="font-bold text-2xl mt-6">Account Login</h5>
-          <p className="text-[#8692A6] my-3">
+          <p className="text-[#8692A6] my-3 text-sm">
             If you are already a member you can login with your email address
             and password.
           </p>
 
           <div className="bg-[#F5F5F5] w-full h-[1px] my-3"></div>
 
+          {error && <span className="text-red-500 text-sm">{error}</span>}
+
           <LoginForm onSubmit={handleSubmit} isLoading={isLoading} />
 
           <p className="text-sm w-full text-center my-6">
             Don't have an account?{' '}
-            <Link href="/" className="text-purple hover:underline">
+            <Link href="/auth/signup" className="text-purple hover:underline">
               Sign up here
             </Link>
           </p>

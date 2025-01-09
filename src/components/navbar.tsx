@@ -4,7 +4,7 @@ import useAuth from '@/hooks/useAuth'
 
 import { LuUserRound } from 'react-icons/lu'
 import { IoSettingsOutline } from 'react-icons/io5'
-import { Button } from './ui/button'
+import Link from 'next/link'
 
 const NavBar = () => {
   const { user } = useAuth()
@@ -40,15 +40,18 @@ const NavBar = () => {
             </div>
           ) : (
             <div className="flex gap-3 items-center">
-              <a href="#" className="text-purple font-bold underline">
+              <Link
+                href="/auth/signup"
+                className="text-purple font-bold underline"
+              >
                 ĐĂNG KÝ
-              </a>
-              <a
-                href="#"
+              </Link>
+              <Link
+                href="/auth/login"
                 className="bg-purple font-bold text-white px-4 py-2 rounded-full"
               >
                 ĐĂNG NHẬP
-              </a>
+              </Link>
             </div>
           )}
         </nav>

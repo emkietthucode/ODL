@@ -7,8 +7,17 @@ import LoginImage from '../../../../public/images/Login.png'
 import { SignUpFormType } from '@/types/schemas/signup'
 import SignUpForm from './SignUpForm'
 import { signup } from '../actions'
+import { useState } from 'react'
+import useAuth from '@/hooks/useAuth'
+import { useRouter } from 'next/navigation'
+import { AuthError } from '@supabase/supabase-js'
 
 function Signup() {
+  const [isLoading, setIsLoading] = useState(false)
+  const { setUser } = useAuth()
+  const router = useRouter()
+  const [error, setError] = useState('')
+
   const handleSubmit = async (values: SignUpFormType) => {
     const formData = new FormData()
     formData.append('email', values.email)
@@ -16,7 +25,20 @@ function Signup() {
     formData.append('name', values.name)
     formData.append('gender', values.gender)
 
-    await signup(formData)
+    setIsLoading(true)
+    try {
+      const res = await signup(formData)
+
+      if (res) {
+        setUser(res.user)
+      }
+
+      router.push('/')
+    } catch (error: AuthError | any) {
+      setError(error.message)
+    }
+
+    setIsLoading(false)
   }
 
   return (
@@ -30,7 +52,9 @@ function Signup() {
 
           <div className="bg-[#F5F5F5] w-full h-[1px] my-3"></div>
 
-          <SignUpForm onSubmit={handleSubmit} />
+          {error && <span className="text-red-500 text-sm">{error}</span>}
+
+          <SignUpForm onSubmit={handleSubmit} isLoading={isLoading} />
         </div>
         <Image
           priority
@@ -38,7 +62,6 @@ function Signup() {
           alt="Login image"
           className="w-[380px] h-full object-cover object-right"
         />
-        {/* <div className="w-[380px] h-full bg-blue-500"></div> */}
       </div>
     </div>
   )
