@@ -70,32 +70,16 @@ const InsertLicenceModal = () => {
       setIsLoading(true)
       console.log(values)
 
-      const flagFile = values.flag?.[0]
-
-      if (!values.countryName || !values.language || !flagFile) {
-        console.log('Error')
+      if (!values.licenceName || !values.description || !countryVal) {
         return toast.error('Vui lòng điền đầy đủ thông tin.')
       }
       const uniqueID = uuidv4()
+      console.log('eeee')
 
-      const { data: imageData, error: imageError } = await supabase.storage
-        .from('quoc_ky')
-        .upload(`quoc-ky-${uniqueID}`, flagFile, {
-          cacheControl: '3600',
-          upsert: false,
-        })
-
-      if (imageError) {
-        setIsLoading(false)
-        console.log(imageError)
-        return toast.error('Lỗi khi thêm quốc kỳ.')
-      }
-
-      const { data, error } = await supabase.rpc('insert_khu_vuc', {
-        p_id: uniqueID,
-        p_ten_khu_vuc: values.countryName,
-        p_ngon_ngu: values.language,
-        p_quoc_ky: imageData.path,
+      const { error } = await supabase.from('hang_bang').insert({
+        ten_hang_bang: values.licenceName,
+        mo_ta_hang_bang: values.description,
+        ma_khu_vuc: countryUUID,
       })
 
       if (error) {
@@ -130,6 +114,7 @@ const InsertLicenceModal = () => {
         />
 
         <Textarea
+          id="description"
           className={cn(
             'h-[100px]',
             !!errors.description && 'border-red-500' // Highlight error visually
@@ -137,11 +122,7 @@ const InsertLicenceModal = () => {
           placeholder="Mô tả"
           {...register('description', { required: true })}
         />
-        <Popover
-          open={openComboBox}
-          onOpenChange={setOpenComboBox}
-          {...register('comboBox', { required: true })}
-        >
+        <Popover open={openComboBox} onOpenChange={setOpenComboBox}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
@@ -162,7 +143,7 @@ const InsertLicenceModal = () => {
           <PopoverContent className="w-[200px] p-0 ">
             <Command>
               <CommandList>
-                <CommandGroup>
+                <CommandGroup {...register('comboBox', { required: true })}>
                   {countries.map((country) => (
                     <CommandItem
                       key={country.value}
