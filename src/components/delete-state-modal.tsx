@@ -1,19 +1,19 @@
 'use client'
 
-import useDeleteCountryModal from '@/hooks/useDeleteCountryModal'
+import useDeleteStateModal from '@/hooks/useDeleteStateModal'
 import Modal from './Modal'
 import { useState } from 'react'
 import { Button } from './ui/button'
 import { toast } from 'react-hot-toast'
 import supabase from '@/utils/supabase/supabase'
 
-const DeleteCountryModal = () => {
+const DeleteStateModal = () => {
   const {
     isOpen,
     onClose,
     item: khuVuc,
     triggerRefresh,
-  } = useDeleteCountryModal()
+  } = useDeleteStateModal()
   const [isLoading, setIsLoading] = useState(false)
 
   if (!khuVuc) {
@@ -33,17 +33,17 @@ const DeleteCountryModal = () => {
         .remove([`quoc-ky-${id}`])
 
       if (storageError) {
-        return toast.error('Xóa quốc gia không thành công.')
+        return toast.error('Xóa tiểu bang không thành công.')
       }
 
-      const { data, error } = await supabase.rpc('delete_khu_vuc', {
+      const { data, error } = await supabase.rpc('delete_tieu_bang', {
         p_id: id,
       })
 
       if (error) {
-        return toast.error('Xóa quốc gia không thành công.')
+        return toast.error('Xóa tiểu bang không thành công.')
       }
-      toast.success('Xóa quốc gia thành công.')
+      toast.success('Xóa tiểu bang thành công.')
       triggerRefresh()
       onClose()
     } catch (error) {
@@ -55,8 +55,8 @@ const DeleteCountryModal = () => {
   return (
     <div>
       <Modal
-        title={`Xóa quốc gia: ${khuVuc.ten_khu_vuc}`}
-        description="Bạn có chắc chắn xóa quốc gia này không?"
+        title={`Xóa tiểu bang: ${khuVuc.ten_khu_vuc}`}
+        description=""
         isOpen={isOpen}
         onChange={onChange}
       >
@@ -81,4 +81,4 @@ const DeleteCountryModal = () => {
   )
 }
 
-export default DeleteCountryModal
+export default DeleteStateModal
