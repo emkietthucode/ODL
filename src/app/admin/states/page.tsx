@@ -96,7 +96,7 @@ export default function StateDashboard() {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="bg-light-purple-admin p-8 flex justify-between items-center">
-        <h1 className="text-purple text-2xl font-bold ml-10">QUỐC GIA</h1>
+        <h1 className="text-purple text-2xl font-bold ml-10">TIỂU BANG</h1>
         <div className="flex items-center space-x-4">
           <Input
             type="text"
