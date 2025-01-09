@@ -12,7 +12,19 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { ChevronLeft, ChevronRight, Pencil, Trash2 } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
+  MoreHorizontal,
+  ChevronLeft,
+  ChevronRight,
+  Pencil,
+  Trash2,
+} from 'lucide-react'
 import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
 import qs from 'query-string'
@@ -133,20 +145,24 @@ export default function CountryDashboard() {
                     />
                   </TableCell>
                   <TableCell className="pr-8 text-right">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => updateOnOpen(item)}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => deleteOnOpen(item)}
-                    >
-                      <Trash2 className="h-4 w-4 text-red-600" />
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Open menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => updateOnOpen(item)}>
+                          <Pencil className="h-4 w-4 mr-2" />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => deleteOnOpen(item)}>
+                          <Trash2 className="h-4 w-4 mr-2 text-red-600" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}
