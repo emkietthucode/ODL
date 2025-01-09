@@ -7,3 +7,11 @@ export interface KhuVuc {
   createdAt: Date // TIMESTAMPTZ
   updatedAt: Date // TIMESTAMPTZ
 }
+export interface HangBang {
+  id: string // UUID
+  ten_hang_bang: string
+  mo_ta_hang_bang?: string
+  ma_khu_vuc: string
+  createdAt: string
+  updatedAt: string
+}

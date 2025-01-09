@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import UpdateStateModal from '@/components/update-state-modal'
 import InsertStateModal from '@/components/insert-state-modal'
 import DeleteStateModal from '@/components/delete-state-modal'
+import InsertLicenceModal from '@/components/insert-licence-modal'
 
 const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false)
@@ -27,6 +28,7 @@ const ModalProvider = () => {
       <InsertStateModal />
       <UpdateStateModal />
       <DeleteStateModal />
+      <InsertLicenceModal />
     </>
   )
 }
