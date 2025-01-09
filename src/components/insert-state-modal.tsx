@@ -35,12 +35,10 @@ const InsertStateModal = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
     try {
       setIsLoading(true)
-      console.log(values)
 
       const flagFile = values.symbol?.[0]
 
       if (!values.stateName || !flagFile) {
-        console.log('Error')
         return toast.error('Vui lòng điền đầy đủ thông tin.')
       }
       const uniqueID = uuidv4()
@@ -54,7 +52,6 @@ const InsertStateModal = () => {
 
       if (imageError) {
         setIsLoading(false)
-        console.log(imageError)
         return toast.error('Lỗi khi thêm quốc kỳ.')
       }
 

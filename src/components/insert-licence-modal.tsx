@@ -1,6 +1,5 @@
 'use client'
 
-import { v4 as uuidv4 } from 'uuid'
 import useInsertLicenceModal from '@/hooks/useInsertLicenceModal'
 import Modal from './Modal'
 import Input from '@/components/input'
@@ -12,9 +11,7 @@ import { Check, ChevronsUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
   Command,
-  CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
@@ -24,7 +21,6 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import supabase from '@/utils/supabase/supabase'
-import { set } from 'date-fns'
 import { Textarea } from '@/components/ui/textarea'
 
 const countries = [
@@ -68,13 +64,10 @@ const InsertLicenceModal = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
     try {
       setIsLoading(true)
-      console.log(values)
 
       if (!values.licenceName || !values.description || !countryVal) {
         return toast.error('Vui lòng điền đầy đủ thông tin.')
       }
-      const uniqueID = uuidv4()
-      console.log('eeee')
 
       const { error } = await supabase.from('hang_bang').insert({
         ten_hang_bang: values.licenceName,
