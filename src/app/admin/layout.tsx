@@ -7,11 +7,11 @@ const AdminDashboard = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex flex-col min-h-screen">
       <NavBar />
-      <div className="flex flex-row flex-1">
+      <div className="flex flex-row flex-1 relative ">
         <ModalProvider />
         <SideBar />
         <ToasterProvider />
-        <div className="grow border-l-2 border-light-purple">{children}</div>
+        <div className="grow relative z-0">{children}</div>
       </div>
     </div>
   )

@@ -70,7 +70,11 @@ const SideBar = () => {
   )
 
   return (
-    <div className="flex mt-[100px]">
+    <div className="relative -mr-4 z-10 flex flex-col rounded-r-2xl shadow-[4px_0px_4px_rgba(0,0,0,0.25)] border-1 bg-white">
+      <div className="self-baseline ml-7 mt-10 text-xl font-semibold text-violet-400">
+        QUẢN LÝ
+      </div>
+      <hr className="w-[235px] h-px mx-auto bg-light-purple border-0 rounded md:my-5 dark:bg-purple"></hr>
       <div
         className="
                 hidden
@@ -79,6 +83,7 @@ const SideBar = () => {
                 gap-y-2
                 h-full
                 w-[250px]
+                
             "
       >
         <Box>
@@ -87,6 +92,7 @@ const SideBar = () => {
                         flex
                         flex-col
                         gap-y-4
+                        
                     "
           >
             {routes.map((item) => (
