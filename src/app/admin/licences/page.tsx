@@ -94,7 +94,7 @@ export default function LicenceDashboard() {
             />
             <button
               onClick={insertOnOpen}
-              className="bg-blue-500 w-[120px] text-white px-4 py-2 rounded-md"
+              className="bg-blue-500 hover:bg-blue-500/90 w-[120px] text-white px-4 py-2 rounded-md"
             >
               + Thêm
             </button>
