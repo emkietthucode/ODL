@@ -35,7 +35,7 @@ import useInsertStateModal from '@/hooks/useInsertStateModal'
 import useDeleteStateModal from '@/hooks/useDeleteStateModal'
 import useUpdateStateModal from '@/hooks/useUpdateStateModal'
 
-const ITEMS_PER_PAGE = 10
+const ITEMS_PER_PAGE = 8
 
 export default function StateDashboard() {
   const { onOpen: insertOnOpen, refreshTrigger: insertRefreshTrigger } =
