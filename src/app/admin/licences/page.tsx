@@ -13,6 +13,7 @@ import useInsertLicenceModal from '@/hooks/useInsertLicenceModal'
 import useDeleteLicenceModal from '@/hooks/useDeleteLicenceModal'
 import HangBangTable from '@/components/hang-bang-table'
 import useUpdateLicenceModal from '@/hooks/useUpdateLicenceModal'
+import { twMerge } from 'tailwind-merge'
 
 export default function LicenceDashboard() {
   const { onOpen: insertOnOpen, refreshTrigger: insertRefreshTrigger } =
@@ -57,53 +58,64 @@ export default function LicenceDashboard() {
     <div className="flex flex-col min-h-screen">
       <div className="bg-light-purple-admin p-8 flex justify-between items-center">
         <h1 className="text-purple text-2xl font-bold ml-10">HẠNG BẰNG</h1>
-        <div className="flex items-center space-x-4">
-          <Input
-            type="text"
-            placeholder="Search"
-            className="bg-white border w-full sm:w-[200px] md:w-[300px] lg:w-[400px] max-w-full rounded-full px-4 py-2"
-            onChange={(e) => setSearchText(e.target.value)}
-          />
-          <button
-            onClick={insertOnOpen}
-            className="bg-blue-500 w-[120px] text-white px-4 py-2 rounded-md"
-          >
-            + Thêm
-          </button>
-        </div>
       </div>
       <div className="container mx-auto p-5">
-        <div className="flex flex-col gap-5">
-          <div className="flex gap-5">
+        <div className="flex gap-10">
+          <div className="flex flex-col items-center bg-white min-w-64 h-[735px] rounded-lg drop-shadow-lg">
+            <div className="mt-10 text-sm font-semibold text-purple">
+              DANH SÁCH QUỐC GIA
+            </div>
+            <hr className="my-6 w-[200px] h-px mx-auto bg-light-purple border-0 rounded dark:bg-purple"></hr>
             <Button
-              className="w-[100px] h-14"
-              variant="outline"
               onClick={() => setFlipCountry(false)}
+              className={twMerge(
+                `my-4 font-semibold rounded-lg text-white bg-purple hover:bg-purple/90 h-[43px] w-[150px]`,
+                flipCountry && `bg-neutral-500 hover:bg-neutral-500/90`
+              )}
             >
               Việt Nam
             </Button>
             <Button
-              className="w-[100px] h-14"
-              variant="outline"
               onClick={() => setFlipCountry(true)}
+              className={twMerge(
+                `my-4 font-semibold rounded-lg text-white bg-purple hover:bg-purple/90 h-[43px] w-[150px]`,
+                !flipCountry && `bg-neutral-500 hover:bg-neutral-500/90`
+              )}
             >
-              Úc
+              ÚC
             </Button>
           </div>
-          {!flipCountry ? (
-            <HangBangTable
-              data={hangBang.filter(
-                (row) => row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID
-              )}
-            />
-          ) : (
-            <HangBangTable
-              data={hangBang.filter(
-                (row) =>
-                  row.ma_khu_vuc === process.env.NEXT_PUBLIC_AUSTRALIA_UUID
-              )}
-            />
-          )}
+          <div className="flex flex-col w-full">
+            <div className="flex justify-between items-center space-x-4 mb-6">
+              <Input
+                type="text"
+                placeholder="Search"
+                className="bg-white border w-full sm:w-[200px] md:w-[300px] lg:w-[400px] max-w-full rounded-full px-4 py-2"
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+              <button
+                onClick={insertOnOpen}
+                className="bg-blue-500 w-[120px] text-white px-4 py-2 rounded-md"
+              >
+                + Thêm
+              </button>
+            </div>
+            {!flipCountry ? (
+              <HangBangTable
+                data={hangBang.filter(
+                  (row) =>
+                    row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID
+                )}
+              />
+            ) : (
+              <HangBangTable
+                data={hangBang.filter(
+                  (row) =>
+                    row.ma_khu_vuc === process.env.NEXT_PUBLIC_AUSTRALIA_UUID
+                )}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>
