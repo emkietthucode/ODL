@@ -110,6 +110,11 @@ const UpdateStateModal = () => {
           {...register('stateName', { required: true })}
           placeholder="Tên tiểu bang"
         />
+        <Input
+          readOnly
+          placeholder="Úc"
+          className="placeholder:text-black bg-gray-200"
+        />
         {/* <Input
           id="language"
           disabled={isLoading}
@@ -118,23 +123,38 @@ const UpdateStateModal = () => {
           placeholder="Ngôn ngữ"
         /> */}
         <div>
-          <div className="pb-1">Chọn biểu tượng</div>
+          <div className="pb-5 pt-2 text-sm font-semibold text-neutral-500">
+            BIỂU TƯỢNG
+          </div>
           <Input
-            id="symbol"
+            id="flag"
             type="file"
             disabled={isLoading}
             error={!!errors.flag}
             accept="image/*"
-            {...register('symbol', { required: false })}
+            {...register('flag', { required: false })}
           />
         </div>
-        <Button
-          className="bg-blue-500 hover:bg-blue-400"
-          disabled={isLoading}
-          type="submit"
-        >
-          Cập nhật
-        </Button>
+        <div className="mt-3 flex gap-10 justify-center">
+          <Button
+            className="bg-purple hover:bg-purple text-white font-semibold min-w-36 self-center"
+            disabled={isLoading}
+            type="submit"
+          >
+            XÁC NHẬN
+          </Button>
+          <Button
+            className="bg-neutral-400 hover:bg-neutral-300 text-white font-semibold min-w-36 self-center"
+            disabled={isLoading}
+            type="submit"
+            onClick={() => {
+              reset()
+              onClose()
+            }}
+          >
+            HỦY
+          </Button>
+        </div>
       </form>
     </Modal>
   )
