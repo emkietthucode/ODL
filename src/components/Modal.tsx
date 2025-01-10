@@ -25,7 +25,7 @@ const Modal: React.FC<ModalProps> = ({
               shadow-md
               drop-shadow-md
               border
-              border-neutral-300
+              border-neutral-400
               max-h-full
               h-full
               md:h-auto
