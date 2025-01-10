@@ -154,11 +154,11 @@ export default function StateDashboard() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => updateOnOpen(item)}>
                           <Pencil className="h-4 w-4 mr-2" />
-                          Edit
+                          Chỉnh sửa
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => deleteOnOpen(item)}>
                           <Trash2 className="h-4 w-4 mr-2 text-red-600" />
-                          Delete
+                          Xóa
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
