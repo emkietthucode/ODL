@@ -104,7 +104,7 @@ export default function StateDashboard() {
             DANH SÁCH QUỐC GIA
           </div>
           <hr className="my-6 w-[235px] h-px mx-auto bg-light-purple border-0 rounded dark:bg-purple"></hr>
-          <button className="font-semibold rounded-lg text-white bg-purple flex h-[43px] items-center shrink-0 pl-[18px] pr-[114px] py-[13px]">
+          <button className="my-3 font-semibold text-sm rounded-lg text-white bg-purple hover:bg-purple/90 flex h-[43px] items-center w-[150px] pl-2">
             ÚC
           </button>
         </div>

@@ -59,63 +59,60 @@ export default function LicenceDashboard() {
       <div className="bg-light-purple-admin p-8 flex justify-between items-center">
         <h1 className="text-purple text-2xl font-bold ml-10">HẠNG BẰNG</h1>
       </div>
-      <div className="container mx-auto p-5">
-        <div className="flex gap-10">
-          <div className="flex flex-col items-center bg-white min-w-64 h-[735px] rounded-lg drop-shadow-lg">
-            <div className="mt-10 text-sm font-semibold text-purple">
-              DANH SÁCH QUỐC GIA
-            </div>
-            <hr className="my-6 w-[200px] h-px mx-auto bg-light-purple border-0 rounded dark:bg-purple"></hr>
-            <Button
-              onClick={() => setFlipCountry(false)}
-              className={twMerge(
-                `my-4 font-semibold rounded-lg text-white bg-purple hover:bg-purple/90 h-[43px] w-[150px]`,
-                flipCountry && `bg-neutral-500 hover:bg-neutral-500/90`
-              )}
-            >
-              Việt Nam
-            </Button>
-            <Button
-              onClick={() => setFlipCountry(true)}
-              className={twMerge(
-                `my-4 font-semibold rounded-lg text-white bg-purple hover:bg-purple/90 h-[43px] w-[150px]`,
-                !flipCountry && `bg-neutral-500 hover:bg-neutral-500/90`
-              )}
-            >
-              ÚC
-            </Button>
+      <div className="flex gap-10 container mx-auto p-8">
+        <div className="flex flex-col items-center bg-white min-w-64 h-[735px] rounded-lg drop-shadow-lg">
+          <div className="mt-10 text-sm font-semibold text-purple">
+            DANH SÁCH QUỐC GIA
           </div>
-          <div className="flex flex-col w-full">
-            <div className="flex justify-between items-center space-x-4 mb-6">
-              <Input
-                type="text"
-                placeholder="Search"
-                className="bg-white border w-full sm:w-[200px] md:w-[300px] lg:w-[400px] max-w-full rounded-full px-4 py-2"
-                onChange={(e) => setSearchText(e.target.value)}
-              />
-              <button
-                onClick={insertOnOpen}
-                className="bg-blue-500 w-[120px] text-white px-4 py-2 rounded-md"
-              >
-                + Thêm
-              </button>
-            </div>
-            {!flipCountry ? (
-              <HangBangTable
-                data={hangBang.filter(
-                  (row) =>
-                    row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID
-                )}
-              />
-            ) : (
-              <HangBangTable
-                data={hangBang.filter(
-                  (row) =>
-                    row.ma_khu_vuc === process.env.NEXT_PUBLIC_AUSTRALIA_UUID
-                )}
-              />
+          <hr className="my-6 w-[200px] h-px mx-auto bg-light-purple border-0 rounded dark:bg-purple"></hr>
+          <button
+            onClick={() => setFlipCountry(false)}
+            className={twMerge(
+              `my-3 font-semibold text-sm rounded-lg text-white bg-purple flex h-[43px] items-center w-[150px] pl-2`,
+              flipCountry && `bg-neutral-500 hover:bg-neutral-500/90`
             )}
+          >
+            VIỆT NAM
+          </button>
+          <button
+            onClick={() => setFlipCountry(true)}
+            className={twMerge(
+              `my-3 font-semibold text-sm rounded-lg text-white bg-purple hover:bg-purple/90 flex h-[43px] items-center w-[150px] pl-2`,
+              !flipCountry && `bg-neutral-500 hover:bg-neutral-500/90`
+            )}
+          >
+            ÚC
+          </button>
+        </div>
+        <div className="flex flex-col w-full">
+          <div className="flex justify-between items-center space-x-4 mb-6">
+            <Input
+              type="text"
+              placeholder="Search"
+              className="bg-white border w-full sm:w-[200px] md:w-[300px] lg:w-[400px] max-w-full rounded-full px-4 py-2"
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+            <button
+              onClick={insertOnOpen}
+              className="bg-blue-500 w-[120px] text-white px-4 py-2 rounded-md"
+            >
+              + Thêm
+            </button>
           </div>
+          {!flipCountry ? (
+            <HangBangTable
+              data={hangBang.filter(
+                (row) => row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID
+              )}
+            />
+          ) : (
+            <HangBangTable
+              data={hangBang.filter(
+                (row) =>
+                  row.ma_khu_vuc === process.env.NEXT_PUBLIC_AUSTRALIA_UUID
+              )}
+            />
+          )}
         </div>
       </div>
     </div>
