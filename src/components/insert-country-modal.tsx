@@ -79,12 +79,15 @@ const InsertCountryModal = () => {
   }
   return (
     <Modal
-      title="Thêm quốc gia mới"
-      description="Điền thông tin quốc gia mới"
+      title="THÊM QUỐC GIA"
+      description="Điền thông tin Quốc gia mới vào đây"
       isOpen={insertCountryModal.isOpen}
       onChange={onChange}
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-y-4 justify-center"
+      >
         <Input
           id="countryName"
           disabled={isLoading}
@@ -100,7 +103,9 @@ const InsertCountryModal = () => {
           placeholder="Ngôn ngữ"
         />
         <div>
-          <div className="pb-1">Chọn quốc kỳ</div>
+          <div className="pb-5 pt-2 text-sm font-semibold text-neutral-500">
+            QUỐC KỲ
+          </div>
           <Input
             id="flag"
             type="file"
@@ -111,11 +116,11 @@ const InsertCountryModal = () => {
           />
         </div>
         <Button
-          className="bg-blue-500 hover:bg-blue-400"
+          className="mt-3 bg-purple hover:bg-purple text-white font-semibold min-w-48 self-center"
           disabled={isLoading}
           type="submit"
         >
-          Thêm
+          XÁC NHẬN
         </Button>
       </form>
     </Modal>
