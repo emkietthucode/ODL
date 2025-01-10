@@ -70,18 +70,34 @@ export default function LicenceDashboard() {
 
   const getFilterData = (): HangBang[] => {
     if (activeTab === 'Tất cả') {
-      return hangBang
+      return hangBang.filter(
+        (row) => row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID
+      )
     } else if (activeTab === 'Xe máy') {
-      return hangBang.filter((row) => row.ten_hang_bang.startsWith('A'))
+      return hangBang.filter(
+        (row) =>
+          row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID &&
+          row.ten_hang_bang.startsWith('A')
+      )
     } else if (activeTab === 'Ô tô') {
       return hangBang.filter(
         (row) =>
-          row.ten_hang_bang.startsWith('B') || row.ten_hang_bang.startsWith('C')
+          row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID &&
+          (row.ten_hang_bang.startsWith('B') ||
+            row.ten_hang_bang.startsWith('C'))
       )
     } else if (activeTab === 'Xe khách') {
-      return hangBang.filter((row) => row.ten_hang_bang.startsWith('D'))
+      return hangBang.filter(
+        (row) =>
+          row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID &&
+          row.ten_hang_bang.startsWith('D')
+      )
     } else if (activeTab === 'Rơ-mooc') {
-      return hangBang.filter((row) => row.ten_hang_bang.startsWith('F'))
+      return hangBang.filter(
+        (row) =>
+          row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID &&
+          row.ten_hang_bang.startsWith('F')
+      )
     }
     return []
   }
@@ -136,10 +152,10 @@ export default function LicenceDashboard() {
             </button>
           </div>
 
-          <div className="flex flex-col text-sm rounded-xl w-full shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-            <div className="pl-[50px] pt-5 flex gap-5 justify-start items-center w-full bg-white rounded-md border-b border-zinc-400 border-opacity-60">
-              {flipCountry === true ? (
-                tabsVN.map((tab) => (
+          {flipCountry === true ? (
+            <div className="flex flex-col text-sm  rounded-xl w-full shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+              <div className="pl-[50px] pt-5 flex gap-5 justify-start items-center w-full bg-white rounded-md border-b border-zinc-400 border-opacity-60">
+                {tabsVN.map((tab) => (
                   <div
                     key={tab.label}
                     onClick={() => handleTabClick(tab.label)}
@@ -147,13 +163,23 @@ export default function LicenceDashboard() {
                   >
                     <Tab label={tab.label} isActive={tab.label === activeTab} />
                   </div>
-                ))
-              ) : (
-                <Tab label="Learner" isActive />
-              )}
+                ))}
+              </div>
+              <HangBangTable data={getFilterData()} />
             </div>
-            {/* <HangBangTable isVN={flipCountry} data={getFilterData()} /> */}
-          </div>
+          ) : (
+            <div className="flex flex-col text-sm  rounded-xl w-full shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+              <div className="pl-[50px] pt-5 flex gap-5 justify-start items-center w-full bg-white rounded-md border-b border-zinc-400 border-opacity-60">
+                <Tab label="Learner" isActive />
+              </div>
+              <HangBangTable
+                data={hangBang.filter(
+                  (row) =>
+                    row.ma_khu_vuc === process.env.NEXT_PUBLIC_AUSTRALIA_UUID
+                )}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

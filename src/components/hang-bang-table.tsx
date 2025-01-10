@@ -29,13 +29,11 @@ import useUpdateLicenceModal from '@/hooks/useUpdateLicenceModal'
 import supabase from '@/utils/supabase/supabase'
 
 interface HangBangTableProps {
-  isVN: boolean
   data: HangBang[]
   itemsPerPage?: number
 }
 
 const HangBangTable: React.FC<HangBangTableProps> = ({
-  isVN,
   data,
   itemsPerPage = 10,
 }) => {
@@ -52,21 +50,13 @@ const HangBangTable: React.FC<HangBangTableProps> = ({
     return data.slice(startIdx, startIdx + itemsPerPage)
   }, [currentPage, itemsPerPage, data])
 
-  const getStateName = async (id: string) => {
-    const { data, error } = await supabase
-      .from('khu_vuc')
-      .select('ten_khu_vuc')
-      .eq('id', id)
-    return data ? data[0].ten_khu_vuc : ''
-  }
-
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
       <Table>
         <TableHeader className="bg-gray-50">
           <TableRow className="border-b border-gray-100">
             <TableHead className="px-8 font-bold text-black w-[15%]">
-              {isVN ? `HẠNG BẰNG` : 'TIỂU BANG'}
+              HẠNG BẰNG
             </TableHead>
             <TableHead className="font-bold text-black w-[30%]">
               MÔ TẢ
@@ -77,9 +67,7 @@ const HangBangTable: React.FC<HangBangTableProps> = ({
         <TableBody>
           {getCurrentPageData.map((item: HangBang) => (
             <TableRow key={item.id} className="border-b border-gray-100">
-              <TableCell className="px-8">
-                {isVN ? item.ten_hang_bang : getStateName(item.ma_khu_vuc)}
-              </TableCell>
+              <TableCell className="px-8">{item.ten_hang_bang}</TableCell>
               <TableCell>{item.mo_ta_hang_bang}</TableCell>
               <TableCell className="pr-8 text-right">
                 <DropdownMenu>
