@@ -52,7 +52,7 @@ const DeleteLicenceModal = () => {
       >
         <div className="mt-3 flex gap-10 justify-center">
           <Button
-            className="bg-purple hover:bg-purple text-white font-semibold min-w-36 self-center"
+            className="bg-purple hover:bg-purple/90 text-white font-semibold min-w-36 self-center"
             disabled={isLoading}
             type="submit"
             onClick={() => handleDelete(hangBang.id)}
@@ -60,7 +60,7 @@ const DeleteLicenceModal = () => {
             XÁC NHẬN
           </Button>
           <Button
-            className="bg-neutral-400 hover:bg-neutral-300 text-white font-semibold min-w-36 self-center"
+            className="bg-neutral-400 hover:bg-neutral-400/90 text-white font-semibold min-w-36 self-center"
             disabled={isLoading}
             type="submit"
             onClick={() => onClose()}
