@@ -35,7 +35,7 @@ import useInsertStateModal from '@/hooks/useInsertStateModal'
 import useDeleteStateModal from '@/hooks/useDeleteStateModal'
 import useUpdateStateModal from '@/hooks/useUpdateStateModal'
 
-const ITEMS_PER_PAGE = 10
+const ITEMS_PER_PAGE = 8
 
 export default function StateDashboard() {
   const { onOpen: insertOnOpen, refreshTrigger: insertRefreshTrigger } =
@@ -97,98 +97,109 @@ export default function StateDashboard() {
     <div className="flex flex-col min-h-screen">
       <div className="bg-light-purple-admin p-8 flex justify-between items-center">
         <h1 className="text-purple text-2xl font-bold ml-10">TIỂU BANG</h1>
-        <div className="flex items-center space-x-4">
-          <Input
-            type="text"
-            placeholder="Search"
-            className="bg-white border w-full sm:w-[200px] md:w-[300px] lg:w-[400px] max-w-full rounded-full px-4 py-2"
-            onChange={(e) => setSearchText(e.target.value)}
-          />
-          <button
-            onClick={insertOnOpen}
-            className="bg-blue-500 w-[120px] text-white px-4 py-2 rounded-md"
-          >
-            + Thêm
+      </div>
+      <div className="flex gap-10 container mx-auto p-8">
+        <div className="flex flex-col justify-start items-center bg-white min-w-64 h-[735px] rounded-lg drop-shadow-lg">
+          <div className="mt-10 text-sm font-semibold text-purple">
+            DANH SÁCH QUỐC GIA
+          </div>
+          <hr className="my-6 w-[235px] h-px mx-auto bg-light-purple border-0 rounded dark:bg-purple"></hr>
+          <button className="my-3 font-semibold text-sm rounded-lg text-white bg-purple hover:bg-purple/90 flex h-[43px] items-center w-[150px] pl-2">
+            ÚC
           </button>
         </div>
-      </div>
-      <div className="container mx-auto p-5">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <Table>
-            <TableHeader className="bg-gray-50">
-              <TableRow className="border-b border-gray-100">
-                <TableHead className="px-8 font-bold text-black w-[28%]">
-                  TIỂU BANG
-                </TableHead>
-                {/* <TableHead className="font-bold text-black w-[28%]">
+        <div className="flex flex-col w-full">
+          <div className="flex justify-between items-center space-x-4 mb-6">
+            <Input
+              type="text"
+              placeholder="Search"
+              className="bg-white border w-full sm:w-[200px] md:w-[300px] lg:w-[400px] max-w-full rounded-full px-4 py-2"
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+            <button
+              onClick={insertOnOpen}
+              className="bg-blue-500 hover:bg-blue-500/90 w-[120px] text-white px-4 py-2 rounded-md"
+            >
+              + Thêm
+            </button>
+          </div>
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <Table>
+              <TableHeader className="bg-gray-50">
+                <TableRow className="border-b border-gray-100">
+                  <TableHead className="px-8 font-bold text-black w-[28%]">
+                    TIỂU BANG
+                  </TableHead>
+                  {/* <TableHead className="font-bold text-black w-[28%]">
                   NGÔN NGỮ
                 </TableHead> */}
-                <TableHead className="font-bold text-black w-[28%]">
-                  BIỂU TƯỢNG
-                </TableHead>
-                <TableHead className="font-bold w-[10%]"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {getCurrentPageData().map((item: KhuVuc) => (
-                <TableRow key={item.id} className="border-b border-gray-100">
-                  <TableCell className="px-8">{item.ten_khu_vuc}</TableCell>
-                  {/* <TableCell>{item.ngon_ngu}</TableCell> */}
-                  <TableCell>
-                    <Image
-                      src={getQuocKy(item)}
-                      alt=""
-                      sizes="100vw"
-                      width={60}
-                      height={60}
-                    />
-                  </TableCell>
-                  <TableCell className="pr-8 text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">Open menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => updateOnOpen(item)}>
-                          <Pencil className="h-4 w-4 mr-2" />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => deleteOnOpen(item)}>
-                          <Trash2 className="h-4 w-4 mr-2 text-red-600" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+                  <TableHead className="font-bold text-black w-[28%]">
+                    BIỂU TƯỢNG
+                  </TableHead>
+                  <TableHead className="font-bold w-[10%]"></TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <div className="flex gap-5 justify-center items-center p-4 border-t border-gray-100">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <span className="text-sm">
-              {currentPage}/{totalPages}
-            </span>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-              }
-              disabled={currentPage === totalPages}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+              </TableHeader>
+              <TableBody>
+                {getCurrentPageData().map((item: KhuVuc) => (
+                  <TableRow key={item.id} className="border-b border-gray-100">
+                    <TableCell className="px-8">{item.ten_khu_vuc}</TableCell>
+                    {/* <TableCell>{item.ngon_ngu}</TableCell> */}
+                    <TableCell>
+                      <Image
+                        src={getQuocKy(item)}
+                        alt=""
+                        sizes="100vw"
+                        width={60}
+                        height={60}
+                      />
+                    </TableCell>
+                    <TableCell className="pr-8 text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Open menu</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => updateOnOpen(item)}>
+                            <Pencil className="h-4 w-4 mr-2" />
+                            Chỉnh sửa
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => deleteOnOpen(item)}>
+                            <Trash2 className="h-4 w-4 mr-2 text-red-600" />
+                            Xóa
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <div className="flex gap-5 justify-center items-center p-4 border-t border-gray-100">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-sm">
+                {currentPage}/{totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>

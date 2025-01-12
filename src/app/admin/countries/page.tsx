@@ -97,7 +97,9 @@ export default function CountryDashboard() {
     <div className="flex flex-col min-h-screen">
       <div className="bg-light-purple-admin p-8 flex justify-between items-center">
         <h1 className="text-purple text-2xl font-bold ml-10">QUỐC GIA</h1>
-        <div className="flex items-center space-x-4">
+      </div>
+      <div className="container mx-auto p-8">
+        <div className="flex justify-between items-center space-x-4 mb-6">
           <Input
             type="text"
             placeholder="Search"
@@ -106,13 +108,11 @@ export default function CountryDashboard() {
           />
           <button
             onClick={insertOnOpen}
-            className="bg-blue-500 w-[120px] text-white px-4 py-2 rounded-md"
+            className="bg-blue-500 hover:bg-blue-500/90 w-[120px] text-white px-4 py-2 rounded-md"
           >
             + Thêm
           </button>
         </div>
-      </div>
-      <div className="container mx-auto p-5">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <Table>
             <TableHeader className="bg-gray-50">
@@ -155,11 +155,11 @@ export default function CountryDashboard() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => updateOnOpen(item)}>
                           <Pencil className="h-4 w-4 mr-2" />
-                          Edit
+                          Chỉnh sửa
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => deleteOnOpen(item)}>
                           <Trash2 className="h-4 w-4 mr-2 text-red-600" />
-                          Delete
+                          Xóa
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

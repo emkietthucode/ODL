@@ -15,25 +15,21 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         flex
         w-full
         rounded-md
-        bg-gray-50
-        border
+        bg-gray-100
         px-3
         py-3
-        text-sm
+        text-xs
+        file:text-neutral-400
         file:border-0
         file:bg-transparent
-        file:text-sm
+        file:text-xs
         file:font-medium
         placeholder:text-neutral-400
         disabled:cursor-not-allowed
         disabled:opacity-50
         focus:outline-none
         transition
-        ${
-          error
-            ? 'border-red-500 focus:border-red-500'
-            : 'border-light-purple focus:border-light-purple'
-        }
+        ${error && 'border-red-500 focus:border-red-500'}
       `,
           className
         )}

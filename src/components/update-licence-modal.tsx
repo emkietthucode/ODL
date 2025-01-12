@@ -118,7 +118,7 @@ const UpdateLicenceModal = () => {
   }
   return (
     <Modal
-      title="Cập nhật hạng bằng mới"
+      title="CHỈNH SỬA HẠNG BẰNG"
       description="Điền thông tin hạng bằng mới"
       isOpen={isOpen}
       onChange={onChange}
@@ -135,7 +135,12 @@ const UpdateLicenceModal = () => {
         <Textarea
           id="description"
           className={cn(
-            'h-[100px]',
+            `h-[100px]
+            bg-gray-100
+            placeholder:text-neutral-400
+            placeholder:text-xs
+            focus:outline-none
+            `,
             !!errors.description && 'border-red-500' // Highlight error visually
           )}
           placeholder="Mô tả"
@@ -191,13 +196,26 @@ const UpdateLicenceModal = () => {
             </Command>
           </PopoverContent>
         </Popover>
-        <Button
-          className="bg-blue-500 hover:bg-blue-400"
-          disabled={isLoading}
-          type="submit"
-        >
-          Cập nhật
-        </Button>
+        <div className="mt-3 flex gap-10 justify-center">
+          <Button
+            className="bg-purple hover:bg-purple/90 text-white font-semibold min-w-36 self-center"
+            disabled={isLoading}
+            type="submit"
+          >
+            XÁC NHẬN
+          </Button>
+          <Button
+            className="bg-neutral-400 hover:bg-neutral-400/90 text-white font-semibold min-w-36 self-center"
+            disabled={isLoading}
+            type="submit"
+            onClick={() => {
+              reset()
+              onClose()
+            }}
+          >
+            HỦY
+          </Button>
+        </div>
       </form>
     </Modal>
   )

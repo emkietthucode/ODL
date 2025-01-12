@@ -45,25 +45,27 @@ const DeleteLicenceModal = () => {
   return (
     <div>
       <Modal
-        title={`Xóa hạng bằng: ${hangBang.ten_hang_bang}`}
-        description="Bạn có chắc chắn xóa hạng bằng này không?"
+        title={`XÓA HẠNG BẰNG`}
+        description="Bạn có chắc chắn xóa hạng bằng này?"
         isOpen={isOpen}
         onChange={onChange}
       >
-        <div className="flex justify-center items-center gap-5">
+        <div className="mt-3 flex gap-10 justify-center">
           <Button
-            onClick={() => onClose()}
-            variant="secondary"
+            className="bg-purple hover:bg-purple/90 text-white font-semibold min-w-36 self-center"
             disabled={isLoading}
+            type="submit"
+            onClick={() => handleDelete(hangBang.id)}
           >
-            Hủy
+            XÁC NHẬN
           </Button>
           <Button
-            onClick={() => handleDelete(hangBang.id)}
-            variant="destructive"
+            className="bg-neutral-400 hover:bg-neutral-400/90 text-white font-semibold min-w-36 self-center"
             disabled={isLoading}
+            type="submit"
+            onClick={() => onClose()}
           >
-            Xóa
+            HỦY
           </Button>
         </div>
       </Modal>

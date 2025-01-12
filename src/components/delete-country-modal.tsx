@@ -55,25 +55,27 @@ const DeleteCountryModal = () => {
   return (
     <div>
       <Modal
-        title={`Xóa quốc gia: ${khuVuc.ten_khu_vuc}`}
-        description="Bạn có chắc chắn xóa quốc gia này không?"
+        title={`XÓA QUỐC GIA`}
+        description="Bạn chắc chắn xóa quốc gia này?"
         isOpen={isOpen}
         onChange={onChange}
       >
-        <div className="flex justify-center items-center gap-5">
+        <div className="mt-3 flex gap-10 justify-center">
           <Button
-            onClick={() => onClose()}
-            variant="secondary"
+            className="bg-purple hover:bg-purple/90 text-white font-semibold min-w-36 self-center"
             disabled={isLoading}
+            type="submit"
+            onClick={() => handleDelete(khuVuc.id)}
           >
-            Hủy
+            XÁC NHẬN
           </Button>
           <Button
-            onClick={() => handleDelete(khuVuc.id)}
-            variant="destructive"
+            className="bg-neutral-400 hover:bg-neutral-400/90 text-white font-semibold min-w-36 self-center"
             disabled={isLoading}
+            type="submit"
+            onClick={() => onClose()}
           >
-            Xóa
+            HỦY
           </Button>
         </div>
       </Modal>

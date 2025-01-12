@@ -26,6 +26,7 @@ import {
 import { HangBang } from '@/types/types' // Adjust the path as necessary
 import useDeleteLicenceModal from '@/hooks/useDeleteLicenceModal'
 import useUpdateLicenceModal from '@/hooks/useUpdateLicenceModal'
+import supabase from '@/utils/supabase/supabase'
 
 interface HangBangTableProps {
   data: HangBang[]
@@ -54,10 +55,10 @@ const HangBangTable: React.FC<HangBangTableProps> = ({
       <Table>
         <TableHeader className="bg-gray-50">
           <TableRow className="border-b border-gray-100">
-            <TableHead className="px-8 font-bold text-black w-[28%]">
+            <TableHead className="px-8 font-bold text-black w-[15%]">
               HẠNG BẰNG
             </TableHead>
-            <TableHead className="font-bold text-black w-[28%]">
+            <TableHead className="font-bold text-black w-[30%]">
               MÔ TẢ
             </TableHead>
             <TableHead className="font-bold w-[10%]"></TableHead>
@@ -79,11 +80,11 @@ const HangBangTable: React.FC<HangBangTableProps> = ({
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => updateOnOpen(item)}>
                       <Pencil className="h-4 w-4 mr-2" />
-                      Edit
+                      Chỉnh sửa
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => deleteOnOpen(item)}>
                       <Trash2 className="h-4 w-4 mr-2 text-red-600" />
-                      Delete
+                      Xóa
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

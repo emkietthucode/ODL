@@ -99,8 +99,8 @@ const UpdateCountryModal = () => {
   }
   return (
     <Modal
-      title="Cập nhật quốc gia"
-      description="Điền thông tin quốc gia mới"
+      title="CHỈNH SỬA QUỐC GIA"
+      description="Điền thông tin vào đây"
       isOpen={isOpen}
       onChange={onChange}
     >
@@ -120,7 +120,9 @@ const UpdateCountryModal = () => {
           placeholder="Ngôn ngữ"
         />
         <div>
-          <div className="pb-1">Chọn quốc kỳ</div>
+          <div className="pb-5 pt-2 text-sm font-semibold text-neutral-500">
+            QUỐC KỲ
+          </div>
           <Input
             id="flag"
             type="file"
@@ -130,13 +132,26 @@ const UpdateCountryModal = () => {
             {...register('flag', { required: false })}
           />
         </div>
-        <Button
-          className="bg-blue-500 hover:bg-blue-400"
-          disabled={isLoading}
-          type="submit"
-        >
-          Cập nhật
-        </Button>
+        <div className="mt-3 flex gap-10 justify-center">
+          <Button
+            className="bg-purple hover:bg-purple/90 text-white font-semibold min-w-36 self-center"
+            disabled={isLoading}
+            type="submit"
+          >
+            XÁC NHẬN
+          </Button>
+          <Button
+            className="bg-neutral-400 hover:bg-neutral-400/90 text-white font-semibold min-w-36 self-center"
+            disabled={isLoading}
+            type="submit"
+            onClick={() => {
+              reset()
+              onClose()
+            }}
+          >
+            HỦY
+          </Button>
+        </div>
       </form>
     </Modal>
   )
