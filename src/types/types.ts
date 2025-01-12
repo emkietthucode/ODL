@@ -15,3 +15,16 @@ export interface HangBang {
   createdAt: string
   updatedAt: string
 }
+
+export interface NguoiDung {
+  id: string
+  email: string
+  ho_ten: string
+  anh_dai_dien: string
+  ngay_sinh: string
+  vai_tro: string
+  ma_khu_vuc: string
+  created_at: string
+  updated_at: string
+  gioi_tinh: string
+}
