@@ -26,25 +26,23 @@ import {
 import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
 import qs from 'query-string'
+import { format, parseISO } from 'date-fns'
 import useDebounce from '@/hooks/useDebounce'
 import { NguoiDung } from '@/types/types'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import useInsertStateModal from '@/hooks/useInsertStateModal'
-import useDeleteStateModal from '@/hooks/useDeleteStateModal'
-import useUpdateStateModal from '@/hooks/useUpdateStateModal'
+import useDeleteUserModal from '@/hooks/useDeleteUserModal'
+import useUpdateUserModal from '@/hooks/useUpdateUserModal'
 
 const ITEMS_PER_PAGE = 8
 const ADMIN_ROLE = 'admin'
 
-export default function StateDashboard() {
-  const { onOpen: insertOnOpen, refreshTrigger: insertRefreshTrigger } =
-    useInsertStateModal()
+export default function UserDashboard() {
   const { onOpen: updateOnOpen, refreshTrigger: updateRefreshTrigger } =
-    useUpdateStateModal()
+    useUpdateUserModal()
   const { onOpen: deleteOnOpen, refreshTrigger: deleteRefreshTrigger } =
-    useDeleteStateModal()
+    useDeleteUserModal()
   const [searchText, setSearchText] = useState('')
   const [nguoiDung, setNguoiDung] = useState<NguoiDung[]>([])
   const [totalUserPages, setTotalUserPages] = useState(0)
@@ -54,7 +52,7 @@ export default function StateDashboard() {
   const router = useRouter()
   const debounceValue = useDebounce<string>(searchText, 500)
 
-  const getKhuVuc = async (debounceValue: string) => {
+  const getNguoiDung = async (debounceValue: string) => {
     const { data, error } = await supabase.rpc('search_nguoi_dung', {
       search_text: debounceValue,
     })
@@ -85,14 +83,8 @@ export default function StateDashboard() {
       query: query,
     })
     router.push(url)
-    getKhuVuc(debounceValue)
-  }, [
-    debounceValue,
-    router,
-    updateRefreshTrigger,
-    deleteRefreshTrigger,
-    insertRefreshTrigger,
-  ])
+    getNguoiDung(debounceValue)
+  }, [debounceValue, router, updateRefreshTrigger, deleteRefreshTrigger])
 
   const getCurrentPageData = (isAdmin: boolean) => {
     if (isAdmin) {
@@ -125,8 +117,8 @@ export default function StateDashboard() {
               onChange={(e) => setSearchText(e.target.value)}
             />
             <button
-              onClick={insertOnOpen}
-              className="bg-blue-500 hover:bg-blue-500/90 w-[120px] text-white px-4 py-2 rounded-md"
+              onClick={() => {}}
+              className="bg-neutral-500 hover:bg-neutral-500/90 w-[120px] text-white px-4 py-2 rounded-md"
             >
               + Thêm
             </button>
@@ -140,17 +132,20 @@ export default function StateDashboard() {
             <Table>
               <TableHeader className="bg-gray-50">
                 <TableRow className="border-b border-gray-100">
-                  <TableHead className="px-8 font-bold text-black w-[26%]">
+                  <TableHead className="px-8 font-bold text-black w-[25%]">
                     HỌ TÊN
                   </TableHead>
-                  <TableHead className="px-8 font-bold text-black w-[26%]">
+                  <TableHead className="px-8 font-bold text-black w-[20%]">
                     EMAIL
                   </TableHead>
-                  <TableHead className="px-8 font-bold text-black w-[26%]">
+                  <TableHead className="px-8 font-bold text-black w-[15%]">
                     NGÀY SINH
                   </TableHead>
-                  <TableHead className="px-8 font-bold text-black w-[10%]">
+                  <TableHead className="px-8 font-bold text-black w-[15%]">
                     GIỚI TÍNH
+                  </TableHead>
+                  <TableHead className="px-8 font-bold text-black w-[25%]">
+                    KHU VỰC
                   </TableHead>
                   <TableHead className="font-bold w-[10%]"></TableHead>
                 </TableRow>
@@ -160,8 +155,12 @@ export default function StateDashboard() {
                   <TableRow key={item.id} className="border-b border-gray-100">
                     <TableCell className="px-8">{item.ho_ten}</TableCell>
                     <TableCell className="px-8">{item.email}</TableCell>
-                    <TableCell className="px-8">{item.ngay_sinh}</TableCell>
+                    <TableCell className="px-8">
+                      {item.ngay_sinh &&
+                        format(new Date(item.ngay_sinh), 'dd/MM/yyyy')}
+                    </TableCell>
                     <TableCell className="px-8">{item.gioi_tinh}</TableCell>
+                    <TableCell className="px-8">{item.ten_khu_vuc}</TableCell>
                     <TableCell className="pr-8 text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -171,9 +170,7 @@ export default function StateDashboard() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={() => {} /*updateOnOpen(item)*/}
-                          >
+                          <DropdownMenuItem onClick={() => updateOnOpen(item)}>
                             <Pencil className="h-4 w-4 mr-2" />
                             Chỉnh sửa
                           </DropdownMenuItem>
@@ -228,17 +225,20 @@ export default function StateDashboard() {
             <Table>
               <TableHeader className="bg-gray-50">
                 <TableRow className="border-b border-gray-100">
-                  <TableHead className="px-8 font-bold text-black w-[26%]">
+                  <TableHead className="px-8 font-bold text-black w-[25%]">
                     HỌ TÊN
                   </TableHead>
-                  <TableHead className="px-8 font-bold text-black w-[26%]">
+                  <TableHead className="px-8 font-bold text-black w-[20%]">
                     EMAIL
                   </TableHead>
-                  <TableHead className="px-8 font-bold text-black w-[26%]">
+                  <TableHead className="px-8 font-bold text-black w-[15%]">
                     NGÀY SINH
                   </TableHead>
-                  <TableHead className="px-8 font-bold text-black w-[10%]">
+                  <TableHead className="px-8 font-bold text-black w-[15%]">
                     GIỚI TÍNH
+                  </TableHead>
+                  <TableHead className="px-8 font-bold text-black w-[25%]">
+                    KHU VỰC
                   </TableHead>
                   <TableHead className="font-bold w-[10%]"></TableHead>
                 </TableRow>
@@ -248,8 +248,12 @@ export default function StateDashboard() {
                   <TableRow key={item.id} className="border-b border-gray-100">
                     <TableCell className="px-8">{item.ho_ten}</TableCell>
                     <TableCell className="px-8">{item.email}</TableCell>
-                    <TableCell className="px-8">{item.ngay_sinh}</TableCell>
+                    <TableCell className="px-8">
+                      {item.ngay_sinh &&
+                        format(new Date(item.ngay_sinh), 'dd/MM/yyyy')}
+                    </TableCell>
                     <TableCell className="px-8">{item.gioi_tinh}</TableCell>
+                    <TableCell className="px-8">{item.ten_khu_vuc}</TableCell>
                     <TableCell className="pr-8 text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -259,9 +263,7 @@ export default function StateDashboard() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={() => {} /*updateOnOpen(item)*/}
-                          >
+                          <DropdownMenuItem onClick={() => updateOnOpen(item)}>
                             <Pencil className="h-4 w-4 mr-2" />
                             Chỉnh sửa
                           </DropdownMenuItem>
