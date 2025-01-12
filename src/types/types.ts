@@ -24,6 +24,7 @@ export interface NguoiDung {
   ngay_sinh: string
   vai_tro: string
   ma_khu_vuc: string
+  ten_khu_vuc: string
   created_at: string
   updated_at: string
   gioi_tinh: string
