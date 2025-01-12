@@ -71,6 +71,7 @@ const UpdateLicenceModal = () => {
         (country) => country.uuid === hangBang.ma_khu_vuc
       )
       setCountryVal(currentCountry?.label || '')
+      setCountryUUID(currentCountry?.uuid || '')
     }
   }, [hangBang, reset])
 
