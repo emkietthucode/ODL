@@ -174,9 +174,7 @@ export default function UserDashboard() {
                             <Pencil className="h-4 w-4 mr-2" />
                             Chỉnh sửa
                           </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => {} /*deleteOnOpen(item)*/}
-                          >
+                          <DropdownMenuItem onClick={() => deleteOnOpen(item)}>
                             <Trash2 className="h-4 w-4 mr-2 text-red-600" />
                             Xóa
                           </DropdownMenuItem>
@@ -267,9 +265,7 @@ export default function UserDashboard() {
                             <Pencil className="h-4 w-4 mr-2" />
                             Chỉnh sửa
                           </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => {} /*deleteOnOpen(item)*/}
-                          >
+                          <DropdownMenuItem onClick={() => deleteOnOpen(item)}>
                             <Trash2 className="h-4 w-4 mr-2 text-red-600" />
                             Xóa
                           </DropdownMenuItem>
