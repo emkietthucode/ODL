@@ -149,8 +149,9 @@ export default function StateDashboard() {
                         src={getQuocKy(item)}
                         alt=""
                         sizes="100vw"
-                        width={60}
-                        height={60}
+                        width={55}
+                        height={48}
+                        style={{ width: '55px', height: '48px' }}
                       />
                     </TableCell>
                     <TableCell className="pr-8 text-right">
