@@ -10,6 +10,8 @@ import DeleteStateModal from '@/components/delete-state-modal'
 import InsertLicenceModal from '@/components/insert-licence-modal'
 import DeleteLicenceModal from '@/components/delete-licence-modal'
 import UpdateLicenceModal from '@/components/update-licence-modal'
+import UpdateUserModal from '@/components/update-user-modal'
+import DeleteUserModal from '@/components/delete-user-modal'
 
 const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false)
@@ -33,6 +35,8 @@ const ModalProvider = () => {
       <InsertLicenceModal />
       <UpdateLicenceModal />
       <DeleteLicenceModal />
+      <UpdateUserModal />
+      <DeleteUserModal />
     </>
   )
 }
