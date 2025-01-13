@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { Button } from './ui/button'
 import { toast } from 'react-hot-toast'
 import supabase from '@/utils/supabase/supabase'
+import { deleteAccount } from '@/actions/users'
 
 const DeleteUserModal = () => {
   const {
@@ -28,7 +29,7 @@ const DeleteUserModal = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const { error: errorAuth } = await supabase.auth.admin.deleteUser(id)
+      const errorAuth = await deleteAccount(id)
 
       if (errorAuth) {
         console.log(errorAuth)
