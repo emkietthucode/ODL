@@ -9,10 +9,10 @@ import useDebounce from '@/hooks/useDebounce'
 import { CauHoi } from '@/types/types'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
-import useInsertLicenceModal from '@/hooks/useInsertLicenceModal'
-import useDeleteLicenceModal from '@/hooks/useDeleteLicenceModal'
+import useInsertQuestionModal from '@/hooks/useInsertQuestionModal'
+import useDeleteQuestionModal from '@/hooks/useDeleteQuestionModal'
 import CauHoiTable from '@/components/cau-hoi-table'
-import useUpdateLicenceModal from '@/hooks/useUpdateLicenceModal'
+import useUpdateQuestionModal from '@/hooks/useUpdateQuestionModal'
 import { cn } from '@/lib/utils'
 import { Tab } from '@/components/tab'
 
@@ -24,11 +24,11 @@ export const tabsVN = [
   { label: 'Sa hình' },
 ]
 
-export default function LicenceDashboard() {
+export default function QuestionDashboard() {
   const { onOpen: insertOnOpen, refreshTrigger: insertRefreshTrigger } =
-    useInsertLicenceModal()
-  const { refreshTrigger: updateRefreshTrigger } = useUpdateLicenceModal()
-  const { refreshTrigger: deleteRefreshTrigger } = useDeleteLicenceModal()
+    useInsertQuestionModal()
+  const { refreshTrigger: updateRefreshTrigger } = useUpdateQuestionModal()
+  const { refreshTrigger: deleteRefreshTrigger } = useDeleteQuestionModal()
   const [searchText, setSearchText] = useState('')
   const [cauHoi, setCauHoi] = useState<CauHoi[]>([])
   const router = useRouter()
