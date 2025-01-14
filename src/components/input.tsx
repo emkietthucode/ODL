@@ -29,7 +29,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         disabled:opacity-50
         focus:outline-none
         transition
-        ${error && 'border-red-500 focus:border-red-500'}
+        ${error && 'border border-red-500 focus:border-red-500'}
       `,
           className
         )}
