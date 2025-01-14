@@ -1,25 +1,24 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import CountryIcon from '../../public/icons/country.png'
 import StateIcon from '../../public/icons/state.png'
 import LicenseIcon from '../../public/icons/license.png'
 import TestIcon from '../../public/icons/test.png'
 import UserIcon from '../../public/icons/user.png'
-import PathIcon from '../../public/icons/path.png'
 import CountryHoverIcon from '../../public/icons/country-hover.png'
 import StateHoverIcon from '../../public/icons/state-hover.png'
 import LicenseHoverIcon from '../../public/icons/license-hover.png'
 import TestHoverIcon from '../../public/icons/test-hover.png'
 import UserHoverIcon from '../../public/icons/user-hover.png'
-import PathHoverIcon from '../../public/icons/path-hover.png'
 import Box from './box'
 import SidebarItem from './sidebar-item'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 
 const SideBar = () => {
   const pathname = usePathname()
-  console.log(pathname)
+  const [isTestExpanded, setIsTestExpanded] = useState(false)
 
   const routes = useMemo(
     () => [
@@ -47,9 +46,13 @@ const SideBar = () => {
       {
         icon: TestIcon,
         hoverIcon: TestHoverIcon,
-        label: 'Đề thi',
-        active: pathname === '/admin/tests',
-        href: '/admin/tests',
+        label: 'Bộ câu hỏi',
+        active: pathname.startsWith('/admin/questions'),
+        href: '/admin/questions',
+        subItems: [
+          { label: 'Chương', href: '/admin/questions/chapters' },
+          { label: 'Lộ trình', href: '/admin/questions/roadmap' },
+        ],
       },
       {
         icon: UserIcon,
@@ -58,16 +61,13 @@ const SideBar = () => {
         active: pathname === '/admin/users',
         href: '/admin/users',
       },
-      {
-        icon: PathIcon,
-        hoverIcon: PathHoverIcon,
-        label: 'Lộ trình',
-        active: pathname === '/admin/learning-paths',
-        href: '/admin/learning-paths',
-      },
     ],
     [pathname]
   )
+
+  const toggleTestExpand = () => {
+    setIsTestExpanded(!isTestExpanded)
+  }
 
   return (
     <div className="relative -mr-4 z-10 flex flex-col rounded-r-2xl shadow-[4px_0px_4px_rgba(0,0,0,0.25)] border-1 bg-white">
@@ -75,28 +75,18 @@ const SideBar = () => {
         QUẢN LÝ
       </div>
       <hr className="w-[235px] h-px mx-auto bg-light-purple border-0 rounded md:my-5 dark:bg-purple"></hr>
-      <div
-        className="
-                hidden
-                md:flex
-                flex-col
-                gap-y-2
-                h-full
-                w-[250px]
-                
-            "
-      >
+      <div className="hidden md:flex flex-col gap-y-2 h-full w-[250px]">
         <Box>
-          <div
-            className="
-                        flex
-                        flex-col
-                        gap-y-4
-                        
-                    "
-          >
+          <div className="flex flex-col gap-y-4">
             {routes.map((item) => (
-              <SidebarItem key={item.label} {...item} />
+              <SidebarItem
+                key={item.label}
+                {...item}
+                isExpanded={isTestExpanded}
+                onToggleExpand={
+                  item.label === 'Bộ câu hỏi' ? toggleTestExpand : undefined
+                }
+              />
             ))}
           </div>
         </Box>
