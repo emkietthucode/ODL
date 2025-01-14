@@ -56,7 +56,7 @@ const DeleteStateModal = () => {
     <div>
       <Modal
         title={`XÓA TIỂU BANG`}
-        description="Bạn chắc chắn xóa tiểu bang này?"
+        description="Bạn chắc chắn muốn xóa tiểu bang này?"
         isOpen={isOpen}
         onChange={onChange}
       >

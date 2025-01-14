@@ -97,8 +97,8 @@ const UpdateStateModal = () => {
   }
   return (
     <Modal
-      title="Cập nhật tiểu bang"
-      description="Điền thông tin tiểu bang mới"
+      title="CHỈNH SỬA TIỂU BANG"
+      description="Điền thông tin vào đây"
       isOpen={isOpen}
       onChange={onChange}
     >

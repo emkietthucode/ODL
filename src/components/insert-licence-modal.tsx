@@ -93,7 +93,7 @@ const InsertLicenceModal = () => {
   return (
     <Modal
       title="THÊM HẠNG BẰNG"
-      description="Điền thông tin hạng bằng mới"
+      description="Điền thông tin Hạng bằng mới vào đây"
       isOpen={insertLicenceModal.isOpen}
       onChange={onChange}
     >

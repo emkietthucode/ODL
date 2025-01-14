@@ -120,7 +120,7 @@ const UpdateLicenceModal = () => {
   return (
     <Modal
       title="CHỈNH SỬA HẠNG BẰNG"
-      description="Điền thông tin hạng bằng mới"
+      description="Điền thông tin vào đây"
       isOpen={isOpen}
       onChange={onChange}
     >

@@ -79,8 +79,8 @@ const InsertStateModal = () => {
   }
   return (
     <Modal
-      title="Thêm tiểu bang"
-      description="Điền thông tin tiểu bang mới"
+      title="THÊM TIỂU BANG"
+      description="Điền thông tin Tiểu bang mới vào đây"
       isOpen={insertStateModal.isOpen}
       onChange={onChange}
     >
