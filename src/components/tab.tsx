@@ -12,7 +12,7 @@ export const Tab: React.FC<TabProps> = ({ label, isActive, onClick }) => {
     <div
       className={`${
         isActive ? 'font-bold text-purple' : 'font-medium text-zinc-400'
-      } cursor-pointer w-20 text-center`}
+      } cursor-pointer w-full text-center`}
       onClick={onClick}
     >
       <div className="self-center p-2 mb-1">{label}</div>
