@@ -29,3 +29,16 @@ export interface NguoiDung {
   updated_at: string
   gioi_tinh: string
 }
+
+export interface CauHoi {
+  id: string
+  noi_dung_cau_hoi: string
+  hinh_anh: string
+  giai_thich: string
+  goi_y: string
+  la_cau_diem_liet: boolean
+  ma_chuong: string
+  loai_cau_hoi: string
+  created_at: Date
+  updated_at: Date
+}
