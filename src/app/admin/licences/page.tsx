@@ -18,9 +18,8 @@ import { Tab } from '@/components/tab'
 
 export const tabsVN = [
   { label: 'Tất cả' },
-  { label: 'Xe máy' },
-  { label: 'Ô tô' },
-  { label: 'Xe khách' },
+  { label: 'Mô tô' },
+  { label: 'Ô tô - Tải - Khách' },
   { label: 'Rơ-mooc' },
 ]
 
@@ -69,37 +68,22 @@ export default function LicenceDashboard() {
   ])
 
   const getFilterData = (): HangBang[] => {
-    if (activeTab === 'Tất cả') {
-      return hangBang.filter(
-        (row) => row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID
-      )
-    } else if (activeTab === 'Xe máy') {
-      return hangBang.filter(
-        (row) =>
-          row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID &&
-          row.ten_hang_bang.startsWith('A')
-      )
-    } else if (activeTab === 'Ô tô') {
-      return hangBang.filter(
-        (row) =>
-          row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID &&
-          (row.ten_hang_bang.startsWith('B') ||
-            row.ten_hang_bang.startsWith('C'))
-      )
-    } else if (activeTab === 'Xe khách') {
-      return hangBang.filter(
-        (row) =>
-          row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID &&
-          row.ten_hang_bang.startsWith('D')
-      )
-    } else if (activeTab === 'Rơ-mooc') {
-      return hangBang.filter(
-        (row) =>
-          row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID &&
-          row.ten_hang_bang.startsWith('F')
-      )
+    const filters: { [key: string]: (row: HangBang) => boolean } = {
+      [tabsVN[0].label]: (row) =>
+        row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID,
+      [tabsVN[1].label]: (row) =>
+        row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID &&
+        ['A1', 'A', 'B1'].includes(row.ten_hang_bang),
+      [tabsVN[2].label]: (row) =>
+        row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID &&
+        ['B', 'C1', 'C', 'D1', 'D2', 'D'].includes(row.ten_hang_bang),
+      [tabsVN[3].label]: (row) =>
+        row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID &&
+        ['BE', 'C1E', 'CE', 'D1E', 'D2E', 'DE'].includes(row.ten_hang_bang),
     }
-    return []
+
+    const filterFn = filters[activeTab] || (() => false)
+    return hangBang.filter(filterFn)
   }
 
   return (
