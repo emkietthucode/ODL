@@ -29,16 +29,18 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Question, Answer } from '@/types/types'
 
-const countries = [
+const questionTypes = [
   {
-    value: 'Việt Nam',
-    label: 'Việt Nam',
-    uuid: 'd078c695-a8b8-4bab-988f-f5bb2094b0e4',
+    value: 'Luật giao thông',
+    label: 'Luật giao thông',
   },
   {
-    value: 'Úc',
-    label: 'Úc',
-    uuid: '6f784311-f8b9-48ce-a202-ac32e5877057',
+    value: 'Biển báo',
+    label: 'Biển báo',
+  },
+  {
+    value: 'Sa hình',
+    label: 'Sa hình',
   },
 ]
 
@@ -48,6 +50,8 @@ const InsertQuestionModal = () => {
   const [countryUUID, setCountryUUID] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const insertQuestionModal = useInsertQuestionModal()
+  const [openComboBoxRole, setOpenComboBoxRole] = useState(false)
+  const [questionTypeVal, setQuestionTypeVal] = useState('')
   const {
     register,
     handleSubmit,
@@ -165,7 +169,7 @@ const InsertQuestionModal = () => {
                   max-h-full
                   h-full
                   md:h-auto
-                  md:max-h-[85vh]
+                  md:max-h-[90vh]
                   w-full
                   md:w-[90vw]
                   md:max-w-[950px]
@@ -190,21 +194,21 @@ const InsertQuestionModal = () => {
               onSubmit={handleSubmit(onSubmit)}
               className="flex flex-col gap-y-4"
             >
-              <div className="flex flex-col justify-center">
+              <div className="flex flex-col justify-center gap-5">
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="noi_dung_cau_hoi">Question</Label>
+                      <Label htmlFor="noi_dung_cau_hoi">Nội dung câu hỏi</Label>
                       <Textarea
                         id="noi_dung_cau_hoi"
                         name="noi_dung_cau_hoi"
                         value={question.noi_dung_cau_hoi}
                         onChange={handleQuestionChange}
-                        className="mt-1"
+                        className="mt-1 border-0 bg-gray-100 placeholder:text-neutral-400 "
                         rows={4}
                       />
                     </div>
-                    <div>
+                    {/* <div>
                       <Label htmlFor="hinh_anh">Image URL</Label>
                       <Input
                         id="hinh_anh"
@@ -213,9 +217,9 @@ const InsertQuestionModal = () => {
                         onChange={handleQuestionChange}
                         className="mt-1"
                       />
-                    </div>
+                    </div> */}
                     <div>
-                      <Label htmlFor="giai_thich">Explanation</Label>
+                      <Label htmlFor="giai_thich">{`Giải thích (nếu có)`}</Label>
                       <Input
                         id="giai_thich"
                         name="giai_thich"
@@ -225,7 +229,7 @@ const InsertQuestionModal = () => {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="goi_y">Hint</Label>
+                      <Label htmlFor="goi_y">{`Gợi ý (nếu có)`}</Label>
                       <Input
                         id="goi_y"
                         name="goi_y"
@@ -233,6 +237,71 @@ const InsertQuestionModal = () => {
                         onChange={handleQuestionChange}
                         className="mt-1"
                       />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="ma_chuong">Chương</Label>
+                      <Input
+                        id="ma_chuong"
+                        name="ma_chuong"
+                        value={question.ma_chuong}
+                        onChange={handleQuestionChange}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="loai_cau_hoi">Loại câu hỏi</Label>
+                      <Popover
+                        open={openComboBoxRole}
+                        onOpenChange={setOpenComboBoxRole}
+                      >
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            aria-expanded={openComboBoxRole}
+                            className={cn('w-full justify-between')}
+                          >
+                            {questionTypeVal
+                              ? questionTypes.find(
+                                  (type) => type.value === questionTypeVal
+                                )?.label
+                              : 'Chọn loại câu hỏi'}
+                            <ChevronsUpDown className="opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[400px] p-0 ">
+                          <Command>
+                            <CommandList>
+                              <CommandGroup>
+                                {questionTypes.map((type) => (
+                                  <CommandItem
+                                    key={type.value}
+                                    value={type.value}
+                                    onSelect={(currentValue) => {
+                                      setQuestionTypeVal(
+                                        currentValue === questionTypeVal
+                                          ? ''
+                                          : currentValue
+                                      )
+                                      setOpenComboBoxRole(false)
+                                    }}
+                                  >
+                                    {type.label}
+                                    <Check
+                                      className={cn(
+                                        'ml-auto',
+                                        questionTypeVal === type.value
+                                          ? 'opacity-100'
+                                          : 'opacity-0'
+                                      )}
+                                    />
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
                     </div>
                     <div className="flex items-center gap-2">
                       <Checkbox
@@ -245,29 +314,7 @@ const InsertQuestionModal = () => {
                           })
                         }
                       />
-                      <Label htmlFor="la_cau_diem_liet">
-                        Is critical question
-                      </Label>
-                    </div>
-                    <div>
-                      <Label htmlFor="ma_chuong">Chapter ID</Label>
-                      <Input
-                        id="ma_chuong"
-                        name="ma_chuong"
-                        value={question.ma_chuong}
-                        onChange={handleQuestionChange}
-                        className="mt-1"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="loai_cau_hoi">Question Type</Label>
-                      <Input
-                        id="loai_cau_hoi"
-                        name="loai_cau_hoi"
-                        value={question.loai_cau_hoi}
-                        onChange={handleQuestionChange}
-                        className="mt-1"
-                      />
+                      <Label htmlFor="la_cau_diem_liet">Câu điểm liệt</Label>
                     </div>
                   </div>
                   <div className="flex flex-col gap-5">
