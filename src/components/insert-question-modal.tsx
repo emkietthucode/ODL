@@ -107,26 +107,27 @@ const InsertQuestionModal = () => {
 
       const uniqueID = uuidv4()
 
-      const { data: imageData, error: imageError } = await supabase.storage
-        .from('hinh_anh_cau_hoi')
-        .upload(`cau-hoi-${uniqueID}`, values.hinh_anh[0], {
-          cacheControl: '3600',
-          upsert: false,
-        })
-
-      if (imageError) {
-        setIsLoading(false)
-        return toast.error('Lỗi khi thêm hình ảnh.')
+      if (values.hinh_anh?.[0]) {
+        const { data: imageData, error: imageError } = await supabase.storage
+          .from('hinh_anh_cau_hoi')
+          .upload(`cau-hoi-${uniqueID}`, values.hinh_anh[0], {
+            cacheControl: '3600',
+            upsert: false,
+          })
+        if (imageError) {
+          setIsLoading(false)
+          return toast.error('Lỗi khi thêm hình ảnh.')
+        }
       }
 
       const { error: errorCauHoi } = await supabase.from('cau_hoi').insert({
         id: uniqueID,
         noi_dung_cau_hoi: values.noi_dung_cau_hoi,
-        hinh_anh: imageData.path,
+        hinh_anh: `cau-hoi-${uniqueID}`,
         giai_thich: values.giai_thich,
         goi_y: values.goi_y,
         la_cau_diem_liet: values.la_cau_diem_liet,
-        ma_chuong: chapterUUID,
+        ma_chuong: chapterUUID || null,
         loai_cau_hoi: questionTypeVal,
       })
 
@@ -155,6 +156,7 @@ const InsertQuestionModal = () => {
       reset()
       insertQuestionModal.onClose()
     } catch (error) {
+      console.log(error)
       toast.error('Thêm mới không thành công.')
     } finally {
       setIsLoading(false)
@@ -198,6 +200,16 @@ const InsertQuestionModal = () => {
   const removeAnswer = (index: number) => {
     const newAnswers = question.lua_chon.filter((_, i) => i !== index)
     setQuestion({ ...question, lua_chon: newAnswers })
+  }
+
+  const handleCancel = () => {
+    reset()
+    insertQuestionModal.onClose()
+    setQuestion({
+      lua_chon: [
+        { noi_dung_lua_chon: '', la_lua_chon_dung: false, so_thu_tu: 1 },
+      ],
+    })
   }
 
   return (
@@ -500,11 +512,8 @@ const InsertQuestionModal = () => {
                   <Button
                     className="bg-neutral-400 hover:bg-neutral-400/90 text-white font-semibold min-w-36 self-center"
                     disabled={isLoading}
-                    type="submit"
-                    onClick={() => {
-                      reset()
-                      insertQuestionModal.onClose()
-                    }}
+                    type="button"
+                    onClick={handleCancel}
                   >
                     HỦY
                   </Button>
@@ -513,6 +522,7 @@ const InsertQuestionModal = () => {
             </form>
             <Dialog.Close asChild>
               <button
+                onClick={handleCancel}
                 className="
                       text-neutral-400
                       hover:text-black
