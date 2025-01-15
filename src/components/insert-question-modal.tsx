@@ -190,123 +190,124 @@ const InsertQuestionModal = () => {
               onSubmit={handleSubmit(onSubmit)}
               className="flex flex-col gap-y-4"
             >
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="noi_dung_cau_hoi">Question</Label>
-                    <Textarea
-                      id="noi_dung_cau_hoi"
-                      name="noi_dung_cau_hoi"
-                      value={question.noi_dung_cau_hoi}
-                      onChange={handleQuestionChange}
-                      className="mt-1"
-                      rows={4}
-                    />
+              <div className="flex flex-col justify-center">
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="noi_dung_cau_hoi">Question</Label>
+                      <Textarea
+                        id="noi_dung_cau_hoi"
+                        name="noi_dung_cau_hoi"
+                        value={question.noi_dung_cau_hoi}
+                        onChange={handleQuestionChange}
+                        className="mt-1"
+                        rows={4}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="hinh_anh">Image URL</Label>
+                      <Input
+                        id="hinh_anh"
+                        name="hinh_anh"
+                        value={question.hinh_anh || ''}
+                        onChange={handleQuestionChange}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="giai_thich">Explanation</Label>
+                      <Input
+                        id="giai_thich"
+                        name="giai_thich"
+                        value={question.giai_thich || ''}
+                        onChange={handleQuestionChange}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="goi_y">Hint</Label>
+                      <Input
+                        id="goi_y"
+                        name="goi_y"
+                        value={question.goi_y || ''}
+                        onChange={handleQuestionChange}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        id="la_cau_diem_liet"
+                        checked={question.la_cau_diem_liet}
+                        onCheckedChange={(checked) =>
+                          setQuestion({
+                            ...question,
+                            la_cau_diem_liet: checked as boolean,
+                          })
+                        }
+                      />
+                      <Label htmlFor="la_cau_diem_liet">
+                        Is critical question
+                      </Label>
+                    </div>
+                    <div>
+                      <Label htmlFor="ma_chuong">Chapter ID</Label>
+                      <Input
+                        id="ma_chuong"
+                        name="ma_chuong"
+                        value={question.ma_chuong}
+                        onChange={handleQuestionChange}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="loai_cau_hoi">Question Type</Label>
+                      <Input
+                        id="loai_cau_hoi"
+                        name="loai_cau_hoi"
+                        value={question.loai_cau_hoi}
+                        onChange={handleQuestionChange}
+                        className="mt-1"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="hinh_anh">Image URL</Label>
-                    <Input
-                      id="hinh_anh"
-                      name="hinh_anh"
-                      value={question.hinh_anh || ''}
-                      onChange={handleQuestionChange}
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="giai_thich">Explanation</Label>
-                    <Input
-                      id="giai_thich"
-                      name="giai_thich"
-                      value={question.giai_thich || ''}
-                      onChange={handleQuestionChange}
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="goi_y">Hint</Label>
-                    <Input
-                      id="goi_y"
-                      name="goi_y"
-                      value={question.goi_y || ''}
-                      onChange={handleQuestionChange}
-                      className="mt-1"
-                    />
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Checkbox
-                      id="la_cau_diem_liet"
-                      checked={question.la_cau_diem_liet}
-                      onCheckedChange={(checked) =>
-                        setQuestion({
-                          ...question,
-                          la_cau_diem_liet: checked as boolean,
-                        })
+                  <div className="flex flex-col gap-5">
+                    <RadioGroup
+                      value={question.lua_chon
+                        .findIndex((a) => a.la_lua_chon_dung)
+                        .toString()}
+                      onValueChange={(value) =>
+                        handleCorrectAnswerChange(parseInt(value))
                       }
-                    />
-                    <Label htmlFor="la_cau_diem_liet">
-                      Is critical question
-                    </Label>
-                  </div>
-                  <div>
-                    <Label htmlFor="ma_chuong">Chapter ID</Label>
-                    <Input
-                      id="ma_chuong"
-                      name="ma_chuong"
-                      value={question.ma_chuong}
-                      onChange={handleQuestionChange}
-                      className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="loai_cau_hoi">Question Type</Label>
-                    <Input
-                      id="loai_cau_hoi"
-                      name="loai_cau_hoi"
-                      value={question.loai_cau_hoi}
-                      onChange={handleQuestionChange}
-                      className="mt-1"
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-5">
-                  <RadioGroup
-                    value={question.lua_chon
-                      .findIndex((a) => a.la_lua_chon_dung)
-                      .toString()}
-                    onValueChange={(value) =>
-                      handleCorrectAnswerChange(parseInt(value))
-                    }
-                  >
-                    {question.lua_chon.map((answer, index) => (
-                      <div key={index}>
-                        <div className="p-1 text-sm">Đáp án {index + 1}</div>
-                        <div
-                          key={index}
-                          className={cn(
-                            'flex items-center space-x-2 p-2 rounded-md transition-colors',
-                            question.lua_chon[index].la_lua_chon_dung
-                              ? 'bg-green-100'
-                              : 'bg-red-100'
-                          )}
-                        >
-                          <RadioGroupItem
-                            value={index.toString()}
-                            id={`answer-${index}`}
-                          />
-                          <div className="flex-grow">
-                            <Input
-                              value={answer.noi_dung_lua_chon}
-                              onChange={(e) =>
-                                handleAnswerChange(index, e.target.value)
-                              }
-                              placeholder={`Nội dung`}
-                              className="bg-transparent"
+                    >
+                      {question.lua_chon.map((answer, index) => (
+                        <div key={index}>
+                          <div className="p-1 text-sm">Đáp án {index + 1}</div>
+                          <div
+                            key={index}
+                            className={cn(
+                              'flex items-center space-x-2 p-2 rounded-md transition-colors',
+                              question.lua_chon[index].la_lua_chon_dung
+                                ? 'bg-green-100'
+                                : 'bg-red-100'
+                            )}
+                          >
+                            <RadioGroupItem
+                              value={index.toString()}
+                              id={`answer-${index}`}
                             />
-                          </div>
+                            <div className="flex-grow">
+                              <Input
+                                value={answer.noi_dung_lua_chon}
+                                onChange={(e) =>
+                                  handleAnswerChange(index, e.target.value)
+                                }
+                                placeholder={`Nội dung`}
+                                className="bg-transparent"
+                              />
+                            </div>
 
-                          <IoMdClose
-                            className="
+                            <IoMdClose
+                              className="
                           text-neutral-400
                           hover:text-black
                             items-center
@@ -314,27 +315,48 @@ const InsertQuestionModal = () => {
                             rounded-full
                             focus:outline-none
                             "
-                            onClick={() => removeAnswer(index)}
-                          />
+                              onClick={() => removeAnswer(index)}
+                            />
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="terms" />
-                    <label
-                      htmlFor="terms"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      ))}
+                    </RadioGroup>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox id="terms" />
+                      <label
+                        htmlFor="terms"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        Đảo câu hỏi
+                      </label>
+                    </div>
+                    <Button
+                      className="bg-purple hover:bg-purple/90"
+                      type="button"
+                      onClick={addAnswer}
                     >
-                      Đảo câu hỏi
-                    </label>
+                      Thêm đáp án
+                    </Button>
                   </div>
+                </div>
+                <div className="mt-3 flex gap-10 justify-center">
                   <Button
-                    className="bg-purple hover:bg-purple/90"
-                    type="button"
-                    onClick={addAnswer}
+                    className="bg-purple hover:bg-purple/90 text-white font-semibold min-w-36 self-center"
+                    disabled={isLoading}
+                    type="submit"
                   >
-                    Thêm đáp án
+                    XÁC NHẬN
+                  </Button>
+                  <Button
+                    className="bg-neutral-400 hover:bg-neutral-400/90 text-white font-semibold min-w-36 self-center"
+                    disabled={isLoading}
+                    type="submit"
+                    onClick={() => {
+                      reset()
+                      insertQuestionModal.onClose()
+                    }}
+                  >
+                    HỦY
                   </Button>
                 </div>
               </div>
