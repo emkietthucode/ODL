@@ -23,7 +23,7 @@ import {
 import supabase from '@/utils/supabase/supabase'
 import { Button } from '@/components/ui/button'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Input } from '@/components/ui/input'
+import Input from '@/components/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
@@ -104,9 +104,6 @@ const InsertQuestionModal = () => {
     loai_cau_hoi: '',
     lua_chon: [
       { noi_dung_lua_chon: '', la_lua_chon_dung: false, so_thu_tu: 1 },
-      { noi_dung_lua_chon: '', la_lua_chon_dung: false, so_thu_tu: 2 },
-      { noi_dung_lua_chon: '', la_lua_chon_dung: false, so_thu_tu: 3 },
-      { noi_dung_lua_chon: '', la_lua_chon_dung: false, so_thu_tu: 4 },
     ],
   })
 
@@ -129,6 +126,28 @@ const InsertQuestionModal = () => {
     }))
     setQuestion({ ...question, lua_chon: newAnswers })
   }
+
+  const addAnswer = () => {
+    if (question.lua_chon.length > 3)
+      return toast.error('Chỉ thêm được tối đa 4 đáp án')
+    setQuestion({
+      ...question,
+      lua_chon: [
+        ...question.lua_chon,
+        {
+          noi_dung_lua_chon: '',
+          la_lua_chon_dung: false,
+          so_thu_tu: question.lua_chon.length + 1,
+        },
+      ],
+    })
+  }
+
+  const removeAnswer = (index: number) => {
+    const newAnswers = question.lua_chon.filter((_, i) => i !== index)
+    setQuestion({ ...question, lua_chon: newAnswers })
+  }
+
   return (
     <Dialog.Root
       open={insertQuestionModal.isOpen}
@@ -250,7 +269,7 @@ const InsertQuestionModal = () => {
                     />
                   </div>
                 </div>
-                <div>
+                <div className="flex flex-col gap-5">
                   <RadioGroup
                     value={question.lua_chon
                       .findIndex((a) => a.la_lua_chon_dung)
@@ -258,35 +277,65 @@ const InsertQuestionModal = () => {
                     onValueChange={(value) =>
                       handleCorrectAnswerChange(parseInt(value))
                     }
-                    className="space-y-4"
                   >
                     {question.lua_chon.map((answer, index) => (
-                      <div
-                        key={index}
-                        className={cn(
-                          'flex items-center space-x-2 p-2 rounded-md transition-colors',
-                          question.lua_chon[index].la_lua_chon_dung
-                            ? 'bg-green-100'
-                            : 'bg-red-100'
-                        )}
-                      >
-                        <RadioGroupItem
-                          value={index.toString()}
-                          id={`answer-${index}`}
-                        />
-                        <div className="flex-grow">
-                          <Input
-                            value={answer.noi_dung_lua_chon}
-                            onChange={(e) =>
-                              handleAnswerChange(index, e.target.value)
-                            }
-                            placeholder={`Answer ${index + 1}`}
-                            className="border-none bg-transparent"
+                      <div key={index}>
+                        <div className="p-1 text-sm">Đáp án {index + 1}</div>
+                        <div
+                          key={index}
+                          className={cn(
+                            'flex items-center space-x-2 p-2 rounded-md transition-colors',
+                            question.lua_chon[index].la_lua_chon_dung
+                              ? 'bg-green-100'
+                              : 'bg-red-100'
+                          )}
+                        >
+                          <RadioGroupItem
+                            value={index.toString()}
+                            id={`answer-${index}`}
+                          />
+                          <div className="flex-grow">
+                            <Input
+                              value={answer.noi_dung_lua_chon}
+                              onChange={(e) =>
+                                handleAnswerChange(index, e.target.value)
+                              }
+                              placeholder={`Nội dung`}
+                              className="bg-transparent"
+                            />
+                          </div>
+
+                          <IoMdClose
+                            className="
+                          text-neutral-400
+                          hover:text-black
+                            items-center
+                            justify-center
+                            rounded-full
+                            focus:outline-none
+                            "
+                            onClick={() => removeAnswer(index)}
                           />
                         </div>
                       </div>
                     ))}
                   </RadioGroup>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="terms" />
+                    <label
+                      htmlFor="terms"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Đảo câu hỏi
+                    </label>
+                  </div>
+                  <Button
+                    className="bg-purple hover:bg-purple/90"
+                    type="button"
+                    onClick={addAnswer}
+                  >
+                    Thêm đáp án
+                  </Button>
                 </div>
               </div>
             </form>
