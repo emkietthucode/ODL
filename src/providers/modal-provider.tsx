@@ -13,6 +13,7 @@ import UpdateLicenceModal from '@/components/update-licence-modal'
 import UpdateUserModal from '@/components/update-user-modal'
 import DeleteUserModal from '@/components/delete-user-modal'
 import InsertQuestionModal from '@/components/insert-question-modal'
+import DeleteQuestionModal from '@/components/delete-question-modal'
 
 const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false)
@@ -39,6 +40,7 @@ const ModalProvider = () => {
       <UpdateUserModal />
       <DeleteUserModal />
       <InsertQuestionModal />
+      <DeleteQuestionModal />
     </>
   )
 }
