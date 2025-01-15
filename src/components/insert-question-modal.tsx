@@ -3,7 +3,7 @@
 import useInsertQuestionModal from '@/hooks/useInsertQuestionModal'
 import Modal from './Modal'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { Check, ChevronsUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -12,6 +12,7 @@ import { IoMdClose } from 'react-icons/io'
 import {
   Command,
   CommandGroup,
+  CommandInput,
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
@@ -27,7 +28,7 @@ import Input from '@/components/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
-import { Question, Answer } from '@/types/types'
+import { Question, Answer, Chuong } from '@/types/types'
 
 const questionTypes = [
   {
@@ -50,8 +51,11 @@ const InsertQuestionModal = () => {
   const [countryUUID, setCountryUUID] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const insertQuestionModal = useInsertQuestionModal()
-  const [openComboBoxRole, setOpenComboBoxRole] = useState(false)
+  const [openComboBoxType, setOpenComboType] = useState(false)
   const [questionTypeVal, setQuestionTypeVal] = useState('')
+  const [openComboChapter, setOpenComboChapter] = useState(false)
+  const [chapterUUID, setChapterUUID] = useState('')
+  const [chapters, setChapters] = useState<Chuong[]>()
   const {
     register,
     handleSubmit,
@@ -64,6 +68,18 @@ const InsertQuestionModal = () => {
       comboBox: '',
     },
   })
+
+  const getDanhSachChuong = async () => {
+    const { data, error } = await supabase.from('chuong').select()
+    if (error) {
+      return toast.error(error.message)
+    }
+    setChapters(data)
+  }
+
+  useEffect(() => {
+    getDanhSachChuong()
+  }, [])
 
   const onChange = (open: boolean) => {
     if (!open) {
@@ -208,16 +224,6 @@ const InsertQuestionModal = () => {
                         rows={4}
                       />
                     </div>
-                    {/* <div>
-                      <Label htmlFor="hinh_anh">Image URL</Label>
-                      <Input
-                        id="hinh_anh"
-                        name="hinh_anh"
-                        value={question.hinh_anh || ''}
-                        onChange={handleQuestionChange}
-                        className="mt-1"
-                      />
-                    </div> */}
                     <div>
                       <Label htmlFor="giai_thich">{`Giải thích (nếu có)`}</Label>
                       <Input
@@ -238,27 +244,97 @@ const InsertQuestionModal = () => {
                         className="mt-1"
                       />
                     </div>
-
                     <div>
-                      <Label htmlFor="ma_chuong">Chương</Label>
+                      <Label htmlFor="hinh_anh">{`Hình ảnh (nếu có)`}</Label>
                       <Input
-                        id="ma_chuong"
-                        name="ma_chuong"
-                        value={question.ma_chuong}
+                        type="file"
+                        id="hinh_anh"
+                        name="hinh_anh"
+                        value={question.hinh_anh || ''}
                         onChange={handleQuestionChange}
                         className="mt-1"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="loai_cau_hoi">Loại câu hỏi</Label>
+                      <Label htmlFor="ma_chuong">Chương</Label>
                       <Popover
-                        open={openComboBoxRole}
-                        onOpenChange={setOpenComboBoxRole}
+                        open={openComboChapter}
+                        onOpenChange={setOpenComboChapter}
                       >
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
-                            aria-expanded={openComboBoxRole}
+                            aria-expanded={openComboChapter}
+                            className={cn('w-full justify-between')}
+                          >
+                            {chapterUUID
+                              ? chapters?.find(
+                                  (chapter) => chapter.id === chapterUUID
+                                )
+                                ? `${
+                                    chapters.find(
+                                      (chapter) => chapter.id === chapterUUID
+                                    )?.ten_chuong
+                                  } - ${
+                                    chapters.find(
+                                      (chapter) => chapter.id === chapterUUID
+                                    )?.mo_ta_chuong
+                                  }`
+                                : 'Chương không tồn tại'
+                              : 'Chọn chương'}
+                            <ChevronsUpDown className="opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[400px] p-0 ">
+                          <Command>
+                            <CommandInput
+                              placeholder="Tìm chương..."
+                              className="h-9"
+                            />
+                            <CommandList>
+                              <CommandGroup>
+                                {chapters?.map((chapter) => (
+                                  <CommandItem
+                                    key={chapter.id}
+                                    value={
+                                      chapter.ten_chuong + chapter.mo_ta_chuong
+                                    }
+                                    onSelect={(currentValue) => {
+                                      setChapterUUID(
+                                        chapter.id === chapterUUID
+                                          ? ''
+                                          : chapter.id
+                                      )
+                                      setOpenComboChapter(false)
+                                    }}
+                                  >
+                                    {`${chapter.ten_chuong} - ${chapter.mo_ta_chuong}`}
+                                    <Check
+                                      className={cn(
+                                        'ml-auto',
+                                        chapterUUID === chapter.id
+                                          ? 'opacity-100'
+                                          : 'opacity-0'
+                                      )}
+                                    />
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    <div>
+                      <Label htmlFor="loai_cau_hoi">Loại câu hỏi</Label>
+                      <Popover
+                        open={openComboBoxType}
+                        onOpenChange={setOpenComboType}
+                      >
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            aria-expanded={openComboBoxType}
                             className={cn('w-full justify-between')}
                           >
                             {questionTypeVal
@@ -283,7 +359,7 @@ const InsertQuestionModal = () => {
                                           ? ''
                                           : currentValue
                                       )
-                                      setOpenComboBoxRole(false)
+                                      setOpenComboType(false)
                                     }}
                                   >
                                     {type.label}
@@ -303,6 +379,7 @@ const InsertQuestionModal = () => {
                         </PopoverContent>
                       </Popover>
                     </div>
+
                     <div className="flex items-center gap-2">
                       <Checkbox
                         id="la_cau_diem_liet"
