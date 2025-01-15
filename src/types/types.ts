@@ -42,3 +42,19 @@ export interface CauHoi {
   created_at: Date
   updated_at: Date
 }
+
+export interface Chuong {
+  id: string
+  ten_chuong: string
+  mo_ta_chuong: string
+  ma_khu_vuc: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface LuaChon {
+  noi_dung_lua_chon: string
+  la_lua_chon_dung: boolean
+  ma_cau_hoi: string
+  so_thu_tu: number
+}

@@ -1,7 +1,6 @@
 'use client'
-
+import { v4 as uuidv4 } from 'uuid'
 import useInsertQuestionModal from '@/hooks/useInsertQuestionModal'
-import Modal from './Modal'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
@@ -28,7 +27,7 @@ import Input from '@/components/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
-import { Question, Answer, Chuong } from '@/types/types'
+import { Chuong, LuaChon } from '@/types/types'
 
 const questionTypes = [
   {
@@ -46,9 +45,7 @@ const questionTypes = [
 ]
 
 const InsertQuestionModal = () => {
-  const [openComboBox, setOpenComboBox] = useState(false)
-  const [countryVal, setCountryVal] = useState('')
-  const [countryUUID, setCountryUUID] = useState('')
+  const [isShuffleAnswer, setIsShuffleAnswer] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const insertQuestionModal = useInsertQuestionModal()
   const [openComboBoxType, setOpenComboType] = useState(false)
@@ -56,6 +53,12 @@ const InsertQuestionModal = () => {
   const [openComboChapter, setOpenComboChapter] = useState(false)
   const [chapterUUID, setChapterUUID] = useState('')
   const [chapters, setChapters] = useState<Chuong[]>()
+  const [question, setQuestion] = useState({
+    lua_chon: [
+      { noi_dung_lua_chon: '', la_lua_chon_dung: false, so_thu_tu: 1 },
+    ],
+  })
+
   const {
     register,
     handleSubmit,
@@ -63,9 +66,11 @@ const InsertQuestionModal = () => {
     reset,
   } = useForm<FieldValues>({
     defaultValues: {
-      licenceName: '',
-      description: '',
-      comboBox: '',
+      noi_dung_cau_hoi: '',
+      hinh_anh: null,
+      giai_thich: '',
+      goi_y: '',
+      la_cau_diem_liet: false,
     },
   })
 
@@ -83,30 +88,69 @@ const InsertQuestionModal = () => {
 
   const onChange = (open: boolean) => {
     if (!open) {
-      reset()
       insertQuestionModal.onClose()
     }
   }
+
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
     try {
       setIsLoading(true)
 
-      if (!values.licenceName || !values.description || !countryVal) {
-        return toast.error('Vui lòng điền đầy đủ thông tin.')
+      if (question.lua_chon.length === 0) {
+        return toast.error('Cần ít nhất một đáp án')
+      }
+      if (
+        !question.lua_chon.some((choice) => choice.la_lua_chon_dung === true)
+      ) {
+        return toast.error('Cần ít nhất một đáp án đúng')
       }
 
-      const { error } = await supabase.from('hang_bang').insert({
-        ten_hang_bang: values.licenceName,
-        mo_ta_hang_bang: values.description,
-        ma_khu_vuc: countryUUID,
+      const uniqueID = uuidv4()
+
+      const { data: imageData, error: imageError } = await supabase.storage
+        .from('hinh_anh_cau_hoi')
+        .upload(`cau-hoi-${uniqueID}`, values.hinh_anh[0], {
+          cacheControl: '3600',
+          upsert: false,
+        })
+
+      if (imageError) {
+        setIsLoading(false)
+        return toast.error('Lỗi khi thêm hình ảnh.')
+      }
+
+      const { error: errorCauHoi } = await supabase.from('cau_hoi').insert({
+        id: uniqueID,
+        noi_dung_cau_hoi: values.noi_dung_cau_hoi,
+        hinh_anh: imageData.path,
+        giai_thich: values.giai_thich,
+        goi_y: values.goi_y,
+        la_cau_diem_liet: values.la_cau_diem_liet,
+        ma_chuong: chapterUUID,
+        loai_cau_hoi: questionTypeVal,
       })
 
-      if (error) {
-        return toast.error('Thêm hạng bằng không thành công.')
+      if (errorCauHoi) {
+        return toast.error('Thêm câu hỏi không thành công.')
+      }
+
+      const luaChonArr: LuaChon[] = question.lua_chon.map((choice, index) => ({
+        noi_dung_lua_chon: choice.noi_dung_lua_chon,
+        la_lua_chon_dung: choice.la_lua_chon_dung,
+        ma_cau_hoi: uniqueID,
+        so_thu_tu: isShuffleAnswer ? 0 : choice.so_thu_tu,
+      }))
+
+      const { error: errorLuaChon } = await supabase
+        .from('lua_chon')
+        .insert(luaChonArr)
+
+      if (errorLuaChon) {
+        return toast.error('Thêm câu hỏi không thành công.')
       }
 
       setIsLoading(false)
-      toast.success('Thêm hạng bằng mới thành công.')
+      toast.success('Thêm câu hỏi mới thành công.')
       insertQuestionModal.triggerRefresh()
       reset()
       insertQuestionModal.onClose()
@@ -115,22 +159,6 @@ const InsertQuestionModal = () => {
     } finally {
       setIsLoading(false)
     }
-  }
-
-  const [question, setQuestion] = useState<Question>({
-    noi_dung_cau_hoi: '',
-    la_cau_diem_liet: false,
-    ma_chuong: '',
-    loai_cau_hoi: '',
-    lua_chon: [
-      { noi_dung_lua_chon: '', la_lua_chon_dung: false, so_thu_tu: 1 },
-    ],
-  })
-
-  const handleQuestionChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setQuestion({ ...question, [e.target.name]: e.target.value })
   }
 
   const handleAnswerChange = (index: number, value: string) => {
@@ -145,6 +173,10 @@ const InsertQuestionModal = () => {
       la_lua_chon_dung: i === index,
     }))
     setQuestion({ ...question, lua_chon: newAnswers })
+  }
+
+  const handleCheckboxChange = (checked: boolean) => {
+    setIsShuffleAnswer(checked)
   }
 
   const addAnswer = () => {
@@ -217,10 +249,12 @@ const InsertQuestionModal = () => {
                       <Label htmlFor="noi_dung_cau_hoi">Nội dung câu hỏi</Label>
                       <Textarea
                         id="noi_dung_cau_hoi"
-                        name="noi_dung_cau_hoi"
-                        value={question.noi_dung_cau_hoi}
-                        onChange={handleQuestionChange}
-                        className="mt-1 border-0 bg-gray-100 placeholder:text-neutral-400 "
+                        {...register('noi_dung_cau_hoi', { required: true })}
+                        className={cn(
+                          `mt-1 border-0 bg-gray-100 placeholder:text-neutral-400`,
+                          !!errors.noi_dung_cau_hoi &&
+                            'border border-red-500 focus:border-red-500'
+                        )}
                         rows={4}
                       />
                     </div>
@@ -228,9 +262,7 @@ const InsertQuestionModal = () => {
                       <Label htmlFor="giai_thich">{`Giải thích (nếu có)`}</Label>
                       <Input
                         id="giai_thich"
-                        name="giai_thich"
-                        value={question.giai_thich || ''}
-                        onChange={handleQuestionChange}
+                        {...register('giai_thich', { required: false })}
                         className="mt-1"
                       />
                     </div>
@@ -238,9 +270,7 @@ const InsertQuestionModal = () => {
                       <Label htmlFor="goi_y">{`Gợi ý (nếu có)`}</Label>
                       <Input
                         id="goi_y"
-                        name="goi_y"
-                        value={question.goi_y || ''}
-                        onChange={handleQuestionChange}
+                        {...register('goi_y', { required: false })}
                         className="mt-1"
                       />
                     </div>
@@ -249,9 +279,7 @@ const InsertQuestionModal = () => {
                       <Input
                         type="file"
                         id="hinh_anh"
-                        name="hinh_anh"
-                        value={question.hinh_anh || ''}
-                        onChange={handleQuestionChange}
+                        {...register('hinh_anh', { required: false })}
                         className="mt-1"
                       />
                     </div>
@@ -383,13 +411,7 @@ const InsertQuestionModal = () => {
                     <div className="flex items-center gap-2">
                       <Checkbox
                         id="la_cau_diem_liet"
-                        checked={question.la_cau_diem_liet}
-                        onCheckedChange={(checked) =>
-                          setQuestion({
-                            ...question,
-                            la_cau_diem_liet: checked as boolean,
-                          })
-                        }
+                        {...register('la_cau_diem_liet', { required: false })}
                       />
                       <Label htmlFor="la_cau_diem_liet">Câu điểm liệt</Label>
                     </div>
@@ -446,7 +468,10 @@ const InsertQuestionModal = () => {
                       ))}
                     </RadioGroup>
                     <div className="flex items-center space-x-2">
-                      <Checkbox id="terms" />
+                      <Checkbox
+                        checked={isShuffleAnswer}
+                        onCheckedChange={handleCheckboxChange}
+                      />
                       <label
                         htmlFor="terms"
                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
