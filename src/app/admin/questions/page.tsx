@@ -6,30 +6,31 @@ import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
 import qs from 'query-string'
 import useDebounce from '@/hooks/useDebounce'
-import { HangBang } from '@/types/types'
+import { CauHoi } from '@/types/types'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
-import useInsertLicenceModal from '@/hooks/useInsertLicenceModal'
-import useDeleteLicenceModal from '@/hooks/useDeleteLicenceModal'
-import HangBangTable from '@/components/hang-bang-table'
-import useUpdateLicenceModal from '@/hooks/useUpdateLicenceModal'
+import useInsertQuestionModal from '@/hooks/useInsertQuestionModal'
+import useDeleteQuestionModal from '@/hooks/useDeleteQuestionModal'
+import CauHoiTable from '@/components/cau-hoi-table'
+import useUpdateQuestionModal from '@/hooks/useUpdateQuestionModal'
 import { cn } from '@/lib/utils'
 import { Tab } from '@/components/tab'
 
 export const tabsVN = [
   { label: 'Tất cả' },
-  { label: 'Mô tô' },
-  { label: 'Ô tô - Tải - Khách' },
-  { label: 'Rơ-mooc' },
+  { label: 'Câu điểm liệt' },
+  { label: 'Luật giao thông' },
+  { label: 'Biển báo' },
+  { label: 'Sa hình' },
 ]
 
-export default function LicenceDashboard() {
+export default function QuestionDashboard() {
   const { onOpen: insertOnOpen, refreshTrigger: insertRefreshTrigger } =
-    useInsertLicenceModal()
-  const { refreshTrigger: updateRefreshTrigger } = useUpdateLicenceModal()
-  const { refreshTrigger: deleteRefreshTrigger } = useDeleteLicenceModal()
+    useInsertQuestionModal()
+  const { refreshTrigger: updateRefreshTrigger } = useUpdateQuestionModal()
+  const { refreshTrigger: deleteRefreshTrigger } = useDeleteQuestionModal()
   const [searchText, setSearchText] = useState('')
-  const [hangBang, setHangBang] = useState<HangBang[]>([])
+  const [cauHoi, setCauHoi] = useState<CauHoi[]>([])
   const router = useRouter()
   const debounceValue = useDebounce<string>(searchText, 500)
   const [flipCountry, setFlipCountry] = useState<boolean>(true)
@@ -39,14 +40,14 @@ export default function LicenceDashboard() {
     setActiveTab(label)
   }
 
-  const getHangBang = async (debounceValue: string) => {
-    const { data, error } = await supabase.rpc('search_hang_bang', {
+  const getCauHoi = async (debounceValue: string) => {
+    const { data, error } = await supabase.rpc('search_cau_hoi', {
       search_text: debounceValue,
     })
     if (error) {
       return toast.error(error.message)
     }
-    setHangBang(data)
+    setCauHoi(data)
   }
 
   useEffect(() => {
@@ -54,11 +55,11 @@ export default function LicenceDashboard() {
       searchInput: debounceValue,
     }
     const url = qs.stringifyUrl({
-      url: '/admin/licences',
+      url: '/admin/questions',
       query: query,
     })
     router.push(url)
-    getHangBang(debounceValue)
+    getCauHoi(debounceValue)
   }, [
     debounceValue,
     router,
@@ -67,29 +68,22 @@ export default function LicenceDashboard() {
     insertRefreshTrigger,
   ])
 
-  const getFilterData = (): HangBang[] => {
-    const filters: { [key: string]: (row: HangBang) => boolean } = {
-      [tabsVN[0].label]: (row) =>
-        row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID,
-      [tabsVN[1].label]: (row) =>
-        row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID &&
-        ['A1', 'A', 'B1'].includes(row.ten_hang_bang),
-      [tabsVN[2].label]: (row) =>
-        row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID &&
-        ['B', 'C1', 'C', 'D1', 'D2', 'D'].includes(row.ten_hang_bang),
-      [tabsVN[3].label]: (row) =>
-        row.ma_khu_vuc === process.env.NEXT_PUBLIC_VIETNAM_UUID &&
-        ['BE', 'C1E', 'CE', 'D1E', 'D2E', 'DE'].includes(row.ten_hang_bang),
+  const getFilterData = (): CauHoi[] => {
+    if (activeTab === tabsVN[0].label) {
+      return cauHoi // Return all rows for "Tất cả"
     }
-
-    const filterFn = filters[activeTab] || (() => false)
-    return hangBang.filter(filterFn)
+    if (activeTab === tabsVN[1].label) {
+      return cauHoi.filter((row) => row.la_cau_diem_liet === true)
+    }
+    return cauHoi.filter((row) => row.loai_cau_hoi === activeTab)
   }
 
   return (
     <div className="flex flex-col min-h-screen">
       <div className="bg-light-purple-admin p-8 flex justify-between items-center">
-        <h1 className="text-purple text-2xl font-bold ml-10">HẠNG BẰNG</h1>
+        <h1 className="text-purple text-2xl font-bold ml-10">
+          CÂU HỎI - ĐÁP ÁN
+        </h1>
       </div>
       <div className="flex gap-10 container mx-auto p-8">
         <div className="flex flex-col items-center bg-white min-w-64 h-[735px] rounded-lg drop-shadow-lg">
@@ -149,19 +143,13 @@ export default function LicenceDashboard() {
                   </div>
                 ))}
               </div>
-              <HangBangTable data={getFilterData()} />
+              <CauHoiTable data={getFilterData()} />
             </div>
           ) : (
             <div className="flex flex-col text-sm  rounded-xl w-full shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
               <div className="pl-[50px] pt-5 flex gap-5 justify-start items-center w-full bg-white rounded-md border-b border-zinc-400 border-opacity-60">
                 <Tab label="Learner" isActive />
               </div>
-              <HangBangTable
-                data={hangBang.filter(
-                  (row) =>
-                    row.ma_khu_vuc === process.env.NEXT_PUBLIC_AUSTRALIA_UUID
-                )}
-              />
             </div>
           )}
         </div>
