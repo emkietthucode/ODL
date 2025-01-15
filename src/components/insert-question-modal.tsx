@@ -238,6 +238,7 @@ const InsertQuestionModal = () => {
             >
               {'THÊM CÂU HỎI MỚI'}
             </Dialog.Title>
+            <Dialog.Description>{''}</Dialog.Description>
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="flex flex-col gap-y-4"
