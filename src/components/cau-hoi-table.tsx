@@ -24,8 +24,7 @@ import {
 
 import { CauHoi } from '@/types/types'
 import useDeleteQuestionModal from '@/hooks/useDeleteQuestionModal'
-import useUpdateQuestionModal from '@/hooks/useDeleteQuestionModal'
-import supabase from '@/utils/supabase/supabase'
+import useUpdateQuestionModal from '@/hooks/useUpdateQuestionModal'
 
 interface CauHoiTableProps {
   data: CauHoi[]

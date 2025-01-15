@@ -53,6 +53,7 @@ export interface Chuong {
 }
 
 export interface LuaChon {
+  id: string
   noi_dung_lua_chon: string
   la_lua_chon_dung: boolean
   ma_cau_hoi: string
