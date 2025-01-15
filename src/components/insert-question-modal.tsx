@@ -46,6 +46,7 @@ const questionTypes = [
 
 const InsertQuestionModal = () => {
   const [isShuffleAnswer, setIsShuffleAnswer] = useState(false)
+  const [isCriticalQuestion, setIsCriticalQuestion] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const insertQuestionModal = useInsertQuestionModal()
   const [openComboBoxType, setOpenComboType] = useState(false)
@@ -126,7 +127,7 @@ const InsertQuestionModal = () => {
         hinh_anh: `cau-hoi-${uniqueID}`,
         giai_thich: values.giai_thich,
         goi_y: values.goi_y,
-        la_cau_diem_liet: values.la_cau_diem_liet,
+        la_cau_diem_liet: isCriticalQuestion,
         ma_chuong: chapterUUID || null,
         loai_cau_hoi: questionTypeVal,
       })
@@ -136,6 +137,7 @@ const InsertQuestionModal = () => {
       }
 
       const luaChonArr: LuaChon[] = question.lua_chon.map((choice, index) => ({
+        id: uuidv4(),
         noi_dung_lua_chon: choice.noi_dung_lua_chon,
         la_lua_chon_dung: choice.la_lua_chon_dung,
         ma_cau_hoi: uniqueID,
@@ -179,6 +181,9 @@ const InsertQuestionModal = () => {
 
   const handleCheckboxChange = (checked: boolean) => {
     setIsShuffleAnswer(checked)
+  }
+  const handleCriticalQuestionboxChange = (checked: boolean) => {
+    setIsCriticalQuestion(checked)
   }
 
   const addAnswer = () => {
@@ -423,8 +428,8 @@ const InsertQuestionModal = () => {
 
                     <div className="flex items-center gap-2">
                       <Checkbox
-                        id="la_cau_diem_liet"
-                        {...register('la_cau_diem_liet', { required: false })}
+                        checked={isCriticalQuestion}
+                        onCheckedChange={handleCriticalQuestionboxChange}
                       />
                       <Label htmlFor="la_cau_diem_liet">Câu điểm liệt</Label>
                     </div>
