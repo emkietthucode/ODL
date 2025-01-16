@@ -99,12 +99,12 @@ export default function StateDashboard() {
         <h1 className="text-purple text-2xl font-bold ml-10">TIỂU BANG</h1>
       </div>
       <div className="flex gap-10 container mx-auto p-8">
-        <div className="flex flex-col justify-start items-center bg-white min-w-64 h-[735px] rounded-lg drop-shadow-lg">
+        <div className="ml-4 flex flex-col justify-start items-center bg-white min-w-64 h-[735px] rounded-lg drop-shadow-lg">
           <div className="mt-10 text-sm font-semibold text-purple">
             DANH SÁCH QUỐC GIA
           </div>
           <hr className="my-6 w-[235px] h-px mx-auto bg-light-purple border-0 rounded dark:bg-purple"></hr>
-          <button className="my-3 font-semibold text-sm rounded-lg text-white bg-purple hover:bg-purple/90 flex h-[43px] items-center w-[150px] pl-2">
+          <button className="my-3 font-semibold text-sm rounded-lg text-white bg-purple hover:bg-purple/90 flex h-[43px] items-center w-[150px] px-2">
             ÚC
           </button>
         </div>

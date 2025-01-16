@@ -92,7 +92,7 @@ export default function LicenceDashboard() {
         <h1 className="text-purple text-2xl font-bold ml-10">HẠNG BẰNG</h1>
       </div>
       <div className="flex gap-10 container mx-auto p-8">
-        <div className="flex flex-col items-center bg-white min-w-64 h-[735px] rounded-lg drop-shadow-lg">
+        <div className="ml-4 flex flex-col items-center bg-white min-w-64 h-[735px] rounded-lg drop-shadow-lg">
           <div className="mt-10 text-sm font-semibold text-purple">
             DANH SÁCH QUỐC GIA
           </div>
@@ -102,7 +102,7 @@ export default function LicenceDashboard() {
               setFlipCountry(true)
             }}
             className={cn(
-              `my-3 font-semibold text-sm rounded-lg text-white bg-purple hover:bg-purple/90 flex h-[43px] items-center w-[150px] pl-2`,
+              `my-3 font-semibold text-sm rounded-lg text-white bg-purple hover:bg-purple/90 flex h-[43px] items-center w-[150px] px-2`,
               !flipCountry ? `bg-neutral-500 hover:bg-neutral-500/90` : ''
             )}
           >
