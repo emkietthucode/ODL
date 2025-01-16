@@ -86,7 +86,7 @@ export default function QuestionDashboard() {
         </h1>
       </div>
       <div className="flex gap-10 container mx-auto p-8">
-        <div className="flex flex-col items-center bg-white min-w-64 h-[735px] rounded-lg drop-shadow-lg">
+        <div className="ml-4 flex flex-col items-center bg-white min-w-64 h-[735px] rounded-lg drop-shadow-lg">
           <div className="mt-10 text-sm font-semibold text-purple">
             DANH SÁCH QUỐC GIA
           </div>
@@ -96,7 +96,7 @@ export default function QuestionDashboard() {
               setFlipCountry(true)
             }}
             className={cn(
-              `my-3 font-semibold text-sm rounded-lg text-white bg-purple hover:bg-purple/90 flex h-[43px] items-center w-[150px] pl-2`,
+              `my-3 font-semibold text-sm rounded-lg text-white bg-purple hover:bg-purple/90 flex h-[43px] items-center w-[150px] px-2`,
               !flipCountry ? `bg-neutral-500 hover:bg-neutral-500/90` : ''
             )}
           >
@@ -148,7 +148,9 @@ export default function QuestionDashboard() {
           ) : (
             <div className="flex flex-col text-sm  rounded-xl w-full shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
               <div className="pl-[50px] pt-5 flex gap-5 justify-start items-center w-full bg-white rounded-md border-b border-zinc-400 border-opacity-60">
-                <Tab label="Learner" isActive />
+                <div className="cursor-pointer self-center">
+                  <Tab label="Learner" isActive />
+                </div>
               </div>
             </div>
           )}
