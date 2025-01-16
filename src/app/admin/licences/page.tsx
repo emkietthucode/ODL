@@ -154,7 +154,9 @@ export default function LicenceDashboard() {
           ) : (
             <div className="flex flex-col text-sm  rounded-xl w-full shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
               <div className="pl-[50px] pt-5 flex gap-5 justify-start items-center w-full bg-white rounded-md border-b border-zinc-400 border-opacity-60">
-                <Tab label="Learner" isActive />
+                <div className="cursor-pointer self-center">
+                  <Tab label="Learner" isActive />
+                </div>
               </div>
               <HangBangTable
                 data={hangBang.filter(
