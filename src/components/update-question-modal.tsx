@@ -549,7 +549,7 @@ const UpdateQuestionModal = () => {
                         htmlFor="terms"
                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                       >
-                        Đảo câu hỏi
+                        Đảo đáp án
                       </label>
                     </div>
                     <Button
