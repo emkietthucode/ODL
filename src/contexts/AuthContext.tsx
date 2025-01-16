@@ -16,14 +16,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const supabase = createClient()
+  const [supabase] = useState(() => createClient())
 
   useEffect(() => {
     const fetchUser = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession()
-      console.log('into', session?.user)
 
       setUser(session?.user || null)
       setLoading(false)
@@ -34,6 +33,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log(event)
       setUser(session?.user || null)
     })
 

@@ -47,7 +47,7 @@ function Login() {
 
   return (
     <div className="bg-[#F6F4FD] h-screen flex items-center justify-center">
-      <div className="flex max-w-3xl h-[580px] shadow-[10px_10px_20px_0px_rgba(0, 0, 0, 0.25)]">
+      <div className="flex max-w-3xl h-[580px] shadow-[10px_10px_20px_0px_rgba(0, 0, 0, 0.25)] mx-auto">
         <Image
           src={LoginImage}
           alt="Login image"

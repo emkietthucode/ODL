@@ -76,3 +76,9 @@ export async function signInWithGoogle() {
 
   redirect(data.url)
 }
+
+export async function signOut() {
+  const supbase = await createClient()
+
+  const { error } = await supbase.auth.signOut()
+}
