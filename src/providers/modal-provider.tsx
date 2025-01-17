@@ -17,6 +17,7 @@ import DeleteQuestionModal from '@/components/delete-question-modal'
 import UpdateQuestionModal from '@/components/update-question-modal'
 import InsertChapterModal from '@/components/insert-chapter-modal'
 import DeleteChapterModal from '@/components/delete-chapter-modal'
+import UpdateChapterModal from '@/components/update-chapter-modal'
 
 const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false)
@@ -46,6 +47,7 @@ const ModalProvider = () => {
       <UpdateQuestionModal />
       <DeleteQuestionModal />
       <InsertChapterModal />
+      <UpdateChapterModal />
       <DeleteChapterModal />
     </>
   )

@@ -25,6 +25,7 @@ import {
 
 import { Chuong } from '@/types/types'
 import useDeleteChapterModal from '@/hooks/useDeleteChapterModal'
+import useUpdateChapterModal from '@/hooks/useUpdateChapterModal'
 
 interface ChuongTableProps {
   data: Chuong[]
@@ -38,6 +39,7 @@ const ChuongTable: React.FC<ChuongTableProps> = ({
   const router = useRouter()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const { onOpen: deleteOnOpen } = useDeleteChapterModal()
+  const { onOpen: updateOnOpen } = useUpdateChapterModal()
 
   const totalPages = useMemo(() => {
     return Math.ceil(data.length / itemsPerPage)
@@ -80,11 +82,7 @@ const ChuongTable: React.FC<ChuongTableProps> = ({
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      onClick={() =>
-                        router.push(`/admin/questions/chapters/${item.id}`)
-                      }
-                    >
+                    <DropdownMenuItem onClick={() => updateOnOpen(item)}>
                       <Pencil className="h-4 w-4 mr-2" />
                       Chỉnh sửa
                     </DropdownMenuItem>

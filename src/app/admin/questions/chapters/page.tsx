@@ -13,11 +13,13 @@ import useInsertChapterModal from '@/hooks/useInsertChapterModal'
 import useDeleteChapterModal from '@/hooks/useDeleteChapterModal'
 import ChuongTable from '@/components/chuong-table'
 import { cn } from '@/lib/utils'
+import useUpdateChapterModal from '@/hooks/useUpdateChapterModal'
 
 export default function ChapterDashboard() {
   const { onOpen: insertOnOpen, refreshTrigger: insertRefreshTrigger } =
     useInsertChapterModal()
   const { refreshTrigger: deleteRefreshTrigger } = useDeleteChapterModal()
+  const { refreshTrigger: updateRefreshTrigger } = useUpdateChapterModal()
   const [searchText, setSearchText] = useState('')
   const [chuong, setChuong] = useState<Chuong[]>([])
   const router = useRouter()
@@ -44,7 +46,13 @@ export default function ChapterDashboard() {
     })
     router.push(url)
     getChuong(debounceValue)
-  }, [debounceValue, router, deleteRefreshTrigger, insertRefreshTrigger])
+  }, [
+    debounceValue,
+    router,
+    deleteRefreshTrigger,
+    insertRefreshTrigger,
+    updateRefreshTrigger,
+  ])
 
   const getFilterData = (isVN: boolean): Chuong[] => {
     if (isVN) {
