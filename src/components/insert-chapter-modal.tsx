@@ -202,9 +202,9 @@ const InsertChapterModal = () => {
     }
   }
 
-  const handleRemoveQuestion = () => {
+  const handleRemoveQuestion = (currentQuestionId: string) => {
     setCurrentQuestions((prevQuestions) =>
-      prevQuestions.filter((question) => question.id !== currentQuestion?.id)
+      prevQuestions.filter((question) => question.id !== currentQuestionId)
     )
   }
 
@@ -421,7 +421,7 @@ const InsertChapterModal = () => {
                               <TableCell className="pr-8 text-right">
                                 <Trash2
                                   className="h-4 w-4 mr-2 text-red-600 cursor-pointer"
-                                  onClick={handleRemoveQuestion}
+                                  onClick={() => handleRemoveQuestion(item.id)}
                                 />
                               </TableCell>
                             </TableRow>
