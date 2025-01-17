@@ -11,7 +11,7 @@ interface SidebarItemProps {
   label: string
   active?: boolean
   href: string
-  subItems?: { label: string; href: string }[]
+  subItems?: { label: string; href: string; active: boolean }[]
   isExpanded?: boolean
   onToggleExpand?: () => void
 }
@@ -114,7 +114,8 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
             <Link
               key={subItem.label}
               href={subItem.href}
-              className={twMerge(`
+              className={twMerge(
+                `
                 block
                 ml-2
                 py-2
@@ -125,7 +126,9 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
                 transition
                 text-neutral-400
                 hover:text-purple
-              `)}
+              `,
+                subItem.active && 'text-purple'
+              )}
             >
               {subItem.label}
             </Link>

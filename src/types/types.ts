@@ -1,8 +1,8 @@
 export interface KhuVuc {
-  id: string // UUID
-  ten_khu_vuc: string | null // VARCHAR(50)
-  quoc_ky: string | null // VARCHAR(100)
-  ngon_ngu: string | null // VARCHAR(20)
+  id: string
+  ten_khu_vuc: string
+  quoc_ky: string
+  ngon_ngu: string
   quoc_gia: string | null // UUID (nullable, foreign key)
   createdAt: Date // TIMESTAMPTZ
   updatedAt: Date // TIMESTAMPTZ
@@ -58,4 +58,12 @@ export interface LuaChon {
   la_lua_chon_dung: boolean
   ma_cau_hoi: string
   so_thu_tu: number
+}
+export interface Chuong {
+  id: string
+  ten_chuong: string
+  mo_ta_chuong: string
+  ma_khu_vuc: string | null
+  created_at: string
+  updated_at: string
 }
