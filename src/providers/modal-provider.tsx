@@ -15,6 +15,8 @@ import DeleteUserModal from '@/components/delete-user-modal'
 import InsertQuestionModal from '@/components/insert-question-modal'
 import DeleteQuestionModal from '@/components/delete-question-modal'
 import UpdateQuestionModal from '@/components/update-question-modal'
+import InsertChapterModal from '@/components/insert-chapter-modal'
+import DeleteChapterModal from '@/components/delete-chapter-modal'
 
 const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false)
@@ -43,6 +45,8 @@ const ModalProvider = () => {
       <InsertQuestionModal />
       <UpdateQuestionModal />
       <DeleteQuestionModal />
+      <InsertChapterModal />
+      <DeleteChapterModal />
     </>
   )
 }
