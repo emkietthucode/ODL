@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-interface InsertCountryModal {
+interface InsertChapterModal {
   isOpen: boolean
   onOpen: () => void
   onClose: () => void
@@ -8,7 +8,7 @@ interface InsertCountryModal {
   triggerRefresh: () => void
 }
 
-const useInsertCountryModal = create<InsertCountryModal>((set) => ({
+const useInsertChapterModal = create<InsertChapterModal>((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
@@ -17,4 +17,4 @@ const useInsertCountryModal = create<InsertCountryModal>((set) => ({
     set((state) => ({ refreshTrigger: state.refreshTrigger + 1 })),
 }))
 
-export default useInsertCountryModal
+export default useInsertChapterModal

@@ -1,18 +1,23 @@
 'use client'
-
-import { v4 as uuidv4 } from 'uuid'
-import useInsertCountryModal from '../hooks/useInsertCountryModal'
 import Modal from './Modal'
 import Input from '@/components/input'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import { toast } from 'react-hot-toast'
 import supabase from '@/utils/supabase/supabase'
+import useUpdateStateModal from '@/hooks/useUpdateStateModal'
 
-const InsertCountryModal = () => {
+const UpdateStateModal = () => {
+  const {
+    isOpen,
+    onClose,
+    item: khuVuc,
+    triggerRefresh,
+  } = useUpdateStateModal()
   const [isLoading, setIsLoading] = useState(false)
-  const insertCountryModal = useInsertCountryModal()
+  //const {user} = useUser();
+  //const supabaseClient = useSupabaseClient();
   const {
     register,
     handleSubmit,
@@ -20,91 +25,106 @@ const InsertCountryModal = () => {
     reset,
   } = useForm<FieldValues>({
     defaultValues: {
-      countryName: '',
-      language: '',
-      flag: null,
+      stateName: '',
+      //language: '',
+      symbol: null,
     },
   })
+
+  useEffect(() => {
+    if (khuVuc) {
+      reset({
+        stateName: khuVuc.ten_khu_vuc || '',
+      })
+    }
+  }, [khuVuc, reset])
+
+  if (!khuVuc) {
+    return null
+  }
 
   const onChange = (open: boolean) => {
     if (!open) {
       reset()
-      insertCountryModal.onClose()
+      onClose()
     }
   }
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
     try {
       setIsLoading(true)
 
-      const flagFile = values.flag?.[0]
+      const flagFile = values.symbol?.[0]
 
-      if (!values.countryName || !values.language || !flagFile) {
+      if (!values.stateName) {
         return toast.error('Vui lòng điền đầy đủ thông tin.')
       }
-      const uniqueID = uuidv4()
 
-      const { data: imageData, error: imageError } = await supabase.storage
-        .from('quoc_ky')
-        .upload(`quoc-ky-${uniqueID}`, flagFile, {
-          cacheControl: '3600',
-          upsert: false,
-        })
+      if (flagFile) {
+        const { data: imageData, error: imageError } = await supabase.storage
+          .from('quoc_ky')
+          .upload(`quoc-ky-${khuVuc.id}`, flagFile, {
+            cacheControl: '3600',
+            upsert: true,
+          })
 
-      if (imageError) {
-        setIsLoading(false)
-        return toast.error('Lỗi khi thêm quốc kỳ.')
+        if (imageError) {
+          setIsLoading(false)
+          return toast.error('Lỗi khi thêm quốc kỳ.')
+        }
       }
 
-      const { data, error } = await supabase.rpc('insert_khu_vuc', {
-        p_id: uniqueID,
-        p_ten_khu_vuc: values.countryName,
-        p_ngon_ngu: values.language,
-        p_quoc_ky: imageData.path,
+      const { data, error } = await supabase.rpc('update_tieu_bang', {
+        p_id: khuVuc.id,
+        p_ten_khu_vuc: values.stateName,
+        p_ngon_ngu: '',
+        p_quoc_ky: `quoc-ky-${khuVuc.id}`,
       })
 
       if (error) {
-        return toast.error('Thêm quốc gia không thành công.')
+        return toast.error('Cập nhật tiểu bang không thành công.')
       }
 
       setIsLoading(false)
-      toast.success('Thêm quốc gia mới thành công.')
-      insertCountryModal.triggerRefresh()
+      toast.success('Cập nhật tiểu bang thành công.')
+      triggerRefresh()
       reset()
-      insertCountryModal.onClose()
+      onClose()
     } catch (error) {
-      toast.error('Thêm mới không thành công.')
+      toast.error('Cập nhật không thành công.')
     } finally {
       setIsLoading(false)
     }
   }
   return (
     <Modal
-      title="THÊM QUỐC GIA"
-      description="Điền thông tin Quốc gia mới vào đây"
-      isOpen={insertCountryModal.isOpen}
+      title="CHỈNH SỬA TIỂU BANG"
+      description="Điền thông tin vào đây"
+      isOpen={isOpen}
       onChange={onChange}
     >
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-y-4 justify-center"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
         <Input
-          id="countryName"
+          id="stateName"
           disabled={isLoading}
-          error={!!errors.countryName}
-          {...register('countryName', { required: true })}
-          placeholder="Tên quốc gia"
+          error={!!errors.stateName}
+          {...register('stateName', { required: true })}
+          placeholder="Tên tiểu bang"
         />
         <Input
+          readOnly
+          placeholder="Úc"
+          className="placeholder:text-black bg-gray-200"
+        />
+        {/* <Input
           id="language"
           disabled={isLoading}
           error={!!errors.language}
           {...register('language', { required: true })}
           placeholder="Ngôn ngữ"
-        />
+        /> */}
         <div>
           <div className="pb-5 pt-2 text-sm font-semibold text-neutral-500">
-            QUỐC KỲ
+            BIỂU TƯỢNG
           </div>
           <Input
             id="flag"
@@ -112,7 +132,7 @@ const InsertCountryModal = () => {
             disabled={isLoading}
             error={!!errors.flag}
             accept="image/*"
-            {...register('flag', { required: true })}
+            {...register('flag', { required: false })}
           />
         </div>
         <div className="mt-3 flex gap-10 justify-center">
@@ -129,7 +149,7 @@ const InsertCountryModal = () => {
             type="submit"
             onClick={() => {
               reset()
-              insertCountryModal.onClose()
+              onClose()
             }}
           >
             HỦY
@@ -140,4 +160,4 @@ const InsertCountryModal = () => {
   )
 }
 
-export default InsertCountryModal
+export default UpdateStateModal

@@ -1,7 +1,7 @@
 'use client'
 
 import { v4 as uuidv4 } from 'uuid'
-import useInsertCountryModal from '../hooks/useInsertCountryModal'
+import useInsertStateModal from '../hooks/useInsertStateModal'
 import Modal from './Modal'
 import Input from '@/components/input'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
@@ -10,9 +10,9 @@ import { Button } from './ui/button'
 import { toast } from 'react-hot-toast'
 import supabase from '@/utils/supabase/supabase'
 
-const InsertCountryModal = () => {
+const InsertStateModal = () => {
   const [isLoading, setIsLoading] = useState(false)
-  const insertCountryModal = useInsertCountryModal()
+  const insertStateModal = useInsertStateModal()
   const {
     register,
     handleSubmit,
@@ -20,25 +20,25 @@ const InsertCountryModal = () => {
     reset,
   } = useForm<FieldValues>({
     defaultValues: {
-      countryName: '',
-      language: '',
-      flag: null,
+      stateName: '',
+      //language: '',
+      symbol: null,
     },
   })
 
   const onChange = (open: boolean) => {
     if (!open) {
       reset()
-      insertCountryModal.onClose()
+      insertStateModal.onClose()
     }
   }
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
     try {
       setIsLoading(true)
 
-      const flagFile = values.flag?.[0]
+      const flagFile = values.symbol?.[0]
 
-      if (!values.countryName || !values.language || !flagFile) {
+      if (!values.stateName || !flagFile) {
         return toast.error('Vui lòng điền đầy đủ thông tin.')
       }
       const uniqueID = uuidv4()
@@ -55,22 +55,22 @@ const InsertCountryModal = () => {
         return toast.error('Lỗi khi thêm quốc kỳ.')
       }
 
-      const { data, error } = await supabase.rpc('insert_khu_vuc', {
+      const { data, error } = await supabase.rpc('insert_tieu_bang', {
         p_id: uniqueID,
-        p_ten_khu_vuc: values.countryName,
-        p_ngon_ngu: values.language,
+        p_ten_khu_vuc: values.stateName,
+        p_ngon_ngu: '',
         p_quoc_ky: imageData.path,
       })
 
       if (error) {
-        return toast.error('Thêm quốc gia không thành công.')
+        return toast.error('Thêm tiểu bang không thành công.')
       }
 
       setIsLoading(false)
-      toast.success('Thêm quốc gia mới thành công.')
-      insertCountryModal.triggerRefresh()
+      toast.success('Thêm tiểu bang mới thành công.')
+      insertStateModal.triggerRefresh()
       reset()
-      insertCountryModal.onClose()
+      insertStateModal.onClose()
     } catch (error) {
       toast.error('Thêm mới không thành công.')
     } finally {
@@ -79,32 +79,34 @@ const InsertCountryModal = () => {
   }
   return (
     <Modal
-      title="THÊM QUỐC GIA"
-      description="Điền thông tin Quốc gia mới vào đây"
-      isOpen={insertCountryModal.isOpen}
+      title="THÊM TIỂU BANG"
+      description="Điền thông tin Tiểu bang mới vào đây"
+      isOpen={insertStateModal.isOpen}
       onChange={onChange}
     >
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-y-4 justify-center"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-4">
         <Input
-          id="countryName"
+          id="stateName"
           disabled={isLoading}
-          error={!!errors.countryName}
-          {...register('countryName', { required: true })}
-          placeholder="Tên quốc gia"
+          error={!!errors.stateName}
+          {...register('stateName', { required: true })}
+          placeholder="Tên tiểu bang"
         />
         <Input
-          id="language"
-          disabled={isLoading}
-          error={!!errors.language}
-          {...register('language', { required: true })}
-          placeholder="Ngôn ngữ"
+          readOnly
+          placeholder="Úc"
+          className="placeholder:text-black bg-gray-200"
         />
+        {/* <Input
+        id="language"
+        disabled={isLoading}
+        error={!!errors.language}
+        {...register('language', { required: true })}
+        placeholder="Ngôn ngữ"
+      /> */}
         <div>
           <div className="pb-5 pt-2 text-sm font-semibold text-neutral-500">
-            QUỐC KỲ
+            BIỂU TƯỢNG
           </div>
           <Input
             id="flag"
@@ -129,7 +131,7 @@ const InsertCountryModal = () => {
             type="submit"
             onClick={() => {
               reset()
-              insertCountryModal.onClose()
+              insertStateModal.onClose()
             }}
           >
             HỦY
@@ -140,4 +142,4 @@ const InsertCountryModal = () => {
   )
 }
 
-export default InsertCountryModal
+export default InsertStateModal
