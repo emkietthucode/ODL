@@ -4,7 +4,7 @@ import './globals.css'
 import { AuthProvider } from '@/contexts/AuthContext'
 
 const montserrat = Montserrat({
-  subsets: ['latin'],
+  subsets: ['vietnamese'],
 })
 
 export const metadata: Metadata = {
