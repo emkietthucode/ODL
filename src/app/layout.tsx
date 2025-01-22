@@ -4,8 +4,7 @@ import './globals.css'
 import { AuthProvider } from '@/contexts/AuthContext'
 
 const montserrat = Montserrat({
-  variable: '--font-montserrat',
-  subsets: ['latin'],
+  subsets: ['vietnamese'],
 })
 
 export const metadata: Metadata = {
@@ -20,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${montserrat.variable} antialiased`}>
+      <body className={`${montserrat.className} antialiased`}>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        worldMapImg: "url('/images/world-map.png')",
+      },
       colors: {
         purple: '#907ECF',
         'light-purple': '#E2DBF7',

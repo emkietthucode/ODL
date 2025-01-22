@@ -2,6 +2,7 @@ import ScrollToTopButton from '@/components/scroll-to-top-button'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import LandingImage from '../../../public/images/Landingpage.png'
+import Link from 'next/link'
 
 const Home = () => {
   return (
@@ -16,13 +17,15 @@ const Home = () => {
           đa quốc gia, ODL đồng hành cùng bạn trên hành trình chinh phục kỳ thi
           lái xe dễ dàng nhất.
         </p>
-        <Button
-          variant="main"
-          size="auto"
-          className="text-4xl mt-20 px-6 py-3 rounded-full shadow-lg w-fit"
-        >
-          Luyện thi ngay
-        </Button>
+        <Link href="/country">
+          <Button
+            variant="main"
+            size="auto"
+            className="text-4xl mt-20 px-6 py-3 rounded-full shadow-lg w-fit"
+          >
+            Luyện thi ngay
+          </Button>
+        </Link>
 
         <div className="absolute top-32 right-0 h-[800px] w-[800px] object-right">
           <Image src={LandingImage} alt="Landing image" />
