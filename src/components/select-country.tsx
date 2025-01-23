@@ -9,7 +9,7 @@ const montserratAlternates = Montserrat_Alternates({
   subsets: ['vietnamese'],
 })
 
-const SelectCountry = () => {
+const CountrySelection = () => {
   return (
     <div className="flex flex-col justify-between h-full">
       <div className="bg-worldMapImg bg-repeat bg-cover bg-bottom w-full h-screen flex flex-col items-center">
@@ -76,4 +76,4 @@ const SelectCountry = () => {
   )
 }
 
-export default SelectCountry
+export default CountrySelection
