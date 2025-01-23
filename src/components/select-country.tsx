@@ -1,5 +1,5 @@
 'use client'
-import SelectCountryVietNam from '../../public/images/select-country-aus.svg'
+import SelectCountryVietNam from '../../public/images/select-country-vietnam.svg'
 import SelectCountryAus from '../../public/images/select-country-aus.svg'
 import { ChevronsRight } from 'lucide-react'
 import { Montserrat_Alternates } from 'next/font/google'
