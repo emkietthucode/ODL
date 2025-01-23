@@ -17,7 +17,7 @@ const Home = () => {
           đa quốc gia, ODL đồng hành cùng bạn trên hành trình chinh phục kỳ thi
           lái xe dễ dàng nhất.
         </p>
-        <Link href="/country">
+        <Link href="/tests">
           <Button
             variant="main"
             size="auto"
