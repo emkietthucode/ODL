@@ -33,7 +33,7 @@ const TestsCategoryPage = () => {
         </div>
         <div className="w-full h-full bg-blue-100/40 flex justify-center p-10">
           <div className="w-[60%] h-full flex  justify-between items-center">
-            <div className="flex flex-col h-[80%] w-[25%] text-center gap-5 items-center justify-around">
+            <div className="flex flex-col h-[300px] w-[25%] text-center gap-5 items-center justify-between">
               <div className="font-bold text-5xl">A1</div>
               <div>
                 dành cho người điều khiển xe mô tô hai bánh có dung tích xi-lanh
@@ -47,7 +47,7 @@ const TestsCategoryPage = () => {
                 THI THỬ
               </Button>
             </div>
-            <div className="flex flex-col h-[80%] w-[25%] text-center gap-5 items-center justify-around">
+            <div className="flex flex-col h-[300px] w-[25%] text-center gap-5 items-center justify-between">
               <div className="font-bold text-5xl">A2</div>
               <div>
                 dành cho người điều khiển xe mô tô hai bánh có dung tích xi-lanh
@@ -61,7 +61,7 @@ const TestsCategoryPage = () => {
                 THI THỬ
               </Button>
             </div>
-            <div className="flex flex-col h-[80%] w-[25%] text-center gap-5 items-center justify-around">
+            <div className="flex flex-col h-[300px] w-[25%] text-center gap-5 items-center justify-between">
               <div className="font-bold text-5xl">A3, A4</div>
               <div>
                 Bằng A3 cấp cho người điều khiển xe mô tô ba bánh, Bằng A4 cấp
