@@ -114,7 +114,7 @@ const TestsCategoryPage = () => {
             </div>
             <Image src={B2Car} alt="" />
           </div>
-          <hr className="w-[90%] h-1 my-1 mx-auto bg-light-purple border-0 rounded dark:bg-light-purp"></hr>
+          <hr className="w-[90%] h-[2px] my-1 mx-auto bg-light-purple border-0 rounded dark:bg-light-purp"></hr>
           <div className="flex justify-between">
             <div className="flex flex-col gap-[128px] justify-between w-[40%]">
               <div className="flex flex-col">
