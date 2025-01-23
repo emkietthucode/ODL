@@ -3,6 +3,7 @@ import SelectCountryAus from '../../public/images/select-country-aus.svg'
 import { ChevronsRight } from 'lucide-react'
 import { Montserrat_Alternates } from 'next/font/google'
 import Image from 'next/image'
+import { usePathname, useRouter } from 'next/navigation'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '700',
@@ -10,6 +11,12 @@ const montserratAlternates = Montserrat_Alternates({
 })
 
 const CountrySelection = () => {
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const handleCountrySelect = (country: 'vietnam' | 'australia') => {
+    router.push(`${pathname}/${country}`)
+  }
   return (
     <div className="flex flex-col justify-between h-full">
       <div className="bg-worldMapImg bg-repeat bg-cover bg-bottom w-full h-screen flex flex-col items-center">
@@ -37,7 +44,10 @@ const CountrySelection = () => {
               Thí sinh cần đạt điểm yêu cầu, bao gồm các câu hỏi điểm liệt, để
               vượt qua phần thi này.
             </div>
-            <div className="flex gap-3 items-center cursor-pointer">
+            <div
+              className="flex gap-3 items-center cursor-pointer"
+              onClick={() => handleCountrySelect('vietnam')}
+            >
               <div
                 className={`underline text-purple text-3xl ${montserratAlternates.className}`}
               >
@@ -61,7 +71,10 @@ const CountrySelection = () => {
               hỗ trợ ôn thi cho nhiều tiểu bang, giúp thí sinh luyện tập theo
               các quy định và yêu cầu riêng của từng vùng.
             </div>
-            <div className="flex gap-3 items-center cursor-pointer">
+            <div
+              className="flex gap-3 items-center cursor-pointer"
+              onClick={() => handleCountrySelect('australia')}
+            >
               <div
                 className={`underline text-purple text-3xl ${montserratAlternates.className}`}
               >
