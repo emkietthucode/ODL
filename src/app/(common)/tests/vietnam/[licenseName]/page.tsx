@@ -3,6 +3,14 @@ import Student from '../../../../../../public/images/f6-student.svg'
 import Overlay from '../../../../../../public/images/f6-overlay.svg'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
+import { Montserrat_Alternates } from 'next/font/google'
+
+const montserratAlternates = Montserrat_Alternates({
+  weight: '700',
+  subsets: ['vietnamese'],
+})
+
+const dethi = [1, 2, 3, 4, 5, 6]
 
 const TestsLicensePage = () => {
   return (
@@ -61,10 +69,29 @@ const TestsLicensePage = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-[32px] items-center">
+          <div className="flex flex-col gap-[32px] items-center w-full">
             <div className="font-semibold">hoặc</div>
             <div className="text-purple text-2xl font-medium">
               THI THỬ VỚI BỘ ĐỀ CÓ SẴN
+            </div>
+            <div className="mb-[128px] mt-[16px] w-[60%] flex flex-wrap gap-10 justify-center">
+              {dethi.map((_, index) => (
+                <Button
+                  key={index}
+                  className={`${montserratAlternates.className} 
+                  rounded-xl 
+                  text-white 
+                  font-bold 
+                  text-2xl 
+                  bg-blue-400
+                  hover:bg-blue-400/80
+                  text-center
+                  w-[150px]
+                  h-[45px]`}
+                >
+                  ĐỀ SỐ {index + 1}
+                </Button>
+              ))}
             </div>
           </div>
         </div>
