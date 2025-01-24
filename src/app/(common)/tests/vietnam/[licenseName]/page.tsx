@@ -1,18 +1,53 @@
+'use client'
 import ScrollToTopButton from '@/components/scroll-to-top-button'
 import Student from '../../../../../../public/images/f6-student.svg'
 import Overlay from '../../../../../../public/images/f6-overlay.svg'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Montserrat_Alternates } from 'next/font/google'
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { DeThi, HangBang } from '@/types/types'
+import supabase from '@/utils/supabase/supabase'
+import toast from 'react-hot-toast'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '700',
   subsets: ['vietnamese'],
 })
 
-const dethi = [1, 2, 3, 4, 5, 6]
-
 const TestsLicensePage = () => {
+  const params = useParams<{ licenseName: string }>()
+  const [license, setLicense] = useState<HangBang>()
+  const [tests, setTests] = useState<DeThi[]>([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: licenseData, error: licenseError } = await supabase
+        .from('hang_bang')
+        .select()
+        .eq('ten_hang_bang', params.licenseName.toUpperCase())
+      if (licenseError) {
+        console.log(licenseError)
+        return toast.error('Lấy dữ liệu hạng bằng không thành công')
+      }
+      setLicense(licenseData[0])
+      const { data: testsData, error: testsError } = await supabase.rpc(
+        'get_de_thi_by_hang_bang_id',
+        {
+          hang_bang_id: license?.id,
+        }
+      )
+      if (testsError) {
+        console.log(testsError)
+        return toast.error('Lấy dữ liệu đề thi không thành công')
+      }
+      setTests(testsData)
+    }
+
+    fetchData()
+  }, [license, params])
+
   return (
     <main className="bg-white mx-auto my-auto max-h-full">
       <div className="flex flex-col items-center h-full">
@@ -20,16 +55,9 @@ const TestsLicensePage = () => {
           <div className="flex justify-start relative w-[90%]">
             <div className="flex flex-col gap-10 z-20 mt-20">
               <div className="text-purple text-5xl font-semibold">
-                LOẠI BẰNG LÁI: A1
+                {`LOẠI BẰNG LÁI: ${license?.ten_hang_bang}`}
               </div>
-              <div className="w-[60%]">
-                Bằng lái xe A1 ở Việt Nam là loại bằng dành cho người lái xe máy
-                có dung tích động cơ từ 50cc đến dưới 175cc. Người sở hữu bằng
-                A1 được phép điều khiển xe máy, xe gắn máy, và các loại phương
-                tiện tương tự trong phạm vi quy định của pháp luật. Để thi bằng
-                A1, thí sinh cần hoàn thành cả phần lý thuyết và thực hành, bao
-                gồm các câu hỏi về luật giao thông và các kỹ năng lái xe cơ bản.
-              </div>
+              <div className="w-[60%]">{license?.mo_ta_hang_bang}</div>
             </div>
           </div>
 
@@ -75,7 +103,7 @@ const TestsLicensePage = () => {
               THI THỬ VỚI BỘ ĐỀ CÓ SẴN
             </div>
             <div className="mb-[128px] mt-[16px] w-[60%] flex flex-wrap gap-10 justify-center">
-              {dethi.map((_, index) => (
+              {tests.map((_, index) => (
                 <Button
                   key={index}
                   className={`${montserratAlternates.className} 

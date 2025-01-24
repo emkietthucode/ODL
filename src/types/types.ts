@@ -67,3 +67,12 @@ export interface Chuong {
   created_at: string
   updated_at: string
 }
+
+export interface DeThi {
+  id: string
+  ten_de_thi: string
+  loai_de_thi: string
+  ma_cau_truc: string
+  created_at: string
+  updated_at: string
+}
