@@ -1,54 +1,98 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import { Montserrat_Alternates } from 'next/font/google'
 import Image from 'next/image'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { CauHoi, LuaChon } from '@/types/types'
+import supabase from '@/utils/supabase/supabase'
+import { toast } from 'react-hot-toast'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '500',
   subsets: ['vietnamese'],
 })
 
-const questions = [
-  'What is your favorite color?',
-  'How old are you?',
-  'What is your profession?',
-  'Where do you live?',
-  'What are your hobbies?',
-  'What are your hobbies?',
-  'What are your hobbies?',
-  'What are your hobbies?',
-  'What are your hobbies?',
-  'What are your hobbies?',
-  'What are your hobbies?',
-]
+interface QuestionDTO {
+  question?: CauHoi
+  answers?: LuaChon[]
+  userAnswerIndex?: string
+}
 
 const DEFAULT_TIME = 1 * 60 // 10 minutes in seconds
 
+const shuffleAnswers = (answers: LuaChon[]) => {
+  const shuffled = [...answers]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
+
 const TestComponent = () => {
   const [isTesting, setIsTesting] = useState<boolean>(false)
-  const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
+  const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
   const [timeLeft, setTimeLeft] = useState(DEFAULT_TIME)
+  const [questions, setQuestions] = useState<QuestionDTO[]>([])
+  const [selectedAnswers, setSelectedAnswers] = useState<string[]>(
+    new Array(questions.length).fill('')
+  )
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
+  // Timer Logic
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null
-
     if (isTesting && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft((timeLeft) => timeLeft - 1)
+      intervalRef.current = setInterval(() => {
+        setTimeLeft((prev) => prev - 1)
       }, 1000)
-    } else if (timeLeft === 0) {
+    }
+
+    if (timeLeft === 0) {
       setIsTesting(false)
-      if (interval) clearInterval(interval)
+      if (intervalRef.current) clearInterval(intervalRef.current)
     }
 
     return () => {
-      if (interval) clearInterval(interval)
+      if (intervalRef.current) clearInterval(intervalRef.current)
     }
   }, [isTesting, timeLeft])
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      const { data, error } = await supabase
+        .from('cau_hoi')
+        .select(
+          `
+          *,
+          lua_chon (
+            *
+          )
+        `
+        )
+        .limit(25)
+
+      if (error) {
+        console.error(error)
+        return toast.error('Lỗi trong quá trình lấy dữ liệu câu hỏi')
+      }
+
+      const formattedQuestions: QuestionDTO[] = data.map((item: any) => ({
+        question: item,
+        answers:
+          item.lua_chon[0]?.so_thu_tu === 0
+            ? shuffleAnswers(item.lua_chon)
+            : item.lua_chon,
+        userAnswerIndex: '-1', // Default to -1
+      }))
+
+      setQuestions(formattedQuestions)
+    }
+
+    fetchQuestions()
+  }, [])
 
   const formatTime = (totalSeconds: number) => {
     const minutes = Math.floor(totalSeconds / 60)
@@ -58,15 +102,26 @@ const TestComponent = () => {
       .padStart(2, '0')}`
   }
 
-  const handleClick = (index: number) => {
+  const handleClickQuestion = (index: number) => {
+    if (!isTesting) {
+      console.log('lỗi')
+      return toast.error('Vui lòng bấm Bắt đầu thi')
+    }
     setSelectedQuestion(index)
   }
 
-  const handleSubmit = () => {
+  const handleAnswerChange = (questionIndex: number, value: string) => {
+    const newSelectedAnswers = [...questions]
+    newSelectedAnswers[questionIndex].userAnswerIndex = value.split('-').pop()
+    setQuestions(newSelectedAnswers)
+  }
+
+  const handleSubmitButton = () => {
     if (!isTesting && timeLeft === 0) {
       setTimeLeft(DEFAULT_TIME)
     }
     setIsTesting(!isTesting)
+    console.log(questions)
   }
 
   return (
@@ -88,10 +143,10 @@ const TestComponent = () => {
       <div className="h-[560px] w-full flex gap-2">
         <div className="w-[22%] bg-light-purple-admin flex flex-col justify-between items-center">
           <ol className="list-none grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 p-4">
-            {questions.map((question, index: number) => (
+            {questions.map((_, index: number) => (
               <li key={index} className="flex justify-center">
                 <Button
-                  onClick={() => handleClick(index)}
+                  onClick={() => handleClickQuestion(index)}
                   variant="outline"
                   size="icon"
                   className={cn(
@@ -110,7 +165,7 @@ const TestComponent = () => {
                   transition-all
                   border-separate"
                   `,
-                    selectedQuestion === index &&
+                    selectedQuestionIndex === index &&
                       'ring-2 ring-purple ring-offset-2 font-extrabold'
                   )}
                 >
@@ -121,7 +176,7 @@ const TestComponent = () => {
           </ol>
           {isTesting ? (
             <Button
-              onClick={handleSubmit}
+              onClick={handleSubmitButton}
               variant="main"
               className="my-5 hover:bg-purple/90"
             >
@@ -129,7 +184,7 @@ const TestComponent = () => {
             </Button>
           ) : (
             <Button
-              onClick={handleSubmit}
+              onClick={() => setIsTesting(true)}
               variant="main"
               className="my-5 hover:bg-purple/90"
             >
@@ -141,43 +196,43 @@ const TestComponent = () => {
         <div className="w-[53%] bg-neutral-200 flex flex-col justify-start items-center p-5 gap-2">
           <div className="flex justify-between items-center w-full text-lg">
             <FaArrowLeft className="text-purple hover:text-purple/80 cursor-pointer" />
-            <div className="font-bold">Câu hỏi 2:</div>
+            <div className="font-bold">{`Câu hỏi ${
+              selectedQuestionIndex + 1
+            }:`}</div>
             <FaArrowRight className="text-purple hover:text-purple/80 cursor-pointer" />
           </div>
           <div className={`${montserratAlternates.className} self-start mb-2`}>
-            Khi gặp biển nào xe ưu tiên theo luật định vẫn phải dừng lại?
+            {questions[selectedQuestionIndex]?.question?.noi_dung_cau_hoi}
           </div>
           <Image src={''} alt="" />
         </div>
         <div className="w-[25%] flex flex-col h-full gap-3">
-          <div className="grow-[0.2] bg-light-purple text-purple font-bold text-3xl flex items-center justify-center">
+          <div className="h-[86px] bg-light-purple text-purple font-bold text-3xl flex items-center justify-center">
             {formatTime(timeLeft)}
           </div>
-          <RadioGroup className="grow" defaultValue="comfortable">
-            <div className="grow bg-neutral-200 flex items-start p-2 gap-2">
-              <RadioGroupItem value="answer-1" id="r1" />
-              <div className="text-sm  text-neutral-500 font-medium">
-                Phần mặt đường và lề đường đường.
-              </div>
-            </div>
-            <div className="grow bg-neutral-200 flex items-start p-2 gap-2">
-              <RadioGroupItem value="answer-2" id="r2" />
-              <div className="text-sm  text-neutral-500 font-medium">
-                Phần mặt đường và lề đường đường.
-              </div>
-            </div>
-            <div className="grow bg-neutral-200 flex items-start p-2 gap-2">
-              <RadioGroupItem value="answer-3" id="r3" />
-              <div className="text-sm  text-neutral-500 font-medium">
-                Phần mặt đường và lề đường đường.
-              </div>
-            </div>
-            <div className="grow bg-neutral-200 flex items-start p-2 gap-2">
-              <RadioGroupItem value="answer-4" id="r4" />
-              <div className="text-sm  text-neutral-500 font-medium">
-                Phần mặt đường và lề đường đường.
-              </div>
-            </div>
+          <RadioGroup
+            value={selectedAnswers[selectedQuestionIndex]}
+            onValueChange={(value) =>
+              handleAnswerChange(selectedQuestionIndex, value)
+            }
+            className="h-full"
+          >
+            {questions[selectedQuestionIndex]?.answers?.map(
+              (answer: LuaChon, index: number) => (
+                <div
+                  key={index}
+                  className="grow bg-neutral-200 flex items-start p-2 gap-2"
+                >
+                  <RadioGroupItem
+                    value={`answer-${selectedQuestionIndex}-${index}`}
+                    id={`r${selectedQuestionIndex}-${index}`}
+                  />
+                  <div className="text-sm text-neutral-500 font-medium">
+                    {answer.noi_dung_lua_chon}
+                  </div>
+                </div>
+              )
+            )}
           </RadioGroup>
         </div>
       </div>
