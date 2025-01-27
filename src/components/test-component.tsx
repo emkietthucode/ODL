@@ -104,7 +104,6 @@ const TestComponent = () => {
 
   const handleClickQuestion = (index: number) => {
     if (!isTesting) {
-      console.log('lỗi')
       return toast.error('Vui lòng bấm Bắt đầu thi')
     }
     setSelectedQuestion(index)
