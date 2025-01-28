@@ -6,7 +6,7 @@ const TestPass = () => {
   return (
     <div className="flex flex-col gap-10 my-[64px] w-[60%] justify-center items-center">
       <div className="flex rounded-[64px] bg-light-purple-admin w-[70%] h-[350px] relative">
-        <div className="w-[50%] flex flex-col items-center  mt-[64px]">
+        <div className="w-[50%] flex flex-col items-center  mt-[32px]">
           <IoCheckmarkCircle className="text-custom-green text-4xl ml-[120px]" />
           <div className="text-custom-green font-bold text-5xl">ĐẠT</div>
         </div>
@@ -39,10 +39,10 @@ const TestPass = () => {
         <Image
           src={F721TestPass}
           alt=""
-          className="absolute -bottom-[110px] -left-[156px]"
+          className="absolute -bottom-[80px] -left-[156px]"
         />
       </div>
-      <div className="my-5"></div>
+      <div className="my-2"></div>
       <div className="flex flex-col gap-3 text-blue-400 w-full justify-center items-center">
         <hr className="h-1 my-5 bg-purple border-0 dark:bg-purple w-full"></hr>
         <div className="flex justify-between items-center gap-[96px] w-[80%] font-medium">
