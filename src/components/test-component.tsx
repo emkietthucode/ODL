@@ -17,7 +17,7 @@ const montserratAlternates = Montserrat_Alternates({
   subsets: ['vietnamese'],
 })
 
-const DEFAULT_TIME = 1 * 60 // 10 minutes in seconds
+const DEFAULT_TIME = 10 * 60 // 10 minutes in seconds
 
 const shuffleAnswers = (answers: LuaChon[]) => {
   const shuffled = [...answers]
@@ -84,7 +84,6 @@ const TestComponent = () => {
           : item.lua_chon.sort(
               (a: LuaChon, b: LuaChon) => a.so_thu_tu - b.so_thu_tu
             ),
-        userAnswerIndex: '-1', // Default to -1
       }))
 
       setQuestions(formattedQuestions)
@@ -123,9 +122,38 @@ const TestComponent = () => {
   }
 
   const handleAnswerChange = (questionIndex: number, value: string) => {
-    const newSelectedAnswers = [...questions]
-    newSelectedAnswers[questionIndex].userAnswerIndex = value.split('-').pop()
-    setQuestions(newSelectedAnswers)
+    // Parse the answer index from the value
+    const answerIndex = parseInt(value.split('-').pop() || '', 10)
+
+    // Ensure the answerIndex is a valid number
+    if (isNaN(answerIndex)) {
+      console.error('Invalid answer index:', value)
+      return
+    }
+
+    // Safely get the selected answer
+    const selectedAnswer = questions[questionIndex]?.answers?.[answerIndex].id
+    if (!selectedAnswer) {
+      console.error(
+        'Selected answer not found for question index:',
+        questionIndex
+      )
+      return
+    }
+
+    // Update the selected answer index for the specific question
+    const updatedQuestions = questions.map((question, index) => {
+      if (index === questionIndex) {
+        return {
+          ...question,
+          userAnswerIndex: String(selectedAnswer),
+        }
+      }
+      return question
+    })
+
+    // Update the state
+    setQuestions(updatedQuestions)
   }
 
   const handleSubmitButton = () => {
@@ -181,8 +209,11 @@ const TestComponent = () => {
                   `,
                     selectedQuestionIndex === index &&
                       'ring-2 ring-purple ring-offset-2 font-extrabold',
-                    questions[index].userAnswerIndex !== '-1' &&
-                      'bg-neutral-300 text-neutral-500'
+                    questions[index].userAnswerIndex &&
+                      `bg-neutral-300 
+                      text-neutral-500 
+                      hover:bg-neutral-300/70 
+                      hover:text-neutral-500/90`
                   )}
                 >
                   {index + 1}
