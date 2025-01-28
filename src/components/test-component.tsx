@@ -6,7 +6,7 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import { Montserrat_Alternates } from 'next/font/google'
 import Image from 'next/image'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { LuaChon } from '@/types/types'
+import { DeThi, LuaChon } from '@/types/types'
 import supabase from '@/utils/supabase/supabase'
 import { toast } from 'react-hot-toast'
 import { QuestionDTO } from '@/types/dto/types'
@@ -20,6 +20,12 @@ const montserratAlternates = Montserrat_Alternates({
 
 const DEFAULT_TIME = 10 * 60 // 10 minutes in seconds
 
+interface TestComponentProps {
+  test: DeThi
+  testDurationMinutes: number
+  defaultQuestions: QuestionDTO[]
+}
+
 const shuffleAnswers = (answers: LuaChon[]) => {
   const shuffled = [...answers]
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -29,15 +35,17 @@ const shuffleAnswers = (answers: LuaChon[]) => {
   return shuffled
 }
 
-const TestComponent = () => {
+const TestComponent: React.FC<TestComponentProps> = ({
+  test,
+  testDurationMinutes = DEFAULT_TIME,
+  defaultQuestions,
+}) => {
   const [isTesting, setIsTesting] = useState<boolean>(false)
   const [hasStarted, setHasStarted] = useState<boolean>(false)
   const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
-  const [timeLeft, setTimeLeft] = useState(DEFAULT_TIME)
+  const [timeLeft, setTimeLeft] = useState(testDurationMinutes)
   const [questions, setQuestions] = useState<QuestionDTO[]>([])
-  const [selectedAnswers, setSelectedAnswers] = useState<string[]>(
-    new Array(questions.length).fill('')
-  )
+
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const { onOpen } = useConfirmSubmitTestModal()
 
@@ -268,7 +276,6 @@ const TestComponent = () => {
             {formatTime(timeLeft)}
           </div>
           <RadioGroup
-            value={selectedAnswers[selectedQuestionIndex]}
             onValueChange={(value) =>
               handleAnswerChange(selectedQuestionIndex, value)
             }
