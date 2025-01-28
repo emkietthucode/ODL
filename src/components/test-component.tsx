@@ -21,7 +21,7 @@ const montserratAlternates = Montserrat_Alternates({
 const DEFAULT_TIME = 10 * 60 // 10 minutes in seconds
 
 interface TestComponentProps {
-  test: DeThi
+  title: string
   testDurationMinutes: number
   defaultQuestions: QuestionDTO[]
 }
@@ -36,7 +36,7 @@ const shuffleAnswers = (answers: LuaChon[]) => {
 }
 
 const TestComponent: React.FC<TestComponentProps> = ({
-  test,
+  title = '',
   testDurationMinutes = DEFAULT_TIME,
   defaultQuestions,
 }) => {
@@ -44,7 +44,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
   const [hasStarted, setHasStarted] = useState<boolean>(false)
   const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
   const [timeLeft, setTimeLeft] = useState(testDurationMinutes)
-  const [questions, setQuestions] = useState<QuestionDTO[]>([])
+  const [questions, setQuestions] = useState<QuestionDTO[]>(defaultQuestions)
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const { onOpen } = useConfirmSubmitTestModal()
@@ -67,39 +67,43 @@ const TestComponent: React.FC<TestComponentProps> = ({
     }
   }, [isTesting, timeLeft])
 
-  useEffect(() => {
-    const fetchQuestions = async () => {
-      const { data, error } = await supabase
-        .from('cau_hoi')
-        .select(
-          `
-          *,
-          lua_chon (
-            *
-          )
-        `
-        )
-        .limit(25)
+  if (!questions) {
+    return null
+  }
 
-      if (error) {
-        console.error(error)
-        return toast.error('Lỗi trong quá trình lấy dữ liệu câu hỏi')
-      }
+  // useEffect(() => {
+  //   const fetchQuestions = async () => {
+  //     const { data, error } = await supabase
+  //       .from('cau_hoi')
+  //       .select(
+  //         `
+  //         *,
+  //         lua_chon (
+  //           *
+  //         )
+  //       `
+  //       )
+  //       .limit(25)
 
-      const formattedQuestions: QuestionDTO[] = data.map((item: any) => ({
-        question: item,
-        answers: item.lua_chon.some((a: LuaChon) => a.so_thu_tu === 0)
-          ? shuffleAnswers(item.lua_chon)
-          : item.lua_chon.sort(
-              (a: LuaChon, b: LuaChon) => a.so_thu_tu - b.so_thu_tu
-            ),
-      }))
+  //     if (error) {
+  //       console.error(error)
+  //       return toast.error('Lỗi trong quá trình lấy dữ liệu câu hỏi')
+  //     }
 
-      setQuestions(formattedQuestions)
-    }
+  //     const formattedQuestions: QuestionDTO[] = data.map((item: any) => ({
+  //       question: item,
+  //       answers: item.lua_chon.some((a: LuaChon) => a.so_thu_tu === 0)
+  //         ? shuffleAnswers(item.lua_chon)
+  //         : item.lua_chon.sort(
+  //             (a: LuaChon, b: LuaChon) => a.so_thu_tu - b.so_thu_tu
+  //           ),
+  //     }))
 
-    fetchQuestions()
-  }, [])
+  //     setQuestions(formattedQuestions)
+  //   }
+
+  //   fetchQuestions()
+  // }, [])
 
   const formatTime = (totalSeconds: number) => {
     const minutes = Math.floor(totalSeconds / 60)
@@ -189,8 +193,9 @@ const TestComponent: React.FC<TestComponentProps> = ({
           flex justify-center items-center
           "
       >
-        BANG A1 - DE SO 1
+        {`${title}`}
       </div>
+
       <div className="h-[560px] w-full flex gap-2">
         <div className="w-[22%] bg-light-purple-admin flex flex-col justify-between items-center">
           <ol className="list-none grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2 p-4">
