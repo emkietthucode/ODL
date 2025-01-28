@@ -6,20 +6,16 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import { Montserrat_Alternates } from 'next/font/google'
 import Image from 'next/image'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { CauHoi, LuaChon } from '@/types/types'
+import { LuaChon } from '@/types/types'
 import supabase from '@/utils/supabase/supabase'
 import { toast } from 'react-hot-toast'
+import { QuestionDTO } from '@/types/dto/types'
+import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '500',
   subsets: ['vietnamese'],
 })
-
-interface QuestionDTO {
-  question?: CauHoi
-  answers?: LuaChon[]
-  userAnswerIndex?: string
-}
 
 const DEFAULT_TIME = 1 * 60 // 10 minutes in seconds
 
@@ -34,6 +30,7 @@ const shuffleAnswers = (answers: LuaChon[]) => {
 
 const TestComponent = () => {
   const [isTesting, setIsTesting] = useState<boolean>(false)
+  const [hasStarted, setHasStarted] = useState<boolean>(false)
   const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
   const [timeLeft, setTimeLeft] = useState(DEFAULT_TIME)
   const [questions, setQuestions] = useState<QuestionDTO[]>([])
@@ -41,6 +38,7 @@ const TestComponent = () => {
     new Array(questions.length).fill('')
   )
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const { onOpen } = useConfirmSubmitTestModal()
 
   // Timer Logic
   useEffect(() => {
@@ -81,10 +79,11 @@ const TestComponent = () => {
 
       const formattedQuestions: QuestionDTO[] = data.map((item: any) => ({
         question: item,
-        answers:
-          item.lua_chon[0]?.so_thu_tu === 0
-            ? shuffleAnswers(item.lua_chon)
-            : item.lua_chon,
+        answers: item.lua_chon.some((a: LuaChon) => a.so_thu_tu === 0)
+          ? shuffleAnswers(item.lua_chon)
+          : item.lua_chon.sort(
+              (a: LuaChon, b: LuaChon) => a.so_thu_tu - b.so_thu_tu
+            ),
         userAnswerIndex: '-1', // Default to -1
       }))
 
@@ -104,9 +103,23 @@ const TestComponent = () => {
 
   const handleClickQuestion = (index: number) => {
     if (!isTesting) {
-      return toast.error('Vui lòng bấm Bắt đầu thi')
+      const message =
+        timeLeft > 0 ? 'Vui lòng bấm Bắt đầu thi' : 'Đã hết thời gian thi'
+      return toast.error(message)
     }
     setSelectedQuestion(index)
+  }
+
+  const handlePrevious = () => {
+    if (selectedQuestionIndex > 0) {
+      setSelectedQuestion((prev) => prev - 1)
+    }
+  }
+
+  const handleNext = () => {
+    if (selectedQuestionIndex < questions.length - 1) {
+      setSelectedQuestion((prev) => prev + 1)
+    }
   }
 
   const handleAnswerChange = (questionIndex: number, value: string) => {
@@ -119,8 +132,10 @@ const TestComponent = () => {
     if (!isTesting && timeLeft === 0) {
       setTimeLeft(DEFAULT_TIME)
     }
-    setIsTesting(!isTesting)
-    console.log(questions)
+    setIsTesting(false)
+    onOpen(questions, () => {
+      setIsTesting(true)
+    })
   }
 
   return (
@@ -165,7 +180,9 @@ const TestComponent = () => {
                   border-separate"
                   `,
                     selectedQuestionIndex === index &&
-                      'ring-2 ring-purple ring-offset-2 font-extrabold'
+                      'ring-2 ring-purple ring-offset-2 font-extrabold',
+                    questions[index].userAnswerIndex !== '-1' &&
+                      'bg-neutral-300 text-neutral-500'
                   )}
                 >
                   {index + 1}
@@ -173,7 +190,18 @@ const TestComponent = () => {
               </li>
             ))}
           </ol>
-          {isTesting ? (
+          {!hasStarted ? (
+            <Button
+              onClick={() => {
+                setHasStarted(true)
+                setIsTesting(true)
+              }}
+              variant="main"
+              className="my-5 hover:bg-purple/90"
+            >
+              BẮT ĐẦU THI
+            </Button>
+          ) : (
             <Button
               onClick={handleSubmitButton}
               variant="main"
@@ -181,24 +209,22 @@ const TestComponent = () => {
             >
               NỘP BÀI
             </Button>
-          ) : (
-            <Button
-              onClick={() => setIsTesting(true)}
-              variant="main"
-              className="my-5 hover:bg-purple/90"
-            >
-              BẮT ĐẦU THI
-            </Button>
           )}
         </div>
 
         <div className="w-[53%] bg-neutral-200 flex flex-col justify-start items-center p-5 gap-2">
           <div className="flex justify-between items-center w-full text-lg">
-            <FaArrowLeft className="text-purple hover:text-purple/80 cursor-pointer" />
+            <FaArrowLeft
+              onClick={handlePrevious}
+              className="text-purple hover:text-purple/80 cursor-pointer"
+            />
             <div className="font-bold">{`Câu hỏi ${
               selectedQuestionIndex + 1
             }:`}</div>
-            <FaArrowRight className="text-purple hover:text-purple/80 cursor-pointer" />
+            <FaArrowRight
+              onClick={handleNext}
+              className="text-purple hover:text-purple/80 cursor-pointer"
+            />
           </div>
           <div className={`${montserratAlternates.className} self-start mb-2`}>
             {questions[selectedQuestionIndex]?.question?.noi_dung_cau_hoi}
