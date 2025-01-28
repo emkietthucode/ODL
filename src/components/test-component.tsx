@@ -11,6 +11,7 @@ import supabase from '@/utils/supabase/supabase'
 import { toast } from 'react-hot-toast'
 import { QuestionDTO } from '@/types/dto/types'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
+import { Label } from '@/components//ui/label'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '500',
@@ -275,9 +276,25 @@ const TestComponent = () => {
           >
             {questions[selectedQuestionIndex]?.answers?.map(
               (answer: LuaChon, index: number) => (
-                <div
+                <Label
                   key={index}
-                  className="grow bg-neutral-200 flex items-start p-2 gap-2"
+                  htmlFor={`r${selectedQuestionIndex}-${index}`}
+                  className="
+                  grow 
+                  bg-neutral-200 
+                  flex 
+                  items-start 
+                  p-3 
+                  gap-2 
+                  cursor-pointer
+                  rounded-lg 
+                  border
+                  border-transparent 
+                hover:bg-neutral-300
+                active:bg-neutral-400
+                  active:scale-80
+                  transition-all 
+                  duration-150"
                 >
                   <RadioGroupItem
                     value={`answer-${selectedQuestionIndex}-${index}`}
@@ -286,7 +303,7 @@ const TestComponent = () => {
                   <div className="text-sm text-neutral-500 font-medium">
                     {answer.noi_dung_lua_chon}
                   </div>
-                </div>
+                </Label>
               )
             )}
           </RadioGroup>
