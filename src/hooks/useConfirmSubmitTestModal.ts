@@ -4,27 +4,23 @@ import { create } from 'zustand'
 interface ConfirmSubmitTestModal {
   isOpen: boolean
   item: QuestionDTO[]
-  onOpen: (item: QuestionDTO[], callback?: () => void) => void
+  onOpen: (callback?: () => void) => void
   onClose: () => void
-  refreshTrigger: number
-  triggerRefresh: () => void
   onCloseCallback: (() => void) | null
+  setQuestions: (questions: QuestionDTO[]) => void
 }
 
 const useConfirmSubmitTestModal = create<ConfirmSubmitTestModal>((set) => ({
   isOpen: false,
   item: [],
   onCloseCallback: null,
-  onOpen: (item, callback) =>
-    set({ isOpen: true, item, onCloseCallback: callback }),
+  onOpen: (callback) => set({ isOpen: true, onCloseCallback: callback }),
   onClose: () =>
     set((state) => {
       if (state.onCloseCallback) state.onCloseCallback() // Execute callback if defined
-      return { isOpen: false, item: [], onCloseCallback: null }
+      return { isOpen: false, onCloseCallback: null }
     }),
-  refreshTrigger: 0,
-  triggerRefresh: () =>
-    set((state) => ({ refreshTrigger: state.refreshTrigger + 1 })),
+  setQuestions: (questions) => set({ item: questions }),
 }))
 
 export default useConfirmSubmitTestModal

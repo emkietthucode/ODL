@@ -6,8 +6,7 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import { Montserrat_Alternates } from 'next/font/google'
 import Image from 'next/image'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { DeThi, LuaChon } from '@/types/types'
-import supabase from '@/utils/supabase/supabase'
+import { LuaChon } from '@/types/types'
 import { toast } from 'react-hot-toast'
 import { QuestionDTO } from '@/types/dto/types'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
@@ -22,29 +21,21 @@ const DEFAULT_TIME = 10 * 60 // 10 minutes in seconds
 
 interface TestComponentProps {
   title: string
-  testDurationMinutes: number
-  defaultQuestions: QuestionDTO[]
-}
-
-const shuffleAnswers = (answers: LuaChon[]) => {
-  const shuffled = [...answers]
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-  }
-  return shuffled
+  testDurationMinutes?: number
+  questions: QuestionDTO[]
+  setQuestions: (questions: QuestionDTO[]) => void
 }
 
 const TestComponent: React.FC<TestComponentProps> = ({
   title = '',
   testDurationMinutes = DEFAULT_TIME,
-  defaultQuestions,
+  questions,
+  setQuestions,
 }) => {
   const [isTesting, setIsTesting] = useState<boolean>(false)
   const [hasStarted, setHasStarted] = useState<boolean>(false)
   const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
   const [timeLeft, setTimeLeft] = useState(testDurationMinutes)
-  const [questions, setQuestions] = useState<QuestionDTO[]>(defaultQuestions)
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const { onOpen } = useConfirmSubmitTestModal()
@@ -71,40 +62,6 @@ const TestComponent: React.FC<TestComponentProps> = ({
     return null
   }
 
-  // useEffect(() => {
-  //   const fetchQuestions = async () => {
-  //     const { data, error } = await supabase
-  //       .from('cau_hoi')
-  //       .select(
-  //         `
-  //         *,
-  //         lua_chon (
-  //           *
-  //         )
-  //       `
-  //       )
-  //       .limit(25)
-
-  //     if (error) {
-  //       console.error(error)
-  //       return toast.error('Lỗi trong quá trình lấy dữ liệu câu hỏi')
-  //     }
-
-  //     const formattedQuestions: QuestionDTO[] = data.map((item: any) => ({
-  //       question: item,
-  //       answers: item.lua_chon.some((a: LuaChon) => a.so_thu_tu === 0)
-  //         ? shuffleAnswers(item.lua_chon)
-  //         : item.lua_chon.sort(
-  //             (a: LuaChon, b: LuaChon) => a.so_thu_tu - b.so_thu_tu
-  //           ),
-  //     }))
-
-  //     setQuestions(formattedQuestions)
-  //   }
-
-  //   fetchQuestions()
-  // }, [])
-
   const formatTime = (totalSeconds: number) => {
     const minutes = Math.floor(totalSeconds / 60)
     const seconds = totalSeconds % 60
@@ -113,10 +70,18 @@ const TestComponent: React.FC<TestComponentProps> = ({
       .padStart(2, '0')}`
   }
 
-  const handleClickQuestion = (index: number) => {
+  const showTestMessage = (isTesting: boolean, timeLeft: number) => {
     if (!isTesting) {
       const message =
         timeLeft > 0 ? 'Vui lòng bấm Bắt đầu thi' : 'Đã hết thời gian thi'
+      return message
+    }
+    return null
+  }
+
+  const handleClickQuestion = (index: number) => {
+    const message = showTestMessage(isTesting, timeLeft)
+    if (message) {
       return toast.error(message)
     }
     setSelectedQuestion(index)
@@ -135,6 +100,10 @@ const TestComponent: React.FC<TestComponentProps> = ({
   }
 
   const handleAnswerChange = (questionIndex: number, value: string) => {
+    const message = showTestMessage(isTesting, timeLeft)
+    if (message) {
+      return toast.error(message)
+    }
     // Parse the answer index from the value
     const answerIndex = parseInt(value.split('-').pop() || '', 10)
 
@@ -169,12 +138,24 @@ const TestComponent: React.FC<TestComponentProps> = ({
     setQuestions(updatedQuestions)
   }
 
+  const handleOnClickRadioGroupItem = () => {
+    const message = showTestMessage(isTesting, timeLeft)
+    if (message) {
+      return toast.error(message)
+    }
+  }
+
+  const getQuestionImg = (imgId: string) => {
+    return ''
+  }
+
   const handleSubmitButton = () => {
     if (!isTesting && timeLeft === 0) {
       setTimeLeft(DEFAULT_TIME)
     }
     setIsTesting(false)
-    onOpen(questions, () => {
+
+    onOpen(() => {
       setIsTesting(true)
     })
   }
@@ -274,7 +255,16 @@ const TestComponent: React.FC<TestComponentProps> = ({
           <div className={`${montserratAlternates.className} self-start mb-2`}>
             {questions[selectedQuestionIndex]?.question?.noi_dung_cau_hoi}
           </div>
-          <Image src={''} alt="" />
+          {getQuestionImg(
+            questions[selectedQuestionIndex]?.question?.hinh_anh || ''
+          ) && (
+            <Image
+              src={getQuestionImg(
+                questions[selectedQuestionIndex]?.question?.hinh_anh || ''
+              )}
+              alt=""
+            />
+          )}
         </div>
         <div className="w-[25%] flex flex-col h-full gap-3">
           <div className="h-[86px] bg-light-purple text-purple font-bold text-3xl flex items-center justify-center">
@@ -285,6 +275,8 @@ const TestComponent: React.FC<TestComponentProps> = ({
               handleAnswerChange(selectedQuestionIndex, value)
             }
             className="h-full"
+            disabled={showTestMessage(isTesting, timeLeft) ? true : false}
+            onClick={handleOnClickRadioGroupItem}
           >
             {questions[selectedQuestionIndex]?.answers?.map(
               (answer: LuaChon, index: number) => (
