@@ -1,10 +1,11 @@
+'use client'
 import ScrollToTopButton from '@/components/scroll-to-top-button'
 import TestComponent from '@/components/test-component'
 import supabase from '@/utils/supabase/supabase'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { QuestionDTO } from '@/types/dto/types'
-import { DeThi, LuaChon } from '@/types/types'
+import { LuaChon } from '@/types/types'
 
 const shuffleAnswers = (answers: LuaChon[]) => {
   const shuffled = [...answers]
@@ -68,7 +69,11 @@ const TestPage = () => {
             </div>
           </div>
         </div>
-        <TestComponent title="25 cau dau" defaultQuestions={questions} />
+        <TestComponent
+          title="25 cau dau"
+          questions={questions}
+          setQuestions={setQuestions}
+        />
       </div>
       <ScrollToTopButton />
     </main>
