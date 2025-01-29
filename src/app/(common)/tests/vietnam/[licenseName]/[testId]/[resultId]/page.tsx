@@ -8,25 +8,58 @@ import { useParams } from 'next/navigation'
 import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
 import { CauTrucDeThi } from '@/types/types'
+import { QuestionDTO } from '@/types/dto/types'
 
 const ResultPage = () => {
   const { item: questions } = useConfirmSubmitTestModal()
-  const [testStructure, setTestStructure] = useState<CauTrucDeThi[]>([
-    {
-      id: '',
-      so_cau_de_dat: 0,
-      so_cau_diem_liet: 0,
-      thoi_gian_lam_bai: 0,
-      ma_hang_bang: '',
-      created_at: '2025-01-16T08:15:49.577045+00:00',
-      updated_at: '2025-01-16T08:15:49.577045+00:00',
-    },
-  ])
+  const [userCorrectAnswers, setUserCorrectAnswers] = useState(0)
+  const [isFailed, setIsFailed] = useState<boolean>(false)
+  const [isFailOnSpecialQuestion, setIsFailedOnSpecialTest] =
+    useState<boolean>(false)
+  const [testStructure, setTestStructure] = useState<CauTrucDeThi[]>([])
   const params = useParams<{
     licenseName: string
     testId: string
     resultId: string
   }>()
+
+  const checkTestStatus = (questions: QuestionDTO[]) => {
+    let totalCorrectAnswers = 0
+    let isFailedOnSpecialTest = false
+
+    // Loop through all the questions
+    for (const questionDTO of questions) {
+      let questionCorrectAnswers = 0
+
+      if (questionDTO?.answers && questionDTO?.question) {
+        // Check each answer
+        for (const answer of questionDTO.answers) {
+          if (
+            answer.la_lua_chon_dung &&
+            answer.id === questionDTO.userAnswerIndex
+          ) {
+            questionCorrectAnswers++
+          }
+        }
+
+        if (questionDTO.question.la_cau_diem_liet) {
+          if (questionCorrectAnswers === 0) {
+            isFailedOnSpecialTest = true
+          }
+        }
+      }
+
+      // Accumulate correct answers
+      totalCorrectAnswers += questionCorrectAnswers
+    }
+
+    // Set state after calculation is done to avoid triggering re-renders during the loop
+    setUserCorrectAnswers(totalCorrectAnswers)
+    setIsFailed(totalCorrectAnswers < testStructure[0].so_cau_de_dat)
+    setIsFailedOnSpecialTest(isFailOnSpecialQuestion)
+
+    return totalCorrectAnswers
+  }
 
   // Get Test Format
   useEffect(() => {
@@ -44,10 +77,34 @@ const ResultPage = () => {
     fetchTestFormat()
   }, [])
 
+  // Separate useEffect for checkTestStatus
+  useEffect(() => {
+    if (testStructure.length > 0) {
+      checkTestStatus(questions)
+    }
+  }, [testStructure, questions])
+
+  if (testStructure.length === 0 || questions.length === 0) {
+    return null
+  }
+
   return (
     <main className="bg-white mx-auto my-auto max-h-full">
       <div className="flex flex-col justify-around items-center h-full ">
-        <TestFail />
+        {isFailed ? (
+          <TestFail
+            totalQuestion={testStructure[0].so_luong_cau_hoi}
+            requiredCorrectAnswer={testStructure[0].so_cau_de_dat}
+            userCorrectAnswers={userCorrectAnswers}
+            isFailOnSpecialQuestion={isFailOnSpecialQuestion}
+          />
+        ) : (
+          <TestPass
+            totalQuestion={questions.length}
+            requiredCorrectAnswer={testStructure[0].so_cau_de_dat}
+            userCorrectAnswers={userCorrectAnswers}
+          />
+        )}
       </div>
       <ScrollToTopButton />
     </main>

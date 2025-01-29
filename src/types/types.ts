@@ -84,4 +84,5 @@ export interface CauTrucDeThi {
   ma_hang_bang: string // UUID
   created_at: string
   updated_at: string
+  so_luong_cau_hoi: number
 }

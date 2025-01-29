@@ -2,7 +2,11 @@ import { IoCheckmarkCircle } from 'react-icons/io5'
 import { Button } from './ui/button'
 import Image from 'next/image'
 import F721TestPass from '../../public/images/f7.2.1-pass.svg'
-const TestPass = () => {
+const TestPass = ({
+  totalQuestion = 0,
+  requiredCorrectAnswer = 0,
+  userCorrectAnswers = 0,
+}) => {
   return (
     <div className="flex flex-col gap-10 my-[64px] w-[60%] justify-center items-center">
       <div className="flex rounded-[64px] bg-light-purple-admin w-[70%] h-[350px] relative">
@@ -14,19 +18,25 @@ const TestPass = () => {
           <div className="flex flex-col gap-5 p-7 w-full mb-8">
             <div className="flex justify-between text-purple">
               <div>Tổng số câu hỏi</div>
-              <div className="font-bold">30</div>
+              <div className="font-bold">{totalQuestion}</div>
             </div>
             <div className="flex justify-between text-purple">
               <div>Yêu cầu</div>
-              <div className="font-bold">27/30</div>
+              <div className="font-bold">
+                {requiredCorrectAnswer + '/' + totalQuestion}
+              </div>
             </div>
             <div className="flex justify-between text-purple">
               <div>Số câu đúng</div>
-              <div className="font-bold">28/30</div>
+              <div className="font-bold">
+                {userCorrectAnswers + '/' + totalQuestion}
+              </div>
             </div>
             <div className="flex justify-between text-purple">
               <div>Số câu sai</div>
-              <div className="font-bold">2/30</div>
+              <div className="font-bold">
+                {totalQuestion - userCorrectAnswers + '/' + totalQuestion}
+              </div>
             </div>
           </div>
           <Button
