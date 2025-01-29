@@ -76,3 +76,12 @@ export interface DeThi {
   created_at: string
   updated_at: string
 }
+export interface CauTrucDeThi {
+  id: string // UUID
+  so_cau_de_dat: number
+  so_cau_diem_liet: number
+  thoi_gian_lam_bai: number
+  ma_hang_bang: string // UUID
+  created_at: string
+  updated_at: string
+}
