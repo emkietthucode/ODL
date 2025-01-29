@@ -11,7 +11,17 @@ import { CauTrucDeThi } from '@/types/types'
 
 const ResultPage = () => {
   const { item: questions } = useConfirmSubmitTestModal()
-  const [testFormat, setTestFormat] = useState<CauTrucDeThi | null>(null)
+  const [testStructure, setTestStructure] = useState<CauTrucDeThi[]>([
+    {
+      id: '',
+      so_cau_de_dat: 0,
+      so_cau_diem_liet: 0,
+      thoi_gian_lam_bai: 0,
+      ma_hang_bang: '',
+      created_at: '2025-01-16T08:15:49.577045+00:00',
+      updated_at: '2025-01-16T08:15:49.577045+00:00',
+    },
+  ])
   const params = useParams<{
     licenseName: string
     testId: string
@@ -21,34 +31,15 @@ const ResultPage = () => {
   // Get Test Format
   useEffect(() => {
     const fetchTestFormat = async () => {
-      const { data, error } = await supabase
-        .from('de_thi')
-        .select(
-          `
-      ma_cau_truc,
-      cau_truc_de_thi (
-        id,
-        so_cau_de_dat,
-        so_cau_diem_liet,
-        thoi_gian_lam_bai,
-        ma_hang_bang,
-        created_at,
-        updated_at
-      )
-    `
-        )
-        .eq('id', params.testId)
-        .single()
+      const { data, error } = await supabase.rpc('get_cau_truc_by_de_thi', {
+        de_thi_id: params.testId,
+      })
 
       if (error) {
         console.error('Error:', error)
         return toast.error('Lỗi khi lấy cấu trúc đề thi')
       }
-      if (data && data.cau_truc_de_thi.length > 0) {
-        setTestFormat(data.cau_truc_de_thi[0])
-      } else {
-        return toast.error('Không có cấu trúc đề thi này')
-      }
+      setTestStructure(data)
     }
     fetchTestFormat()
   }, [])
