@@ -23,7 +23,7 @@ interface TestComponentProps {
   title: string
   testDurationMinutes?: number
   questions: QuestionDTO[]
-  setQuestions: React.Dispatch<React.SetStateAction<QuestionDTO[]>>
+  setQuestions: (questions: QuestionDTO[]) => void
 }
 
 const TestComponent: React.FC<TestComponentProps> = ({
@@ -135,7 +135,8 @@ const TestComponent: React.FC<TestComponentProps> = ({
       setTimeLeft(DEFAULT_TIME)
     }
     setIsTesting(false)
-    onOpen(questions, () => {
+
+    onOpen(() => {
       setIsTesting(true)
     })
   }

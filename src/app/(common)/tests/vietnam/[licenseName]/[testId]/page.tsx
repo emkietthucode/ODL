@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { QuestionDTO } from '@/types/dto/types'
 import { LuaChon } from '@/types/types'
+import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 
 const shuffleAnswers = (answers: LuaChon[]) => {
   const shuffled = [...answers]
@@ -17,7 +18,7 @@ const shuffleAnswers = (answers: LuaChon[]) => {
 }
 
 const TestPage = () => {
-  const [questions, setQuestions] = useState<QuestionDTO[]>([])
+  const { item: questions, setQuestions } = useConfirmSubmitTestModal()
 
   useEffect(() => {
     const fetchQuestions = async () => {

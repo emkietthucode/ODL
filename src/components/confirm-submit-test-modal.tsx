@@ -2,28 +2,30 @@
 
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import Modal from './Modal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
-import { toast } from 'react-hot-toast'
-import supabase from '@/utils/supabase/supabase'
+import { v4 as uuidv4 } from 'uuid'
+import { usePathname, useRouter } from 'next/navigation'
 
 const ConfirmSubmitTestModal = () => {
-  const {
-    isOpen,
-    onClose,
-    item: questions,
-    triggerRefresh,
-  } = useConfirmSubmitTestModal()
+  const router = useRouter()
+  const pathname = usePathname()
+  const { isOpen, onClose, item: questions } = useConfirmSubmitTestModal()
   const [isLoading, setIsLoading] = useState(false)
-
-  if (!questions) {
-    return null
-  }
 
   const onChange = (open: boolean) => {
     if (!open) {
       onClose()
     }
+  }
+
+  const handleConfirmClick = () => {
+    setIsLoading(true)
+    const uniqueID = uuidv4()
+    console.log('modal ', questions)
+    onClose()
+    router.push(`${pathname}/${uniqueID}`)
+    setIsLoading(false)
   }
 
   return (
@@ -39,7 +41,7 @@ const ConfirmSubmitTestModal = () => {
             className="bg-purple hover:bg-purple/90 text-white font-semibold min-w-36 self-center"
             disabled={isLoading}
             type="submit"
-            onClick={() => {}}
+            onClick={handleConfirmClick}
           >
             XÁC NHẬN
           </Button>
