@@ -70,10 +70,18 @@ const TestComponent: React.FC<TestComponentProps> = ({
       .padStart(2, '0')}`
   }
 
-  const handleClickQuestion = (index: number) => {
+  const showTestMessage = (isTesting: boolean, timeLeft: number) => {
     if (!isTesting) {
       const message =
         timeLeft > 0 ? 'Vui lòng bấm Bắt đầu thi' : 'Đã hết thời gian thi'
+      return message
+    }
+    return null
+  }
+
+  const handleClickQuestion = (index: number) => {
+    const message = showTestMessage(isTesting, timeLeft)
+    if (message) {
       return toast.error(message)
     }
     setSelectedQuestion(index)
@@ -92,6 +100,10 @@ const TestComponent: React.FC<TestComponentProps> = ({
   }
 
   const handleAnswerChange = (questionIndex: number, value: string) => {
+    const message = showTestMessage(isTesting, timeLeft)
+    if (message) {
+      return toast.error(message)
+    }
     // Parse the answer index from the value
     const answerIndex = parseInt(value.split('-').pop() || '', 10)
 
@@ -124,6 +136,13 @@ const TestComponent: React.FC<TestComponentProps> = ({
 
     // Update the state
     setQuestions(updatedQuestions)
+  }
+
+  const handleOnClickRadioGroupItem = () => {
+    const message = showTestMessage(isTesting, timeLeft)
+    if (message) {
+      return toast.error(message)
+    }
   }
 
   const getQuestionImg = (imgId: string) => {
@@ -256,6 +275,8 @@ const TestComponent: React.FC<TestComponentProps> = ({
               handleAnswerChange(selectedQuestionIndex, value)
             }
             className="h-full"
+            disabled={showTestMessage(isTesting, timeLeft) ? true : false}
+            onClick={handleOnClickRadioGroupItem}
           >
             {questions[selectedQuestionIndex]?.answers?.map(
               (answer: LuaChon, index: number) => (
