@@ -1,7 +1,56 @@
 import ScrollToTopButton from '@/components/scroll-to-top-button'
 import TestComponent from '@/components/test-component'
+import supabase from '@/utils/supabase/supabase'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-hot-toast'
+import { QuestionDTO } from '@/types/dto/types'
+import { DeThi, LuaChon } from '@/types/types'
+
+const shuffleAnswers = (answers: LuaChon[]) => {
+  const shuffled = [...answers]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
 
 const TestPage = () => {
+  const [questions, setQuestions] = useState<QuestionDTO[]>([])
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      const { data, error } = await supabase
+        .from('cau_hoi')
+        .select(
+          `
+          *,
+          lua_chon (
+            *
+          )
+        `
+        )
+        .limit(25)
+
+      if (error) {
+        console.error(error)
+        return toast.error('Lỗi trong quá trình lấy dữ liệu câu hỏi')
+      }
+
+      const formattedQuestions: QuestionDTO[] = data.map((item: any) => ({
+        question: item,
+        answers: item.lua_chon.some((a: LuaChon) => a.so_thu_tu === 0)
+          ? shuffleAnswers(item.lua_chon)
+          : item.lua_chon.sort(
+              (a: LuaChon, b: LuaChon) => a.so_thu_tu - b.so_thu_tu
+            ),
+      }))
+
+      setQuestions(formattedQuestions)
+    }
+
+    fetchQuestions()
+  }, [])
   return (
     <main className="bg-white mx-auto my-auto max-h-full">
       <div className="flex flex-col justify-around items-center h-full ">
@@ -19,7 +68,7 @@ const TestPage = () => {
             </div>
           </div>
         </div>
-        <TestComponent />
+        <TestComponent title="25 cau dau" defaultQuestions={questions} />
       </div>
       <ScrollToTopButton />
     </main>
