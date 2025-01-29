@@ -22,19 +22,20 @@ const DEFAULT_TIME = 10 * 60 // 10 minutes in seconds
 interface TestComponentProps {
   title: string
   testDurationMinutes?: number
-  defaultQuestions: QuestionDTO[]
+  questions: QuestionDTO[]
+  setQuestions: React.Dispatch<React.SetStateAction<QuestionDTO[]>>
 }
 
 const TestComponent: React.FC<TestComponentProps> = ({
   title = '',
   testDurationMinutes = DEFAULT_TIME,
-  defaultQuestions,
+  questions,
+  setQuestions,
 }) => {
   const [isTesting, setIsTesting] = useState<boolean>(false)
   const [hasStarted, setHasStarted] = useState<boolean>(false)
   const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
   const [timeLeft, setTimeLeft] = useState(testDurationMinutes)
-  const [questions, setQuestions] = useState<QuestionDTO[]>(defaultQuestions)
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const { onOpen } = useConfirmSubmitTestModal()
@@ -123,6 +124,10 @@ const TestComponent: React.FC<TestComponentProps> = ({
 
     // Update the state
     setQuestions(updatedQuestions)
+  }
+
+  const getQuestionImg = (imgId: string) => {
+    return ''
   }
 
   const handleSubmitButton = () => {
@@ -230,7 +235,16 @@ const TestComponent: React.FC<TestComponentProps> = ({
           <div className={`${montserratAlternates.className} self-start mb-2`}>
             {questions[selectedQuestionIndex]?.question?.noi_dung_cau_hoi}
           </div>
-          <Image src={''} alt="" />
+          {getQuestionImg(
+            questions[selectedQuestionIndex]?.question?.hinh_anh || ''
+          ) && (
+            <Image
+              src={getQuestionImg(
+                questions[selectedQuestionIndex]?.question?.hinh_anh || ''
+              )}
+              alt=""
+            />
+          )}
         </div>
         <div className="w-[25%] flex flex-col h-full gap-3">
           <div className="h-[86px] bg-light-purple text-purple font-bold text-3xl flex items-center justify-center">
