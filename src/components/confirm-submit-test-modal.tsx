@@ -22,8 +22,8 @@ const ConfirmSubmitTestModal = () => {
   const handleConfirmClick = () => {
     setIsLoading(true)
     const uniqueID = uuidv4()
-    onClose()
     router.push(`${pathname}/${uniqueID}`)
+    onClose()
     setIsLoading(false)
   }
 
