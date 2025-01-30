@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { QuestionDTO } from '@/types/dto/types'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Label } from '@/components//ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
@@ -53,6 +53,23 @@ const TestDetailPage = () => {
   const getQuestionImg = (imgId: string) => {
     return ''
   }
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft') {
+        handlePrevious()
+      } else if (event.key === 'ArrowRight') {
+        handleNext()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [selectedQuestionIndex, handleNext, handlePrevious]) // Re-run effect if selectedQuestionIndex changes
 
   return (
     <main className="bg-white mx-auto max-h-full my-[64px] h-full">

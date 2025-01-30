@@ -170,6 +170,40 @@ const TestComponent: React.FC<TestComponentProps> = ({
     })
   }
 
+  const handleStartTheTest = () => {
+    setHasStarted(true)
+    setIsTesting(true)
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft') {
+        handlePrevious()
+      } else if (event.key === 'ArrowRight') {
+        handleNext()
+      } else if (event.key === 'Enter') {
+        if (hasStarted) {
+          handleSubmitButton()
+        } else {
+          handleStartTheTest()
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [
+    selectedQuestionIndex,
+    handleNext,
+    handlePrevious,
+    handleSubmitButton,
+    handleStartTheTest,
+  ]) // Re-run effect if selectedQuestionIndex changes
+
   return (
     <div className="flex flex-col gap-10 my-10 w-[71%]">
       <div
@@ -228,10 +262,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
           </ol>
           {!hasStarted ? (
             <Button
-              onClick={() => {
-                setHasStarted(true)
-                setIsTesting(true)
-              }}
+              onClick={handleStartTheTest}
               variant="main"
               className="my-5 hover:bg-purple/90"
             >
