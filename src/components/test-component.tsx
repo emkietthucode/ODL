@@ -177,7 +177,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
         {`${title}`}
       </div>
 
-      <div className="h-[560px] w-full flex gap-2">
+      <div className="h-[600px] w-full flex gap-2">
         <div className="w-[22%] bg-light-purple-admin flex flex-col justify-between items-center">
           <ol className="list-none grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2 p-4">
             {questions.map((_, index: number) => (
