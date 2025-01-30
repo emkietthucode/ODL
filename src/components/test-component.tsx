@@ -35,6 +35,9 @@ const TestComponent: React.FC<TestComponentProps> = ({
   const [isTesting, setIsTesting] = useState<boolean>(false)
   const [hasStarted, setHasStarted] = useState<boolean>(false)
   const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
+  const [selectedAnswers, setSelectedAnswers] = useState<string[]>(
+    new Array(questions.length).fill('')
+  )
   const [timeLeft, setTimeLeft] = useState(testDurationMinutes)
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
@@ -136,6 +139,13 @@ const TestComponent: React.FC<TestComponentProps> = ({
 
     // Update the state
     setQuestions(updatedQuestions)
+
+    // Update user selected answer
+    setSelectedAnswers((prev) => {
+      const newAnswers = [...prev]
+      newAnswers[questionIndex] = value
+      return newAnswers
+    })
   }
 
   const handleOnClickRadioGroupItem = () => {
@@ -271,6 +281,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
             {formatTime(timeLeft)}
           </div>
           <RadioGroup
+            value={selectedAnswers[selectedQuestionIndex]}
             onValueChange={(value) =>
               handleAnswerChange(selectedQuestionIndex, value)
             }
