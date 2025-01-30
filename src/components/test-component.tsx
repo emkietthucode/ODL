@@ -35,6 +35,9 @@ const TestComponent: React.FC<TestComponentProps> = ({
   const [isTesting, setIsTesting] = useState<boolean>(false)
   const [hasStarted, setHasStarted] = useState<boolean>(false)
   const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
+  const [selectedAnswers, setSelectedAnswers] = useState<string[]>(
+    new Array(questions.length).fill('')
+  )
   const [timeLeft, setTimeLeft] = useState(testDurationMinutes)
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
@@ -136,6 +139,13 @@ const TestComponent: React.FC<TestComponentProps> = ({
 
     // Update the state
     setQuestions(updatedQuestions)
+
+    // Update user selected answer
+    setSelectedAnswers((prev) => {
+      const newAnswers = [...prev]
+      newAnswers[questionIndex] = value
+      return newAnswers
+    })
   }
 
   const handleOnClickRadioGroupItem = () => {
@@ -160,6 +170,40 @@ const TestComponent: React.FC<TestComponentProps> = ({
     })
   }
 
+  const handleStartTheTest = () => {
+    setHasStarted(true)
+    setIsTesting(true)
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft') {
+        handlePrevious()
+      } else if (event.key === 'ArrowRight') {
+        handleNext()
+      } else if (event.key === 'Enter') {
+        if (hasStarted) {
+          handleSubmitButton()
+        } else {
+          handleStartTheTest()
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [
+    selectedQuestionIndex,
+    handleNext,
+    handlePrevious,
+    handleSubmitButton,
+    handleStartTheTest,
+  ]) // Re-run effect if selectedQuestionIndex changes
+
   return (
     <div className="flex flex-col gap-10 my-10 w-[71%]">
       <div
@@ -177,7 +221,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
         {`${title}`}
       </div>
 
-      <div className="h-[560px] w-full flex gap-2">
+      <div className="h-[600px] w-full flex gap-2">
         <div className="w-[22%] bg-light-purple-admin flex flex-col justify-between items-center">
           <ol className="list-none grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2 p-4">
             {questions.map((_, index: number) => (
@@ -218,10 +262,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
           </ol>
           {!hasStarted ? (
             <Button
-              onClick={() => {
-                setHasStarted(true)
-                setIsTesting(true)
-              }}
+              onClick={handleStartTheTest}
               variant="main"
               className="my-5 hover:bg-purple/90"
             >
@@ -271,6 +312,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
             {formatTime(timeLeft)}
           </div>
           <RadioGroup
+            value={selectedAnswers[selectedQuestionIndex]}
             onValueChange={(value) =>
               handleAnswerChange(selectedQuestionIndex, value)
             }

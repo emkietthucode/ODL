@@ -2,11 +2,14 @@ import { IoCheckmarkCircle } from 'react-icons/io5'
 import { Button } from './ui/button'
 import Image from 'next/image'
 import F721TestPass from '../../public/images/f7.2.1-pass.svg'
+import { usePathname, useRouter } from 'next/navigation'
 const TestPass = ({
   totalQuestion = 0,
   requiredCorrectAnswer = 0,
   userCorrectAnswers = 0,
 }) => {
+  const router = useRouter()
+  const pathname = usePathname()
   return (
     <div className="flex flex-col gap-10 my-[64px] w-[60%] justify-center items-center">
       <div className="flex rounded-[64px] bg-light-purple-admin w-[70%] h-[350px] relative">
@@ -42,6 +45,7 @@ const TestPass = ({
           <Button
             variant="main"
             className="font-bold text-2xl rounded-full w-[75%]"
+            onClick={() => router.push(`${pathname}/detail`)}
           >
             XEM CHI TIẾT
           </Button>

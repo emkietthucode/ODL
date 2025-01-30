@@ -13,8 +13,11 @@ export default {
         worldMapImg: "url('/images/world-map.png')",
       },
       colors: {
+        'custom-ol-green': '#A3C9A8',
         'custom-green': '#93B597',
+        'custom-light-green': '#E2EEE4',
         'custom-brown': '#C88572',
+        'custom-light-brown': '#EED9D3',
         purple: '#907ECF',
         'light-purple': '#E2DBF7',
         'light-purple-admin': '#F1EEFB',
