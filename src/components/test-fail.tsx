@@ -3,12 +3,15 @@ import { CiWarning } from 'react-icons/ci'
 import { Button } from './ui/button'
 import Image from 'next/image'
 import F722TestFail from '../../public/images/f7.2.2-fail.svg'
+import { usePathname, useRouter } from 'next/navigation'
 const TestFail = ({
   totalQuestion = 0,
   requiredCorrectAnswer = 0,
   userCorrectAnswers = 0,
   isFailOnSpecialQuestion = false,
 }) => {
+  const router = useRouter()
+  const pathname = usePathname()
   return (
     <div className="flex flex-col gap-10 my-[64px] w-[60%] justify-center items-center">
       <div className="flex rounded-[64px] bg-light-purple-admin w-[70%] h-[350px] relative">
@@ -52,6 +55,7 @@ const TestFail = ({
           <Button
             variant="main"
             className="font-bold text-2xl rounded-full w-[75%]"
+            onClick={() => router.push(`${pathname}/detail`)}
           >
             XEM CHI TIẾT
           </Button>
