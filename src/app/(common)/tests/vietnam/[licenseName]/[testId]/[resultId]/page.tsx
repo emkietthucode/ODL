@@ -9,9 +9,11 @@ import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
 import { CauTrucDeThi } from '@/types/types'
 import { QuestionDTO } from '@/types/dto/types'
+import useAuth from '@/hooks/useAuth'
 
 const ResultPage = () => {
-  const { item: questions } = useConfirmSubmitTestModal()
+  const { user } = useAuth()
+  const { item: questions, testCompletionTimeSec } = useConfirmSubmitTestModal()
   const [userCorrectAnswers, setUserCorrectAnswers] = useState(0)
   const [testResult, setTestResult] = useState<boolean>(false)
   const [isFailOnSpecialQuestion, setIsFailedOnSpecialTest] =
@@ -22,6 +24,22 @@ const ResultPage = () => {
     testId: string
     resultId: string
   }>()
+
+  // Get Test Structure
+  useEffect(() => {
+    const fetchTestStructure = async () => {
+      const { data, error } = await supabase.rpc('get_cau_truc_by_de_thi', {
+        de_thi_id: params.testId,
+      })
+
+      if (error) {
+        console.error('Error:', error)
+        return toast.error('Lỗi khi lấy cấu trúc đề thi')
+      }
+      setTestStructure(data)
+    }
+    fetchTestStructure()
+  }, [])
 
   const checkTestStatus = (questions: QuestionDTO[]) => {
     let totalCorrectAnswers = 0
@@ -61,30 +79,71 @@ const ResultPage = () => {
     return totalCorrectAnswers
   }
 
-  // Get Test Format
-  useEffect(() => {
-    const fetchTestFormat = async () => {
-      const { data, error } = await supabase.rpc('get_cau_truc_by_de_thi', {
-        de_thi_id: params.testId,
-      })
-
-      if (error) {
-        console.error('Error:', error)
-        return toast.error('Lỗi khi lấy cấu trúc đề thi')
-      }
-      setTestStructure(data)
-    }
-    fetchTestFormat()
-  }, [])
-
   // Separate useEffect for checkTestStatus
   useEffect(() => {
-    if (testStructure.length > 0) {
+    const fetchResult = async () => {
+      const { data, error } = await supabase
+        .from('ket_qua_lam_bai')
+        .select()
+        .eq('id', params.resultId)
+      if (error || !data) {
+        console.log(error)
+        return toast.error('Lỗi khi lấy kết quả bài thi')
+      }
+      setUserCorrectAnswers(data[0].diem)
+      setTestResult(data[0].diem < testStructure[0].so_cau_de_dat)
+      setIsFailedOnSpecialTest(data[0].ket_qua_bai_lam)
+    }
+
+    if (testStructure.length > 0 && questions.length > 0) {
       checkTestStatus(questions)
+    } else if (testStructure.length > 0 && questions.length === 0) {
+      fetchResult()
     }
   }, [testStructure, questions])
 
-  if (testStructure.length === 0 || questions.length === 0) {
+  useEffect(() => {
+    const insertResult = async () => {
+      const { error: insertResultError } = await supabase
+        .from('ket_qua_lam_bai')
+        .insert({
+          id: params.resultId,
+          diem: userCorrectAnswers,
+          ket_qua_bai_lam: testResult,
+          thoi_gian_lam_bai: testCompletionTimeSec,
+          ngay_lam_bai: new Date().toISOString(),
+          ma_de_thi: params.testId,
+          ma_nguoi_dung: user?.id,
+        })
+      if (insertResultError) {
+        console.log(insertResultError)
+        return toast.error('Lỗi khi thêm kết kết quả vào cơ sở dữ liệu')
+      }
+
+      try {
+        const insertPromises = questions.map(async (questionDTO) => {
+          const { error } = await supabase
+            .from('ket_qua_bai_lam_lua_chon')
+            .insert({
+              ma_ket_qua_lam_bai: params.resultId,
+              ma_lua_chon: questionDTO.userAnswerIndex,
+            })
+
+          if (error) throw error
+        })
+
+        await Promise.all(insertPromises)
+      } catch (error) {
+        console.log(error)
+        return toast.error('Lỗi khi thêm kết quả vào cơ sở dữ liệu')
+      }
+    }
+    if (user && testStructure.length > 0 && questions.length > 0) {
+      insertResult()
+    }
+  }, [userCorrectAnswers, testResult])
+
+  if (!testStructure) {
     return null
   }
 
@@ -93,15 +152,15 @@ const ResultPage = () => {
       <div className="flex flex-col justify-around items-center h-full ">
         {testResult ? (
           <TestFail
-            totalQuestion={testStructure[0].so_luong_cau_hoi}
-            requiredCorrectAnswer={testStructure[0].so_cau_de_dat}
+            totalQuestion={testStructure[0]?.so_luong_cau_hoi}
+            requiredCorrectAnswer={testStructure[0]?.so_cau_de_dat}
             userCorrectAnswers={userCorrectAnswers}
             isFailOnSpecialQuestion={isFailOnSpecialQuestion}
           />
         ) : (
           <TestPass
             totalQuestion={questions.length}
-            requiredCorrectAnswer={testStructure[0].so_cau_de_dat}
+            requiredCorrectAnswer={testStructure[0]?.so_cau_de_dat}
             userCorrectAnswers={userCorrectAnswers}
           />
         )}
