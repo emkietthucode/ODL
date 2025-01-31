@@ -56,7 +56,7 @@ const ResultPage = () => {
     // Set state after calculation is done to avoid triggering re-renders during the loop
     setUserCorrectAnswers(totalCorrectAnswers)
     setIsFailed(totalCorrectAnswers < testStructure[0].so_cau_de_dat)
-    setIsFailedOnSpecialTest(isFailOnSpecialQuestion)
+    setIsFailedOnSpecialTest(isFailedOnSpecialTest)
 
     return totalCorrectAnswers
   }
