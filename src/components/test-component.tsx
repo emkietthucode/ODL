@@ -41,7 +41,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
   const [timeLeft, setTimeLeft] = useState(testDurationMinutes)
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
-  const { onOpen } = useConfirmSubmitTestModal()
+  const { onOpen, setTestCompletionTimeSec } = useConfirmSubmitTestModal()
 
   // Timer Logic
   useEffect(() => {
@@ -161,10 +161,10 @@ const TestComponent: React.FC<TestComponentProps> = ({
 
   const handleSubmitButton = () => {
     if (!isTesting && timeLeft === 0) {
-      setTimeLeft(DEFAULT_TIME)
+      setTimeLeft(testDurationMinutes)
     }
     setIsTesting(false)
-
+    setTestCompletionTimeSec(testDurationMinutes - timeLeft)
     onOpen(() => {
       setIsTesting(true)
     })
