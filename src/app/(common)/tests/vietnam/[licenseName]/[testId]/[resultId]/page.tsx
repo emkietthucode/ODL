@@ -13,7 +13,7 @@ import { QuestionDTO } from '@/types/dto/types'
 const ResultPage = () => {
   const { item: questions } = useConfirmSubmitTestModal()
   const [userCorrectAnswers, setUserCorrectAnswers] = useState(0)
-  const [isFailed, setIsFailed] = useState<boolean>(false)
+  const [testResult, setTestResult] = useState<boolean>(false)
   const [isFailOnSpecialQuestion, setIsFailedOnSpecialTest] =
     useState<boolean>(false)
   const [testStructure, setTestStructure] = useState<CauTrucDeThi[]>([])
@@ -55,7 +55,7 @@ const ResultPage = () => {
 
     // Set state after calculation is done to avoid triggering re-renders during the loop
     setUserCorrectAnswers(totalCorrectAnswers)
-    setIsFailed(totalCorrectAnswers < testStructure[0].so_cau_de_dat)
+    setTestResult(totalCorrectAnswers < testStructure[0].so_cau_de_dat)
     setIsFailedOnSpecialTest(isFailedOnSpecialTest)
 
     return totalCorrectAnswers
@@ -91,7 +91,7 @@ const ResultPage = () => {
   return (
     <main className="bg-white mx-auto my-auto max-h-full">
       <div className="flex flex-col justify-around items-center h-full ">
-        {isFailed ? (
+        {testResult ? (
           <TestFail
             totalQuestion={testStructure[0].so_luong_cau_hoi}
             requiredCorrectAnswer={testStructure[0].so_cau_de_dat}
