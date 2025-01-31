@@ -41,7 +41,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
   const [timeLeft, setTimeLeft] = useState(testDurationMinutes)
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
-  const { onOpen } = useConfirmSubmitTestModal()
+  const { onOpen, setTestCompletionTimeSec } = useConfirmSubmitTestModal()
 
   // Timer Logic
   useEffect(() => {
@@ -161,10 +161,10 @@ const TestComponent: React.FC<TestComponentProps> = ({
 
   const handleSubmitButton = () => {
     if (!isTesting && timeLeft === 0) {
-      setTimeLeft(DEFAULT_TIME)
+      setTimeLeft(testDurationMinutes)
     }
     setIsTesting(false)
-
+    setTestCompletionTimeSec(testDurationMinutes - timeLeft)
     onOpen(() => {
       setIsTesting(true)
     })
@@ -177,9 +177,14 @@ const TestComponent: React.FC<TestComponentProps> = ({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      // Always handle arrow keys for question navigation, regardless of focus
       if (event.key === 'ArrowLeft') {
+        event.preventDefault() // Prevent default radio group behavior
+        event.stopPropagation() // Stop event from reaching radio group
         handlePrevious()
       } else if (event.key === 'ArrowRight') {
+        event.preventDefault()
+        event.stopPropagation()
         handleNext()
       } else if (event.key === 'Enter') {
         if (hasStarted) {
@@ -190,19 +195,17 @@ const TestComponent: React.FC<TestComponentProps> = ({
       }
     }
 
-    window.addEventListener('keydown', handleKeyDown)
-
-    // Cleanup function
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
+    // Capture phase ensures our handler runs before the radio group's handler
+    window.addEventListener('keydown', handleKeyDown, true)
+    return () => window.removeEventListener('keydown', handleKeyDown, true)
   }, [
     selectedQuestionIndex,
     handleNext,
     handlePrevious,
     handleSubmitButton,
     handleStartTheTest,
-  ]) // Re-run effect if selectedQuestionIndex changes
+    hasStarted,
+  ])
 
   return (
     <div className="flex flex-col gap-10 my-10 w-[71%]">

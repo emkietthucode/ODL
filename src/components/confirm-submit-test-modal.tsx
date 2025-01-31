@@ -10,7 +10,7 @@ import { usePathname, useRouter } from 'next/navigation'
 const ConfirmSubmitTestModal = () => {
   const router = useRouter()
   const pathname = usePathname()
-  const { isOpen, onClose, item: questions } = useConfirmSubmitTestModal()
+  const { isOpen, onClose } = useConfirmSubmitTestModal()
   const [isLoading, setIsLoading] = useState(false)
 
   const onChange = (open: boolean) => {
