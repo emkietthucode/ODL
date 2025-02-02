@@ -4,7 +4,7 @@ import TestPass from '@/components/test-pass'
 import TestFail from '@/components/test-fail'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
 import { CauTrucDeThi } from '@/types/types'
@@ -20,11 +20,28 @@ const ResultPage = () => {
   const [isFailOnSpecialQuestion, setIsFailedOnSpecialTest] =
     useState<boolean>(false)
   const [testStructure, setTestStructure] = useState<CauTrucDeThi[]>([])
+  const pathname = usePathname()
+  const router = useRouter()
   const params = useParams<{
     licenseName: string
     testId: string
     resultId: string
   }>()
+
+  const getBaseUrl = () => {
+    // Extract base URL dynamically
+    const segments = pathname.split('/')
+    const baseUrl = `/${segments.slice(1, 4).join('/')}` // Keep only `/tests/{country}/{licenseName}`
+    return baseUrl
+  }
+
+  const handleRedoTest = () => {
+    router.push(`${getBaseUrl()}/${params.testId}`)
+  }
+
+  const handleDoOtherTest = () => {
+    router.push(`${getBaseUrl()}`)
+  }
 
   // Get Test Structure
   useEffect(() => {
@@ -170,13 +187,19 @@ const ResultPage = () => {
             <hr className="h-1 my-5 bg-purple border-0 dark:bg-purple w-full"></hr>
             <div className="flex justify-between items-center gap-[96px] w-[60%] font-medium">
               <div>Chưa hài lòng với kết quả? Làm bài lại ngay</div>
-              <Button className="bg-blue-100 hover:bg-blue-100/90 rounded-2xl text-xs text-blue-400 h-full shadow-md">
+              <Button
+                onClick={handleRedoTest}
+                className="bg-blue-100 hover:bg-blue-100/90 rounded-2xl text-xs text-blue-400 h-full shadow-md"
+              >
                 LÀM BÀI LẠI
               </Button>
             </div>
             <div className="flex justify-between items-center gap-[96px] w-[60%] font-medium">
               <div>Chúng tôi còn nhiều đề khác, xem ngay!</div>
-              <Button className="bg-blue-100 hover:bg-blue-100/90 rounded-2xl text-xs text-blue-400 h-full shadow-md">
+              <Button
+                onClick={handleDoOtherTest}
+                className="bg-blue-100 hover:bg-blue-100/90 rounded-2xl text-xs text-blue-400 h-full shadow-md"
+              >
                 LÀM ĐỀ KHÁC
               </Button>
             </div>
