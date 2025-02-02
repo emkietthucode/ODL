@@ -130,9 +130,10 @@ const TestsLicensePage = () => {
                 Bạn chưa sẵn sàng để thi thử?
               </div>
               <div>
-                Đừng lo, hãy bắt đầu với phần luyện thi bằng lái xe hạng A1. Tại
-                đây, bạn có thể ôn lại kiến thức luật giao thông, biển báo, và
-                thực hành các câu hỏi sát hạch để tự tin hơn.
+                Đừng lo, hãy bắt đầu với phần luyện thi bằng lái xe hạng{' '}
+                {license?.ten_hang_bang}. Tại đây, bạn có thể ôn lại kiến thức
+                luật giao thông, biển báo, và thực hành các câu hỏi sát hạch để
+                tự tin hơn.
               </div>
             </div>
             <Button
@@ -140,7 +141,7 @@ const TestsLicensePage = () => {
               size="auto"
               className="font-medium w-[150px]"
             >
-              LUYỆN THI A1
+              LUYỆN THI {license?.ten_hang_bang}
             </Button>
           </div>
         </div>

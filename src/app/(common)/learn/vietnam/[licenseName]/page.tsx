@@ -8,7 +8,7 @@ import F11LearningCardIcon4 from '../../../../../../public/images/f11LearningCar
 import ScrollToTopButton from '@/components/scroll-to-top-button'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { HangBang } from '@/types/types'
 import supabase from '@/utils/supabase/supabase'
@@ -18,6 +18,7 @@ import LearningCard from '@/components/learning-card'
 const TestsLicensePage = () => {
   const params = useParams<{ licenseName: string }>()
   const [license, setLicense] = useState<HangBang>()
+  const router = useRouter()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -129,8 +130,11 @@ const TestsLicensePage = () => {
               variant="main"
               size="auto"
               className="font-medium w-[150px]"
+              onClick={() =>
+                router.push(`/tests/vietnam/${license?.ten_hang_bang}`)
+              }
             >
-              THI THỬ A1
+              THI THỬ {license?.ten_hang_bang}
             </Button>
           </div>
         </div>
