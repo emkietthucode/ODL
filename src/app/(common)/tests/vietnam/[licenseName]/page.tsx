@@ -27,7 +27,7 @@ const TestsLicensePage = () => {
         .from('hang_bang')
         .select()
         .eq('ten_hang_bang', params.licenseName.toUpperCase())
-      if (licenseError) {
+      if (licenseError || !licenseData) {
         console.log(licenseError)
         return toast.error('Lấy dữ liệu hạng bằng không thành công')
       }
@@ -35,7 +35,7 @@ const TestsLicensePage = () => {
       const { data: testsData, error: testsError } = await supabase.rpc(
         'get_de_thi_by_hang_bang_id',
         {
-          hang_bang_id: license?.id,
+          hang_bang_id: licenseData[0].id,
         }
       )
       if (testsError) {
