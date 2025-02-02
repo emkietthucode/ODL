@@ -5,7 +5,7 @@ import Overlay from '../../../../../../public/images/f6-overlay.svg'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Montserrat_Alternates } from 'next/font/google'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { DeThi, HangBang } from '@/types/types'
 import supabase from '@/utils/supabase/supabase'
@@ -20,6 +20,7 @@ const TestsLicensePage = () => {
   const params = useParams<{ licenseName: string }>()
   const [license, setLicense] = useState<HangBang>()
   const [tests, setTests] = useState<DeThi[]>([])
+  const router = useRouter()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -140,6 +141,9 @@ const TestsLicensePage = () => {
               variant="main"
               size="auto"
               className="font-medium w-[150px]"
+              onClick={() =>
+                router.push(`/learn/vietnam/${license?.ten_hang_bang}`)
+              }
             >
               LUYỆN THI {license?.ten_hang_bang}
             </Button>
