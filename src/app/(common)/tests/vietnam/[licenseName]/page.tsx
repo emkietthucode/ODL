@@ -5,7 +5,7 @@ import Overlay from '../../../../../../public/images/f6-overlay.svg'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Montserrat_Alternates } from 'next/font/google'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { DeThi, HangBang } from '@/types/types'
 import supabase from '@/utils/supabase/supabase'
@@ -21,6 +21,7 @@ const TestsLicensePage = () => {
   const [license, setLicense] = useState<HangBang>()
   const [tests, setTests] = useState<DeThi[]>([])
   const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -104,7 +105,7 @@ const TestsLicensePage = () => {
               THI THỬ VỚI BỘ ĐỀ CÓ SẴN
             </div>
             <div className="mb-[128px] mt-[16px] w-[60%] flex flex-wrap gap-10 justify-center">
-              {tests.map((_, index) => (
+              {tests.map((test, index) => (
                 <Button
                   key={index}
                   className={`${montserratAlternates.className} 
@@ -117,6 +118,7 @@ const TestsLicensePage = () => {
                   text-center
                   w-[150px]
                   h-[45px]`}
+                  onClick={() => router.push(`${pathname}/${test.id}`)}
                 >
                   ĐỀ SỐ {index + 1}
                 </Button>
