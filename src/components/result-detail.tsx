@@ -8,15 +8,28 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import { Montserrat_Alternates } from 'next/font/google'
 import Image from 'next/image'
 import { LuaChon } from '@/types/types'
-import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
+import { QuestionDTO } from '@/types/dto/types'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '500',
   subsets: ['vietnamese'],
 })
 
-const ResultDetailPage = () => {
-  const { item: questions } = useConfirmSubmitTestModal()
+interface ResultDetailPageProps {
+  questions: QuestionDTO[]
+  testDesc: string
+  userCompleteTime: string
+  userScore: number
+  testTotalScore: number
+}
+
+const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
+  questions,
+  testDesc,
+  userCompleteTime,
+  userScore,
+  testTotalScore,
+}) => {
   const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>(
     questions?.map((question, questionIndex) => {
@@ -79,9 +92,11 @@ const ResultDetailPage = () => {
           <div className="w-full h-[20%] bg-violet-300 flex items-center">
             <div className="flex justify-between items-center w-full p-10">
               <div className="flex flex-col text-white italic">
-                <div>Đề: 01</div>
-                <div>Hoàn thành: 12:00</div>
-                <div>Điểm: 28/30</div>
+                <div>Đề: {testDesc}</div>
+                <div>Hoàn thành: {userCompleteTime}</div>
+                <div>
+                  Điểm: {userScore}/{testTotalScore}
+                </div>
               </div>
               <div className="bg-violet-50 rounded-2xl h-[120px] w-[739px]">
                 <ol className="list-none flex flex-wrap  gap-2 p-4">
