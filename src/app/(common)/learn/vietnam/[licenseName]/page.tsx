@@ -8,23 +8,16 @@ import F11LearningCardIcon4 from '../../../../../../public/images/f11LearningCar
 import ScrollToTopButton from '@/components/scroll-to-top-button'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { Montserrat_Alternates } from 'next/font/google'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { DeThi, HangBang } from '@/types/types'
+import { HangBang } from '@/types/types'
 import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
 import LearningCard from '@/components/learning-card'
 
-const montserratAlternates = Montserrat_Alternates({
-  weight: '700',
-  subsets: ['vietnamese'],
-})
-
 const TestsLicensePage = () => {
   const params = useParams<{ licenseName: string }>()
   const [license, setLicense] = useState<HangBang>()
-  const [tests, setTests] = useState<DeThi[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,17 +30,6 @@ const TestsLicensePage = () => {
         return toast.error('Lấy dữ liệu hạng bằng không thành công')
       }
       setLicense(licenseData[0])
-      const { data: testsData, error: testsError } = await supabase.rpc(
-        'get_de_thi_by_hang_bang_id',
-        {
-          hang_bang_id: licenseData[0].id,
-        }
-      )
-      if (testsError) {
-        console.log(testsError)
-        return toast.error('Lấy dữ liệu đề thi không thành công')
-      }
-      setTests(testsData)
     }
 
     fetchData()
@@ -81,7 +63,8 @@ const TestsLicensePage = () => {
               </div>
               <Button
                 className="
-                bg-white text-custom-violet 
+                bg-white hover:bg-white/90
+                text-custom-violet 
                   rounded-none 
                   w-[135px] h-[49px] 
                   font-bold text-2xl
