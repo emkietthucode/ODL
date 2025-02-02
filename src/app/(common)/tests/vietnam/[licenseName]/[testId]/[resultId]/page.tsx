@@ -9,6 +9,7 @@ import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
 import { CauTrucDeThi } from '@/types/types'
 import { QuestionDTO } from '@/types/dto/types'
+import { Button } from '@/components/ui/button'
 import useAuth from '@/hooks/useAuth'
 
 const ResultPage = () => {
@@ -164,6 +165,29 @@ const ResultPage = () => {
             userCorrectAnswers={userCorrectAnswers}
           />
         )}
+        <div className="flex flex-col gap-10 my-[64px] w-[60%] justify-center items-center">
+          <div className="flex flex-col gap-3 text-blue-400 w-full justify-center items-center">
+            <hr className="h-1 my-5 bg-purple border-0 dark:bg-purple w-full"></hr>
+            <div className="flex justify-between items-center gap-[96px] w-[60%] font-medium">
+              <div>Chưa hài lòng với kết quả? Làm bài lại ngay</div>
+              <Button className="bg-blue-100 hover:bg-blue-100/90 rounded-2xl text-xs text-blue-400 h-full shadow-md">
+                LÀM BÀI LẠI
+              </Button>
+            </div>
+            <div className="flex justify-between items-center gap-[96px] w-[60%] font-medium">
+              <div>Chúng tôi còn nhiều đề khác, xem ngay!</div>
+              <Button className="bg-blue-100 hover:bg-blue-100/90 rounded-2xl text-xs text-blue-400 h-full shadow-md">
+                LÀM ĐỀ KHÁC
+              </Button>
+            </div>
+            <div className="flex justify-between items-center gap-[96px] w-[60%] font-medium">
+              <div>Ôn tập lại những câu mà bạn đã làm sai</div>
+              <Button className="bg-blue-100 hover:bg-blue-100/90 rounded-2xl text-xs text-blue-400 h-full shadow-md">
+                CHALLENGE BANK
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
       <ScrollToTopButton />
     </main>
