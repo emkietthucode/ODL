@@ -13,6 +13,7 @@ export default {
         worldMapImg: "url('/images/world-map.png')",
       },
       colors: {
+        'custom-beige': '#D6B07A',
         'custom-ol-green': '#A3C9A8',
         'custom-green': '#93B597',
         'custom-light-green': '#E2EEE4',
