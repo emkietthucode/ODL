@@ -14,6 +14,7 @@ import { HangBang } from '@/types/types'
 import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
 import LearningCard from '@/components/learning-card'
+import Link from 'next/link'
 
 const TestsLicensePage = () => {
   const params = useParams<{ licenseName: string }>()
@@ -93,26 +94,34 @@ const TestsLicensePage = () => {
             </div>
           </div>
           <div className="flex flex-wrap gap-x-[150px] gap-y-[64px] justify-center items-center">
-            <LearningCard
-              icon={F11LearningCardIcon1}
-              title="HỌC CÂU HỎI LÝ THUYẾT:"
-              desc="Giúp bạn ôn tập toàn bộ kiến thức luật giao thông qua các câu hỏi trắc nghiệm chính thức."
-            />
-            <LearningCard
-              icon={F11LearningCardIcon2}
-              title="HỌC CÂU HỎI LÝ THUYẾT:"
-              desc="Giúp bạn ôn tập toàn bộ kiến thức luật giao thông qua các câu hỏi trắc nghiệm chính thức."
-            />
-            <LearningCard
-              icon={F11LearningCardIcon3}
-              title="HỌC CÂU HỎI LÝ THUYẾT:"
-              desc="Giúp bạn ôn tập toàn bộ kiến thức luật giao thông qua các câu hỏi trắc nghiệm chính thức."
-            />
-            <LearningCard
-              icon={F11LearningCardIcon4}
-              title="HỌC CÂU HỎI LÝ THUYẾT:"
-              desc="Giúp bạn ôn tập toàn bộ kiến thức luật giao thông qua các câu hỏi trắc nghiệm chính thức."
-            />
+            <Link href="/">
+              <LearningCard
+                icon={F11LearningCardIcon1}
+                title="HỌC CÂU HỎI LÝ THUYẾT:"
+                desc="Giúp bạn ôn tập toàn bộ kiến thức luật giao thông qua các câu hỏi trắc nghiệm chính thức."
+              />
+            </Link>
+            <Link href="/">
+              <LearningCard
+                icon={F11LearningCardIcon2}
+                title="HỌC BIỂN BÁO GIAO THÔNG:"
+                desc="Tập trung ôn luyện các câu hỏi quan trọng, bắt buộc phải trả lời đúng để vượt qua kỳ thi."
+              />
+            </Link>
+            <Link href="/">
+              <LearningCard
+                icon={F11LearningCardIcon3}
+                title="HỌC CÂU ĐIỂM LIỆT:"
+                desc="Giúp bạn ôn tập toàn bộ kiến thức luật giao thông qua các câu hỏi trắc nghiệm chính thức."
+              />
+            </Link>
+            <Link href="/missed-questions">
+              <LearningCard
+                icon={F11LearningCardIcon4}
+                title="LÀM LẠI NHỮNG CÂU SAI:"
+                desc="Lưu lại và giúp bạn luyện tập các câu hỏi đã trả lời sai để cải thiện điểm số và nắm chắc kiến thức."
+              />
+            </Link>
           </div>
         </div>
         <div className="w-full h-full bg-blue-100/40 flex justify-center py-20">
