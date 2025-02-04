@@ -21,7 +21,7 @@ const shuffleAnswers = (answers: LuaChon[]) => {
   return shuffled
 }
 
-const LearnTheoryPage = () => {
+const LearnCriticalPage = () => {
   const params = useParams<{ licenseName: string }>()
   const [license, setLicense] = useState<HangBang>()
   const [chapters, setChapters] = useState<Chuong[]>([])
@@ -124,4 +124,4 @@ const LearnTheoryPage = () => {
   )
 }
 
-export default LearnTheoryPage
+export default LearnCriticalPage
