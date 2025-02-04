@@ -7,6 +7,7 @@ import { toast } from 'react-hot-toast'
 import { QuestionDTO } from '@/types/dto/types'
 import { LuaChon } from '@/types/types'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
+import { useParams } from 'next/navigation'
 
 const shuffleAnswers = (answers: LuaChon[]) => {
   const shuffled = [...answers]
@@ -19,31 +20,35 @@ const shuffleAnswers = (answers: LuaChon[]) => {
 
 const TestPage = () => {
   const { item: questions, setQuestions } = useConfirmSubmitTestModal()
+  const params = useParams<{
+    licenseName: string
+    testId: string
+  }>()
 
   useEffect(() => {
     const fetchQuestions = async () => {
       const { data, error } = await supabase
-        .from('cau_hoi')
+        .from('cau_hoi_de_thi')
         .select(
           `
-          *,
-          lua_chon (
-            *
-          )
-        `
+            cau_hoi (
+              *,
+              lua_chon ( * )
+            )
+          `
         )
-        .limit(25)
+        .eq('ma_de_thi', params.testId)
 
       if (error) {
-        console.error(error)
+        console.log(error)
         return toast.error('Lỗi trong quá trình lấy dữ liệu câu hỏi')
       }
 
       const formattedQuestions: QuestionDTO[] = data.map((item: any) => ({
-        question: item,
-        answers: item.lua_chon.some((a: LuaChon) => a.so_thu_tu === 0)
-          ? shuffleAnswers(item.lua_chon)
-          : item.lua_chon.sort(
+        question: item.cau_hoi,
+        answers: item.cau_hoi.lua_chon.some((a: LuaChon) => a.so_thu_tu === 0)
+          ? shuffleAnswers(item.cau_hoi.lua_chon)
+          : item.cau_hoi.lua_chon.sort(
               (a: LuaChon, b: LuaChon) => a.so_thu_tu - b.so_thu_tu
             ),
       }))
