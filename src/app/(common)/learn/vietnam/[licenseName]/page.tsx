@@ -8,7 +8,7 @@ import F11LearningCardIcon4 from '../../../../../../public/images/f11LearningCar
 import ScrollToTopButton from '@/components/scroll-to-top-button'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { HangBang } from '@/types/types'
 import supabase from '@/utils/supabase/supabase'
@@ -20,6 +20,7 @@ const TestsLicensePage = () => {
   const params = useParams<{ licenseName: string }>()
   const [license, setLicense] = useState<HangBang>()
   const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,7 +95,7 @@ const TestsLicensePage = () => {
             </div>
           </div>
           <div className="flex flex-wrap gap-x-[150px] gap-y-[64px] justify-center items-center">
-            <Link href="/">
+            <Link href={`${pathname}/theory-questions`}>
               <LearningCard
                 icon={F11LearningCardIcon1}
                 title="HỌC CÂU HỎI LÝ THUYẾT:"
