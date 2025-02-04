@@ -1,14 +1,10 @@
 'use client'
 import ScrollToTopButton from '@/components/scroll-to-top-button'
-import F12Overlay from '../../../../../../../public/images/f12Overlay.svg'
-import Image from 'next/image'
-import { Button } from '@/components/ui/button'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Chuong, HangBang, LuaChon } from '@/types/types'
+import { HangBang, LuaChon } from '@/types/types'
 import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
-import { cn } from '@/lib/utils'
 import { QuestionDTO } from '@/types/dto/types'
 import LearnComponent from '@/components/learn-component'
 
@@ -24,8 +20,6 @@ const shuffleAnswers = (answers: LuaChon[]) => {
 const LearnCriticalPage = () => {
   const params = useParams<{ licenseName: string }>()
   const [license, setLicense] = useState<HangBang>()
-  const [chapters, setChapters] = useState<Chuong[]>([])
-  const [selectedChapter, setSelectedChapter] = useState<Chuong>()
   const [questions, setQuestions] = useState<QuestionDTO[]>([])
 
   useEffect(() => {
@@ -43,19 +37,6 @@ const LearnCriticalPage = () => {
 
     fetchData()
   }, [params])
-
-  useEffect(() => {
-    const fetchChapters = async () => {
-      const { data, error } = await supabase.from('chuong').select().limit(4)
-      if (error || !data) {
-        console.log(error)
-        return toast.error('Lấy dữ liệu chương không thành công')
-      }
-      setChapters(data)
-      setSelectedChapter(data[0])
-    }
-    fetchChapters()
-  }, [])
 
   useEffect(() => {
     const fetchQuestions = async () => {
