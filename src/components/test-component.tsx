@@ -131,7 +131,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
       if (index === questionIndex) {
         return {
           ...question,
-          userAnswerIndex: String(selectedAnswer),
+          userAnswerId: String(selectedAnswer),
         }
       }
       return question
@@ -251,7 +251,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
                   `,
                     selectedQuestionIndex === index &&
                       'ring-2 ring-purple ring-offset-2 font-extrabold',
-                    questions[index].userAnswerIndex &&
+                    questions[index].userAnswerId &&
                       `bg-neutral-300 
                       text-neutral-500 
                       hover:bg-neutral-300/70 

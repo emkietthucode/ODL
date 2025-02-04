@@ -72,7 +72,7 @@ const ResultPage = () => {
         for (const answer of questionDTO.answers) {
           if (
             answer.la_lua_chon_dung &&
-            answer.id === questionDTO.userAnswerIndex
+            answer.id === questionDTO.userAnswerId
           ) {
             questionCorrectAnswers++
           }
@@ -144,7 +144,7 @@ const ResultPage = () => {
             .from('ket_qua_bai_lam_lua_chon')
             .insert({
               ma_ket_qua_lam_bai: params.resultId,
-              ma_lua_chon: questionDTO.userAnswerIndex,
+              ma_lua_chon: questionDTO.userAnswerId,
             })
 
           if (error) throw error
