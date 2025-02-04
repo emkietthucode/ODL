@@ -31,21 +31,28 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
   testTotalScore,
 }) => {
   const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
-  const [selectedAnswers, setSelectedAnswers] = useState<string[]>(
-    questions?.map((question, questionIndex) => {
-      if (!question.userAnswerId || !question.answers) {
-        return `answer-${questionIndex}-null`
-      }
+  const [selectedAnswers, setSelectedAnswers] = useState<string[]>([])
 
-      const userAnswerPosition = question.answers.findIndex(
-        (answer) => answer.id === question.userAnswerId
+  useEffect(() => {
+    if (questions) {
+      setSelectedAnswers(
+        questions.map((question, questionIndex) => {
+          if (!question.userAnswerId || !question.answers) {
+            return `answer-${questionIndex}-null`
+          }
+
+          const userAnswerPosition = question.answers.findIndex(
+            (answer) => answer.id === question.userAnswerId
+          )
+
+          return `answer-${questionIndex}-${
+            userAnswerPosition !== -1 ? userAnswerPosition : 'null'
+          }`
+        })
       )
+    }
+  }, [questions]) // Runs when `questions` changes
 
-      return `answer-${questionIndex}-${
-        userAnswerPosition !== -1 ? userAnswerPosition : 'null'
-      }`
-    }) || []
-  )
   if (!questions) {
     return null
   }
