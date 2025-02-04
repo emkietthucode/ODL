@@ -5,16 +5,28 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Chuong, HangBang } from '@/types/types'
+import { Chuong, HangBang, LuaChon } from '@/types/types'
 import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
 import { cn } from '@/lib/utils'
+import { QuestionDTO } from '@/types/dto/types'
+import LearnComponent from '@/components/learn-component'
+
+const shuffleAnswers = (answers: LuaChon[]) => {
+  const shuffled = [...answers]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
 
 const LearnTheoryPage = () => {
   const params = useParams<{ licenseName: string }>()
   const [license, setLicense] = useState<HangBang>()
   const [chapters, setChapters] = useState<Chuong[]>([])
   const [selectedChapter, setSelectedChapter] = useState<Chuong>()
+  const [questions, setQuestions] = useState<QuestionDTO[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,6 +55,40 @@ const LearnTheoryPage = () => {
       setSelectedChapter(data[0])
     }
     fetchChapters()
+  }, [])
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      const { data, error } = await supabase
+        .from('cau_hoi')
+        .select(
+          `
+          *,
+          lua_chon (
+            *
+          )
+        `
+        )
+        .limit(25)
+
+      if (error) {
+        console.error(error)
+        return toast.error('Lỗi trong quá trình lấy dữ liệu câu hỏi')
+      }
+
+      const formattedQuestions: QuestionDTO[] = data.map((item: any) => ({
+        question: item,
+        answers: item.lua_chon.some((a: LuaChon) => a.so_thu_tu === 0)
+          ? shuffleAnswers(item.lua_chon)
+          : item.lua_chon.sort(
+              (a: LuaChon, b: LuaChon) => a.so_thu_tu - b.so_thu_tu
+            ),
+      }))
+
+      setQuestions(formattedQuestions)
+    }
+
+    fetchQuestions()
   }, [])
 
   return (
@@ -105,8 +151,7 @@ const LearnTheoryPage = () => {
             </div>
           </div>
         </div>
-
-        <div className="h-[300px]"></div>
+        <LearnComponent initialQuestions={questions} />
       </div>
       <ScrollToTopButton />
     </main>
