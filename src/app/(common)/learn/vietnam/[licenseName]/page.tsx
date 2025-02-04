@@ -16,7 +16,7 @@ import toast from 'react-hot-toast'
 import LearningCard from '@/components/learning-card'
 import Link from 'next/link'
 
-const TestsLicensePage = () => {
+const LearnLicensePage = () => {
   const params = useParams<{ licenseName: string }>()
   const [license, setLicense] = useState<HangBang>()
   const router = useRouter()
@@ -154,4 +154,4 @@ const TestsLicensePage = () => {
   )
 }
 
-export default TestsLicensePage
+export default LearnLicensePage
