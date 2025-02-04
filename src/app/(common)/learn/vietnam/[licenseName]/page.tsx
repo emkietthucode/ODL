@@ -109,7 +109,7 @@ const LearnLicensePage = () => {
                 desc="Tập trung ôn luyện các câu hỏi quan trọng, bắt buộc phải trả lời đúng để vượt qua kỳ thi."
               />
             </Link>
-            <Link href="/">
+            <Link href={`${pathname}/critical-questions`}>
               <LearningCard
                 icon={F11LearningCardIcon3}
                 title="HỌC CÂU ĐIỂM LIỆT:"
