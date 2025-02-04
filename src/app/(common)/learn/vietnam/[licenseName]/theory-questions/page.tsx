@@ -3,7 +3,7 @@ import ScrollToTopButton from '@/components/scroll-to-top-button'
 import F12Overlay from '../../../../../../../public/images/f12Overlay.svg'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Chuong, HangBang } from '@/types/types'
 import supabase from '@/utils/supabase/supabase'
@@ -12,8 +12,6 @@ import { cn } from '@/lib/utils'
 
 const LearnTheoryPage = () => {
   const params = useParams<{ licenseName: string }>()
-  const router = useRouter()
-  const pathname = usePathname()
   const [license, setLicense] = useState<HangBang>()
   const [chapters, setChapters] = useState<Chuong[]>([])
   const [selectedChapter, setSelectedChapter] = useState<Chuong>()
