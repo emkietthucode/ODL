@@ -18,6 +18,8 @@ export default {
         'custom-green': '#93B597',
         'custom-light-green': '#E2EEE4',
         'custom-brown': '#C88572',
+        'custom-violet': '#B3A3EB',
+        'custom-light-violet': '#F6F4FD',
         'custom-light-brown': '#EED9D3',
         purple: '#907ECF',
         'light-purple': '#E2DBF7',

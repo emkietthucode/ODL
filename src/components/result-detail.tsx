@@ -33,12 +33,12 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
   const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>(
     questions?.map((question, questionIndex) => {
-      if (!question.userAnswerIndex || !question.answers) {
+      if (!question.userAnswerId || !question.answers) {
         return `answer-${questionIndex}-null`
       }
 
       const userAnswerPosition = question.answers.findIndex(
-        (answer) => answer.id === question.userAnswerIndex
+        (answer) => answer.id === question.userAnswerId
       )
 
       return `answer-${questionIndex}-${
@@ -121,9 +121,9 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
                         `,
                           selectedQuestionIndex === index &&
                             'ring-2 ring-purple ring-offset-2 font-bold',
-                          !questions[index].userAnswerIndex
+                          !questions[index].userAnswerId
                             ? `` // No answer chosen
-                            : questions[index].userAnswerIndex ===
+                            : questions[index].userAnswerId ===
                               questions[index].answers?.find(
                                 (a) => a.la_lua_chon_dung
                               )?.id
@@ -179,7 +179,7 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
                 {questions[selectedQuestionIndex]?.answers?.map(
                   (answer: LuaChon, index: number) => {
                     const isSelected =
-                      questions[selectedQuestionIndex]?.userAnswerIndex ===
+                      questions[selectedQuestionIndex]?.userAnswerId ===
                       answer.id
                     const isCorrect = answer.la_lua_chon_dung
 

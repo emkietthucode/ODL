@@ -5,7 +5,7 @@ import Overlay from '../../../../../../public/images/f6-overlay.svg'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Montserrat_Alternates } from 'next/font/google'
-import { useParams } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { DeThi, HangBang } from '@/types/types'
 import supabase from '@/utils/supabase/supabase'
@@ -20,6 +20,8 @@ const TestsLicensePage = () => {
   const params = useParams<{ licenseName: string }>()
   const [license, setLicense] = useState<HangBang>()
   const [tests, setTests] = useState<DeThi[]>([])
+  const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,7 +105,7 @@ const TestsLicensePage = () => {
               THI THỬ VỚI BỘ ĐỀ CÓ SẴN
             </div>
             <div className="mb-[128px] mt-[16px] w-[60%] flex flex-wrap gap-10 justify-center">
-              {tests.map((_, index) => (
+              {tests.map((test, index) => (
                 <Button
                   key={index}
                   className={`${montserratAlternates.className} 
@@ -116,6 +118,7 @@ const TestsLicensePage = () => {
                   text-center
                   w-[150px]
                   h-[45px]`}
+                  onClick={() => router.push(`${pathname}/${test.id}`)}
                 >
                   ĐỀ SỐ {index + 1}
                 </Button>
@@ -130,17 +133,21 @@ const TestsLicensePage = () => {
                 Bạn chưa sẵn sàng để thi thử?
               </div>
               <div>
-                Đừng lo, hãy bắt đầu với phần luyện thi bằng lái xe hạng A1. Tại
-                đây, bạn có thể ôn lại kiến thức luật giao thông, biển báo, và
-                thực hành các câu hỏi sát hạch để tự tin hơn.
+                Đừng lo, hãy bắt đầu với phần luyện thi bằng lái xe hạng{' '}
+                {license?.ten_hang_bang}. Tại đây, bạn có thể ôn lại kiến thức
+                luật giao thông, biển báo, và thực hành các câu hỏi sát hạch để
+                tự tin hơn.
               </div>
             </div>
             <Button
               variant="main"
               size="auto"
               className="font-medium w-[150px]"
+              onClick={() =>
+                router.push(`/learn/vietnam/${license?.ten_hang_bang}`)
+              }
             >
-              LUYỆN THI A1
+              LUYỆN THI {license?.ten_hang_bang}
             </Button>
           </div>
         </div>

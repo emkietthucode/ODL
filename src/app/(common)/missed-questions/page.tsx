@@ -1,5 +1,5 @@
 'use client'
-import F81MissedQuestions from '../../../../../public/images/f8.1.svg'
+import F81MissedQuestions from '../../../../public/images/f8.1.svg'
 import ScrollToTopButton from '@/components/scroll-to-top-button'
 import TestComponent from '@/components/test-component'
 import supabase from '@/utils/supabase/supabase'

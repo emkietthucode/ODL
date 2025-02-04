@@ -72,7 +72,7 @@ const ResultPage = () => {
         for (const answer of questionDTO.answers) {
           if (
             answer.la_lua_chon_dung &&
-            answer.id === questionDTO.userAnswerIndex
+            answer.id === questionDTO.userAnswerId
           ) {
             questionCorrectAnswers++
           }
@@ -144,7 +144,7 @@ const ResultPage = () => {
             .from('ket_qua_bai_lam_lua_chon')
             .insert({
               ma_ket_qua_lam_bai: params.resultId,
-              ma_lua_chon: questionDTO.userAnswerIndex,
+              ma_lua_chon: questionDTO.userAnswerId,
             })
 
           if (error) throw error
@@ -205,7 +205,10 @@ const ResultPage = () => {
             </div>
             <div className="flex justify-between items-center gap-[96px] w-[60%] font-medium">
               <div>Ôn tập lại những câu mà bạn đã làm sai</div>
-              <Button className="bg-blue-100 hover:bg-blue-100/90 rounded-2xl text-xs text-blue-400 h-full shadow-md">
+              <Button
+                onClick={() => router.push('/missed-questions')}
+                className="bg-blue-100 hover:bg-blue-100/90 rounded-2xl text-xs text-blue-400 h-full shadow-md"
+              >
                 CHALLENGE BANK
               </Button>
             </div>
