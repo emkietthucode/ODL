@@ -7,9 +7,7 @@ import { Montserrat_Alternates } from 'next/font/google'
 import Image from 'next/image'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { LuaChon } from '@/types/types'
-import { toast } from 'react-hot-toast'
 import { QuestionDTO } from '@/types/dto/types'
-import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { Label } from '@/components//ui/label'
 
 const montserratAlternates = Montserrat_Alternates({
@@ -34,10 +32,6 @@ const LearnComponent: React.FC<TestComponentProps> = ({ initialQuestions }) => {
 
   if (!questions) {
     return null
-  }
-
-  const handleClickQuestion = (index: number) => {
-    setSelectedQuestion(index)
   }
 
   const handlePrevious = () => {
@@ -94,13 +88,9 @@ const LearnComponent: React.FC<TestComponentProps> = ({ initialQuestions }) => {
     })
   }
 
-  const handleOnClickRadioGroupItem = () => {}
-
   const getQuestionImg = (imgId: string) => {
     return ''
   }
-
-  const handleStartTheTest = () => {}
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -113,15 +103,27 @@ const LearnComponent: React.FC<TestComponentProps> = ({ initialQuestions }) => {
         event.preventDefault()
         event.stopPropagation()
         handleNext()
-      } else if (event.key === 'Enter') {
-        handleStartTheTest()
       }
     }
 
     // Capture phase ensures our handler runs before the radio group's handler
     window.addEventListener('keydown', handleKeyDown, true)
     return () => window.removeEventListener('keydown', handleKeyDown, true)
-  }, [selectedQuestionIndex, handleNext, handlePrevious, handleStartTheTest])
+  }, [selectedQuestionIndex, handleNext, handlePrevious])
+
+  const getBackgroundColor = (answer: LuaChon, index: number) => {
+    const isSelected =
+      selectedAnswers[selectedQuestionIndex] ===
+      `answer-${selectedQuestionIndex}-${index}`
+
+    if (!isSelected) {
+      return 'bg-neutral-200'
+    }
+
+    return answer.la_lua_chon_dung
+      ? 'bg-custom-ol-green/70 hover:bg-custom-ol-green/50'
+      : 'bg-custom-brown/70 hover:bg-custom-brown/50'
+  }
 
   return (
     <div className="flex flex-col gap-10 my-10 w-[71%]">
@@ -131,32 +133,35 @@ const LearnComponent: React.FC<TestComponentProps> = ({ initialQuestions }) => {
             {questions.map((_, index: number) => (
               <li key={index} className="flex justify-center">
                 <Button
-                  onClick={() => handleClickQuestion(index)}
+                  onClick={() => setSelectedQuestion(index)}
                   variant="outline"
                   size="icon"
                   className={cn(
                     `
-                  w-2 h-2 text-[6px]
-                  sm:w-4 sm:h-4 sm:text-[9px]  
-                  lg:w-6 lg:h-6 lg: lg:text-sm  
-                  xl:w-7 xl:h-7 lg: xl:text-sm  
-                  font-bold 
-                  rounded-full 
-                  p-0 m-0 
-                  text-purple 
-                  bg-light-purple
-                  hover:bg-light-purple/70 
-                  hover:text-purple/70
-                  transition-all
-                  border-separate"
-                  `,
+                      w-2 h-2 text-[6px]
+                      sm:w-4 sm:h-4 sm:text-[9px]  
+                      lg:w-6 lg:h-6 lg: lg:text-sm  
+                      xl:w-7 xl:h-7 lg: xl:text-sm  
+                      font-bold 
+                      rounded-full 
+                      p-0 m-0 
+                      text-purple 
+                      bg-light-purple
+                      hover:bg-light-purple/70 
+                      hover:text-purple/70
+                      transition-all
+                      border-separate"
+                        `,
                     selectedQuestionIndex === index &&
-                      'ring-2 ring-purple ring-offset-2 font-extrabold',
-                    questions[index].userAnswerId &&
-                      `bg-neutral-300 
-                      text-neutral-500 
-                      hover:bg-neutral-300/70 
-                      hover:text-neutral-500/90`
+                      'ring-2 ring-purple ring-offset-2 font-bold',
+                    !questions[index].userAnswerId
+                      ? `` // No answer chosen
+                      : questions[index].userAnswerId ===
+                        questions[index].answers?.find(
+                          (a) => a.la_lua_chon_dung
+                        )?.id
+                      ? `bg-custom-ol-green text-white hover:bg-custom-ol-green/70 hover:text-white/90` // Correct answer
+                      : `bg-custom-brown text-white hover:bg-custom-brown/70 hover:text-white/90` // Incorrect answer
                   )}
                 >
                   {index + 1}
@@ -204,39 +209,38 @@ const LearnComponent: React.FC<TestComponentProps> = ({ initialQuestions }) => {
                   handleAnswerChange(selectedQuestionIndex, value)
                 }
                 className="h-full"
-                onClick={handleOnClickRadioGroupItem}
               >
                 {questions[selectedQuestionIndex]?.answers?.map(
-                  (answer: LuaChon, index: number) => (
-                    <Label
-                      key={index}
-                      htmlFor={`r${selectedQuestionIndex}-${index}`}
-                      className="
-                  grow 
-                  bg-neutral-200 
-                  flex 
-                  items-start 
-                  p-3 
-                  gap-2 
-                  cursor-pointer
-                  rounded-lg 
-                  border
-                  border-transparent 
-                hover:bg-neutral-300
-                active:bg-neutral-400
-                  active:scale-80
-                  transition-all 
-                  duration-150"
-                    >
-                      <RadioGroupItem
-                        value={`answer-${selectedQuestionIndex}-${index}`}
-                        id={`r${selectedQuestionIndex}-${index}`}
-                      />
-                      <div className="text-sm text-neutral-500 font-medium">
-                        {answer.noi_dung_lua_chon}
-                      </div>
-                    </Label>
-                  )
+                  (answer: LuaChon, index: number) => {
+                    return (
+                      <Label
+                        key={index}
+                        htmlFor={`r${selectedQuestionIndex}-${index}`}
+                        className={`
+                          grow 
+                          ${getBackgroundColor(answer, index)}
+                          flex 
+                          items-start 
+                          p-3 
+                          gap-2 
+                          cursor-pointer
+                          rounded-lg 
+                          border
+                          border-transparent 
+                          active:scale-80
+                          transition-all 
+                          duration-150`}
+                      >
+                        <RadioGroupItem
+                          value={`answer-${selectedQuestionIndex}-${index}`}
+                          id={`r${selectedQuestionIndex}-${index}`}
+                        />
+                        <div className="text-sm text-neutral-500 font-medium">
+                          {answer.noi_dung_lua_chon}
+                        </div>
+                      </Label>
+                    )
+                  }
                 )}
               </RadioGroup>
             </div>
@@ -248,7 +252,7 @@ const LearnComponent: React.FC<TestComponentProps> = ({ initialQuestions }) => {
               bg-purple rounded-lg w-[100px] h-[37px] text-sm font-medium text-white"
             >
               GIẢI THÍCH:{' '}
-              {questions[selectedQuestionIndex].question?.giai_thich}
+              {questions[selectedQuestionIndex]?.question?.giai_thich}
             </div>
           </div>
         </div>
