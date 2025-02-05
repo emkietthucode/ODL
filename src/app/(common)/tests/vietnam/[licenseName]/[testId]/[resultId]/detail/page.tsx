@@ -86,7 +86,6 @@ const TestDetailPage = () => {
             ),
         userAnswerId: userAnswersMap[item.cau_hoi.id] || null,
       }))
-      console.log(formattedQuestions)
 
       setQuestions(formattedQuestions)
     }
