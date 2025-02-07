@@ -5,7 +5,7 @@ import supabase from '@/utils/supabase/supabase'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { QuestionDTO } from '@/types/dto/types'
-import { LuaChon } from '@/types/types'
+import { DeThi, LuaChon } from '@/types/types'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { useParams } from 'next/navigation'
 
@@ -20,10 +20,27 @@ const shuffleAnswers = (answers: LuaChon[]) => {
 
 const TestPage = () => {
   const { item: questions, setQuestions } = useConfirmSubmitTestModal()
+  const [testTitle, setTestTitle] = useState('')
   const params = useParams<{
     licenseName: string
     testId: string
   }>()
+
+  useEffect(() => {
+    const fetchTestInfo = async () => {
+      const { data, error } = await supabase
+        .from('de_thi')
+        .select('ten_de_thi')
+        .eq('id', params.testId)
+        .single()
+      if (error) {
+        console.log(error)
+        return toast.error('Lỗi trong quá trình lấy tên đề thi')
+      }
+      setTestTitle(data.ten_de_thi)
+    }
+    fetchTestInfo()
+  }, [])
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -76,7 +93,7 @@ const TestPage = () => {
           </div>
         </div>
         <TestComponent
-          title="25 cau dau"
+          title={testTitle}
           questions={questions}
           setQuestions={setQuestions}
         />
