@@ -26,18 +26,18 @@ const NavBar = () => {
       <div className="text-gray-500">Logo</div>
       <div className="flex gap-[110px]">
         <nav className="flex justify-center items-center space-x-[60px] text-gray-500">
-          <a href="#" className="hover:text-purple">
+          <Link href="/" className="hover:text-purple">
             Trang chủ
-          </a>
-          <a href="#" className="hover:text-purple">
+          </Link>
+          <Link href="/tests" className="hover:text-purple">
             Thi thử
-          </a>
-          <a href="#" className="hover:text-purple">
+          </Link>
+          <Link href="/learn" className="hover:text-purple">
             Luyện thi
-          </a>
-          <a href="#" className="hover:text-purple">
+          </Link>
+          <Link href="#" className="hover:text-purple">
             Liên hệ
-          </a>
+          </Link>
         </nav>
 
         <nav>
