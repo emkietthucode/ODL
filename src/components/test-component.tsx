@@ -91,12 +91,20 @@ const TestComponent: React.FC<TestComponentProps> = ({
   }
 
   const handlePrevious = () => {
+    const message = showTestMessage(isTesting, timeLeft)
+    if (message) {
+      return toast.error(message)
+    }
     if (selectedQuestionIndex > 0) {
       setSelectedQuestion((prev) => prev - 1)
     }
   }
 
   const handleNext = () => {
+    const message = showTestMessage(isTesting, timeLeft)
+    if (message) {
+      return toast.error(message)
+    }
     if (selectedQuestionIndex < questions.length - 1) {
       setSelectedQuestion((prev) => prev + 1)
     }
