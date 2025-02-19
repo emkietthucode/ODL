@@ -121,8 +121,8 @@ const LearnComponent: React.FC<TestComponentProps> = ({ initialQuestions }) => {
     }
 
     return answer.la_lua_chon_dung
-      ? 'bg-custom-ol-green/70 hover:bg-custom-ol-green/50'
-      : 'bg-custom-brown/70 hover:bg-custom-brown/50'
+      ? 'bg-custom-light-green'
+      : 'bg-custom-light-brown'
   }
 
   return (
