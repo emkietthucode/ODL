@@ -24,7 +24,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         data: { session },
       } = await supabase.auth.getSession()
 
+      console.log('auth session', session)
+
       setUser(session?.user || null)
+
       setLoading(false)
     }
 
@@ -41,6 +44,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       subscription?.unsubscribe()
     }
   }, [supabase])
+
+  console.log(user)
 
   return (
     <AuthContext.Provider value={{ user, loading, setUser }}>
