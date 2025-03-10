@@ -4,8 +4,10 @@ import B1Car from '../../../../../public/images/f5-b1-car.svg'
 import B2Car from '../../../../../public/images/f5-b2-car.svg'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
+import { useTranslations } from 'next-intl'
 
 const TestsCategoryPage = () => {
+  const t = useTranslations('VietnamTestPage')
   return (
     <main className="bg-white mx-auto my-auto max-h-full">
       <div className="flex flex-col items-center h-full">
@@ -13,15 +15,9 @@ const TestsCategoryPage = () => {
           <div className="flex justify-start relative">
             <div className="w-[72%] flex flex-col gap-10 z-20 mt-20">
               <div className="text-purple text-4xl font-semibold">
-                THI THỬ LÝ THUYẾT
+                {t('title')}
               </div>
-              <div>
-                Chức năng Thi thử lý thuyết mô phỏng bài thi sát hạch chính
-                thức, giúp người dùng kiểm tra kiến thức về luật giao thông,
-                biển báo, và kỹ năng xử lý tình huống. Đề thi được xây dựng đúng
-                cấu trúc và nội dung theo quy định, bao gồm cả câu hỏi điểm liệt
-                (nếu có), mang lại trải nghiệm sát với kỳ thi thực tế.
-              </div>
+              <div>{t('description')}</div>
             </div>
             <Image
               className="hidden xl:inline-block absolute z-10 right-0 top-[120px] "
@@ -35,44 +31,35 @@ const TestsCategoryPage = () => {
           <div className="w-[60%] h-full flex  justify-between items-center">
             <div className="flex flex-col h-[300px] w-[25%] text-center gap-5 items-center justify-between">
               <div className="font-bold text-5xl">A1</div>
-              <div>
-                dành cho người điều khiển xe mô tô hai bánh có dung tích xi-lanh
-                từ 50cc đến dưới 175cc.
-              </div>
+              <div>{t('a1Description')}</div>
               <Button
                 variant="main"
                 size="auto"
-                className="font-medium w-[50%] self-end mx-auto"
+                className="font-medium w-[50%] self-end mx-auto uppercase"
               >
-                THI THỬ
+                {t('startButton')}
               </Button>
             </div>
             <div className="flex flex-col h-[300px] w-[25%] text-center gap-5 items-center justify-between">
               <div className="font-bold text-5xl">A2</div>
-              <div>
-                dành cho người điều khiển xe mô tô hai bánh có dung tích xi-lanh
-                từ 175cc trở lên.
-              </div>
+              <div>{t('a2Description')}</div>
               <Button
                 variant="main"
                 size="auto"
-                className="font-medium w-[50%] self-end mx-auto"
+                className="font-medium w-[50%] self-end mx-auto uppercase"
               >
-                THI THỬ
+                {t('startButton')}
               </Button>
             </div>
             <div className="flex flex-col h-[300px] w-[25%] text-center gap-5 items-center justify-between">
               <div className="font-bold text-5xl">A3, A4</div>
-              <div>
-                Bằng A3 cấp cho người điều khiển xe mô tô ba bánh, Bằng A4 cấp
-                cho người điều khiển máy kéo có trọng tải đến 1.000 kg.
-              </div>
+              <div>{t('a3Description')}</div>
               <Button
                 variant="main"
                 size="auto"
-                className="font-medium w-[50%] self-end mx-auto"
+                className="font-medium w-[50%] self-end mx-auto uppercase"
               >
-                THI THỬ
+                {t('startButton')}
               </Button>
             </div>
           </div>
@@ -83,16 +70,13 @@ const TestsCategoryPage = () => {
             <div className="flex flex-col justify-center text-left gap-5">
               <hr className="w-[150px] h-1 my-1 bg-purple border-0 rounded dark:bg-purple"></hr>
               <div className="font-bold text-5xl">B1</div>
-              <div>
-                dành cho người điều khiển ô tô chở người dưới 9 chỗ và xe tải
-                dưới 3.500 kg, không dùng để kinh doanh vận tải.
-              </div>
+              <div>{t('b1Description')}</div>
               <Button
                 variant="main"
                 size="auto"
-                className="font-medium w-[100px]"
+                className="font-medium w-[100px] uppercase"
               >
-                THI THỬ
+                {t('startButton')}
               </Button>
             </div>
           </div>
@@ -100,16 +84,13 @@ const TestsCategoryPage = () => {
             <div className="flex flex-col justify-center text-left gap-5">
               <hr className="w-[150px] h-1 my-1 bg-purple border-0 rounded dark:bg-purple"></hr>
               <div className="font-bold text-5xl">B2</div>
-              <div>
-                dành cho người điều khiển ô tô chở người dưới 9 chỗ, xe tải dưới
-                3.500 kg và được hành nghề lái xe kinh doanh vận tải.
-              </div>
+              <div>{t('b2Description')}</div>
               <Button
                 variant="main"
                 size="auto"
-                className="font-medium w-[100px]"
+                className="font-medium w-[100px] uppercase"
               >
-                THI THỬ
+                {t('startButton')}
               </Button>
             </div>
             <Image src={B2Car} alt="" />
@@ -119,35 +100,29 @@ const TestsCategoryPage = () => {
             <div className="flex flex-col gap-[128px] justify-between w-[40%]">
               <div className="flex flex-col">
                 <div className="font-bold text-5xl mb-[25px]">C</div>
-                <div>
-                  dành cho người điều khiển ô tô tải, máy kéo có trọng tải từ
-                  3.500 kg trở lên.
-                </div>
+                <div>{t('cDescription')}</div>
               </div>
               <Button
                 variant="main"
                 size="auto"
-                className="font-medium w-[100px]"
+                className="font-medium w-[100px] uppercase"
               >
-                THI THỬ
+                {t('startButton')}
               </Button>
             </div>
             <div className="flex flex-col gap-[128px] justify-between w-[45%]">
               <div className="flex flex-col">
-                <div className="font-bold text-5xl mb-[20px]">
-                  NÂNG HẠNG DEF
+                <div className="font-bold text-5xl mb-[20px] uppercase">
+                  {t('defTitle')}
                 </div>
-                <div>
-                  dành cho người điều khiển ô tô chở người 10 đến 30 chỗ; trên
-                  30 chỗ; lái xe kéo rơ-mooc.
-                </div>
+                <div>{t('defDescription')}</div>
               </div>
               <Button
                 variant="main"
                 size="auto"
-                className="font-medium w-[100px]"
+                className="font-medium w-[100px] uppercase"
               >
-                THI THỬ
+                {t('startButton')}
               </Button>
             </div>
           </div>

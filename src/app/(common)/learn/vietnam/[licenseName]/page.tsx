@@ -15,12 +15,14 @@ import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
 import LearningCard from '@/components/learning-card'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 
 const LearnLicensePage = () => {
   const params = useParams<{ licenseName: string }>()
   const [license, setLicense] = useState<HangBang>()
   const router = useRouter()
   const pathname = usePathname()
+  const t = useTranslations('LearningOverall')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,8 +46,8 @@ const LearnLicensePage = () => {
         <div className="flex flex-col gap-[32px] justify-between items-center h-full w-[60%]">
           <div className="flex justify-start relative w-full">
             <div className="flex flex-col gap-10 z-20 mt-20">
-              <div className="text-purple text-5xl font-semibold">
-                {`LOẠI BẰNG LÁI: ${license?.ten_hang_bang}`}
+              <div className="text-purple text-5xl font-semibold uppercase">
+                {`${t('title')}: ${license?.ten_hang_bang}`}
               </div>
               <div className="w-[60%]">{license?.mo_ta_hang_bang}</div>
             </div>
@@ -55,14 +57,10 @@ const LearnLicensePage = () => {
           <div className="flex w-[60%] items-center justify-between h-full">
             <div className="flex flex-col gap-[50px] justify-center w-[70%] h-full">
               <div className="font-bold text-3xl text-white">
-                CHƯA BIẾT BẮT ĐẦU TỪ ĐÂU?
+                {t('learningPathTitle')}
               </div>
               <div className="font-medium text-sm text-white w-[90%]">
-                Chức năng Học theo lộ trình hướng dẫn người dùng ôn luyện từ cơ
-                bản đến nâng cao qua các bài thi được sắp xếp theo thứ tự hợp
-                lý. Hệ thống chia nhỏ nội dung thành các phần, giúp bạn từng
-                bước làm quen với bộ câu hỏi và nâng cao kỹ năng trước khi tham
-                gia kỳ thi thực tế.
+                {t('learningPathDescription')}
               </div>
               <Button
                 className="
@@ -74,7 +72,7 @@ const LearnLicensePage = () => {
                   mx-auto
                 "
               >
-                BẮT ĐẦU
+                {t('startButton')}
               </Button>
             </div>
             <Image src={F11Studying} alt="" />
@@ -87,40 +85,40 @@ const LearnLicensePage = () => {
         </div>
         <div className="w-[50%] flex flex-col justify-center items-center mb-[128px]">
           <div className="flex flex-col gap-5 justify-center items-center my-[128px] ">
-            <div className="text-4xl font-bold text-blue-400">HỌC TỰ DO</div>
+            <div className="text-4xl font-bold text-blue-400">
+              {t('learningTitle')}
+            </div>
             <div className="text-xl font-medium text-center">
-              cho phép bạn chọn bất kỳ câu hỏi, biển báo, hoặc nội dung nào để
-              ôn luyện theo ý thích, giúp học tập linh hoạt và tập trung vào
-              những phần bạn cần cải thiện.
+              {t('learningDescription')}
             </div>
           </div>
           <div className="flex flex-wrap gap-x-[150px] gap-y-[64px] justify-center items-center">
             <Link href={`${pathname}/theory-questions`}>
               <LearningCard
                 icon={F11LearningCardIcon1}
-                title="HỌC CÂU HỎI LÝ THUYẾT:"
-                desc="Giúp bạn ôn tập toàn bộ kiến thức luật giao thông qua các câu hỏi trắc nghiệm chính thức."
+                title={t('theoryTitle')}
+                desc={t('theoryDescription')}
               />
             </Link>
             <Link href="/">
               <LearningCard
                 icon={F11LearningCardIcon2}
-                title="HỌC BIỂN BÁO GIAO THÔNG:"
-                desc="Tập trung ôn luyện các câu hỏi quan trọng, bắt buộc phải trả lời đúng để vượt qua kỳ thi."
+                title={t('trafficSignsTitle')}
+                desc={t('trafficSignsDescription')}
               />
             </Link>
             <Link href={`${pathname}/critical-questions`}>
               <LearningCard
                 icon={F11LearningCardIcon3}
-                title="HỌC CÂU ĐIỂM LIỆT:"
-                desc="Giúp bạn ôn tập toàn bộ kiến thức luật giao thông qua các câu hỏi trắc nghiệm chính thức."
+                title={t('criticalQuestionsTitle')}
+                desc={t('criticalQuestionsDescription')}
               />
             </Link>
             <Link href="/missed-questions">
               <LearningCard
                 icon={F11LearningCardIcon4}
-                title="LÀM LẠI NHỮNG CÂU SAI:"
-                desc="Lưu lại và giúp bạn luyện tập các câu hỏi đã trả lời sai để cải thiện điểm số và nắm chắc kiến thức."
+                title={t('reviewTitle')}
+                desc={t('reviewDescription')}
               />
             </Link>
           </div>
@@ -129,12 +127,9 @@ const LearnLicensePage = () => {
           <div className="w-[60%] h-full flex justify-between items-center">
             <div className="flex flex-col gap-10 w-[70%]">
               <div className="text-purple text-3xl font-bold">
-                Sẵn sàng để thi thử?
+                {t('readyToTest')}
               </div>
-              <div>
-                Nếu bạn đã sẵn sàng, hãy bắt đầu Thi thử ngay để kiểm tra kiến
-                thức và đánh giá mức độ chuẩn bị của mình!
-              </div>
+              <div>{t('readyToTestDescription')}</div>
             </div>
             <Button
               variant="main"
@@ -144,7 +139,7 @@ const LearnLicensePage = () => {
                 router.push(`/tests/vietnam/${license?.ten_hang_bang}`)
               }
             >
-              THI THỬ {license?.ten_hang_bang}
+              {t('readyToTestButton')} {license?.ten_hang_bang}
             </Button>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { ChevronsRight } from 'lucide-react'
 import { Montserrat_Alternates } from 'next/font/google'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '700',
@@ -14,6 +15,7 @@ const montserratAlternates = Montserrat_Alternates({
 const CountrySelection = () => {
   const router = useRouter()
   const pathname = usePathname()
+  const t = useTranslations('ChooseRegionPage')
 
   const handleCountrySelect = (country: 'vietnam' | 'australia') => {
     router.push(`${pathname}/${country}`)
@@ -22,13 +24,12 @@ const CountrySelection = () => {
     <div className="flex flex-col justify-between h-full">
       <div className="bg-worldMapImg bg-repeat bg-cover bg-bottom w-full h-screen flex flex-col items-center">
         <div className="flex flex-col justify-center items-center my-[128px]">
-          <div className="text-6xl font-extrabold text-purple">
-            CHỌN QUỐC GIA
+          <div className="text-6xl font-extrabold text-purple uppercase">
+            {t('chooseRegion')}
           </div>
           <hr className="w-[450px] h-1 mx-auto my-7 bg-purple border-0 rounded dark:bg-purple"></hr>
           <div className="my-10 w-[650px] break text-center text-purple text-2xl font-medium">
-            ODL là website ôn thi bằng lái xe đa quốc gia, giúp bạn học và thi
-            thử theo quy định của nhiều nước trên thế giới.
+            {t('description')}
           </div>
         </div>
       </div>
@@ -36,15 +37,12 @@ const CountrySelection = () => {
         <div className="flex justify-between">
           <div className="flex flex-col w-[50%]">
             <hr className="w-[100px] h-1 my-2 bg-purple border-0 rounded dark:bg-purple"></hr>
-            <div className={`text-3xl ${montserratAlternates.className}`}>
-              VIỆT NAM
+            <div
+              className={`text-3xl ${montserratAlternates.className} uppercase`}
+            >
+              {t('vnTitle')}
             </div>
-            <div className="mt-10 mb-5 text-xl">
-              Thi lý thuyết lái xe ở Việt Nam kiểm tra kiến thức về luật giao
-              thông, biển báo và xử lý tình huống qua các câu hỏi trắc nghiệm.
-              Thí sinh cần đạt điểm yêu cầu, bao gồm các câu hỏi điểm liệt, để
-              vượt qua phần thi này.
-            </div>
+            <div className="mt-10 mb-5 text-xl">{t('vnDescription')}</div>
             <div
               className="flex gap-3 items-center cursor-pointer"
               onClick={() => handleCountrySelect('vietnam')}
@@ -52,7 +50,7 @@ const CountrySelection = () => {
               <div
                 className={`underline text-purple text-3xl ${montserratAlternates.className}`}
               >
-                Bắt đầu ngay
+                {t('startButton')}
               </div>
               <ChevronsRight className="text-purple" />
             </div>
@@ -64,14 +62,9 @@ const CountrySelection = () => {
           <div className="flex flex-col w-[50%]">
             <hr className="w-[100px] h-1 my-2 bg-purple border-0 rounded dark:bg-purple"></hr>
             <div className={`text-3xl ${montserratAlternates.className}`}>
-              ÚC
+              {t('ausTitle')}
             </div>
-            <div className="mt-10 mb-5 text-xl">
-              Thi lý thuyết lái xe ở Úc kiểm tra kiến thức về luật giao thông,
-              biển báo và xử lý tình huống qua các câu hỏi trắc nghiệm. Website
-              hỗ trợ ôn thi cho nhiều tiểu bang, giúp thí sinh luyện tập theo
-              các quy định và yêu cầu riêng của từng vùng.
-            </div>
+            <div className="mt-10 mb-5 text-xl">{t('ausDescription')}</div>
             <div
               className="flex gap-3 items-center cursor-pointer"
               onClick={() => handleCountrySelect('australia')}
@@ -79,7 +72,7 @@ const CountrySelection = () => {
               <div
                 className={`underline text-purple text-3xl ${montserratAlternates.className}`}
               >
-                Bắt đầu ngay
+                {t('startButton')}
               </div>
               <ChevronsRight className="text-purple" />
             </div>

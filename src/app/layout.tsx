@@ -4,6 +4,7 @@ import './globals.css'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
+import { LanguageProvider } from '@/contexts/LanguageContext'
 
 const montserrat = Montserrat({
   subsets: ['vietnamese'],
@@ -23,14 +24,14 @@ export default async function RootLayout({
 
   const messages = await getMessages()
 
-  console.log(locale)
-
   return (
     <html lang={locale}>
       <body className={`${montserrat.className} antialiased`}>
-        <NextIntlClientProvider messages={messages}>
-          <AuthProvider>{children}</AuthProvider>
-        </NextIntlClientProvider>
+        <LanguageProvider>
+          <NextIntlClientProvider messages={messages}>
+            <AuthProvider>{children}</AuthProvider>
+          </NextIntlClientProvider>
+        </LanguageProvider>
       </body>
     </html>
   )

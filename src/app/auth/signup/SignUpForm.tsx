@@ -33,6 +33,7 @@ import {
   SignUpFormSchema,
   SignUpFormType,
 } from '@/types/schemas/signup'
+import { useTranslations } from 'next-intl'
 
 interface SignUpFormProps {
   onSubmit: (data: SignUpFormType) => void
@@ -50,7 +51,7 @@ function SignUpForm({ onSubmit, isLoading }: SignUpFormProps) {
 
     resolver: zodResolver(SignUpFormSchema),
   })
-
+  const t = useTranslations('RegisterPage')
   const errors = form.formState.errors
 
   return (
@@ -62,7 +63,7 @@ function SignUpForm({ onSubmit, isLoading }: SignUpFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor={field.name} className="text-[#696F79]">
-                Full name
+                {t('fullname')}
               </FormLabel>
               {errors.name && (
                 <FormMessage className="text-red-500 mt-1">
@@ -80,7 +81,7 @@ function SignUpForm({ onSubmit, isLoading }: SignUpFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor={field.name} className="text-[#696F79]">
-                Email
+                {t('email')}
               </FormLabel>
               {errors.email && (
                 <FormMessage className="text-red-500 mt-1">
@@ -98,7 +99,7 @@ function SignUpForm({ onSubmit, isLoading }: SignUpFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor={field.name} className="text-[#696F79]">
-                Password
+                {t('password')}
               </FormLabel>
               {errors.password && (
                 <FormMessage className="text-red-500 mt-1">
@@ -115,7 +116,7 @@ function SignUpForm({ onSubmit, isLoading }: SignUpFormProps) {
           name="gender"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-[#696F79]">Gender</FormLabel>
+              <FormLabel className="text-[#696F79]">{t('gender')}</FormLabel>
               {errors.gender && (
                 <FormMessage className="text-red-500 mt-1">
                   {errors.gender.message}
@@ -128,11 +129,15 @@ function SignUpForm({ onSubmit, isLoading }: SignUpFormProps) {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value={Genders.Male}>{Genders.Male}</SelectItem>
-                  <SelectItem value={Genders.Female}>
-                    {Genders.Female}
+                  <SelectItem value={Genders.Male}>
+                    {t(`${Genders.Male}`)}
                   </SelectItem>
-                  <SelectItem value={Genders.Other}>{Genders.Other}</SelectItem>
+                  <SelectItem value={Genders.Female}>
+                    {t(`${Genders.Female}`)}
+                  </SelectItem>
+                  <SelectItem value={Genders.Other}>
+                    {t(`${Genders.Other}`)}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </FormItem>
@@ -145,7 +150,7 @@ function SignUpForm({ onSubmit, isLoading }: SignUpFormProps) {
           className="w-full my-8"
         >
           {isLoading && <Loader2 className="animate-spin" />}
-          Continue
+          {t('continue')}
         </Button>
       </form>
     </Form>

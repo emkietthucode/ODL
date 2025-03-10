@@ -16,6 +16,12 @@ export interface HangBang {
   updatedAt: string
 }
 
+export interface NgonNgu {
+  id: string
+  ten_ngon_ngu: string
+  ky_hieu: string
+}
+
 export interface NguoiDung {
   id: string
   email: string

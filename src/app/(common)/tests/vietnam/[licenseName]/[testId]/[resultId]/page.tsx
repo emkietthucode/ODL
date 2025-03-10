@@ -11,6 +11,7 @@ import { CauTrucDeThi } from '@/types/types'
 import { QuestionDTO } from '@/types/dto/types'
 import { Button } from '@/components/ui/button'
 import useAuth from '@/hooks/useAuth'
+import { useTranslations } from 'next-intl'
 
 const ResultPage = () => {
   const { user } = useAuth()
@@ -27,6 +28,7 @@ const ResultPage = () => {
     testId: string
     resultId: string
   }>()
+  const t = useTranslations('ResultPage')
 
   const getBaseUrl = () => {
     // Extract base URL dynamically
@@ -186,30 +188,30 @@ const ResultPage = () => {
           <div className="flex flex-col gap-3 text-blue-400 w-full justify-center items-center">
             <hr className="h-1 my-5 bg-purple border-0 dark:bg-purple w-full"></hr>
             <div className="flex justify-between items-center gap-[96px] w-[60%] font-medium">
-              <div>Chưa hài lòng với kết quả? Làm bài lại ngay</div>
+              <div>{t('notSatisfied')}</div>
               <Button
                 onClick={handleRedoTest}
-                className="bg-blue-100 hover:bg-blue-100/90 rounded-2xl text-xs text-blue-400 h-full shadow-md"
+                className="bg-blue-100 hover:bg-blue-100/90 rounded-2xl text-xs text-blue-400 h-full shadow-md uppercase"
               >
-                LÀM BÀI LẠI
+                {t('retestButton')}
               </Button>
             </div>
             <div className="flex justify-between items-center gap-[96px] w-[60%] font-medium">
-              <div>Chúng tôi còn nhiều đề khác, xem ngay!</div>
+              <div>{t('otherTest')}</div>
               <Button
                 onClick={handleDoOtherTest}
-                className="bg-blue-100 hover:bg-blue-100/90 rounded-2xl text-xs text-blue-400 h-full shadow-md"
+                className="bg-blue-100 hover:bg-blue-100/90 rounded-2xl text-xs text-blue-400 h-full shadow-md uppercase"
               >
-                LÀM ĐỀ KHÁC
+                {t('otherTestButton')}
               </Button>
             </div>
             <div className="flex justify-between items-center gap-[96px] w-[60%] font-medium">
-              <div>Ôn tập lại những câu mà bạn đã làm sai</div>
+              <div>{t('reviewWrongQuestion')}</div>
               <Button
                 onClick={() => router.push('/missed-questions')}
-                className="bg-blue-100 hover:bg-blue-100/90 rounded-2xl text-xs text-blue-400 h-full shadow-md"
+                className="bg-blue-100 hover:bg-blue-100/90 rounded-2xl text-xs text-blue-400 h-full shadow-md uppercase"
               >
-                CHALLENGE BANK
+                {t('reviewWrongButton')}
               </Button>
             </div>
           </div>
