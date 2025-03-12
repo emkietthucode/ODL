@@ -11,6 +11,7 @@ import { toast } from 'react-hot-toast'
 import { QuestionDTO } from '@/types/dto/types'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { Label } from '@/components//ui/label'
+import { useTranslations } from 'next-intl'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '500',
@@ -42,6 +43,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const { onOpen, setTestCompletionTimeSec } = useConfirmSubmitTestModal()
+  const t = useTranslations('TestPage')
 
   // Timer Logic
   useEffect(() => {
@@ -277,7 +279,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
               variant="main"
               className="my-5 hover:bg-purple/90"
             >
-              BẮT ĐẦU THI
+              {t('startButton')}
             </Button>
           ) : (
             <Button
@@ -285,7 +287,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
               variant="main"
               className="my-5 hover:bg-purple/90"
             >
-              NỘP BÀI
+              {t('submit')}
             </Button>
           )}
         </div>

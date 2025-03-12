@@ -22,6 +22,7 @@ import GoogleIcon from '../../../../public/icons/google-icon.svg'
 import { signInWithGoogle } from '../actions'
 
 import { Loader2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 interface LoginFormProps {
   onSubmit: (data: LoginFormType) => void
@@ -38,6 +39,7 @@ function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
     resolver: zodResolver(LoginFormSchema),
   })
 
+  const t = useTranslations('LoginPage')
   const errors = form.formState.errors
 
   return (
@@ -49,7 +51,7 @@ function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor={field.name} className="text-[#696F79]">
-                Email
+                {t('email')}
               </FormLabel>
               {errors.email && (
                 <FormMessage className="text-red-500 mt-1">
@@ -69,7 +71,7 @@ function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor={field.name} className="text-[#696F79]">
-                Password
+                {t('password')}
               </FormLabel>
               {errors.password && (
                 <FormMessage className="text-red-500 mt-1">
@@ -90,12 +92,12 @@ function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
               className="data-[state=checked]:bg-purple"
             />
             <label htmlFor="remember" className="text-sm">
-              Remember me
+              {t('remember')}
             </label>
           </div>
 
           <Button variant="link" className="px-0">
-            Forgot password?
+            {t('forgot')}
           </Button>
         </div>
 
@@ -106,7 +108,7 @@ function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
           type="submit"
         >
           {isLoading && <Loader2 className="animate-spin" />}
-          Log in
+          {t('loginButton')}
         </Button>
 
         <Button
@@ -123,7 +125,7 @@ function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
             className="w-5 h-5 absolute left-4"
           />
           {isLoading && <Loader2 className="animate-spin" />}
-          Sign in with Google
+          {t('googleButton')}
         </Button>
       </form>
     </Form>

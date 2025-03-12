@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react'
 import { DeThi, HangBang } from '@/types/types'
 import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
+import { useTranslations } from 'next-intl'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '700',
@@ -22,6 +23,7 @@ const TestsLicensePage = () => {
   const [tests, setTests] = useState<DeThi[]>([])
   const router = useRouter()
   const pathname = usePathname()
+  const t = useTranslations('ChooseTestPage')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,8 +58,8 @@ const TestsLicensePage = () => {
         <div className="flex flex-col gap-[32px] justify-between items-center h-full w-[60%]">
           <div className="flex justify-start relative w-[90%]">
             <div className="flex flex-col gap-10 z-20 mt-20">
-              <div className="text-purple text-5xl font-semibold">
-                {`LOẠI BẰNG LÁI: ${license?.ten_hang_bang}`}
+              <div className="text-purple text-5xl font-semibold uppercase">
+                {`${t('title')}: ${license?.ten_hang_bang}`}
               </div>
               <div className="w-[60%]">{license?.mo_ta_hang_bang}</div>
             </div>
@@ -78,14 +80,8 @@ const TestsLicensePage = () => {
                 />
 
                 <div className="flex flex-col gap-[32px] w-[60%] justify-center">
-                  <div className="text-2xl font-medium">SẴN SÀNG THI THỬ?</div>
-                  <div>
-                    Chức năng Thi với đề ngẫu nhiên giúp người dùng trải nghiệm
-                    kỳ thi thực tế bằng cách tạo các đề thi ngẫu nhiên từ bộ câu
-                    hỏi có sẵn. Mỗi lần thi, hệ thống sẽ tự động chọn các câu
-                    hỏi khác nhau, đảm bảo không trùng lặp và giúp người học làm
-                    quen với sự đa dạng của bài thi.
-                  </div>
+                  <div className="text-2xl font-medium">{t('readyTitle')}</div>
+                  <div>{t('testDescription')}</div>
                 </div>
 
                 <Button
@@ -93,16 +89,16 @@ const TestsLicensePage = () => {
                   size="auto"
                   className="rounded-xl shadow-xl font-medium w-[150px] h-full"
                 >
-                  ĐỀ NGẪU NHIÊN
+                  {t('randomButton')}
                 </Button>
               </div>
             </div>
           </div>
 
           <div className="flex flex-col gap-[32px] items-center w-full">
-            <div className="font-semibold">hoặc</div>
-            <div className="text-purple text-2xl font-medium">
-              THI THỬ VỚI BỘ ĐỀ CÓ SẴN
+            <div className="font-semibold">{t('or')}</div>
+            <div className="text-purple text-2xl font-medium uppercase">
+              {t('providedTitle')}
             </div>
             <div className="mb-[128px] mt-[16px] w-[60%] flex flex-wrap gap-10 justify-center">
               {tests.map((test, index) => (
@@ -120,7 +116,7 @@ const TestsLicensePage = () => {
                   h-[45px]`}
                   onClick={() => router.push(`${pathname}/${test.id}`)}
                 >
-                  ĐỀ SỐ {index + 1}
+                  {t('exam')} {index + 1}
                 </Button>
               ))}
             </div>
@@ -130,13 +126,11 @@ const TestsLicensePage = () => {
           <div className="w-[60%] h-full flex justify-between items-center">
             <div className="flex flex-col gap-10 w-[70%]">
               <div className="text-purple text-3xl font-semibold">
-                Bạn chưa sẵn sàng để thi thử?
+                {t('notReadyTitle')}
               </div>
               <div>
-                Đừng lo, hãy bắt đầu với phần luyện thi bằng lái xe hạng{' '}
-                {license?.ten_hang_bang}. Tại đây, bạn có thể ôn lại kiến thức
-                luật giao thông, biển báo, và thực hành các câu hỏi sát hạch để
-                tự tin hơn.
+                {t('notReadyDescriptionP1')} {license?.ten_hang_bang}.{' '}
+                {t('notReadyDescriptionP2')}
               </div>
             </div>
             <Button
@@ -147,7 +141,7 @@ const TestsLicensePage = () => {
                 router.push(`/learn/vietnam/${license?.ten_hang_bang}`)
               }
             >
-              LUYỆN THI {license?.ten_hang_bang}
+              {t('learningButton')} {license?.ten_hang_bang}
             </Button>
           </div>
         </div>

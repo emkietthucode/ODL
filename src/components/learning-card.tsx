@@ -21,7 +21,7 @@ const LearningCard: React.FC<LearningCardProps> = ({ icon, title, desc }) => {
     >
       <Image src={icon} alt="" />
       <div className="flex flex-col gap-5 h-[40%]">
-        <div className="text-purple font-semibold">{title}</div>
+        <div className="text-purple font-semibold uppercase">{title}</div>
         <div className="text-purple">{desc}</div>
       </div>
     </div>

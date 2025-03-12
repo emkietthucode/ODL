@@ -1,0 +1,125 @@
+{
+  "Navbar": {
+    "homePage": "Home Page",
+    "testPage": "Test",
+    "learningPage": "Learning",
+    "contactPage": "Contact",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Log out"
+  },
+  "Footer": {
+    "addressTitle": "Address",
+    "address": "227 Nguyen Van Cu, Ward 4, District 5, Ho Chi Minh City",
+    "informationTitle": "Information",
+    "contactTitle": "Contact"
+  },
+  "LoginPage": {
+    "login": "Account Login",
+    "title": "If you are already a member you can login with your email address and password.",
+    "email": "Email",
+    "password": "Password",
+    "remember": "Remember me",
+    "forgot": "Forgot password?",
+    "loginButton": "Log in",
+    "googleButton": "Sign in with Google",
+    "noAccount": "Don't have an account?",
+    "registerButton": "Sign up here"
+  },
+  "RegisterPage": {
+    "register": "Account SignUp",
+    "title": "Become a member and start using the amazing features of ODL.",
+    "fullname": "Fullname",
+    "email": "Email",
+    "password": "Password",
+    "gender": "Gender",
+    "continue": "Continue",
+    "Male": "Male",
+    "Female": "Female",
+    "Other": "Other"
+  },
+  "HomePage": {
+    "title": "Conquer the steering wheel, surpass all limits!",
+    "description": "ODL offers a fast and convenient driving test review solution, helping you study anytime, anywhere with benefits. With a system of practical tests and multinational support, ODL accompanies you on the easiest way to take the driving test.",
+    "testButton": "Start testing"
+  },
+  "ChooseRegionPage": {
+    "chooseRegion": "Choose region",
+    "description": "ODL is a multinational driving test review website that helps you study and take practice tests according to the regulations of many countries around the world.",
+    "vnTitle": "Vietnam",
+    "vnDescription": "The driving theory test in Vietnam tests knowledge of traffic laws, road signs and handling situations through multiple choice questions. Candidates must achieve the required score, including failing questions, to pass this part of the test.",
+    "ausTitle": "Australia",
+    "ausDescription": "The Australian driving theory test tests knowledge of traffic laws, road signs and handling situations through multiple choice questions. The website supports test preparation for many states, helping candidates practice according to the regulations and requirements of each region.",
+    "startButton": "Start now"
+  },
+  "VietnamTestPage": {
+    "title": "THEORY TEST",
+    "description": "The Theory Test function simulates the official driving test, helping users test their knowledge of traffic laws, signs, and situation handling skills. The test is structured and contains the correct content according to regulations, including failing questions (if any), providing an experience close to the actual exam.",
+    "a1Description": "for drivers of two-wheeled motorcycles with a cylinder capacity from 50cc to under 175cc.",
+    "a2Description": "for drivers of two-wheeled motorcycles with a cylinder capacity of 175cc or more.",
+    "a3Description": "A3 license is issued to drivers of three-wheeled motorbikes, A4 license is issued to drivers of tractors with a load capacity of up to 1,000 kg.",
+    "b1Description": "for drivers of passenger cars with less than 9 seats and trucks under 3,500 kg, not used for transportation business.",
+    "b2Description": "for drivers of passenger cars with less than 9 seats, trucks under 3,500 kg and are allowed to work as drivers in the transport business.",
+    "cDescription": "for drivers of trucks and tractors with a load capacity of 3,500 kg or more.",
+    "defTitle": "Upgrade DEF",
+    "defDescription": "for drivers of passenger cars with 10 to 30 seats; over 30 seats; drivers of trailers",
+    "startButton": "Start testing"
+  },
+  "ChooseTestPage": {
+    "title": "Type of license",
+    "description": "Issued to drivers of two-wheeled motorbikes with a cylinder capacity of up to 125 cm3 or with an electric motor power of up to 11 kW.",
+    "readyTitle": "READY TO TAKE THE TEST?",
+    "testDescription": "The Random Test function helps users experience the real exam by generating random exams from available question sets. Each time the exam is taken, the system will automatically select different questions, ensuring no duplication and helping learners get used to the diversity of the exam.",
+    "randomButton": "Random test",
+    "or": "or",
+    "providedTitle": "TRY THE TEST WITH AVAILABLE QUESTIONS",
+    "exam": "Test number",
+    "notReadyTitle": "Not ready for a practice test?",
+    "notReadyDescriptionP1": "Don't worry, let's start learning  ",
+    "notReadyDescriptionP2": " first. Here, you can review traffic laws, signs, and practice test questions to gain confidence.",
+    "learningButton": "Learn"
+  },
+  "TestPage": {
+    "title": "Take the test",
+    "description": "The mock test simulates the official exam, helping users test their knowledge of traffic laws, signs, and handling situations. The test is built according to the prescribed structure and content, including zero-point questions, providing an experience close to the real exam, helping learners assess their level of readiness.",
+    "testName": "Test number",
+    "question": "Question",
+    "startButton": "Start testing",
+    "submitButton": "Submit"
+  },
+  "ResultPage": {
+    "fail": "Failed",
+    "pass": "Passed",
+    "failSpecialQuestion": "Wrong answer for critical question",
+    "totalQuestion": "Total questions",
+    "requirement": "Requirement",
+    "correctAnswers": "Correct answers",
+    "wrongAnswers": "Wrong answers",
+    "showDetails": "Details",
+    "notSatisfied": "Not satisfied with the results? Do it again now",
+    "retestButton": "Take the test again",
+    "otherTest": "We have many more tests, check it out now!",
+    "otherTestButton": "Take another test",
+    "reviewWrongQuestion": "Review the questions you got wrong.",
+    "reviewWrongButton": "CHALLENGE BANK"
+  },
+  "LearningOverall": {
+    "title": "Type of license",
+    "learningPathTitle": "DON'T KNOW WHERE TO START?",
+    "learningPathDescription": "The Pathway Learning function guides users through practice from basic to advanced through exams arranged in a logical order. The system divides the content into sections, helping you gradually get acquainted with the question set and improve your skills before taking the actual exam.",
+    "startButton": "Start now",
+    "learningTitle": "Learning",
+    "learningDescription": "lets you choose any questions, cues, or content to review at your leisure, allowing for flexible learning and focused practice on the areas you need to improve.",
+    "theoryTitle": "Learning theory questions:",
+    "theoryDescription": "Help you review all traffic law knowledge through official multiple choice questions.",
+    "trafficSignsTitle": "Learning traffic signs:",
+    "trafficSignsDescription": "Focus on reviewing important questions that must be answered correctly to pass the exam.",
+    "criticalQuestionsTitle": "Learning critical questions:",
+    "criticalQuestionsDescription": "Help you review all traffic law knowledge through official multiple choice questions.",
+    "reviewTitle": "REDO WRONG QUESTIONS:",
+    "reviewDescription": "Save and help you practice your wrongly answered questions to improve your score and master your knowledge.",
+    "readyToTest": "Ready to take the test?",
+    "readyToTestDescription": "If you're ready, start the Practice Test now to test your knowledge and assess your level of preparation!",
+    "readyToTestButton": "Take a test"
+  }
+}
