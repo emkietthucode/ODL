@@ -1,6 +1,6 @@
 import { QuestionDTO } from '@/types/dto/types'
 import { LuaChon } from '@/types/types'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Montserrat_Alternates } from 'next/font/google'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -8,6 +8,8 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import Image from 'next/image'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components//ui/label'
+import { chunk } from 'lodash'
+import QuestionCarousel from './question-carousel'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '500',
@@ -43,8 +45,6 @@ function LearningPathComponent({
   useEffect(() => {
     setQuestions(initialQuestions)
   }, [initialQuestions])
-
-  console.log(selectedAnswers)
 
   if (!questions) {
     return null
@@ -141,11 +141,20 @@ function LearningPathComponent({
     return ''
   }
 
+  const chunkedQuestions = chunk(questions, 25)
+
+  const carouselRef = useRef<{ goToFirstSlide: () => void } | null>(null)
+
+  useEffect(() => {
+    if (carouselRef.current) {
+      carouselRef.current.goToFirstSlide()
+    }
+  }, [chunkedQuestions])
   return (
     <div className="flex flex-col gap-10 my-10 w-[71%]">
       <div className="h-[600px] w-full flex gap-2">
         <div className="w-[22%] bg-light-purple-admin flex flex-col justify-between items-center">
-          <ol className="list-none grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2 p-4">
+          {/* <ol className="list-none grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2 p-4">
             {questions.map((_, index: number) => (
               <li key={index} className="flex justify-center">
                 <Button
@@ -184,7 +193,58 @@ function LearningPathComponent({
                 </Button>
               </li>
             ))}
-          </ol>
+          </ol> */}
+          <QuestionCarousel ref={carouselRef}>
+            {chunkedQuestions.map((questionGroup, groupIndex) => (
+              <ul
+                key={groupIndex}
+                className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2 p-4"
+              >
+                {questionGroup.map((_, index) => {
+                  const actualIndex = groupIndex * 25 + index // Get actual index in full questions array
+
+                  return (
+                    <li key={actualIndex} className="flex justify-center">
+                      <Button
+                        onClick={() => setSelectedQuestion(actualIndex)}
+                        variant="outline"
+                        size="icon"
+                        className={cn(
+                          `
+                  w-2 h-2 text-[6px]
+                  sm:w-4 sm:h-4 sm:text-[9px]  
+                  lg:w-6 lg:h-6 lg:text-sm  
+                  xl:w-7 xl:h-7 xl:text-sm  
+                  font-bold 
+                  rounded-full 
+                  p-0 m-0 
+                  text-purple 
+                  bg-light-purple
+                  hover:bg-light-purple/70 
+                  hover:text-purple/70
+                  transition-all
+                  border-separate"
+                    `,
+                          selectedQuestionIndex === actualIndex &&
+                            'ring-2 ring-purple ring-offset-2 font-bold',
+                          !questions[actualIndex].userAnswerId
+                            ? '' // No answer chosen
+                            : questions[actualIndex].userAnswerId ===
+                              questions[actualIndex].answers?.find(
+                                (a) => a.la_lua_chon_dung
+                              )?.id
+                            ? `bg-custom-ol-green text-white hover:bg-custom-ol-green/70 hover:text-white/90` // Correct answer
+                            : `bg-custom-brown text-white hover:bg-custom-brown/70 hover:text-white/90` // Incorrect answer
+                        )}
+                      >
+                        {actualIndex + 1}
+                      </Button>
+                    </li>
+                  )
+                })}
+              </ul>
+            ))}
+          </QuestionCarousel>
         </div>
         <div className="w-[88%] flex flex-col gap-2">
           <div className="flex w-full h-full gap-2">

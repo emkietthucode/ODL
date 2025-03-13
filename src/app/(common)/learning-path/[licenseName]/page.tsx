@@ -92,7 +92,7 @@ function LearningPathPage() {
     const handleFetchQuestions = async () => {
       // Fetch questions
       const { data, error } = await supabase.rpc('get_questions_with_answers', {
-        ma_chuong_value: 'e82446fb-7ef2-4f87-a66f-74d57304db46',
+        ma_chuong_value: selectedChapter,
       })
 
       if (error) {
@@ -132,7 +132,9 @@ function LearningPathPage() {
       setAnsweredQuestions(answeredData)
     }
 
-    handleFetchQuestions()
+    if (selectedChapter) {
+      handleFetchQuestions()
+    }
   }, [selectedChapter, auth.user?.id])
 
   return (
@@ -154,6 +156,7 @@ function LearningPathPage() {
               {chapters.map((chapter, index) => (
                 <Button
                   key={index}
+                  onClick={() => setSelectedChapter(chapter.id)}
                   className={cn(
                     `
                                         text-lg 
