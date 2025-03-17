@@ -10,6 +10,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components//ui/label'
 import { chunk } from 'lodash'
 import QuestionCarousel from './question-carousel'
+import useAuth from '@/hooks/useAuth'
+import supabase from '@/utils/supabase/supabase'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '500',
@@ -29,6 +31,7 @@ function LearningPathComponent({
   const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
   const [selectedAnswers, setSelectedAnswers] =
     useState<string[]>(initialAnswers)
+  const { user } = useAuth()
 
   useEffect(() => {
     setSelectedAnswers([
@@ -62,7 +65,7 @@ function LearningPathComponent({
     }
   }
 
-  const handleAnswerChange = (questionIndex: number, value: string) => {
+  const handleAnswerChange = async (questionIndex: number, value: string) => {
     // Parse the answer index from the value
     const answerIndex = parseInt(value.split('-').pop() || '', 10)
 
@@ -102,6 +105,16 @@ function LearningPathComponent({
       newAnswers[questionIndex] = value
       return newAnswers
     })
+
+    const { data, error } = await supabase.rpc('update_user_answers', {
+      user_id: user?.id,
+      question_id: questions[questionIndex].question?.id,
+      answer_id: questions[questionIndex].answers?.[answerIndex].id,
+    })
+
+    if (error) {
+      console.error(error)
+    }
   }
 
   useEffect(() => {

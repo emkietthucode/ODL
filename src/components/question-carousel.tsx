@@ -61,7 +61,6 @@ const QuestionCarousel = forwardRef(
     useImperativeHandle(ref, () => ({
       goToFirstSlide: () => {
         if (carouselRef.current) {
-          console.log('into')
           carouselRef.current.goToSlide(0)
         }
       },
