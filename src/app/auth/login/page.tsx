@@ -1,6 +1,6 @@
 'use client'
 
-import { LoginFormType } from '@/types/schemas/login'
+import { LoginFormSchema, LoginFormType } from '@/types/schemas/login'
 import LoginForm from './LoginForm'
 import Link from 'next/link'
 
@@ -9,15 +9,16 @@ import Image from 'next/image'
 import LoginImage from '../../../../public/images/Login.png'
 import { useState } from 'react'
 import useAuth from '@/hooks/useAuth'
-import { redirect } from 'next/dist/server/api-utils'
 import { useRouter } from 'next/navigation'
 import { AuthError } from '@supabase/supabase-js'
+import { useTranslations } from 'next-intl'
 
 function Login() {
   const [isLoading, setIsloading] = useState(false)
   const [error, setError] = useState('')
   const { setUser } = useAuth()
   const router = useRouter()
+  const t = useTranslations('LoginPage')
 
   const handleSubmit = async (values: LoginFormType) => {
     const formData = new FormData()
@@ -55,11 +56,8 @@ function Login() {
         />
         {/* <div className="w-[380px] h-full bg-blue-500"></div> */}
         <div className="w-[480px] h-full bg-white px-12 py-8">
-          <h5 className="font-bold text-2xl mt-6">Account Login</h5>
-          <p className="text-[#8692A6] my-3 text-sm">
-            If you are already a member you can login with your email address
-            and password.
-          </p>
+          <h5 className="font-bold text-2xl mt-6">{t('login')}</h5>
+          <p className="text-[#8692A6] my-3 text-sm">{t('title')}</p>
 
           <div className="bg-[#F5F5F5] w-full h-[1px] my-3"></div>
 
@@ -68,9 +66,9 @@ function Login() {
           <LoginForm onSubmit={handleSubmit} isLoading={isLoading} />
 
           <p className="text-sm w-full text-center my-6">
-            Don't have an account?{' '}
+            {t('noAccount')}{' '}
             <Link href="/auth/signup" className="text-purple hover:underline">
-              Sign up here
+              {t('registerButton')}
             </Link>
           </p>
         </div>
