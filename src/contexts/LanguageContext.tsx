@@ -41,7 +41,7 @@ export const LanguageProvider = ({
 
   const [locale, setLocaleState] = useState<string | undefined>('')
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const storedLanguages = localStorage.getItem('languages')
     if (storedLanguages) {
       setLanguages(JSON.parse(storedLanguages))
@@ -50,7 +50,7 @@ export const LanguageProvider = ({
     setLocaleState(getClientCookie('locale') || 'en')
   }, [])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const handleFetchLanguages = async () => {
       const supabase = createClient()
       const { data, error } = await supabase.rpc('get_languages')
@@ -65,7 +65,7 @@ export const LanguageProvider = ({
     if (!languages.length) {
       handleFetchLanguages()
     }
-  }, [languages])
+  }, [])
 
   const setLocale = (newLocale: string) => {
     setLocaleState(newLocale)
