@@ -54,7 +54,7 @@ const NavBar = () => {
           </Link>
         </nav>
 
-        <nav>
+        <nav className="flex gap-3">
           {user ? (
             <div className="flex gap-8 items-center">
               <Popover>
@@ -97,35 +97,35 @@ const NavBar = () => {
               >
                 {t('login')}
               </Link>
-
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button className="w-10 h-10 p-1 hover:bg-gray-200 rounded-md">
-                    <AiOutlineGlobal className="w-full h-full" />
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent align="end" className="w-64 max-h-80">
-                  {languages.map((language, index) => (
-                    <button
-                      onClick={() => handleLanguageChange(language.ky_hieu)}
-                      key={index}
-                      className={cn(
-                        'w-full text-start my-3 text-gray-500 hover:text-black transition-colors flex items-center justify-between',
-                        locale === language.ky_hieu && 'text-[#c4202b]'
-                      )}
-                    >
-                      <span>{language.ten_ngon_ngu}</span>{' '}
-                      {locale === language.ky_hieu && (
-                        <span>
-                          <FaCheck />
-                        </span>
-                      )}
-                    </button>
-                  ))}
-                </PopoverContent>
-              </Popover>
             </div>
           )}
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="w-10 h-10 p-1 hover:bg-gray-200 rounded-md">
+                <AiOutlineGlobal className="w-full h-full" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-64 max-h-80">
+              {languages.map((language, index) => (
+                <button
+                  onClick={() => handleLanguageChange(language.ky_hieu)}
+                  key={index}
+                  className={cn(
+                    'w-full text-start my-3 text-gray-500 hover:text-black transition-colors flex items-center justify-between',
+                    locale === language.ky_hieu && 'text-[#c4202b]'
+                  )}
+                >
+                  <span>{language.ten_ngon_ngu}</span>{' '}
+                  {locale === language.ky_hieu && (
+                    <span>
+                      <FaCheck />
+                    </span>
+                  )}
+                </button>
+              ))}
+            </PopoverContent>
+          </Popover>
         </nav>
       </div>
     </div>

@@ -1,6 +1,5 @@
 import { getRequestConfig } from 'next-intl/server'
 import { createClient } from '@/utils/supabase/server'
-import useLanguage from '@/hooks/use-language'
 import { cookies } from 'next/headers'
 
 export default getRequestConfig(async () => {
@@ -14,14 +13,15 @@ export default getRequestConfig(async () => {
 
   if (locale === '') {
     if (session?.user) {
-      const { data, error } = await supabase.rpc('get_ngon_ngu_nguoi_dung', {
-        user_id: 'b3ba76c0-1b00-4737-8395-682b8d31c039',
-      })
+      try {
+        const { data, error } = await supabase.rpc('get_ngon_ngu_nguoi_dung', {
+          user_id: 'b3ba76c0-1b00-4737-8395-682b8d31c039',
+        })
 
-      if (error) {
-        console.error('Error fetching user language:', error)
-      } else {
         locale = data?.language_record.ky_hieu || 'en'
+      } catch (error) {
+        console.error('Error fetching user language:', error)
+        locale = 'en'
       }
     } else {
       locale = 'en'
