@@ -287,7 +287,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
               variant="main"
               className="my-5 hover:bg-purple/90"
             >
-              {t('submit')}
+              {t('submitButton')}
             </Button>
           )}
         </div>
