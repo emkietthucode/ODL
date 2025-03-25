@@ -304,7 +304,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
               onClick={handlePrevious}
               className="text-purple hover:text-purple/80 cursor-pointer"
             />
-            <div className="flex gap-2 justify-center items-center">
+            <div className="flex gap-2 justify-center items-center select-none">
               <div className="font-bold">{`Câu hỏi ${
                 selectedQuestionIndex + 1
               }:`}</div>
