@@ -306,7 +306,12 @@ const TestComponent: React.FC<TestComponentProps> = ({
               className="text-purple hover:text-purple/80 cursor-pointer"
             />
           </div>
-          <div className={`${montserratAlternates.className} self-start mb-2`}>
+          <div
+            className={`${montserratAlternates.className} self-start mb-2 ${
+              !isTesting && 'blur-sm'
+            }`}
+          >
+            Noi Dung Cau Hoi
             {questions[selectedQuestionIndex]?.question?.noi_dung_cau_hoi}
           </div>
           {getQuestionImg(
