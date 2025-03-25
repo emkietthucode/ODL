@@ -12,6 +12,7 @@ import { QuestionDTO } from '@/types/dto/types'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { Label } from '@/components//ui/label'
 import { useTranslations } from 'next-intl'
+import { BsFlag, BsFlagFill } from 'react-icons/bs'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '500',
@@ -36,6 +37,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
   const [isTesting, setIsTesting] = useState<boolean>(false)
   const [hasStarted, setHasStarted] = useState<boolean>(false)
   const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
+  const [flagQuestion, setFlagQuestion] = useState<boolean>(false)
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>(
     new Array(questions.length).fill('')
   )
@@ -217,6 +219,10 @@ const TestComponent: React.FC<TestComponentProps> = ({
     hasStarted,
   ])
 
+  const handleFlagQuestion = () => {
+    setFlagQuestion((prev) => !prev)
+  }
+
   return (
     <div className="flex flex-col gap-10 my-10 w-[71%]">
       <div
@@ -298,15 +304,34 @@ const TestComponent: React.FC<TestComponentProps> = ({
               onClick={handlePrevious}
               className="text-purple hover:text-purple/80 cursor-pointer"
             />
-            <div className="font-bold">{`Câu hỏi ${
-              selectedQuestionIndex + 1
-            }:`}</div>
+            <div className="flex gap-2 justify-center items-center select-none">
+              <div className="font-bold">{`Câu hỏi ${
+                selectedQuestionIndex + 1
+              }:`}</div>
+              {flagQuestion ? (
+                <BsFlagFill
+                  className="text-2xl cursor-pointer"
+                  onClick={handleFlagQuestion}
+                  color="yellow"
+                />
+              ) : (
+                <BsFlag
+                  className="text-2xl cursor-pointer"
+                  onClick={handleFlagQuestion}
+                />
+              )}
+            </div>
             <FaArrowRight
               onClick={handleNext}
               className="text-purple hover:text-purple/80 cursor-pointer"
             />
           </div>
-          <div className={`${montserratAlternates.className} self-start mb-2`}>
+          <div
+            className={`${montserratAlternates.className} self-start mb-2 ${
+              !isTesting && 'blur-sm'
+            }`}
+          >
+            Noi Dung Cau Hoi
             {questions[selectedQuestionIndex]?.question?.noi_dung_cau_hoi}
           </div>
           {getQuestionImg(
