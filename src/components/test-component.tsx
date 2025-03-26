@@ -328,10 +328,9 @@ const TestComponent: React.FC<TestComponentProps> = ({
           </div>
           <div
             className={`${montserratAlternates.className} self-start mb-2 ${
-              !isTesting && 'blur-sm'
+              !isTesting && 'blur-sm select-none'
             }`}
           >
-            Noi Dung Cau Hoi
             {questions[selectedQuestionIndex]?.question?.noi_dung_cau_hoi}
           </div>
           {getQuestionImg(
@@ -384,7 +383,11 @@ const TestComponent: React.FC<TestComponentProps> = ({
                     value={`answer-${selectedQuestionIndex}-${index}`}
                     id={`r${selectedQuestionIndex}-${index}`}
                   />
-                  <div className="text-sm text-neutral-500 font-medium">
+                  <div
+                    className={`text-sm text-neutral-500 font-medium select-none ${
+                      !isTesting && 'blur-sm'
+                    }`}
+                  >
                     {answer.noi_dung_lua_chon}
                   </div>
                 </Label>
