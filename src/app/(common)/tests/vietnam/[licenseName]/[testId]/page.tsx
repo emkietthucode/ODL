@@ -50,10 +50,7 @@ const TestPage = () => {
         .from('cau_hoi_de_thi')
         .select(
           `
-            cau_hoi (
-              *,
-              lua_chon ( * )
-            )
+            cau_hoi:ma_cau_hoi (*, lua_chon ( * ) )
           `
         )
         .eq('ma_de_thi', params.testId)
