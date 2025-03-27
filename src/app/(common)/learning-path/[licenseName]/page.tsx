@@ -12,6 +12,7 @@ import { QuestionDTO } from '@/types/dto/types'
 import { LuaChon } from '@/types/types'
 import LearningPathComponent from '@/components/learning-path-component'
 import useAuth from '@/hooks/useAuth'
+import { LockKeyhole } from 'lucide-react'
 
 const shuffleAnswers = (answers: LuaChon[]) => {
   const shuffled = [...answers]
@@ -108,7 +109,7 @@ function LearningPathPage() {
           'get_answered',
           {
             user_id: auth.user?.id,
-            chapter_id: 'e82446fb-7ef2-4f87-a66f-74d57304db46',
+            chapter_id: selectedChapter,
           }
         )
 

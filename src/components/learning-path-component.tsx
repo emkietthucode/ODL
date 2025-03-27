@@ -12,6 +12,7 @@ import { chunk } from 'lodash'
 import QuestionCarousel from './question-carousel'
 import useAuth from '@/hooks/useAuth'
 import supabase from '@/utils/supabase/supabase'
+import { LockKeyhole } from 'lucide-react'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '500',
@@ -154,6 +155,18 @@ function LearningPathComponent({
     return ''
   }
 
+  const isQuestionLocked = (question: QuestionDTO, index: number) => {
+    return (
+      index !== 0 &&
+      index >
+        selectedAnswers.findLastIndex(
+          (a) => a !== 'undefined' && a !== 'temp'
+        ) +
+          1 &&
+      !selectedAnswers.includes(question.question?.id || 'undefined')
+    )
+  }
+
   const chunkedQuestions = chunk(questions, 25)
 
   const carouselRef = useRef<{ goToFirstSlide: () => void } | null>(null)
@@ -163,6 +176,8 @@ function LearningPathComponent({
       carouselRef.current.goToFirstSlide()
     }
   }, [chunkedQuestions])
+
+  console.log('selected::', selectedAnswers)
   return (
     <div className="flex flex-col gap-10 my-10 w-[71%]">
       <div className="h-[600px] w-full flex gap-2">
@@ -215,15 +230,21 @@ function LearningPathComponent({
               >
                 {questionGroup.map((_, index) => {
                   const actualIndex = groupIndex * 25 + index // Get actual index in full questions array
+                  const isLocked = isQuestionLocked(
+                    questions[actualIndex],
+                    actualIndex
+                  )
 
                   return (
                     <li key={actualIndex} className="flex justify-center">
                       <Button
                         onClick={() => setSelectedQuestion(actualIndex)}
+                        disabled={isLocked}
                         variant="outline"
                         size="icon"
                         className={cn(
                           `
+                          relative
                   w-2 h-2 text-[6px]
                   sm:w-4 sm:h-4 sm:text-[9px]  
                   lg:w-6 lg:h-6 lg:text-sm  
@@ -250,6 +271,11 @@ function LearningPathComponent({
                             : `bg-custom-brown text-white hover:bg-custom-brown/70 hover:text-white/90` // Incorrect answer
                         )}
                       >
+                        {isLocked && (
+                          <span className="block absolute -top-1 -right-1">
+                            <LockKeyhole className="!w-3 !h-3" />
+                          </span>
+                        )}
                         {actualIndex + 1}
                       </Button>
                     </li>
