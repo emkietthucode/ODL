@@ -43,10 +43,7 @@ const TestDetailPage = () => {
         .from('cau_hoi_de_thi')
         .select(
           `
-            cau_hoi (
-              *,
-              lua_chon ( * )
-            )
+            cau_hoi:ma_cau_hoi (*, lua_chon ( * ) )
           `
         )
         .eq('ma_de_thi', params.testId)
@@ -58,7 +55,9 @@ const TestDetailPage = () => {
 
       const { data: userAnswersData, error: userAnswersError } = await supabase
         .from('ket_qua_bai_lam_lua_chon')
-        .select('ma_lua_chon, lua_chon(ma_cau_hoi)')
+        .select(
+          'ma_lua_chon, lua_chon!ket_qua_bai_lam_lua_chon_ma_lua_chon_fkey(ma_cau_hoi)'
+        )
         .eq('ma_ket_qua_lam_bai', params.resultId)
 
       if (userAnswersError) {
