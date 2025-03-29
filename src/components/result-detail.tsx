@@ -106,8 +106,8 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
                   Điểm: {userScore}/{testTotalScore}
                 </div>
               </div>
-              <div className="bg-violet-50 rounded-2xl h-[120px] w-[739px]">
-                <ol className="list-none flex flex-wrap  gap-2 p-4">
+              <div className="bg-violet-50 rounded-2xl h-[120px] w-[739px] flex items-center">
+                <ol className="list-none flex flex-wrap gap-2 px-8">
                   {questions.map((ele, index: number) => (
                     <div className="relative" key={index}>
                       <li key={index} className="flex justify-center">
