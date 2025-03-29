@@ -9,6 +9,7 @@ import { Montserrat_Alternates } from 'next/font/google'
 import Image from 'next/image'
 import { LuaChon } from '@/types/types'
 import { QuestionDTO } from '@/types/dto/types'
+import CriticalStar from './critical-star'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '500',
@@ -105,16 +106,17 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
                   Điểm: {userScore}/{testTotalScore}
                 </div>
               </div>
-              <div className="bg-violet-50 rounded-2xl h-[120px] w-[739px]">
-                <ol className="list-none flex flex-wrap  gap-2 p-4">
-                  {questions.map((_, index: number) => (
-                    <li key={index} className="flex justify-center">
-                      <Button
-                        onClick={() => setSelectedQuestion(index)}
-                        variant="outline"
-                        size="icon"
-                        className={cn(
-                          `
+              <div className="bg-violet-50 rounded-2xl h-[120px] w-[739px] flex items-center">
+                <ol className="list-none flex flex-wrap gap-2 px-8">
+                  {questions.map((ele, index: number) => (
+                    <div className="relative" key={index}>
+                      <li key={index} className="flex justify-center">
+                        <Button
+                          onClick={() => setSelectedQuestion(index)}
+                          variant="outline"
+                          size="icon"
+                          className={cn(
+                            `
                         w-8 h-8 text-lg
                         font-semibold 
                         rounded-full 
@@ -126,21 +128,28 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
                         transition-all
                         border-separate"
                         `,
-                          selectedQuestionIndex === index &&
-                            'ring-2 ring-purple ring-offset-2 font-bold',
-                          !questions[index].userAnswerId
-                            ? `` // No answer chosen
-                            : questions[index].userAnswerId ===
-                              questions[index].answers?.find(
-                                (a) => a.la_lua_chon_dung
-                              )?.id
-                            ? `bg-custom-ol-green text-white hover:bg-custom-ol-green/70 hover:text-white/90` // Correct answer
-                            : `bg-custom-brown text-white hover:bg-custom-brown/70 hover:text-white/90` // Incorrect answer
-                        )}
-                      >
-                        {index + 1}
-                      </Button>
-                    </li>
+                            selectedQuestionIndex === index &&
+                              'ring-2 ring-purple ring-offset-2 font-bold',
+                            !questions[index].userAnswerId
+                              ? `` // No answer chosen
+                              : questions[index].userAnswerId ===
+                                questions[index].answers?.find(
+                                  (a) => a.la_lua_chon_dung
+                                )?.id
+                              ? `bg-custom-ol-green text-white hover:bg-custom-ol-green/70 hover:text-white/90` // Correct answer
+                              : `bg-custom-brown text-white hover:bg-custom-brown/70 hover:text-white/90` // Incorrect answer
+                          )}
+                        >
+                          {index + 1}
+                        </Button>
+                      </li>
+                      {ele.question?.la_cau_diem_liet && (
+                        <CriticalStar
+                          displayText={false}
+                          className="absolute bottom-[23px] left-[20px]"
+                        />
+                      )}
+                    </div>
                   ))}
                 </ol>
               </div>
@@ -149,13 +158,21 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
           <div className="flex gap-2 h-[550px]">
             <div className="w-[65%] bg-neutral-200 flex flex-col justify-start items-center p-5 gap-2">
               <div className="flex justify-between items-center w-full text-lg">
-                <FaArrowLeft
-                  onClick={handlePrevious}
-                  className="text-purple hover:text-purple/80 cursor-pointer"
-                />
+                <div className="relative">
+                  <FaArrowLeft
+                    onClick={handlePrevious}
+                    className="text-purple hover:text-purple/80 cursor-pointer"
+                  />
+                  {questions[selectedQuestionIndex]?.question
+                    ?.la_cau_diem_liet && (
+                    <div className="absolute top-[-5px] left-[26px]">
+                      <CriticalStar className="text-2xl" displayText={true} />
+                    </div>
+                  )}
+                </div>
                 <div className="font-bold">{`Câu hỏi ${
                   selectedQuestionIndex + 1
-                }:`}</div>
+                }`}</div>
                 <FaArrowRight
                   onClick={handleNext}
                   className="text-purple hover:text-purple/80 cursor-pointer"
