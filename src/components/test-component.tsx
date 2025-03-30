@@ -361,7 +361,13 @@ const TestComponent: React.FC<TestComponentProps> = ({
             {questions[selectedQuestionIndex]?.question?.noi_dung_cau_hoi}
           </div>
           {imgSrc && (
-            <Image width={300} height={200} src={imgSrc} alt="Question Image" />
+            <Image
+              className={`${!isTesting && 'blur-sm'}`}
+              width={300}
+              height={200}
+              src={imgSrc}
+              alt="Question Image"
+            />
           )}
         </div>
         <div className="w-[25%] flex flex-col h-full gap-3">
