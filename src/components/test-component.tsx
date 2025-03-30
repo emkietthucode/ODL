@@ -13,6 +13,7 @@ import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { Label } from '@/components//ui/label'
 import { useTranslations } from 'next-intl'
 import { BsFlag, BsFlagFill } from 'react-icons/bs'
+import supabase from '@/utils/supabase/supabase'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '500',
@@ -167,9 +168,35 @@ const TestComponent: React.FC<TestComponentProps> = ({
     }
   }
 
-  const getQuestionImg = (imgId: string) => {
-    return ''
+  const getQuestionImg = async (imgId: string) => {
+    if (!imgId) return ''
+    const { data } = supabase.storage
+      .from('hinh_anh_cau_hoi')
+      .getPublicUrl(imgId)
+
+    if (!data?.publicUrl) return ''
+
+    try {
+      const response = await fetch(data.publicUrl, { method: 'HEAD' }) // Ping the URL
+      if (!response.ok) return ''
+      return data.publicUrl
+    } catch (error) {
+      console.error('Error checking image URL:', error)
+      return ''
+    }
   }
+
+  const [imgSrc, setImgSrc] = useState<string>('')
+
+  useEffect(() => {
+    const loadImage = async () => {
+      const src = await getQuestionImg(
+        questions[selectedQuestionIndex]?.question?.id || ''
+      )
+      setImgSrc(src)
+    }
+    loadImage()
+  }, [selectedQuestionIndex, questions])
 
   const handleSubmitButton = () => {
     if (!isTesting && timeLeft === 0) {
@@ -333,15 +360,8 @@ const TestComponent: React.FC<TestComponentProps> = ({
           >
             {questions[selectedQuestionIndex]?.question?.noi_dung_cau_hoi}
           </div>
-          {getQuestionImg(
-            questions[selectedQuestionIndex]?.question?.hinh_anh || ''
-          ) && (
-            <Image
-              src={getQuestionImg(
-                questions[selectedQuestionIndex]?.question?.hinh_anh || ''
-              )}
-              alt=""
-            />
+          {imgSrc && (
+            <Image width={300} height={200} src={imgSrc} alt="Question Image" />
           )}
         </div>
         <div className="w-[25%] flex flex-col h-full gap-3">
