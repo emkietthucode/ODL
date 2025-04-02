@@ -23,7 +23,7 @@ const Home = () => {
             size="auto"
             className="text-[28px] h-[54px] ml-20 mt-36 p-[10px] rounded-full shadow-lg w-[246px]"
           >
-            Luyện thi ngay
+            {t('testButton')}
           </Button>
         </Link>
 

@@ -48,6 +48,7 @@ function LearningPathComponent({
 
   useEffect(() => {
     setQuestions(initialQuestions)
+    setSelectedQuestion(0)
   }, [initialQuestions])
 
   if (!questions) {
@@ -121,11 +122,11 @@ function LearningPathComponent({
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Always handle arrow keys for question navigation, regardless of focus
-      if (event.key === 'ArrowLeft') {
+      if (event.key === 'ArrowLeft' && selectedQuestionIndex > 0) {
         event.preventDefault() // Prevent default radio group behavior
         event.stopPropagation() // Stop event from reaching radio group
         handlePrevious()
-      } else if (event.key === 'ArrowRight') {
+      } else if (event.key === 'ArrowRight' && !canGoToNextQuestion()) {
         event.preventDefault()
         event.stopPropagation()
         handleNext()
@@ -167,6 +168,11 @@ function LearningPathComponent({
     )
   }
 
+  const canGoToNextQuestion = () => {
+    const lastIndex = selectedAnswers.findLastIndex((q) => q !== 'temp')
+    return selectedQuestionIndex > lastIndex
+  }
+
   const chunkedQuestions = chunk(questions, 25)
 
   const carouselRef = useRef<{ goToFirstSlide: () => void } | null>(null)
@@ -177,51 +183,10 @@ function LearningPathComponent({
     }
   }, [chunkedQuestions])
 
-  console.log('selected::', selectedAnswers)
   return (
     <div className="flex flex-col gap-10 my-10 w-[71%]">
       <div className="h-[600px] w-full flex gap-2">
         <div className="w-[22%] bg-light-purple-admin flex flex-col justify-between items-center">
-          {/* <ol className="list-none grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2 p-4">
-            {questions.map((_, index: number) => (
-              <li key={index} className="flex justify-center">
-                <Button
-                  onClick={() => setSelectedQuestion(index)}
-                  variant="outline"
-                  size="icon"
-                  className={cn(
-                    `
-                  w-2 h-2 text-[6px]
-                  sm:w-4 sm:h-4 sm:text-[9px]  
-                  lg:w-6 lg:h-6 lg: lg:text-sm  
-                  xl:w-7 xl:h-7 lg: xl:text-sm  
-                  font-bold 
-                  rounded-full 
-                  p-0 m-0 
-                  text-purple 
-                  bg-light-purple
-                  hover:bg-light-purple/70 
-                  hover:text-purple/70
-                  transition-all
-                  border-separate"
-                    `,
-                    selectedQuestionIndex === index &&
-                      'ring-2 ring-purple ring-offset-2 font-bold',
-                    !questions[index].userAnswerId
-                      ? `` // No answer chosen
-                      : questions[index].userAnswerId ===
-                        questions[index].answers?.find(
-                          (a) => a.la_lua_chon_dung
-                        )?.id
-                      ? `bg-custom-ol-green text-white hover:bg-custom-ol-green/70 hover:text-white/90` // Correct answer
-                      : `bg-custom-brown text-white hover:bg-custom-brown/70 hover:text-white/90` // Incorrect answer
-                  )}
-                >
-                  {index + 1}
-                </Button>
-              </li>
-            ))}
-          </ol> */}
           <QuestionCarousel ref={carouselRef}>
             {chunkedQuestions.map((questionGroup, groupIndex) => (
               <ul
@@ -289,17 +254,23 @@ function LearningPathComponent({
           <div className="flex w-full h-full gap-2">
             <div className="w-[64%] bg-neutral-200 flex flex-col justify-start items-center p-5 gap-2">
               <div className="flex justify-between items-center w-full text-lg">
-                <FaArrowLeft
+                <button
                   onClick={handlePrevious}
-                  className="text-purple hover:text-purple/80 cursor-pointer"
-                />
+                  disabled={selectedQuestionIndex === 0}
+                  className="disabled:cursor-auto disabled:opacity-30"
+                >
+                  <FaArrowLeft className="text-purple hover:text-purple/80" />
+                </button>
                 <div className="font-bold">{`Câu hỏi ${
                   selectedQuestionIndex + 1
                 }:`}</div>
-                <FaArrowRight
+                <button
                   onClick={handleNext}
-                  className="text-purple hover:text-purple/80 cursor-pointer"
-                />
+                  disabled={canGoToNextQuestion()}
+                  className="disabled:cursor-auto disabled:opacity-30"
+                >
+                  <FaArrowRight className="text-purple hover:text-purple/80" />
+                </button>
               </div>
               <div
                 className={`${montserratAlternates.className} self-start mb-2`}
