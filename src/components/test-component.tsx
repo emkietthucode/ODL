@@ -175,27 +175,20 @@ const TestComponent: React.FC<TestComponentProps> = ({
       .getPublicUrl(imgId)
 
     if (!data?.publicUrl) return ''
-
-    try {
-      const response = await fetch(data.publicUrl, { method: 'HEAD' }) // Ping the URL
-      if (!response.ok) return ''
-      return data.publicUrl
-    } catch (error) {
-      console.error('Error checking image URL:', error)
-      return ''
-    }
+    return data.publicUrl
   }
 
   const [imgSrc, setImgSrc] = useState<string>('')
 
   useEffect(() => {
-    const loadImage = async () => {
-      const src = await getQuestionImg(
-        questions[selectedQuestionIndex]?.question?.id || ''
-      )
+    const loadImage = async (imgId: string) => {
+      const src = await getQuestionImg(imgId)
       setImgSrc(src)
     }
-    loadImage()
+    const imageFilePath = questions[selectedQuestionIndex]?.question?.hinh_anh
+    if (imageFilePath) {
+      loadImage(imageFilePath)
+    }
   }, [selectedQuestionIndex, questions])
 
   const handleSubmitButton = () => {
