@@ -17,6 +17,10 @@ import { useRouter } from 'next/navigation'
 import { AiOutlineGlobal } from 'react-icons/ai'
 import { cn } from '@/lib/utils'
 import { FaCheck } from 'react-icons/fa6'
+import Image from 'next/image'
+
+const defaultFlag =
+  'https://cgtsomijxwpcyqgznjqx.supabase.co/storage/v1/object/public/quoc_ky//Flag_of_the_United_Kingdom_(1-2).svg.png'
 
 const NavBar = () => {
   const t = useTranslations('Navbar')
@@ -34,6 +38,10 @@ const NavBar = () => {
     setLocale(language)
     router.refresh()
   }
+
+  const selectedLanguage = languages.find((lang) => lang.ky_hieu === locale)
+
+  console.log(selectedLanguage)
 
   return (
     <div className="flex justify-around items-center p-4">
@@ -103,7 +111,13 @@ const NavBar = () => {
           <Popover>
             <PopoverTrigger asChild>
               <button className="w-10 h-10 p-1 hover:bg-gray-200 rounded-md">
-                <AiOutlineGlobal className="w-full h-full" />
+                {/* <AiOutlineGlobal className="w-full h-full" /> */}
+                <Image
+                  width={40}
+                  height={20}
+                  src={selectedLanguage?.quoc_ky || defaultFlag}
+                  alt="flag"
+                />
               </button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-64 max-h-80">
