@@ -13,6 +13,7 @@ import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { Label } from '@/components//ui/label'
 import { useTranslations } from 'next-intl'
 import { BsFlag, BsFlagFill } from 'react-icons/bs'
+import supabase from '@/utils/supabase/supabase'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '500',
@@ -168,7 +169,13 @@ const TestComponent: React.FC<TestComponentProps> = ({
   }
 
   const getQuestionImg = (imgId: string) => {
-    return ''
+    if (!imgId) return ''
+    const { data } = supabase.storage
+      .from('hinh_anh_cau_hoi')
+      .getPublicUrl(imgId)
+
+    if (!data?.publicUrl) return ''
+    return data.publicUrl
   }
 
   const handleSubmitButton = () => {
@@ -308,7 +315,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
               <div className="font-bold">{`Câu hỏi ${
                 selectedQuestionIndex + 1
               }:`}</div>
-              {flagQuestion ? (
+              {/* {flagQuestion ? (
                 <BsFlagFill
                   className="text-2xl cursor-pointer"
                   onClick={handleFlagQuestion}
@@ -319,7 +326,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
                   className="text-2xl cursor-pointer"
                   onClick={handleFlagQuestion}
                 />
-              )}
+              )} */}
             </div>
             <FaArrowRight
               onClick={handleNext}
@@ -333,15 +340,22 @@ const TestComponent: React.FC<TestComponentProps> = ({
           >
             {questions[selectedQuestionIndex]?.question?.noi_dung_cau_hoi}
           </div>
-          {getQuestionImg(
-            questions[selectedQuestionIndex]?.question?.hinh_anh || ''
-          ) && (
-            <Image
-              src={getQuestionImg(
-                questions[selectedQuestionIndex]?.question?.hinh_anh || ''
-              )}
-              alt=""
-            />
+          {questions[selectedQuestionIndex]?.question?.hinh_anh && (
+            <div
+              className={`relative w-full max-w-[500px] ${
+                !isTesting && 'blur-sm'
+              } aspect-[3/1]`}
+            >
+              <Image
+                src={getQuestionImg(
+                  questions[selectedQuestionIndex]?.question?.hinh_anh
+                )}
+                alt="Question Image"
+                fill
+                className="object-contain"
+                sizes="100vw"
+              />
+            </div>
           )}
         </div>
         <div className="w-[25%] flex flex-col h-full gap-3">
