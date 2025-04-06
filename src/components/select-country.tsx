@@ -21,60 +21,62 @@ const CountrySelection = () => {
     router.push(`${pathname}/${country}`)
   }
   return (
-    <div className="flex flex-col justify-between h-full">
-      <div className="bg-worldMapImg bg-repeat bg-cover bg-bottom w-full h-screen flex flex-col items-center">
-        <div className="flex flex-col justify-center items-center my-[128px]">
-          <div className="text-6xl font-extrabold text-purple uppercase">
+    <div className="flex flex-col justify-between h-[1000px]">
+      <div className="bg-worldMapImg bg-repeat bg-center bg-fixed w-full h-screen flex flex-col items-center px-4 max-w-[100vw]">
+        <div className="flex flex-col justify-center items-center my-[32px]">
+          <div className="text-4xl font-extrabold text-purple uppercase">
             {t('chooseRegion')}
           </div>
-          <hr className="w-[450px] h-1 mx-auto my-7 bg-purple border-0 rounded dark:bg-purple"></hr>
-          <div className="my-10 w-[650px] break text-center text-purple text-2xl font-medium">
+          <hr className="w-[320px] h-1 mx-auto my-5 bg-purple border-0 rounded dark:bg-purple"></hr>
+          <div className="w-[550px] break text-center text-purple text-base font-medium">
             {t('description')}
           </div>
         </div>
-      </div>
-      <div className="flex flex-col gap-[128px] mb-[64px]">
-        <div className="flex justify-between">
-          <div className="flex flex-col w-[50%]">
-            <hr className="w-[100px] h-1 my-2 bg-purple border-0 rounded dark:bg-purple"></hr>
-            <div
-              className={`text-3xl ${montserratAlternates.className} uppercase`}
-            >
-              {t('vnTitle')}
-            </div>
-            <div className="mt-10 mb-5 text-xl">{t('vnDescription')}</div>
-            <div
-              className="flex gap-3 items-center cursor-pointer"
-              onClick={() => handleCountrySelect('vietnam')}
-            >
+        <div className="flex flex-col gap-[64px] mb-[64px] w-[90%]">
+          <div className="flex justify-between">
+            <div className="flex flex-col w-[50%]">
+              <hr className="w-[100px] h-1 mb-5 bg-purple border-0 rounded dark:bg-purple"></hr>
               <div
-                className={`underline text-purple text-3xl ${montserratAlternates.className}`}
+                className={`text-3xl ${montserratAlternates.className} uppercase`}
               >
-                {t('startButton')}
+                {t('vnTitle')}
               </div>
-              <ChevronsRight className="text-purple" />
+              <div className="mt-10 mb-5 text-base">{t('vnDescription')}</div>
+              <div
+                className="flex gap-3 items-center cursor-pointer"
+                onClick={() => handleCountrySelect('vietnam')}
+              >
+                <div
+                  className={`underline text-purple text-xl ${montserratAlternates.className}`}
+                >
+                  {t('startButton')}
+                </div>
+                <ChevronsRight className="text-purple" />
+              </div>
             </div>
+            <Image className="" src={SelectCountryVietNam} alt="" />
           </div>
-          <Image className="" src={SelectCountryVietNam} alt="" />
-        </div>
-        <div className="flex justify-between">
-          <Image className="" src={SelectCountryAus} alt="" />
-          <div className="flex flex-col w-[50%]">
-            <hr className="w-[100px] h-1 my-2 bg-purple border-0 rounded dark:bg-purple"></hr>
-            <div className={`text-3xl ${montserratAlternates.className}`}>
-              {t('ausTitle')}
-            </div>
-            <div className="mt-10 mb-5 text-xl">{t('ausDescription')}</div>
-            <div
-              className="flex gap-3 items-center cursor-pointer"
-              onClick={() => handleCountrySelect('australia')}
-            >
+          <div className="flex justify-between">
+            <Image className="" src={SelectCountryAus} alt="" />
+            <div className="flex flex-col w-[50%]">
+              <hr className="w-[100px] h-1 mb-5 bg-purple border-0 rounded dark:bg-purple"></hr>
               <div
-                className={`underline text-purple text-3xl ${montserratAlternates.className}`}
+                className={`text-3xl ${montserratAlternates.className} uppercase`}
               >
-                {t('startButton')}
+                {t('ausTitle')}
               </div>
-              <ChevronsRight className="text-purple" />
+              <div className="mt-10 mb-5 text-base">{t('ausDescription')}</div>
+              <div
+                className="flex gap-3 items-center cursor-pointer"
+                onClick={() => handleCountrySelect('australia')}
+              >
+                <div
+                  className={`underline text-purple text-xl ${montserratAlternates.className}`}
+                >
+                  {t('startButton')}
+                </div>
+                <ChevronsRight className="text-purple" />
+              </div>
             </div>
           </div>
         </div>
