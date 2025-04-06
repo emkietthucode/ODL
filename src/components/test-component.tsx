@@ -168,7 +168,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
     }
   }
 
-  const getQuestionImg = async (imgId: string) => {
+  const getQuestionImg = (imgId: string) => {
     if (!imgId) return ''
     const { data } = supabase.storage
       .from('hinh_anh_cau_hoi')
@@ -177,19 +177,6 @@ const TestComponent: React.FC<TestComponentProps> = ({
     if (!data?.publicUrl) return ''
     return data.publicUrl
   }
-
-  const [imgSrc, setImgSrc] = useState<string>('')
-
-  useEffect(() => {
-    const loadImage = async (imgId: string) => {
-      const src = await getQuestionImg(imgId)
-      setImgSrc(src)
-    }
-    const imageFilePath = questions[selectedQuestionIndex]?.question?.hinh_anh
-    if (imageFilePath) {
-      loadImage(imageFilePath)
-    }
-  }, [selectedQuestionIndex, questions])
 
   const handleSubmitButton = () => {
     if (!isTesting && timeLeft === 0) {
@@ -353,14 +340,22 @@ const TestComponent: React.FC<TestComponentProps> = ({
           >
             {questions[selectedQuestionIndex]?.question?.noi_dung_cau_hoi}
           </div>
-          {imgSrc && (
-            <Image
-              className={`${!isTesting && 'blur-sm'}`}
-              width={300}
-              height={200}
-              src={imgSrc}
-              alt="Question Image"
-            />
+          {questions[selectedQuestionIndex]?.question?.hinh_anh && (
+            <div
+              className={`relative w-full max-w-[500px] ${
+                !isTesting && 'blur-sm'
+              } aspect-[3/1]`}
+            >
+              <Image
+                src={getQuestionImg(
+                  questions[selectedQuestionIndex]?.question?.hinh_anh
+                )}
+                alt="Question Image"
+                fill
+                className="object-contain"
+                sizes="100vw"
+              />
+            </div>
           )}
         </div>
         <div className="w-[25%] flex flex-col h-full gap-3">
