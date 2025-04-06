@@ -315,7 +315,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
               <div className="font-bold">{`Câu hỏi ${
                 selectedQuestionIndex + 1
               }:`}</div>
-              {flagQuestion ? (
+              {/* {flagQuestion ? (
                 <BsFlagFill
                   className="text-2xl cursor-pointer"
                   onClick={handleFlagQuestion}
@@ -326,7 +326,7 @@ const TestComponent: React.FC<TestComponentProps> = ({
                   className="text-2xl cursor-pointer"
                   onClick={handleFlagQuestion}
                 />
-              )}
+              )} */}
             </div>
             <FaArrowRight
               onClick={handleNext}
