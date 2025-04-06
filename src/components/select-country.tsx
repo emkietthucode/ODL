@@ -21,7 +21,7 @@ const CountrySelection = () => {
     router.push(`${pathname}/${country}`)
   }
   return (
-    <div className="flex flex-col justify-between h-[1000px]">
+    <div className="flex flex-col justify-between h-[900px]">
       <div className="bg-worldMapImg bg-repeat bg-center bg-fixed w-full h-screen flex flex-col items-center px-4 max-w-[100vw]">
         <div className="flex flex-col justify-center items-center my-[32px]">
           <div className="text-4xl font-extrabold text-purple uppercase">
