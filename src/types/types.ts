@@ -20,6 +20,7 @@ export interface NgonNgu {
   id: string
   ten_ngon_ngu: string
   ky_hieu: string
+  quoc_ky: string
 }
 
 export interface NguoiDung {
