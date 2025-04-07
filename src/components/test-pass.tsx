@@ -11,7 +11,7 @@ const TestPass = ({
 }) => {
   const router = useRouter()
   const pathname = usePathname()
-  const t = useTranslations('TestPage')
+  const t = useTranslations('ResultPage')
   return (
     <div className="flex flex-col gap-10 my-[64px] w-[60%] justify-center items-center">
       <div className="flex rounded-[64px] bg-light-purple-admin w-[70%] h-[350px] relative">
