@@ -210,13 +210,13 @@ function LearningPathComponent({
                         className={cn(
                           `
                           relative
-                  w-2 h-2 text-[6px]
+                   text-[6px]
                   sm:w-4 sm:h-4 sm:text-[9px]  
                   lg:w-6 lg:h-6 lg:text-sm  
-                  xl:w-7 xl:h-7 xl:text-sm  
+                   xl:text-xs  
                   font-bold 
                   rounded-full 
-                  p-0 m-0 
+                  px-2 m-0 
                   text-purple 
                   bg-light-purple
                   hover:bg-light-purple/70 
