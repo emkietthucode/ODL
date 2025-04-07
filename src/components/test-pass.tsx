@@ -13,42 +13,42 @@ const TestPass = ({
   const pathname = usePathname()
   const t = useTranslations('ResultPage')
   return (
-    <div className="flex flex-col gap-10 my-[64px] w-[60%] justify-center items-center">
-      <div className="flex rounded-[64px] bg-light-purple-admin w-[70%] h-[350px] relative">
-        <div className="w-[50%] flex flex-col items-center  mt-[32px]">
+    <div className="flex flex-col gap-10 mt-[32px] w-[60%] justify-center items-center">
+      <div className="flex rounded-[64px] bg-custom-light-violet w-[800px] h-[350px] relative">
+        <div className="w-[50%] flex flex-col items-center mt-[32px]">
           <IoCheckmarkCircle className="text-custom-green text-4xl ml-[120px]" />
-          <div className="text-custom-green font-bold text-5xl">
+          <div className="text-custom-green font-extrabold text-5xl uppercase  ">
             {t('pass')}
           </div>
         </div>
         <div className="w-[50%] flex flex-col items-center">
-          <div className="flex flex-col gap-5 p-7 w-full mb-8">
-            <div className="flex justify-between text-purple">
+          <div className="flex flex-col gap-3 p-6 w-[350px]">
+            <div className="flex justify-between text-purple p-2">
               <div>{t('totalQuestion')}</div>
-              <div className="font-bold">{totalQuestion}</div>
+              <div className="font-semibold text-lg">{totalQuestion}</div>
             </div>
-            <div className="flex justify-between text-purple">
+            <div className="flex justify-between text-purple p-2">
               <div>{t('requirement')}</div>
-              <div className="font-bold">
+              <div className="font-semibold text-lg">
                 {requiredCorrectAnswer + '/' + totalQuestion}
               </div>
             </div>
-            <div className="flex justify-between text-purple">
+            <div className="flex justify-between text-purple p-2">
               <div>{t('correctAnswers')}</div>
-              <div className="font-bold">
+              <div className="font-semibold text-lg">
                 {userCorrectAnswers + '/' + totalQuestion}
               </div>
             </div>
-            <div className="flex justify-between text-purple">
+            <div className="flex justify-between text-purple p-2">
               <div>{t('wrongAnswers')}</div>
-              <div className="font-bold">
+              <div className="font-semibold text-lg">
                 {totalQuestion - userCorrectAnswers + '/' + totalQuestion}
               </div>
             </div>
           </div>
           <Button
             variant="main"
-            className="font-bold text-2xl rounded-full w-[75%]"
+            className="font-bold text-2xl rounded-full w-[240px] h-[40px] uppercase bg-custom-normal-violet twx"
             onClick={() => router.push(`${pathname}/detail`)}
           >
             {t('showDetails')}
@@ -57,7 +57,7 @@ const TestPass = ({
         <Image
           src={F721TestPass}
           alt=""
-          className="absolute -bottom-[80px] -left-[156px]"
+          className="absolute -bottom-[50px] -left-[156px]"
         />
       </div>
       <div className="my-2"></div>
