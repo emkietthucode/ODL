@@ -50,11 +50,15 @@ export const ProfileFormSchema = z.object({
   state: z.string().nullable(),
   dob: z.date(),
   avatar: z
-    .instanceof(File)
-    .refine(
-      (file) => ['image/jpeg', 'image/png'].includes(file.type),
-      'Avatar must be a JPEG or PNG image'
-    )
+    .union([
+      z
+        .instanceof(File)
+        .refine(
+          (file) => ['image/jpeg', 'image/png'].includes(file.type),
+          'Avatar must be a JPEG or PNG image'
+        ),
+      z.string(), // Allow string for existing URL
+    ])
     .optional(),
 })
 
@@ -109,9 +113,15 @@ function ProfileForm({ onSubmit, user, regions, states }: ProfileFormProps) {
     }
   }
 
+  const handleSubmit = async (data: ProfileFormType) => {
+    await onSubmit(data)
+  }
+
+  console.log('errors::', form.formState.errors)
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-5">
             <div className="relative">

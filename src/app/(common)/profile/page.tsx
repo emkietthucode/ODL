@@ -11,8 +11,23 @@ function Profile() {
   const [regions, setRegions] = useState([])
   const [states, setStates] = useState([])
 
-  const handleSubmit = (values: ProfileFormType) => {
-    console.log(values)
+  const handleSubmit = async (values: ProfileFormType) => {
+    if (values.country && values.state) {
+      values.country = values.state
+    }
+
+    if (values.avatar) {
+      const { data, error } = await supabase.storage
+        .from('avatar')
+        .upload('avatar-' + user?.id, values.avatar, {
+          cacheControl: '3600',
+          upsert: true,
+        })
+
+      const { data: publicUrlData } = supabase.storage
+        .from('avatar')
+        .getPublicUrl(data?.path || '')
+    }
   }
 
   const getUserDetails = async () => {
