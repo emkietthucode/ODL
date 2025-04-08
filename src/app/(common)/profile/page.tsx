@@ -11,8 +11,43 @@ function Profile() {
   const [regions, setRegions] = useState([])
   const [states, setStates] = useState([])
 
-  const handleSubmit = (values: ProfileFormType) => {
-    console.log(values)
+  const handleSubmit = async (values: ProfileFormType) => {
+    try {
+      if (values.country && values.state) {
+        values.country = values.state
+      }
+
+      let newAvatar = values.avatar
+
+      if (values.avatar && typeof values.avatar !== 'string') {
+        const { data, error } = await supabase.storage
+          .from('avatar')
+          .upload('avatar-' + user?.id, values.avatar, {
+            cacheControl: '3600',
+            upsert: true,
+          })
+
+        const { data: publicUrlData } = supabase.storage
+          .from('avatar')
+          .getPublicUrl(data?.path || '')
+
+        newAvatar = publicUrlData.publicUrl
+      }
+
+      const { data, error } = await supabase.rpc('update_user_info', {
+        user_id: user?.id,
+        name: values.name,
+        phone_number: values.phoneNumber,
+        avatar: newAvatar,
+        gender: values.gender,
+        dob: values.dob,
+        country: values.country,
+      })
+      return toast.success('Profile updated successfully')
+    } catch (error: any) {
+      console.log(error)
+      return toast.error(error.message)
+    }
   }
 
   const getUserDetails = async () => {

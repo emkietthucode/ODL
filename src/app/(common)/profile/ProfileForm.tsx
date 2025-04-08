@@ -50,11 +50,15 @@ export const ProfileFormSchema = z.object({
   state: z.string().nullable(),
   dob: z.date(),
   avatar: z
-    .instanceof(File)
-    .refine(
-      (file) => ['image/jpeg', 'image/png'].includes(file.type),
-      'Avatar must be a JPEG or PNG image'
-    )
+    .union([
+      z
+        .instanceof(File)
+        .refine(
+          (file) => ['image/jpeg', 'image/png'].includes(file.type),
+          'Avatar must be a JPEG or PNG image'
+        ),
+      z.string(), // Allow string for existing URL
+    ])
     .optional(),
 })
 
@@ -72,7 +76,7 @@ function ProfileForm({ onSubmit, user, regions, states }: ProfileFormProps) {
       gender: user?.gioi_tinh || '',
       country: user?.ma_khu_vuc || '',
       state: user?.ma_tinh || '',
-      dob: user?.ngay_sinh || new Date(),
+      dob: new Date(user?.ngay_sinh) || new Date(),
       avatar: user?.anh_dai_dien || null,
     },
     resolver: zodResolver(ProfileFormSchema),
@@ -109,9 +113,13 @@ function ProfileForm({ onSubmit, user, regions, states }: ProfileFormProps) {
     }
   }
 
+  const handleSubmit = async (data: ProfileFormType) => {
+    await onSubmit(data)
+  }
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-5">
             <div className="relative">
