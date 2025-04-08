@@ -76,7 +76,7 @@ function ProfileForm({ onSubmit, user, regions, states }: ProfileFormProps) {
       gender: user?.gioi_tinh || '',
       country: user?.ma_khu_vuc || '',
       state: user?.ma_tinh || '',
-      dob: user?.ngay_sinh || new Date(),
+      dob: new Date(user?.ngay_sinh) || new Date(),
       avatar: user?.anh_dai_dien || null,
     },
     resolver: zodResolver(ProfileFormSchema),
@@ -116,8 +116,6 @@ function ProfileForm({ onSubmit, user, regions, states }: ProfileFormProps) {
   const handleSubmit = async (data: ProfileFormType) => {
     await onSubmit(data)
   }
-
-  console.log('errors::', form.formState.errors)
 
   return (
     <Form {...form}>
