@@ -24,7 +24,9 @@
     "loginButton": "Log in",
     "googleButton": "Sign in with Google",
     "noAccount": "Don't have an account?",
-    "registerButton": "Sign up here"
+    "registerButton": "Sign up here",
+    "invalidEmail": "Invalid email address",
+    "passwordRequired": "Password is required"
   },
   "RegisterPage": {
     "register": "Account SignUp",
@@ -36,7 +38,10 @@
     "continue": "Continue",
     "Male": "Male",
     "Female": "Female",
-    "Other": "Other"
+    "Other": "Other",
+    "invalidEmail": "Invalid email address",
+    "passwordRequired": "Password must be at least 6 characters",
+    "nameRequired": "Name must be at least 6 characters"
   },
   "HomePage": {
     "title": "Conquer the steering wheel, surpass all limits!",
@@ -121,5 +126,15 @@
     "readyToTest": "Ready to take the test?",
     "readyToTestDescription": "If you're ready, start the Practice Test now to test your knowledge and assess your level of preparation!",
     "readyToTestButton": "Take a test"
+  },
+  "Profile": {
+    "saveButton": "Save",
+    "nameLabel": "Name",
+    "phoneLabel": "Phone number",
+    "genderLabel": "Gender",
+    "countryLabel": "Country",
+    "dobLabel": "Date of birth",
+    "stateLabel": "State",
+    "pickDateLabel": "Pick a date"
   }
 }

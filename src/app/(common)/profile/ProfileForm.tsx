@@ -34,6 +34,7 @@ import {
 
 import { CameraIcon } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 interface ProfileFormProps {
   onSubmit: (data: ProfileFormType) => void
@@ -68,6 +69,7 @@ function ProfileForm({ onSubmit, user, regions, states }: ProfileFormProps) {
   const [preview, setPreview] = useState<string | null>(
     user?.anh_dai_dien || null
   )
+  const t = useTranslations('Profile')
 
   const form = useForm({
     defaultValues: {
@@ -153,7 +155,7 @@ function ProfileForm({ onSubmit, user, regions, states }: ProfileFormProps) {
             disabled={!form.formState.isDirty}
             className="bg-[#4182F9] w-[96px] h-[44px]"
           >
-            Edit
+            {t('saveButton')}
           </Button>
         </div>
 
@@ -163,7 +165,7 @@ function ProfileForm({ onSubmit, user, regions, states }: ProfileFormProps) {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>{t('nameLabel')}</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -180,7 +182,7 @@ function ProfileForm({ onSubmit, user, regions, states }: ProfileFormProps) {
             name="phoneNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone Number</FormLabel>
+                <FormLabel>{t('phoneLabel')}</FormLabel>
                 <FormControl>
                   <Input
                     className="h-[52px] bg-white"
@@ -197,7 +199,9 @@ function ProfileForm({ onSubmit, user, regions, states }: ProfileFormProps) {
             name="gender"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[#696F79]">Gender</FormLabel>
+                <FormLabel className="text-[#696F79]">
+                  {t('genderLabel')}
+                </FormLabel>
                 {errors.gender && (
                   <FormMessage className="text-red-500 mt-1">
                     {/* {errors.gender.message} */}
@@ -231,7 +235,9 @@ function ProfileForm({ onSubmit, user, regions, states }: ProfileFormProps) {
             name="country"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[#696F79]">Country</FormLabel>
+                <FormLabel className="text-[#696F79]">
+                  {t('countryLabel')}
+                </FormLabel>
                 {errors.gender && (
                   <FormMessage className="text-red-500 mt-1">
                     {/* {errors.gender.message} */}
@@ -263,7 +269,9 @@ function ProfileForm({ onSubmit, user, regions, states }: ProfileFormProps) {
             name="dob"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel className="text-[#696F79]">Country</FormLabel>
+                <FormLabel className="text-[#696F79]">
+                  {t('dobLabel')}
+                </FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -277,7 +285,7 @@ function ProfileForm({ onSubmit, user, regions, states }: ProfileFormProps) {
                         {field.value ? (
                           format(field.value, 'd LLL y')
                         ) : (
-                          <span>Pick a date</span>
+                          <span>{t('pickDateLabel')}</span>
                         )}
                         <CalendarIcon />
                       </Button>
@@ -304,7 +312,9 @@ function ProfileForm({ onSubmit, user, regions, states }: ProfileFormProps) {
             name="state"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[#696F79]">State</FormLabel>
+                <FormLabel className="text-[#696F79]">
+                  {t('stateLabel')}
+                </FormLabel>
                 {errors.gender && (
                   <FormMessage className="text-red-500 mt-1">
                     {/* {errors.gender.message} */}

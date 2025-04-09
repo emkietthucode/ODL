@@ -10,19 +10,16 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-
-import { LoginFormSchema, LoginFormType } from '@/types/schemas/login'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import PasswordInput from '@/components/password-input'
 import { Checkbox } from '@/components/ui/checkbox'
 import Image from 'next/image'
-
 import GoogleIcon from '../../../../public/icons/google-icon.svg'
 import { signInWithGoogle } from '../actions'
-
 import { Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { createLoginFormSchema, LoginFormType } from '@/types/schemas/login' // Adjust import path
 
 interface LoginFormProps {
   onSubmit: (data: LoginFormType) => void
@@ -30,16 +27,19 @@ interface LoginFormProps {
 }
 
 function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
+  const t = useTranslations('LoginPage')
+
+  // Create the schema with the translation function
+  const LoginFormSchema = createLoginFormSchema(t)
+
   const form = useForm<LoginFormType>({
     defaultValues: {
       email: '',
       password: '',
     },
-
     resolver: zodResolver(LoginFormSchema),
   })
 
-  const t = useTranslations('LoginPage')
   const errors = form.formState.errors
 
   return (
@@ -59,11 +59,11 @@ function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
                 </FormMessage>
               )}
               <FormControl>
-                <Input id={field.name} {...field}></Input>
+                <Input id={field.name} {...field} />
               </FormControl>
             </FormItem>
           )}
-        ></FormField>
+        />
 
         <FormField
           control={form.control}
@@ -79,11 +79,11 @@ function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
                 </FormMessage>
               )}
               <FormControl>
-                <PasswordInput id={field.name} {...field}></PasswordInput>
+                <PasswordInput id={field.name} {...field} />
               </FormControl>
             </FormItem>
           )}
-        ></FormField>
+        />
 
         <div className="flex justify-between my-4">
           <div className="flex items-center space-x-2">
@@ -95,7 +95,6 @@ function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
               {t('remember')}
             </label>
           </div>
-
           <Button variant="link" className="px-0">
             {t('forgot')}
           </Button>
@@ -118,7 +117,6 @@ function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
           className="w-full py-6 rounded-[20px] border-black text-purple relative"
           onClick={signInWithGoogle}
         >
-          {/* <FaGoogle className="absolute left-4" /> */}
           <Image
             src={GoogleIcon}
             alt="Google icon"
