@@ -18,7 +18,9 @@
     "loginButton": "Đăng nhập",
     "googleButton": "Đăng nhập bằng Google",
     "noAccount": "Chưa có tài khoản?",
-    "registerButton": "Đăng ký ngay"
+    "registerButton": "Đăng ký ngay",
+    "invalidEmail": "Email không hợp lệ",
+    "passwordRequired": "Vui lòng nhập mật khẩu"
   },
   "RegisterPage": {
     "register": "Đăng ký",
@@ -30,7 +32,10 @@
     "continue": "Tiếp tục",
     "Male": "Nam",
     "Female": "Nữ",
-    "Other": "Khác"
+    "Other": "Khác",
+    "invalidEmail": "Email không hợp lệ",
+    "passwordRequired": "Mật khẩu phải có ít nhất 6 ký tự",
+    "nameRequired": "Tên phải có ít nhất 6 ký tự"
   },
   "HomePage": {
     "title": "Chinh phục tay lái, vượt mọi giới hạn!",
@@ -121,5 +126,15 @@
     "readyToTest": "Sẵn sàng để thi thử?",
     "readyToTestDescription": " Nếu bạn đã sẵn sàng, hãy bắt đầu Thi thử ngay để kiểm tra kiến thức và đánh giá mức độ chuẩn bị của mình!",
     "readyToTestButton": "THI THỬ"
+  },
+  "Profile": {
+    "saveButton": "Lưu",
+    "nameLabel": "Họ tên",
+    "phoneLabel": "Số điện thoại",
+    "genderLabel": "Giới tính",
+    "countryLabel": "Quốc gia",
+    "dobLabel": "Ngày sinh",
+    "stateLabel": "Tỉnh/Thành phố",
+    "pickDateLabel": "Chọn ngày"
   }
 }

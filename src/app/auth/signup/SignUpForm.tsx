@@ -29,8 +29,8 @@ import {
 } from '@/components/ui/select'
 
 import {
+  createSignUpFormSchema,
   Genders,
-  SignUpFormSchema,
   SignUpFormType,
 } from '@/types/schemas/signup'
 import { useTranslations } from 'next-intl'
@@ -41,6 +41,8 @@ interface SignUpFormProps {
 }
 
 function SignUpForm({ onSubmit, isLoading }: SignUpFormProps) {
+  const t = useTranslations('RegisterPage')
+  const SignUpFormSchema = createSignUpFormSchema(t)
   const form = useForm<SignUpFormType>({
     defaultValues: {
       email: '',
@@ -51,7 +53,7 @@ function SignUpForm({ onSubmit, isLoading }: SignUpFormProps) {
 
     resolver: zodResolver(SignUpFormSchema),
   })
-  const t = useTranslations('RegisterPage')
+
   const errors = form.formState.errors
 
   return (
