@@ -138,6 +138,10 @@ function LearningPathPage() {
     }
   }, [selectedChapter, auth.user?.id])
 
+  const isChapterLocked = (index: number) => {
+    return index !== 0
+  }
+
   return (
     <div className="flex flex-col items-center h-full relative">
       <div className="flex flex-col gap-[32px] justify-between items-center h-full w-full max-w-screen-xl ">
@@ -157,6 +161,7 @@ function LearningPathPage() {
               {chapters.map((chapter, index) => (
                 <Button
                   key={index}
+                  disabled={isChapterLocked(index)}
                   onClick={() => setSelectedChapter(chapter.id)}
                   className={cn(
                     `
@@ -167,12 +172,17 @@ function LearningPathPage() {
                                         bg-white 
                                         hover:bg-white/80 
                                         border-purple 
-                                        border-2 uppercase`,
+                                        border-2 uppercase
+                                        p-[10px]
+                                        `,
 
                     selectedChapter === chapter.id &&
                       'ring-4 ring-purple/50 font-bold'
                   )}
                 >
+                  {isChapterLocked(index) && (
+                    <LockKeyhole className="text-purple" />
+                  )}
                   {chapter.ten_chuong}
                 </Button>
               ))}
