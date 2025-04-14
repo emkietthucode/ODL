@@ -93,3 +93,9 @@ export interface CauTrucDeThi {
   updated_at: string
   so_luong_cau_hoi: number
 }
+
+export interface LoTrinh {
+  id: string
+  ten_lo_trinh: string
+  mo_ta_lo_trinh: string
+}

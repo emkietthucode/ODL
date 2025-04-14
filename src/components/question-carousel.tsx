@@ -1,11 +1,9 @@
 import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
-
-import { GoTriangleRight } from 'react-icons/go'
-import { GoTriangleLeft } from 'react-icons/go'
 import { cn } from '@/lib/utils'
 import { useImperativeHandle, useRef } from 'react'
 import { forwardRef } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const responsive = {
   desktop: {
@@ -34,28 +32,35 @@ const ButtonGroup = ({ next, previous, goToSlide, ...rest }: any) => {
     carouselState: { currentSlide },
   } = rest
   return (
-    <div className="carousel-button-group absolute left-4 -bottom-2 text-[24px] ">
+    <div className="carousel-button-group w-full absolute text-[24px]">
       <button
+        disabled={currentSlide === 0}
         className={cn(
-          'hover:bg-slate-400 rounded-full pr-1 text-center',
+          'text-center w-8 h-8 text-[#B1B1B1] absolute top-1/2 -translate-y-1/2 -left-3 ',
           currentSlide === 0 ? 'disable' : ''
         )}
         onClick={() => previous()}
       >
-        <GoTriangleLeft />
+        <ChevronLeft className="hover:text-purple" />
       </button>
       <button
-        className="hover:bg-slate-400 rounded-full pl-1 text-center"
+        className="text-center w-8 h-8 text-[#B1B1B1] absolute top-1/2 -translate-y-1/2 -right-0"
         onClick={() => next()}
       >
-        <GoTriangleRight />
+        <ChevronRight className="hover:text-purple" />
       </button>
     </div>
   )
 }
 
 const QuestionCarousel = forwardRef(
-  ({ children }: { children: React.ReactNode }, ref) => {
+  (
+    {
+      children,
+      isLastSlide,
+    }: { children: React.ReactNode; isLastSlide: number },
+    ref
+  ) => {
     const carouselRef = useRef<any>(null)
 
     useImperativeHandle(ref, () => ({
@@ -69,10 +74,10 @@ const QuestionCarousel = forwardRef(
     return (
       <Carousel
         ref={carouselRef}
-        className="w-full h-[40%]"
+        className="w-full h-full px-4"
         responsive={responsive}
-        customButtonGroup={<ButtonGroup />}
         arrows={false}
+        customButtonGroup={<ButtonGroup />}
       >
         {children}
       </Carousel>
