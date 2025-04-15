@@ -1,21 +1,41 @@
 import { LearningQuestionDTO } from '@/types/dto/types'
-
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import { HiOutlineLightBulb } from 'react-icons/hi'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Label } from '@/components//ui/label'
+import { Label } from '@/components/ui/label'
+import { useEffect, useState, useCallback } from 'react'
 
 interface QuestionTableProps {
-  question?: LearningQuestionDTO
+  question: LearningQuestionDTO
   index: number
-  onAnswerChange?: (answerId: string, index: number) => void
+  onAnswerChange: (answerId: string, index: number) => void
+  onQuestionChange?: (change: number) => void
+  canGoToQuestion: (index: number) => boolean
 }
 
 function QuestionTable({
   question,
   index,
   onAnswerChange,
+  onQuestionChange,
+  canGoToQuestion,
 }: QuestionTableProps) {
+  const [selectedAnswer, setSelectedAnswer] = useState<number>(() => {
+    // Initialize state synchronously to avoid stale state issues
+    return question?.cau_tra_loi
+      ? question.ds_lua_chon.findIndex((c) => c.id === question?.cau_tra_loi)
+      : -1
+  })
+
+  // Update selectedAnswer when question or index changes
+  useEffect(() => {
+    const selectedIndex = question?.cau_tra_loi
+      ? question.ds_lua_chon.findIndex((c) => c.id === question?.cau_tra_loi)
+      : -1
+    setSelectedAnswer(selectedIndex)
+  }, [question, index])
+
+  // Handle answer background color based on correctness
   const answered = (question: LearningQuestionDTO, answerId: string) => {
     if (question.cau_tra_loi) {
       const correctAnswer = question.ds_lua_chon.find(
@@ -37,36 +57,112 @@ function QuestionTable({
     return 'bg-[#EDEDED]'
   }
 
+  // Handle answer navigation (up/down)
+  const changeAnswer = useCallback(
+    (change: number) => {
+      if (!question.ds_lua_chon.length) return
+
+      setSelectedAnswer((prev) => {
+        const maxIndex = question.ds_lua_chon.length - 1
+        let newIndex = prev + change
+
+        // Handle wrapping
+        if (newIndex < 0) {
+          newIndex = maxIndex
+        } else if (newIndex > maxIndex) {
+          newIndex = 0
+        }
+
+        // Update parent state with the new answer
+        onAnswerChange(question.ds_lua_chon[newIndex].id, index)
+        return newIndex
+      })
+    },
+    [question.ds_lua_chon, onAnswerChange, index]
+  )
+
+  const changeAnswerWithNumber = useCallback(
+    (key: number) => {
+      if (key - 1 >= question.ds_lua_chon.length) return
+
+      setSelectedAnswer(key - 1)
+      onAnswerChange(question.ds_lua_chon[key - 1].id, index)
+    },
+    [question.ds_lua_chon, onAnswerChange, index]
+  )
+
+  // Handle keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault()
+        event.stopPropagation()
+        onQuestionChange?.(-1)
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault()
+        event.stopPropagation()
+        onQuestionChange?.(1)
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault()
+        event.stopPropagation()
+        changeAnswer(-1)
+      } else if (event.key === 'ArrowDown') {
+        event.preventDefault()
+        event.stopPropagation()
+        changeAnswer(1)
+      } else if (event.key === '1') {
+        event.preventDefault()
+        event.stopPropagation()
+        changeAnswerWithNumber(1)
+      } else if (event.key === '2') {
+        event.preventDefault()
+        event.stopPropagation()
+        changeAnswerWithNumber(2)
+      } else if (event.key === '3') {
+        event.preventDefault()
+        event.stopPropagation()
+        changeAnswerWithNumber(3)
+      } else if (event.key === '4') {
+        event.preventDefault()
+        event.stopPropagation()
+        changeAnswerWithNumber(4)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown, true)
+    return () => window.removeEventListener('keydown', handleKeyDown, true)
+  }, [onQuestionChange, changeAnswer])
+
   return (
     <div className="w-[938px] flex gap-2 my-[10px] h-[464px] mx-auto">
       {/* Question info */}
       <div className="w-[530px] bg-[#EDEDED] p-[10px] relative">
-        {/* Question header */}
         <div className="w-full relative">
           <div className="absolute w-full flex justify-between items-center">
-            <button className="w-[30px] h-[30px] text-purple flex justify-end items-center">
+            <button
+              disabled={index === 0}
+              onClick={() => onQuestionChange?.(-1)}
+              className="w-[30px] h-[30px] text-purple flex justify-end items-center disabled:opacity-50"
+            >
               <FaArrowLeft />
             </button>
-
             <p className="w-full text-center text-[14px] font-bold">
               Question {index + 1}:
             </p>
-
-            <button className="w-[30px] h-[30px] text-purple flex justify-start items-center">
+            <button
+              disabled={!canGoToQuestion(index + 1)}
+              onClick={() => onQuestionChange?.(1)}
+              className="w-[30px] h-[30px] text-purple flex justify-start items-center disabled:opacity-50"
+            >
               <FaArrowRight />
             </button>
           </div>
         </div>
-
-        {/* Question body */}
         <div className="mt-[49px] px-4">
           <p className="text-[12px]">
-            {' '}
             {question?.noi_dung_cau_hoi || 'Question text here'}
           </p>
         </div>
-
-        {/* Quesiton footer */}
         <div className="absolute bottom-[10px] left-[10px]">
           <button
             disabled
@@ -85,32 +181,34 @@ function QuestionTable({
         <RadioGroup
           className="h-full"
           value={question?.cau_tra_loi}
-          onValueChange={(value) => onAnswerChange?.(value, index)}
+          onValueChange={(value) => onAnswerChange(value, index)}
         >
           {question &&
             Array.from({ length: 4 }).map((_, selectionIndex) => (
               <Label
                 key={selectionIndex}
-                htmlFor={`r`}
+                htmlFor={`r${selectionIndex}`}
                 className={`
-                      grow 
-                      ${answered(
-                        question,
-                        question?.ds_lua_chon[selectionIndex]?.id || ''
-                      )}
-                      flex 
-                      items-start 
-                      p-3 
-                      gap-2 
-                      cursor-pointer
-                      border
-                      border-transparent 
-                      active:scale-80
-                      transition-all 
-                      duration-150`}
+                  grow 
+                  ${answered(
+                    question,
+                    question?.ds_lua_chon[selectionIndex]?.id || ''
+                  )}
+                  flex 
+                  items-start 
+                  p-3 
+                  gap-2 
+                  cursor-pointer
+                  border
+                  border-transparent 
+                  active:scale-80
+                  transition-all 
+                  duration-150`}
               >
                 <RadioGroupItem
+                  disabled={selectionIndex >= question?.ds_lua_chon.length}
                   value={question?.ds_lua_chon[selectionIndex]?.id || ''}
+                  id={`r${selectionIndex}`}
                 />
                 <div className="text-sm text-neutral-500 font-medium">
                   {question?.ds_lua_chon[selectionIndex]?.noi_dung_lua_chon ||

@@ -33,9 +33,6 @@ function LearningPathPage() {
             license_name: licenseName,
           }),
         ])
-
-        console.log('learningPathData', learningPathData)
-        console.log('questionsData', chaptersData)
       } catch (error: any) {
         console.log(error)
       }

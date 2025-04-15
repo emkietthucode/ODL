@@ -28,6 +28,7 @@ function LearningPage() {
   const [questions, setQuestions] = useState<LearningQuestionDTO[]>([])
   const { user, loading } = useAuth()
   const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
+  const [lastAnsweredQuestion, setLastAnsweredQuestion] = useState<number>(0)
 
   useEffect(() => {
     if (!user) {
@@ -58,6 +59,12 @@ function LearningPage() {
     fetchData()
   }, [user, pagination.page])
 
+  useEffect(() => {
+    setLastAnsweredQuestion(
+      questions.findLastIndex((q) => q.cau_tra_loi !== null)
+    )
+  }, [questions])
+
   const handleAnswerChange = async (answerId: string, index: number) => {
     try {
       const { data, error } = await supabase.rpc('update_user_answers', {
@@ -81,6 +88,26 @@ function LearningPage() {
     }
   }
 
+  const handleQuestionChange = (change: number) => {
+    if (
+      selectedQuestion + change < 0 ||
+      selectedQuestion + change >= questions.length ||
+      !canGoToQuestion(selectedQuestion + change)
+    ) {
+      return
+    }
+
+    setSelectedQuestion(selectedQuestion + change)
+  }
+
+  const canGoToQuestion = (index: number) => {
+    if (index < 0 || index >= questions.length || !isQuestionUnlocked(index)) {
+      return false
+    }
+
+    return true
+  }
+
   const getAnswerBackground = (question: LearningQuestionDTO) => {
     if (question.cau_tra_loi) {
       const correctAnswer = question.ds_lua_chon.find(
@@ -95,6 +122,18 @@ function LearningPage() {
     } else {
       return 'bg-light-purple'
     }
+  }
+
+  const isQuestionUnlocked = (index: number) => {
+    if (index === 0) {
+      return true
+    }
+
+    if (questions[index]?.cau_tra_loi) {
+      return true
+    }
+
+    return index === lastAnsweredQuestion + 1
   }
 
   return (
@@ -135,6 +174,7 @@ function LearningPage() {
                     .map((q, index) => (
                       <button
                         key={index}
+                        disabled={!isQuestionUnlocked(index + bigIndex * 24)}
                         onClick={() =>
                           setSelectedQuestion(index + bigIndex * 24)
                         }
@@ -160,6 +200,8 @@ function LearningPage() {
         question={questions[selectedQuestion]}
         index={selectedQuestion}
         onAnswerChange={handleAnswerChange}
+        onQuestionChange={handleQuestionChange}
+        canGoToQuestion={canGoToQuestion}
       />
     </div>
   )
