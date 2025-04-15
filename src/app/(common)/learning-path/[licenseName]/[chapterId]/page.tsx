@@ -12,6 +12,8 @@ import QuestionCarousel from '@/components/question-carousel'
 import QuestionTable from '@/components/learning-path/question-table'
 import usePathInfo from '@/hooks/use-path-info'
 import { LearningQuestionDTO } from '@/types/dto/types'
+import { Chuong } from '@/types/types'
+import { useTranslations } from 'next-intl'
 
 function LearningPage() {
   const { chapterId, licenseName } = useParams<{
@@ -30,6 +32,9 @@ function LearningPage() {
   const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
   const [lastAnsweredQuestion, setLastAnsweredQuestion] = useState<number>(0)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [chapterData, setChapterData] = useState<Chuong | null>(null)
+
+  const t = useTranslations('LearningPathPage')
 
   useEffect(() => {
     if (!user) {
@@ -39,19 +44,26 @@ function LearningPage() {
     const fetchData = async () => {
       try {
         setIsLoading(true)
-        const { data, error } = await supabase.rpc('fetch_user_questions', {
-          chapter_id: chapterId,
-          user_id: user.id,
-          page: pagination.page,
-          record_limit: pagination.limit,
-          learning_path_id: pathInfo?.learningPath?.id,
-        })
+        const [{ data, error }, { data: chapter_data, error: chapter_error }] =
+          await Promise.all([
+            await supabase.rpc('fetch_user_questions', {
+              chapter_id: chapterId,
+              user_id: user.id,
+              page: pagination.page,
+              record_limit: pagination.limit,
+              learning_path_id: pathInfo?.learningPath?.id,
+            }),
+            await supabase.rpc('fetch_chapter_info', {
+              chapter_id: chapterId,
+            }),
+          ])
 
         setQuestions(data)
         setPagination((prev) => ({
           ...prev,
           total: data[0]?.total_records,
         }))
+        setChapterData(chapter_data)
 
         const lastIndex = data.findLastIndex(
           (q: LearningQuestionDTO) => q.cau_tra_loi !== null
@@ -165,21 +177,25 @@ function LearningPage() {
     return Math.round((correctAnswers.length / answeredQuestions.length) * 100)
   }
 
+  console.log(chapterData)
+
   return (
     <div>
       <div className="w-full max-w-[940px] h-[70px] mt-10 mx-auto relative bg-light-purple-admin flex">
         <div className="mr-[35px]">
           <Image src={PathBar} alt="Bar" className=" top-0 left-0" />
           <span className="absolute top-1/2 left-[25px] -translate-y-[50%] font-bold text-white text-[18px]">
-            Chương 1:
+            {chapterData?.ten_chuong}
           </span>
         </div>
         <div className="flex">
           <div className="flex flex-col text-[12px] text-purple h-full justify-between w-[275px] py-3">
             <span>
-              Tiến độ: {lastAnsweredQuestion + 1}/{questions.length}
+              {t('progress')}: {lastAnsweredQuestion + 1}/{questions.length}
             </span>
-            <span>Tỉ lệ đúng: {getCorrectRatio()}%</span>
+            <span>
+              {t('ratio')}: {getCorrectRatio()}%
+            </span>
           </div>
           <div className="py-3">
             {' '}
@@ -192,7 +208,8 @@ function LearningPage() {
           <div className="flex-1 w-[400px] relative h-full ml-4">
             {!isLoading && (
               <QuestionCarousel
-                initialSlide={Math.ceil(lastAnsweredQuestion / 24)}
+                className="px-4"
+                initialSlide={Math.floor(lastAnsweredQuestion / 24)}
               >
                 {Array.from({
                   length: Math.ceil(pagination.total / 24),

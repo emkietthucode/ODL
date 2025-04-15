@@ -136,5 +136,10 @@
     "dobLabel": "Ngày sinh",
     "stateLabel": "Tỉnh/Thành phố",
     "pickDateLabel": "Chọn ngày"
+  },
+  "LearningPathPage": {
+    "progress": "Tiến độ",
+    "ratio": "Tỉ lệ đúng",
+    "question": "Câu hỏi"
   }
 }

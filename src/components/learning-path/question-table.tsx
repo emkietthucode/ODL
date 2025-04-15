@@ -4,6 +4,7 @@ import { HiOutlineLightBulb } from 'react-icons/hi'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { useEffect, useState, useCallback } from 'react'
+import { useTranslations } from 'next-intl'
 
 interface QuestionTableProps {
   question: LearningQuestionDTO
@@ -26,6 +27,8 @@ function QuestionTable({
       ? question.ds_lua_chon.findIndex((c) => c.id === question?.cau_tra_loi)
       : -1
   })
+
+  const t = useTranslations('LearningPathPage')
 
   // Update selectedAnswer when question or index changes
   useEffect(() => {
@@ -147,7 +150,7 @@ function QuestionTable({
               <FaArrowLeft />
             </button>
             <p className="w-full text-center text-[14px] font-bold">
-              Question {index + 1}:
+              {t('question')} {index + 1}:
             </p>
             <button
               disabled={!canGoToQuestion(index + 1)}

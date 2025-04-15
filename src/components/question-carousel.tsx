@@ -49,12 +49,39 @@ const ButtonGroup = ({ next, previous, ...rest }: any) => {
   )
 }
 
+const SecondButtonGroup = ({ next, previous, ...rest }: any) => {
+  const {
+    carouselState: { currentSlide },
+  } = rest
+  return (
+    <div className="carousel-button-group w-full h-full absolute text-[24px]">
+      <button
+        disabled={currentSlide === 0}
+        className={cn(
+          'cursor-pointer text-center bg-[#7869AD] w-6 h-6 text-white absolute bottom-6 left-2 rounded-full hover:opacity-80',
+          currentSlide === 0 ? 'disable' : ''
+        )}
+        onClick={() => previous()}
+      >
+        <ChevronLeft />
+      </button>
+      <button
+        className="cursor-pointer text-center bg-[#7869AD] w-6 h-6 text-white absolute bottom-6 right-2 rounded-full hover:opacity-80"
+        onClick={() => next()}
+      >
+        <ChevronRight />
+      </button>
+    </div>
+  )
+}
+
 const QuestionCarousel = forwardRef(
   (
     {
       children,
       initialSlide = 0,
-    }: { children: React.ReactNode; initialSlide?: number },
+      className,
+    }: { children: React.ReactNode; initialSlide?: number; className?: string },
     ref
   ) => {
     const carouselRef = useRef<any>(null)
@@ -84,10 +111,10 @@ const QuestionCarousel = forwardRef(
     return (
       <Carousel
         ref={carouselRef}
-        className="w-full h-full px-4"
+        className={cn('w-full h-full', className)}
         responsive={responsive}
         arrows={false}
-        customButtonGroup={<ButtonGroup />}
+        customButtonGroup={<SecondButtonGroup />}
       >
         {children}
       </Carousel>

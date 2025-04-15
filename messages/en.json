@@ -136,5 +136,10 @@
     "dobLabel": "Date of birth",
     "stateLabel": "State",
     "pickDateLabel": "Pick a date"
+  },
+  "LearningPathPage": {
+    "progress": "Progress",
+    "ratio": "Correct Ratio",
+    "question": "Question"
   }
 }
