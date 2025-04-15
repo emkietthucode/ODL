@@ -68,7 +68,7 @@ function LearningPathPage() {
         {/* Question carousel */}
 
         <div className="flex-1 w-[400px] relative h-full">
-          <QuestionCarousel isLastSlide={0}>
+          <QuestionCarousel initialSlide={0}>
             <div className="w-full max-w-[380px] flex justify-start flex-wrap gap-[5px] pl-5">
               {Array.from({ length: 24 }).map((_, index) => (
                 <button

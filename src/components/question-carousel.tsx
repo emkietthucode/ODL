@@ -1,7 +1,7 @@
 import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
 import { cn } from '@/lib/utils'
-import { useImperativeHandle, useRef } from 'react'
+import { useEffect, useImperativeHandle, useLayoutEffect, useRef } from 'react'
 import { forwardRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -9,25 +9,21 @@ const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
     items: 1,
-    slidesToSlide: 1, // optional, default to 1.
+    slidesToSlide: 1,
   },
   tablet: {
     breakpoint: { max: 1024, min: 464 },
     items: 1,
-    slidesToSlide: 1, // optional, default to 1.
+    slidesToSlide: 1,
   },
   mobile: {
     breakpoint: { max: 464, min: 0 },
     items: 1,
-    slidesToSlide: 1, // optional, default to 1.
+    slidesToSlide: 1,
   },
 }
 
-interface QuestionCarouselProps {
-  children: React.ReactNode
-}
-
-const ButtonGroup = ({ next, previous, goToSlide, ...rest }: any) => {
+const ButtonGroup = ({ next, previous, ...rest }: any) => {
   const {
     carouselState: { currentSlide },
   } = rest
@@ -36,7 +32,7 @@ const ButtonGroup = ({ next, previous, goToSlide, ...rest }: any) => {
       <button
         disabled={currentSlide === 0}
         className={cn(
-          'text-center w-8 h-8 text-[#B1B1B1] absolute top-1/2 -translate-y-1/2 -left-3 ',
+          'text-center w-8 h-8 text-[#B1B1B1] absolute top-1/2 -translate-y-1/2 -left-3',
           currentSlide === 0 ? 'disable' : ''
         )}
         onClick={() => previous()}
@@ -57,19 +53,33 @@ const QuestionCarousel = forwardRef(
   (
     {
       children,
-      isLastSlide,
-    }: { children: React.ReactNode; isLastSlide: number },
+      initialSlide = 0,
+    }: { children: React.ReactNode; initialSlide?: number },
     ref
   ) => {
     const carouselRef = useRef<any>(null)
 
-    useImperativeHandle(ref, () => ({
-      goToFirstSlide: () => {
-        if (carouselRef.current) {
-          carouselRef.current.goToSlide(0)
-        }
-      },
-    }))
+    useLayoutEffect(() => {
+      if (carouselRef.current && initialSlide > 0) {
+        const timer = setTimeout(() => {
+          try {
+            carouselRef.current.goToSlide(initialSlide, false)
+          } catch (error) {
+            console.error('Error calling goToSlide:', error)
+          }
+        }, 100)
+
+        return () => clearTimeout(timer)
+      }
+    }, [initialSlide])
+
+    // useImperativeHandle(ref, () => ({
+    //   goToFirstSlide: () => {
+    //     if (carouselRef.current) {
+    //       carouselRef.current.goToSlide(0)
+    //     }
+    //   },
+    // }))
 
     return (
       <Carousel

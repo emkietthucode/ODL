@@ -29,6 +29,7 @@ function LearningPage() {
   const { user, loading } = useAuth()
   const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
   const [lastAnsweredQuestion, setLastAnsweredQuestion] = useState<number>(0)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
     if (!user) {
@@ -37,6 +38,7 @@ function LearningPage() {
 
     const fetchData = async () => {
       try {
+        setIsLoading(true)
         const { data, error } = await supabase.rpc('fetch_user_questions', {
           chapter_id: chapterId,
           user_id: user.id,
@@ -50,9 +52,17 @@ function LearningPage() {
           ...prev,
           total: data[0]?.total_records,
         }))
-        setSelectedQuestion(0)
+
+        const lastIndex = data.findLastIndex(
+          (q: LearningQuestionDTO) => q.cau_tra_loi !== null
+        )
+        setSelectedQuestion(
+          lastIndex + 1 >= data.length ? lastIndex : lastIndex + 1
+        )
       } catch (error: any) {
         console.log(error)
+      } finally {
+        setIsLoading(false)
       }
     }
 
@@ -60,9 +70,9 @@ function LearningPage() {
   }, [user, pagination.page])
 
   useEffect(() => {
-    setLastAnsweredQuestion(
-      questions.findLastIndex((q) => q.cau_tra_loi !== null)
-    )
+    const lastIndex = questions.findLastIndex((q) => q.cau_tra_loi !== null)
+
+    setLastAnsweredQuestion(lastIndex !== -1 ? lastIndex : 0)
   }, [questions])
 
   const handleAnswerChange = async (answerId: string, index: number) => {
@@ -136,6 +146,25 @@ function LearningPage() {
     return index === lastAnsweredQuestion + 1
   }
 
+  const getCorrectRatio = () => {
+    const answeredQuestions = questions.filter(
+      (question) => question.cau_tra_loi !== null
+    )
+
+    if (answeredQuestions.length === 0) {
+      return 0
+    }
+
+    const correctAnswers = answeredQuestions.filter((question) => {
+      const correctAnswer = question.ds_lua_chon.find(
+        (answer) => answer.la_lua_chon_dung
+      )
+      return question.cau_tra_loi === correctAnswer?.id
+    })
+
+    return Math.round((correctAnswers.length / answeredQuestions.length) * 100)
+  }
+
   return (
     <div>
       <div className="w-full max-w-[940px] h-[70px] mt-10 mx-auto relative bg-light-purple-admin flex">
@@ -147,8 +176,10 @@ function LearningPage() {
         </div>
         <div className="flex">
           <div className="flex flex-col text-[12px] text-purple h-full justify-between w-[275px] py-3">
-            <span>Tiến độ: 1/200</span>
-            <span>Tỉ lệ đúng: 100%</span>
+            <span>
+              Tiến độ: {lastAnsweredQuestion + 1}/{questions.length}
+            </span>
+            <span>Tỉ lệ đúng: {getCorrectRatio()}%</span>
           </div>
           <div className="py-3">
             {' '}
@@ -159,40 +190,42 @@ function LearningPage() {
           </div>
           {/* Question carousel */}
           <div className="flex-1 w-[400px] relative h-full ml-4">
-            <QuestionCarousel
-              isLastSlide={Math.ceil(pagination.total / pagination.limit) - 1}
-            >
-              {Array.from({
-                length: Math.ceil(pagination.total / 24),
-              }).map((_, bigIndex) => (
-                <div
-                  key={bigIndex}
-                  className="w-full max-w-[380px] flex justify-start flex-wrap gap-[5px] pl-5"
-                >
-                  {questions
-                    .slice(bigIndex * 24, bigIndex * 24 + 24)
-                    .map((q, index) => (
-                      <button
-                        key={index}
-                        disabled={!isQuestionUnlocked(index + bigIndex * 24)}
-                        onClick={() =>
-                          setSelectedQuestion(index + bigIndex * 24)
-                        }
-                        className={cn(
-                          `w-6 h-6 rounded-full text-purple font-bold ${getAnswerBackground(
-                            q
-                          )} text-center`,
-                          index + bigIndex * 24 === selectedQuestion &&
-                            'ring ring-purple ring-offset-2',
-                          q.cau_tra_loi && 'text-white'
-                        )}
-                      >
-                        {index + 1 + bigIndex * 24}
-                      </button>
-                    ))}
-                </div>
-              ))}
-            </QuestionCarousel>
+            {!isLoading && (
+              <QuestionCarousel
+                initialSlide={Math.ceil(lastAnsweredQuestion / 24)}
+              >
+                {Array.from({
+                  length: Math.ceil(pagination.total / 24),
+                }).map((_, bigIndex) => (
+                  <div
+                    key={bigIndex}
+                    className="w-full max-w-[380px] flex justify-start flex-wrap gap-[5px] pl-5"
+                  >
+                    {questions
+                      .slice(bigIndex * 24, bigIndex * 24 + 24)
+                      .map((q, index) => (
+                        <button
+                          key={index}
+                          disabled={!isQuestionUnlocked(index + bigIndex * 24)}
+                          onClick={() =>
+                            setSelectedQuestion(index + bigIndex * 24)
+                          }
+                          className={cn(
+                            `w-6 h-6 rounded-full text-purple font-bold ${getAnswerBackground(
+                              q
+                            )} text-center`,
+                            index + bigIndex * 24 === selectedQuestion &&
+                              'ring ring-purple ring-offset-2',
+                            q.cau_tra_loi && 'text-white'
+                          )}
+                        >
+                          {index + 1 + bigIndex * 24}
+                        </button>
+                      ))}
+                  </div>
+                ))}
+              </QuestionCarousel>
+            )}
           </div>
         </div>
       </div>

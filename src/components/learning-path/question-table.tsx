@@ -78,7 +78,7 @@ function QuestionTable({
         return newIndex
       })
     },
-    [question.ds_lua_chon, onAnswerChange, index]
+    [question?.ds_lua_chon, onAnswerChange, index]
   )
 
   const changeAnswerWithNumber = useCallback(
@@ -88,7 +88,7 @@ function QuestionTable({
       setSelectedAnswer(key - 1)
       onAnswerChange(question.ds_lua_chon[key - 1].id, index)
     },
-    [question.ds_lua_chon, onAnswerChange, index]
+    [question?.ds_lua_chon, onAnswerChange, index]
   )
 
   // Handle keyboard navigation
