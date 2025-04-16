@@ -141,5 +141,9 @@
     "progress": "Progress",
     "ratio": "Correct Ratio",
     "question": "Question"
+  },
+  "LearningTestPage": {
+    "question": "Question",
+    "submit": "Submit"
   }
 }

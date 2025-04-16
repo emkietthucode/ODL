@@ -141,5 +141,9 @@
     "progress": "Tiến độ",
     "ratio": "Tỉ lệ đúng",
     "question": "Câu hỏi"
+  },
+  "LearningTestPage": {
+    "question": "Câu hỏi",
+    "submit": "Nộp bài"
   }
 }

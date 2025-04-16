@@ -1,7 +1,13 @@
 import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
 import { cn } from '@/lib/utils'
-import { useEffect, useImperativeHandle, useLayoutEffect, useRef } from 'react'
+import {
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 import { forwardRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -49,43 +55,24 @@ const ButtonGroup = ({ next, previous, ...rest }: any) => {
   )
 }
 
-const SecondButtonGroup = ({ next, previous, ...rest }: any) => {
-  const {
-    carouselState: { currentSlide },
-  } = rest
-  return (
-    <div className="carousel-button-group w-full h-full absolute text-[24px]">
-      <button
-        disabled={currentSlide === 0}
-        className={cn(
-          'cursor-pointer text-center bg-[#7869AD] w-6 h-6 text-white absolute bottom-6 left-2 rounded-full hover:opacity-80',
-          currentSlide === 0 ? 'disable' : ''
-        )}
-        onClick={() => previous()}
-      >
-        <ChevronLeft />
-      </button>
-      <button
-        className="cursor-pointer text-center bg-[#7869AD] w-6 h-6 text-white absolute bottom-6 right-2 rounded-full hover:opacity-80"
-        onClick={() => next()}
-      >
-        <ChevronRight />
-      </button>
-    </div>
-  )
-}
-
 const QuestionCarousel = forwardRef(
   (
     {
       children,
       initialSlide = 0,
       className,
-    }: { children: React.ReactNode; initialSlide?: number; className?: string },
+      secondary = false,
+      totalSlide = 0,
+    }: {
+      children: React.ReactNode
+      initialSlide?: number
+      className?: string
+      secondary?: boolean
+      totalSlide?: number
+    },
     ref
   ) => {
     const carouselRef = useRef<any>(null)
-
     useLayoutEffect(() => {
       if (carouselRef.current && initialSlide > 0) {
         const timer = setTimeout(() => {
@@ -100,13 +87,37 @@ const QuestionCarousel = forwardRef(
       }
     }, [initialSlide])
 
-    // useImperativeHandle(ref, () => ({
-    //   goToFirstSlide: () => {
-    //     if (carouselRef.current) {
-    //       carouselRef.current.goToSlide(0)
-    //     }
-    //   },
-    // }))
+    const SecondButtonGroup = ({ next, previous, ...rest }: any) => {
+      const isLastSlide = totalSlide - 1 === rest.carouselState.currentSlide
+      const {
+        carouselState: { currentSlide },
+      } = rest
+      return (
+        <div className="carousel-button-group w-full h-[24px] absolute text-[24px] bottom-4">
+          <button
+            disabled={currentSlide === 0}
+            className={cn(
+              'disabled:opacity-50 disabled:cursor-default cursor-pointer text-center bg-[#7869AD] w-6 h-6 text-white absolute left-2 rounded-full hover:opacity-80',
+              currentSlide === 0 ? 'disable' : ''
+            )}
+            onClick={() => previous()}
+          >
+            <ChevronLeft />
+          </button>
+
+          <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-[10px]">
+            {currentSlide + 1} / {totalSlide}
+          </div>
+          <button
+            className="disabled:opacity-50 disabled:cursor-default cursor-pointer text-center bg-[#7869AD] w-6 h-6 text-white absolute right-2 rounded-full hover:opacity-80"
+            disabled={isLastSlide}
+            onClick={() => next()}
+          >
+            <ChevronRight />
+          </button>
+        </div>
+      )
+    }
 
     return (
       <Carousel
@@ -114,7 +125,7 @@ const QuestionCarousel = forwardRef(
         className={cn('w-full h-full', className)}
         responsive={responsive}
         arrows={false}
-        customButtonGroup={<SecondButtonGroup />}
+        customButtonGroup={secondary ? <SecondButtonGroup /> : <ButtonGroup />}
       >
         {children}
       </Carousel>
