@@ -43,8 +43,6 @@ const NavBar = () => {
 
   const selectedLanguage = languages.find((lang) => lang.ky_hieu === locale)
 
-  console.log(selectedLanguage)
-
   return (
     <div className="h-10 bg-custom-light-violet flex justify-center text-purple">
       <div className="max-w-[1080px] w-full flex justify-start items-center gap-[60px]">

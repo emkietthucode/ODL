@@ -19,28 +19,38 @@ function LearningTestPage() {
   const [isActive, setIsActive] = useState<boolean>(true)
   const { user } = useAuth()
   const t = useTranslations('LearningTestPage')
-  const [currentTimeLeft, setCurrentTimeLeft] = useState(10)
+  const [currentTimeLeft, setCurrentTimeLeft] = useState(0)
+  const [testInfo, setTestInfo] = useState<{
+    thoi_gian_lam_bai: number
+    ten_de_thi: string
+  } | null>(null)
 
   useEffect(() => {
-    const handleFetchQuestions = async () => {
+    const handleFetchData = async () => {
       setIsActive(false)
       try {
-        const { data, error } = await supabase.rpc('fetch_test_questions', {
-          test_id: testId,
-        })
+        const [
+          { data: questionsData, error: questionsError },
+          { data: testInfoData, error: testInfoError },
+        ] = await Promise.all([
+          supabase.rpc('fetch_test_questions', {
+            test_id: testId,
+          }),
+          supabase.rpc('fetch_test_info', {
+            test_id: testId,
+          }),
+        ])
 
-        if (error) {
-          throw new Error(error.message)
-        }
-
-        setQuestions(data as LearningQuestionDTO[])
+        setQuestions(questionsData as LearningQuestionDTO[])
+        setTestInfo(testInfoData)
+        setCurrentTimeLeft(testInfoData.thoi_gian_lam_bai * 60)
         setIsActive(true)
       } catch (error: any) {
         console.log('error', error.message)
       }
     }
 
-    handleFetchQuestions()
+    handleFetchData()
   }, [testId])
 
   const getButtonCss = (index: number) => {
@@ -222,7 +232,11 @@ function LearningTestPage() {
         <div className="w-[164px] h-full bg-[#F1EEFB] py-3 flex flex-col justify-between">
           <div className="mx-auto w-[106px] h-[47px] font-bold bg-light-purple text-center leading-[47px] rounded-[8px] text-[28px] text-purple">
             <Timer
-              time={10}
+              time={
+                testInfo?.thoi_gian_lam_bai
+                  ? testInfo?.thoi_gian_lam_bai * 60
+                  : 0
+              }
               isActive={isActive}
               onTimeUp={async (time: number) => {
                 setIsActive(false)
