@@ -58,11 +58,15 @@ function LearningPage() {
             }),
           ])
 
+        console.log(data)
+
         setQuestions(data)
-        setPagination((prev) => ({
-          ...prev,
-          total: data[0]?.total_records,
-        }))
+        if (data) {
+          setPagination((prev) => ({
+            ...prev,
+            total: data[0]?.total_records,
+          }))
+        }
         setChapterData(chapter_data)
 
         const lastIndex = data.findLastIndex(

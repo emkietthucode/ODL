@@ -98,4 +98,5 @@ export interface LoTrinh {
   id: string
   ten_lo_trinh: string
   mo_ta_lo_trinh: string
+  ma_hang_bang?: string
 }
