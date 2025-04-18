@@ -1,7 +1,8 @@
 import ScrollToTopButton from '@/components/scroll-to-top-button'
 import LearnCategory from '../../../../../public/images/f5-learn-category.svg'
-import B1Car from '../../../../../public/images/f5-b1-car.svg'
-import B2Car from '../../../../../public/images/f5-b2-car.svg'
+import ThreeWhiteDot from '../../../../../public/images/three-white-dot.svg'
+import BCar from '../../../../../public/images/F5BCar.svg'
+import C1Car from '../../../../../public/images/F5C1Car.svg'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
@@ -35,7 +36,12 @@ const TestsCategoryPage = () => {
             {t('licenseClasses')}
           </div>
         </div>
-        <div className="w-full h-[350px] bg-custom-light-hover-blue flex justify-center">
+        <div className="w-full h-[350px] bg-custom-light-hover-blue flex justify-center relative">
+          <Image
+            src={ThreeWhiteDot}
+            alt=""
+            className="absolute top-0 left-[700px] w-[95%] h-[80%]"
+          />
           <div className="w-[60%] h-full flex flex-col justify-around items-center">
             <div className="flex flex-col text-center w-[25%]">
               <div className="text-xl text-gray-400 font-medium uppercase">
@@ -98,13 +104,15 @@ const TestsCategoryPage = () => {
             </div>
           </div>
         </div>
-        <div className="h-full w-[60%] flex flex-col my-10 gap-[64px]">
+        <div className="h-full w-[75%] flex flex-col gap-[64px] my-4">
           <div className="flex justify-between gap-20 w-full">
-            <Image src={B1Car} alt="" />
-            <div className="flex flex-col justify-center text-left gap-5">
-              <hr className="w-[150px] h-1 my-1 bg-purple border-0 rounded dark:bg-purple"></hr>
-              <div className="font-bold text-5xl">B1</div>
-              <div>{t('b1Description')}</div>
+            <div className="w-[50%] flex justify-center">
+              <Image src={BCar} alt="" />
+            </div>
+            <div className="w-[50%] flex flex-col justify-center text-left gap-5">
+              <hr className="w-[100px] h-1 my-1 bg-purple border-0 rounded dark:bg-purple"></hr>
+              <div className="font-bold text-4xl">B</div>
+              <div className="text-sm font-light">{t('bDescription')}</div>
               <Button
                 variant="main"
                 size="auto"
@@ -114,11 +122,11 @@ const TestsCategoryPage = () => {
               </Button>
             </div>
           </div>
-          <div className="flex justify-between gap-20 w-full">
-            <div className="flex flex-col justify-center text-left gap-5">
-              <hr className="w-[150px] h-1 my-1 bg-purple border-0 rounded dark:bg-purple"></hr>
-              <div className="font-bold text-5xl">B2</div>
-              <div>{t('b2Description')}</div>
+          <div className="w-full flex justify-between gap-20">
+            <div className="w-[50%] flex flex-col justify-center text-left gap-5">
+              <hr className="w-[100px] h-1 my-1 bg-purple border-0 rounded dark:bg-purple"></hr>
+              <div className="font-bold text-4xl">C1</div>
+              <div>{t('c1Description')}</div>
               <Button
                 variant="main"
                 size="auto"
@@ -127,37 +135,8 @@ const TestsCategoryPage = () => {
                 {t('startButton')}
               </Button>
             </div>
-            <Image src={B2Car} alt="" />
-          </div>
-          <hr className="w-[90%] h-[2px] my-1 mx-auto bg-light-purple border-0 rounded dark:bg-light-purp"></hr>
-          <div className="flex justify-between">
-            <div className="flex flex-col gap-[128px] justify-between w-[40%]">
-              <div className="flex flex-col">
-                <div className="font-bold text-5xl mb-[25px]">C</div>
-                <div>{t('cDescription')}</div>
-              </div>
-              <Button
-                variant="main"
-                size="auto"
-                className="font-medium w-[100px] uppercase"
-              >
-                {t('startButton')}
-              </Button>
-            </div>
-            <div className="flex flex-col gap-[128px] justify-between w-[45%]">
-              <div className="flex flex-col">
-                <div className="font-bold text-5xl mb-[20px] uppercase">
-                  {t('defTitle')}
-                </div>
-                <div>{t('defDescription')}</div>
-              </div>
-              <Button
-                variant="main"
-                size="auto"
-                className="font-medium w-[100px] uppercase"
-              >
-                {t('startButton')}
-              </Button>
+            <div className="w-[50%] flex justify-center">
+              <Image src={C1Car} alt="" />
             </div>
           </div>
         </div>
