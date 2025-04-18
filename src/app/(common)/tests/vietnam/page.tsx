@@ -35,40 +35,66 @@ const TestsCategoryPage = () => {
             {t('licenseClasses')}
           </div>
         </div>
-        <div className="w-full h-full bg-blue-100/40 flex justify-center p-10">
-          <div className="w-[60%] h-full flex  justify-between items-center">
-            <div className="flex flex-col h-[300px] w-[25%] text-center gap-5 items-center justify-between">
-              <div className="font-bold text-5xl">A1</div>
-              <div>{t('a1Description')}</div>
-              <Button
-                variant="main"
-                size="auto"
-                className="font-medium w-[50%] self-end mx-auto uppercase"
-              >
-                {t('startButton')}
-              </Button>
+        <div className="w-full h-[350px] bg-custom-light-hover-blue flex justify-center">
+          <div className="w-[60%] h-full flex flex-col justify-around items-center">
+            <div className="flex flex-col text-center w-[25%]">
+              <div className="text-xl text-gray-400 font-medium uppercase">
+                {t('motorbikes')}
+              </div>
+              <div className="text-sm font-light">
+                {`(${t('vehicle_wheels')})`}
+              </div>
             </div>
-            <div className="flex flex-col h-[300px] w-[25%] text-center gap-5 items-center justify-between">
-              <div className="font-bold text-5xl">A2</div>
-              <div>{t('a2Description')}</div>
-              <Button
-                variant="main"
-                size="auto"
-                className="font-medium w-[50%] self-end mx-auto uppercase"
+            <div className="flex w-full justify-between">
+              <div
+                className="bg-custom-light-blue rounded-2xl border-4 border-custom-normal-light-blue 
+              flex flex-col h-[240px] w-[180px] 
+              text-center items-center justify-around"
               >
-                {t('startButton')}
-              </Button>
-            </div>
-            <div className="flex flex-col h-[300px] w-[25%] text-center gap-5 items-center justify-between">
-              <div className="font-bold text-5xl">A3, A4</div>
-              <div>{t('a3Description')}</div>
-              <Button
-                variant="main"
-                size="auto"
-                className="font-medium w-[50%] self-end mx-auto uppercase"
+                <div className="font-bold text-3xl">A1</div>
+                <div className="text-sm font-normal w-[70%]">
+                  {t('a1Description')}
+                </div>
+                <Button
+                  variant="main"
+                  size="auto"
+                  className="font-medium w-[50%] self-end mx-auto uppercase"
+                >
+                  {t('startButton')}
+                </Button>
+              </div>
+              <div
+                className="bg-custom-light-blue rounded-2xl border-4 border-custom-normal-light-blue 
+              flex flex-col h-[240px] w-[180px] 
+              text-center items-center justify-around"
               >
-                {t('startButton')}
-              </Button>
+                <div className="font-bold text-3xl">A</div>
+                <div className="text-sm font-normal">{t('aDescription')}</div>
+                <Button
+                  variant="main"
+                  size="auto"
+                  className="font-medium w-[50%] self-end mx-auto uppercase"
+                >
+                  {t('startButton')}
+                </Button>
+              </div>
+              <div
+                className="bg-custom-light-blue rounded-2xl border-4 border-custom-normal-light-blue 
+              flex flex-col h-[240px] w-[180px] 
+              text-center items-center justify-around"
+              >
+                <div className="font-bold text-3xl">B1</div>
+                <div className="text-sm font-normal w-[80 %]">
+                  {t('b1Description')}
+                </div>
+                <Button
+                  variant="main"
+                  size="auto"
+                  className="font-medium w-[50%] self-end mx-auto uppercase"
+                >
+                  {t('startButton')}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
