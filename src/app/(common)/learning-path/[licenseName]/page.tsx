@@ -19,6 +19,7 @@ import FeatureCard from '@/components/feature-card'
 import { Chuong, LoTrinh } from '@/types/types'
 import { cn } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
+import { FaCircleCheck } from 'react-icons/fa6'
 
 const chartConfig = {
   count: {
@@ -153,81 +154,6 @@ function LearningPathPage() {
 
             <div className="w-[760px] h-full flex flex-col">
               <div className="w-full items-center flex-wrap flex-1 flex bg-light-purple-admin rounded-t-[16px] gap-4 justify-center">
-                {/* <button
-                  className="
-                relative  
-                min-w-[118px] 
-                h-[42px]
-              text-purple 
-                rounded-full 
-              bg-white text-[18px] 
-                font-bold 
-                uppercase 
-                border-2 
-                border-[#7869AD]
-                after:content-['']
-                after:absolute
-                after:w-[85%]
-                after:h-[3px]
-                after:bg-[#8070B8]
-                after:rounded-full
-                after:-bottom-3
-                after:left-1/2
-                after:-translate-x-1/2
-                "
-                >
-                  chương 1
-                </button>
-
-                <button
-                  className="
-                relative  
-                min-w-[118px] 
-                h-[42px]
-              text-purple 
-                rounded-full 
-              bg-white text-[18px] 
-                font-bold 
-                uppercase 
-                border-2 
-                border-[#7869AD]
-                opacity-50
-                cursor-auto
-                "
-                >
-                  chương 1
-                  <FaLock
-                    className="absolute right-0 -bottom-3"
-                    fill="#979797"
-                    stroke="#979797"
-                    size={24}
-                  />
-                </button>
-
-                <button
-                  className="
-                relative  
-                min-w-[118px] 
-                h-[42px]
-              text-purple 
-                rounded-full 
-              bg-white text-[18px] 
-                font-bold 
-                uppercase 
-                border-2 
-                border-[#7869AD]
-                opacity-50
-                cursor-auto
-                "
-                >
-                  chương 1
-                  <FaLock
-                    className="absolute right-0 -bottom-3"
-                    fill="#979797"
-                    stroke="#979797"
-                    size={24}
-                  />
-                </button> */}
                 {chaptersData?.map((chapter, index) => (
                   <button
                     disabled={!chaptersData[index - 1]?.passed && index > 0}
@@ -248,6 +174,15 @@ function LearningPathPage() {
                         fill="#979797"
                         stroke="#979797"
                         size={24}
+                      />
+                    )}
+
+                    {chapter.passed && (
+                      <FaCircleCheck
+                        className="absolute -right-1 -bottom-[10px]"
+                        fill="#A3C9A8"
+                        stroke="#A3C9A8"
+                        size={20}
                       />
                     )}
                   </button>

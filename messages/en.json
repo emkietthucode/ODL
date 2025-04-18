@@ -140,7 +140,12 @@
   "LearningPathPage": {
     "progress": "Progress",
     "ratio": "Correct Ratio",
-    "question": "Question"
+    "question": "Question",
+    "congratulation": "Congratulations!",
+    "done": "You have completed",
+    "testReady": "Do you want to take the final chapter test?",
+    "testButton": "Test",
+    "backButton": "Back"
   },
   "LearningTestPage": {
     "question": "Question",

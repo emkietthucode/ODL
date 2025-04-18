@@ -2,7 +2,7 @@
 
 import useAuth from '@/hooks/useAuth'
 import supabase from '@/utils/supabase/supabase'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import PathBar from '../../../../../../public/images/path-bar-vector.svg'
 import Image from 'next/image'
@@ -14,6 +14,14 @@ import usePathInfo from '@/hooks/use-path-info'
 import { LearningQuestionDTO } from '@/types/dto/types'
 import { Chuong } from '@/types/types'
 import { useTranslations } from 'next-intl'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+} from '@/components/ui/dialog'
+import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog'
+import { Loader2 } from 'lucide-react'
 
 function LearningPage() {
   const { chapterId, licenseName } = useParams<{
@@ -33,8 +41,20 @@ function LearningPage() {
   const [lastAnsweredQuestion, setLastAnsweredQuestion] = useState<number>(0)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [chapterData, setChapterData] = useState<Chuong | null>(null)
+  const [isChapterPassed, setIsChapterPassed] = useState<boolean>(false)
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(
+    lastAnsweredQuestion === questions.length - 1 && !isChapterPassed
+  )
+  const [isTestCreated, setIsTestCreated] = useState<boolean>(true)
 
   const t = useTranslations('LearningPathPage')
+  const router = useRouter()
+
+  useEffect(() => {
+    if (lastAnsweredQuestion === questions.length - 1 && !isChapterPassed) {
+      setIsDialogOpen(true)
+    }
+  }, [lastAnsweredQuestion, questions.length, isChapterPassed])
 
   useEffect(() => {
     if (!user) {
@@ -58,7 +78,16 @@ function LearningPage() {
             }),
           ])
 
-        console.log(data)
+        const { data: pass, error: passError } = await supabase.rpc(
+          'is_chapter_passed',
+          {
+            user_id: user?.id,
+            chapter_id: chapter_data?.id,
+            level_id: pathInfo?.learningPath?.ma_hang_bang,
+          }
+        )
+
+        setIsChapterPassed(pass)
 
         setQuestions(data)
         if (data) {
@@ -181,7 +210,24 @@ function LearningPage() {
     return Math.round((correctAnswers.length / answeredQuestions.length) * 100)
   }
 
-  console.log(chapterData)
+  const handleCreateTest = async () => {
+    try {
+      setIsTestCreated(false)
+      const { data, error } = await supabase.rpc('create_test', {
+        user_id: user?.id,
+        chapter_id: chapterData?.id,
+        license_name: licenseName,
+      })
+
+      if (error) {
+        console.error(error)
+      } else {
+        router.push(`/learning-path/${licenseName}/${chapterId}/${data}`)
+      }
+    } catch (error: any) {
+      console.log(error)
+    }
+  }
 
   return (
     <div>
@@ -257,6 +303,42 @@ function LearningPage() {
         onQuestionChange={handleQuestionChange}
         canGoToQuestion={canGoToQuestion}
       />
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="w-[469px] py-9 px-[35px]">
+          <DialogHeader className="text-[20px] font-bold text-purple">
+            <DialogTitle className="w-full text-center">
+              {t('congratulation')}
+            </DialogTitle>
+            <DialogDescription className="w-full text-center uppercase">
+              {t('done')} {chapterData?.ten_chuong}!
+            </DialogDescription>
+          </DialogHeader>
+
+          <p className="my-0 text-[14px] text-center">{t('testReady')}</p>
+          <div className="w-full h-[2px] rounded-full bg-purple my-8"></div>
+
+          <div className="w-[365px] mx-auto flex justify-between">
+            <button
+              disabled={!isTestCreated}
+              onClick={handleCreateTest}
+              className="relative disabled:opacity-50 font-bold text-[14px] text-white bg-purple rounded-[6px] w-[160px] h-[34px] uppercase"
+            >
+              {!isTestCreated && (
+                <Loader2 className="animate-spin absolute left-3" />
+              )}
+              {t('testButton')}
+            </button>
+            <button
+              disabled={!isTestCreated}
+              onClick={() => setIsDialogOpen(false)}
+              className="font-bold text-[14px] text-white bg-[#979797] rounded-[6px] w-[160px] h-[34px] uppercase"
+            >
+              {t('backButton')}
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
