@@ -59,6 +59,7 @@
   },
   "VietnamTestPage": {
     "title": "THI THỬ LÝ THUYẾT",
+    "licenseClasses": "Các hạng bằng lái",
     "description": "Chức năng Thi thử lý thuyết mô phỏng bài thi sát hạch chính thức, giúp người dùng kiểm tra kiến thức về luật giao thông, biển báo, và kỹ năng xử lý tình huống. Đề thi được xây dựng đúng cấu trúc và nội dung theo quy định, bao gồm cả câu hỏi điểm liệt (nếu có), mang lại trải nghiệm sát với kỳ thi thực tế.",
     "a1Description": "dành cho người điều khiển xe mô tô hai bánh có dung tích xi-lanh từ 50cc đến dưới 175cc.",
     "a2Description": "dành cho người điều khiển xe mô tô hai bánh có dung tích xi-lanh từ 175cc trở lên.",

@@ -11,21 +11,29 @@ const TestsCategoryPage = () => {
   return (
     <main className="bg-white mx-auto my-auto max-h-full">
       <div className="flex flex-col items-center h-full">
-        <div className="flex flex-col h-full w-[60%]">
+        <div className="flex flex-col h-[275px] w-[75%]">
           <div className="flex justify-start relative">
-            <div className="w-[72%] flex flex-col gap-10 z-20 mt-20">
-              <div className="text-purple text-4xl font-semibold">
+            <div className="w-[72%] flex flex-col z-20 mt-2">
+              <hr className="w-20 my-3 h-1 bg-purple border-0 rounded-sm" />
+              <div className="text-purple text-3xl font-semibold">
                 {t('title')}
               </div>
-              <div>{t('description')}</div>
+              <div className="my-3 text-sm leading-2 w-[90%]">
+                {t('description')}
+              </div>
             </div>
             <Image
-              className="hidden xl:inline-block absolute z-10 right-0 top-[120px] "
+              className="hidden xl:inline-block absolute z-10 right-14 top-[20px] "
               src={LearnCategory}
               alt=""
+              width={240}
+              height={340}
             />
           </div>
-          <div className="w-full h-[200px]"></div>
+          <hr className="h-px my-5 bg-gray-400 border-0 dark:bg-gray-700" />
+          <div className="uppercase mt-auto font-semibold text-2xl text-purple pb-2">
+            {t('licenseClasses')}
+          </div>
         </div>
         <div className="w-full h-full bg-blue-100/40 flex justify-center p-10">
           <div className="w-[60%] h-full flex  justify-between items-center">

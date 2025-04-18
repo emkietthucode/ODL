@@ -59,6 +59,7 @@
   },
   "VietnamTestPage": {
     "title": "THEORY TEST",
+    "licenseClasses": "Driver's license classes",
     "description": "The Theory Test function simulates the official driving test, helping users test their knowledge of traffic laws, signs, and situation handling skills. The test is structured and contains the correct content according to regulations, including failing questions (if any), providing an experience close to the actual exam.",
     "a1Description": "for drivers of two-wheeled motorcycles with a cylinder capacity from 50cc to under 175cc.",
     "a2Description": "for drivers of two-wheeled motorcycles with a cylinder capacity of 175cc or more.",
