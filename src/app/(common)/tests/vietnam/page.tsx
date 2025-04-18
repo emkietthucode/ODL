@@ -84,7 +84,7 @@ const TestsCategoryPage = () => {
               text-center items-center justify-around"
               >
                 <div className="font-bold text-3xl">B1</div>
-                <div className="text-sm font-normal w-[80 %]">
+                <div className="text-sm font-normal w-[80%]">
                   {t('b1Description')}
                 </div>
                 <Button
