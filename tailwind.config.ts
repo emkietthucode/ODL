@@ -25,6 +25,8 @@ export default {
         'custom-normal-blue': '#5297CC',
         'custom-light-active-blue': '#D0EBFF',
         'custom-light-hover-blue': '#E8F5FF',
+        'custom-light-blue': '#F0F8FF',
+        'custom-normal-light-blue': '#5CAAE6',
         purple: '#907ECF',
         'light-purple': '#E2DBF7',
         'light-purple-admin': '#F1EEFB',
