@@ -22,6 +22,7 @@ export default {
         'custom-light-violet': '#F6F4FD',
         'custom-light-brown': '#EED9D3',
         'custom-normal-violet': '#A08CE6',
+        'custom-dark-violet': '#7869AD',
         'custom-normal-active-violet': '#8070B8',
         'custom-normal-blue': '#5297CC',
         'custom-light-active-blue': '#D0EBFF',
