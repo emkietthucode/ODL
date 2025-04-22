@@ -59,7 +59,7 @@ const TestsLicensePage = () => {
           <div className="flex justify-start relative w-[90%]">
             <div className="flex flex-col gap-10 z-20 mt-20">
               <div className="text-purple text-5xl font-semibold uppercase">
-                {`${t('title')}: ${license?.ten_hang_bang}`}
+                {`${t('title')}: ${license?.ten_hang_bang || ''}`}
               </div>
               <div className="w-[60%]">{license?.mo_ta_hang_bang}</div>
             </div>
