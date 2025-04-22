@@ -172,7 +172,7 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
                     <MdKeyboardArrowRight />
                   </Button>
                 </div>
-                <ol className="list-none flex flex-wrap gap-1 w-[329px] h-[52px] mx-auto select-none mt-2">
+                <ol className="list-none flex flex-wrap gap-[5px] w-[329px] h-[52px] mx-auto select-none mt-2">
                   {currentQuestions.map((ele, index: number) => (
                     <div className="relative" key={index}>
                       <li key={index} className="flex justify-center">
@@ -234,7 +234,7 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
                     </div>
                   )}
                 </div>
-                <div className="font-bold text-base">{`Câu hỏi ${
+                <div className="font-bold text-base select-none">{`Câu hỏi ${
                   selectedQuestionIndex + 1
                 }`}</div>
                 <FaArrowRight
