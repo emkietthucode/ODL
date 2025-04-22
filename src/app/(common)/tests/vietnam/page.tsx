@@ -1,3 +1,4 @@
+'use client'
 import ScrollToTopButton from '@/components/scroll-to-top-button'
 import LearnCategory from '../../../../../public/images/f5-learn-category.svg'
 import ThreeWhiteDot from '../../../../../public/images/three-white-dot.svg'
@@ -6,9 +7,12 @@ import C1Car from '../../../../../public/images/F5C1Car.svg'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
+import { usePathname, useRouter } from 'next/navigation'
 
 const TestsCategoryPage = () => {
   const t = useTranslations('VietnamTestPage')
+  const router = useRouter()
+  const pathname = usePathname()
   return (
     <main className="bg-white mx-auto my-auto max-h-full">
       <div className="flex flex-col items-center h-full">
@@ -65,6 +69,7 @@ const TestsCategoryPage = () => {
                   variant="main"
                   size="auto"
                   className="font-medium w-[50%] self-end mx-auto uppercase"
+                  onClick={() => router.push(pathname + '/a1')}
                 >
                   {t('startButton')}
                 </Button>
@@ -80,6 +85,7 @@ const TestsCategoryPage = () => {
                   variant="main"
                   size="auto"
                   className="font-medium w-[50%] self-end mx-auto uppercase"
+                  onClick={() => router.push(pathname + '/a')}
                 >
                   {t('startButton')}
                 </Button>
@@ -97,6 +103,7 @@ const TestsCategoryPage = () => {
                   variant="main"
                   size="auto"
                   className="font-medium w-[50%] self-end mx-auto uppercase"
+                  onClick={() => router.push(pathname + '/b1')}
                 >
                   {t('startButton')}
                 </Button>
@@ -117,6 +124,7 @@ const TestsCategoryPage = () => {
                 variant="main"
                 size="auto"
                 className="font-medium w-[100px] uppercase"
+                onClick={() => router.push(pathname + '/b')}
               >
                 {t('startButton')}
               </Button>
@@ -131,6 +139,7 @@ const TestsCategoryPage = () => {
                 variant="main"
                 size="auto"
                 className="font-medium w-[100px] uppercase"
+                onClick={() => router.push(pathname + '/c1')}
               >
                 {t('startButton')}
               </Button>
