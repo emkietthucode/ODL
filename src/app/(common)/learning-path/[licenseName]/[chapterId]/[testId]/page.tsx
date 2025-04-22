@@ -11,6 +11,7 @@ import supabase from '@/utils/supabase/supabase'
 import Timer from '@/components/timer'
 import useAuth from '@/hooks/useAuth'
 import { useTranslations } from 'next-intl'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 
 function LearningTestPage() {
   const { testId } = useParams<{ testId: string }>()
@@ -228,6 +229,22 @@ function LearningTestPage() {
           <p className="text-[12px] my-4">
             {questions[selectedQuestion]?.noi_dung_cau_hoi || ''}
           </p>
+
+          <div className="flex justify-between">
+            <button
+              className="text-purple hover:opacity-80"
+              onClick={() => handleChangeQuestion(-1)}
+            >
+              <ArrowLeft />
+            </button>
+
+            <button
+              className="text-purple hover:opacity-80"
+              onClick={() => handleChangeQuestion(1)}
+            >
+              <ArrowRight />
+            </button>
+          </div>
         </div>
         <div className="w-[164px] h-full bg-[#F1EEFB] py-3 flex flex-col justify-between">
           <div className="mx-auto w-[106px] h-[47px] font-bold bg-light-purple text-center leading-[47px] rounded-[8px] text-[28px] text-purple">
