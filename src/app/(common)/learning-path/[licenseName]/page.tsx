@@ -1,205 +1,307 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import { useState, useEffect } from 'react'
-import { Chuong } from '@/types/types'
-import { useParams } from 'next/navigation'
-import supabase from '@/utils/supabase/supabase'
-import toast from 'react-hot-toast'
-
-import { QuestionDTO } from '@/types/dto/types'
-import { LuaChon } from '@/types/types'
-import LearningPathComponent from '@/components/learning-path-component'
 import useAuth from '@/hooks/useAuth'
-import { LockKeyhole } from 'lucide-react'
+import supabase from '@/utils/supabase/supabase'
+import { useParams } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
 
-const shuffleAnswers = (answers: LuaChon[]) => {
-  const shuffled = [...answers]
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-  }
-  return shuffled
-}
+import { Pie, PieChart } from 'recharts'
+import { ChartConfig, ChartContainer } from '@/components/ui/chart'
+import { FaLock } from 'react-icons/fa'
+import WorkingDesk from '../../../../../public/images/working-desk.svg'
+import Image from 'next/image'
+import { Progress } from '@/components/ui/progress'
+import Card1 from '../../../../../public/images/card-1.png'
+import Card2 from '../../../../../public/images/card-2.png'
+import Card3 from '../../../../../public/images/card-3.png'
+import Card4 from '../../../../../public/images/card-4.png'
+import FeatureCard from '@/components/feature-card'
+import { Chuong, LoTrinh } from '@/types/types'
+import { cn } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
+import { FaCircleCheck } from 'react-icons/fa6'
 
-interface AnsweredQuestion {
-  id: string
-  ma_cau_hoi: string
-  ma_chuong: string
-  ma_lua_chon: string
+const chartConfig = {
+  count: {
+    label: 'Visitors',
+  },
+  done: {
+    color: '#A08CE6',
+  },
+} satisfies ChartConfig
+
+interface ChuongExtended extends Chuong {
+  tong_so_cau: number
+  so_cau_da_lam: number
+  thu_tu: number
+  passed: boolean
 }
 
 function LearningPathPage() {
-  const params = useParams<{ licenseName: string }>()
+  const { licenseName } = useParams<{ licenseName: string }>()
+  const [learningPathData, setLearningPathData] = useState<LoTrinh | null>(null)
+  const [chaptersData, setChaptersData] = useState<ChuongExtended[]>([])
+  const [selectedChapter, setSelectedChapter] = useState<ChuongExtended | null>(
+    null
+  )
 
-  const auth = useAuth()
+  const { user, loading } = useAuth()
+  const router = useRouter()
 
-  const [chapters, setChapters] = useState<Chuong[]>([])
-  const [selectedChapter, setSelectedChapter] = useState<string>()
-  const [questions, setQuestions] = useState<QuestionDTO[]>([])
-  const [answeredQuestions, setAnsweredQuestions] = useState<
-    AnsweredQuestion[]
-  >([])
+  const chartData = useMemo(
+    () => [
+      {
+        status: 'done',
+        count: chaptersData.filter((chapter) => chapter.passed).length,
+      },
+      {
+        status: 'not done',
+        count:
+          chaptersData.length -
+            chaptersData.filter((chapter) => chapter.passed).length || 0,
+      },
+    ],
+    [chaptersData]
+  )
 
   useEffect(() => {
-    const fetchChapters = async () => {
-      const { data, error } = await supabase.from('chuong').select().limit(4)
-      if (error || !data) {
-        console.log(error)
-        return toast.error('Lấy dữ liệu chương không thành công')
-      }
-      setChapters(data)
-      setSelectedChapter(data[0].id)
+    if (!user) {
+      return
     }
-    fetchChapters()
-  }, [])
 
-  //   useEffect(() => {
-  //     const fetchQuestions = async () => {
-  //       const { data, error } = await supabase
-  //         .from('cau_hoi')
-  //         .select(
-  //           `
-  //             *,
-  //             lua_chon (
-  //               *
-  //             )
-  //           `
-  //         )
-  //         .limit(25)
-
-  //       if (error) {
-  //         console.error(error)
-  //         return toast.error('Lỗi trong quá trình lấy dữ liệu câu hỏi')
-  //       }
-
-  //       const formattedQuestions: QuestionDTO[] = data.map((item: any) => ({
-  //         question: item,
-  //         answers: item.lua_chon.some((a: LuaChon) => a.so_thu_tu === 0)
-  //           ? shuffleAnswers(item.lua_chon)
-  //           : item.lua_chon.sort(
-  //               (a: LuaChon, b: LuaChon) => a.so_thu_tu - b.so_thu_tu
-  //             ),
-  //       }))
-
-  //       setQuestions(formattedQuestions)
-  //     }
-
-  //     fetchQuestions()
-  //   }, [selectedChapter])
-
-  useEffect(() => {
-    const handleFetchQuestions = async () => {
-      // Fetch questions
-      const { data, error } = await supabase.rpc('get_questions_with_answers', {
-        ma_chuong_value: selectedChapter,
-      })
-
-      if (error) {
-        console.error(error)
-        return
-      }
-
-      let answeredData: AnsweredQuestion[] = []
-
-      // Fetch answered questions only if user is logged in
-      if (auth.user?.id) {
-        const { data: answered, error: answeredError } = await supabase.rpc(
-          'get_answered',
+    const fetchData = async () => {
+      try {
+        const { data: pathData, error: pathDataError } = await supabase.rpc(
+          'fetch_learning_path_info',
           {
-            user_id: auth.user?.id,
-            chapter_id: selectedChapter,
+            path_name: licenseName,
           }
         )
 
-        if (answeredError) {
-          console.error(answeredError)
-        } else {
-          answeredData = answered.answered_records || [] // Ensure it's an array
+        setLearningPathData(pathData)
+
+        const { data: chaptersData, error: chaptersError } = await supabase.rpc(
+          'find_chapters',
+          {
+            learning_path_id: pathData?.id,
+            license_id: pathData?.ma_hang_bang,
+            user_id: user.id,
+          }
+        )
+
+        setChaptersData(chaptersData)
+        if (chaptersData && chaptersData.length > 0) {
+          setSelectedChapter(chaptersData[0])
         }
+      } catch (error: any) {
+        console.log(error)
       }
-
-      // Process questions
-      const formattedQuestions: QuestionDTO[] = data.map((item: any) => ({
-        question: item,
-        answers: item.ds_lua_chon.map((a: LuaChon) => a),
-        userAnswerId:
-          answeredData.find((a: AnsweredQuestion) => a.ma_cau_hoi === item.id)
-            ?.ma_lua_chon || '',
-      }))
-
-      setQuestions(formattedQuestions)
-      setAnsweredQuestions(answeredData)
     }
 
-    if (selectedChapter) {
-      handleFetchQuestions()
-    }
-  }, [selectedChapter, auth.user?.id])
-
-  const isChapterLocked = (index: number) => {
-    return index !== 0
-  }
+    fetchData()
+  }, [user, licenseName])
+  if (loading) return <div>Loading...</div>
 
   return (
-    <div className="flex flex-col items-center h-full relative">
-      <div className="flex flex-col gap-[32px] justify-between items-center h-full w-full max-w-screen-xl ">
-        <div className="flex justify-start w-full bg-light-purple mt-16">
-          <div className="flex flex-col z-20 mt-20 w-full px-40">
-            <hr className="w-28 h-1 bg-purple border-0 rounded-sm  dark:bg-purple" />
-            <div className="text-purple text-2xl font-bold my-5">
-              HỌC CÂU HỎI LÝ THUYẾT
-            </div>
-            <div className="w-[80%]">
-              Dưới đây là bộ tài liệu 200 câu lý thuyết thi lái xe mô
-              tô của Tổng Cục Đường Bộ Việt Nam dùng cho thi sát hạch lý thuyết
-              để cấp giấy phép lái xe hạng A1
+    <div>
+      <div className="w-full max-w-[1080px]  mt-10 mb-[52px] mx-auto relative ">
+        <div className="w-20 h-[3px] bg-[#907ECF] rounded-full"></div>
+        <p className="uppercase font-bold text-[26px] text-purple my-[14px]">
+          Lộ trình học bằng lái
+        </p>
+        <p className="max-w-[682px] text-purple text-[14px]">
+          Lộ trình học giúp bạn theo dõi quá trình ôn tập một cách khoa học và
+          tuần tự. Hoàn thành từng chương để mở khóa nội dung tiếp theo và tiến
+          gần hơn đến việc vượt qua kỳ thi bằng lái!
+        </p>
+      </div>
+      <div className="w-full bg-light-purple h-[482px] ">
+        <div className="max-w-[1065px] mx-auto pt-[23px] pb-[28px]">
+          <p className="uppercase font-semibold text-[20px] text-purple">
+            Tiến trình của bạn
+          </p>
+
+          <div className="flex gap-[65px] h-[382px] mt-[25px]">
+            <div className="w-60 h-full bg-[#F6F4FD] rounded-[16px]">
+              <p className="w-full text-center font-medium text-[14px] text-[#3D7199] mt-[25px] mb-[36px]">
+                Số chương đã hoàn thành:
+              </p>
+
+              <ChartContainer config={chartConfig}>
+                <PieChart width={136} height={136}>
+                  <Pie
+                    dataKey="count"
+                    nameKey="status"
+                    data={chartData}
+                    innerRadius={40}
+                    outerRadius={65}
+                    fill="#DBDBDB"
+                    direction="clokewise"
+                    startAngle={90} // Start at the bottom
+                    endAngle={450} // End at the top
+                  ></Pie>
+                </PieChart>
+              </ChartContainer>
+
+              <p className="font-extrabold text-4xl text-purple mt-[57px] w-full text-center">
+                {chaptersData.filter((chapter) => chapter.passed).length}/
+                {chaptersData.length}
+              </p>
+              <p className="w-full text-center text-[14px] font-medium text-purple mt-[11px]">
+                Cùng bắt đầu nào!
+              </p>
             </div>
 
-            <div className="mt-12 flex gap-8 justify-center">
-              {chapters.map((chapter, index) => (
-                <Button
-                  key={index}
-                  disabled={isChapterLocked(index)}
-                  onClick={() => setSelectedChapter(chapter.id)}
-                  className={cn(
-                    `
-                                        text-lg 
-                                        text-purple 
-                                        font-medium 
-                                        rounded-full 
-                                        bg-white 
-                                        hover:bg-white/80 
-                                        border-purple 
-                                        border-2 uppercase
-                                        p-[10px]
-                                        `,
+            <div className="w-[760px] h-full flex flex-col">
+              <div className="w-full items-center flex-wrap flex-1 flex bg-light-purple-admin rounded-t-[16px] gap-4 justify-center">
+                {chaptersData?.map((chapter, index) => (
+                  <button
+                    disabled={!chaptersData[index - 1]?.passed && index > 0}
+                    onClick={() => {
+                      setSelectedChapter(chapter)
+                    }}
+                    key={chapter.id}
+                    className={cn(
+                      'relative min-w-[118px] h-[42px] text-purple rounded-full bg-white text-[18px] font-bold uppercase border-2 border-[#7869AD] disabled:opacity-50 disabled:cursor-auto',
+                      selectedChapter?.id === chapter.id &&
+                        "after:content-[''] after:absolute after:w-[85%] after:h-[3px] after:bg-[#8070B8] after:rounded-full after:-bottom-3 after:left-1/2 after:-translate-x-1/2"
+                    )}
+                  >
+                    {chapter.ten_chuong}
+                    {!chaptersData[index - 1]?.passed && index > 0 && (
+                      <FaLock
+                        className="absolute right-0 -bottom-3"
+                        fill="#979797"
+                        stroke="#979797"
+                        size={24}
+                      />
+                    )}
 
-                    selectedChapter === chapter.id &&
-                      'ring-4 ring-purple/50 font-bold'
-                  )}
-                >
-                  {isChapterLocked(index) && (
-                    <LockKeyhole className="text-purple" />
-                  )}
-                  {chapter.ten_chuong}
-                </Button>
-              ))}
-            </div>
+                    {chapter.passed && (
+                      <FaCircleCheck
+                        className="absolute -right-1 -bottom-[10px]"
+                        fill="#A3C9A8"
+                        stroke="#A3C9A8"
+                        size={20}
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
+              <div className="w-full h-[280px] bg-[#F0F8FF] rounded-b-[16px] pt-[30px] pb-[28px] pl-[66px] pr-[53px]">
+                <p className="text-[14px] text-[#60548A]">
+                  <b>{selectedChapter?.ten_chuong}</b>:{' '}
+                  {selectedChapter?.mo_ta_chuong}
+                </p>
 
-            <div className="px-4 py-8 bg-white rounded-md my-8">
-              Chương 1: 100 câu về kiến thức luật
+                <div className="bg-purple w-full rounded-full h-[1px] my-[25px]"></div>
+
+                <div className="flex h-full gap-[165px]">
+                  <div className="relative">
+                    <p className="text-[14px]">
+                      Trạng thái:{' '}
+                      <b>
+                        {selectedChapter?.passed
+                          ? 'Đã hoàn thành'
+                          : 'Chưa hoàn thành'}
+                      </b>
+                    </p>
+                    <Image
+                      width={200}
+                      height={200}
+                      src={WorkingDesk}
+                      alt="image"
+                      className="absolute bottom-16"
+                    />
+                  </div>
+
+                  <div className="w-[200px]">
+                    <p className="text-[14px] mb-[5px]">Tiến trình:</p>
+
+                    <p className="w-full text-end text-[14px] text-[#5CAAE6]">
+                      {selectedChapter?.so_cau_da_lam}/
+                      {selectedChapter?.tong_so_cau}
+                    </p>
+                    <Progress
+                      value={
+                        ((selectedChapter?.so_cau_da_lam ?? 0) /
+                          (selectedChapter?.tong_so_cau ?? 1)) *
+                        100
+                      }
+                      className="w-[200px] h-1 rounded-none"
+                      indicatorClassName="bg-[#5CAAE6]"
+                    />
+
+                    <div className="mt-[74px] flex gap-[16px]">
+                      <button
+                        onClick={() =>
+                          router.push(
+                            `/learning-path/${licenseName}/${selectedChapter?.id}`
+                          )
+                        }
+                        className="hover:opacity-80 text-[14px] bg-purple text-white shadow-sm font-semibold w-[98px] h-[37px] rounded-full uppercase"
+                      >
+                        luyện thi
+                      </button>
+
+                      {selectedChapter?.so_cau_da_lam ===
+                      selectedChapter?.tong_so_cau ? (
+                        <button className="hover:opacity-80 text-[14px] bg-[#F5D5F1] text-[#C96BBC] shadow-sm font-semibold w-[98px] h-[37px] rounded-full uppercase">
+                          kiểm tra
+                        </button>
+                      ) : (
+                        <button
+                          disabled
+                          className="relative cursor-auto text-[14px] bg-[#D8D8D8] text-[#979797] shadow-sm font-semibold w-[98px] h-[37px] rounded-full uppercase"
+                        >
+                          kiểm tra
+                          <FaLock
+                            className="absolute right-0 -bottom-2"
+                            fill="#979797"
+                            stroke="#979797"
+                            size={20}
+                          />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <LearningPathComponent
-          initialQuestions={questions}
-          initialAnswers={[
-            ...questions.map((q) => (q.userAnswerId ? q.userAnswerId : '')),
-          ]}
-        />
+      <div className="max-w-[1065px] mx-auto mb-[61px]">
+        <p className="text-[20px] font-light text-[#7869AD] w-full text-center mt-[46px]">
+          Các tính năng khác
+        </p>
+
+        <div className="flex gap-10 justify-center mt-8 ">
+          <FeatureCard
+            title="thi thử"
+            description="Mô phỏng bài thi lý thuyết, giúp bạn làm quen."
+            icon={Card1}
+          />
+
+          <FeatureCard
+            title="học câu điểm liệt"
+            description="Những câu hỏi về tình huống gây mất an toàn giao thông nghiêm trọng."
+            icon={Card2}
+          />
+
+          <FeatureCard
+            title="học những câu sai"
+            description="Những câu bạn đã từng làm sai, được hệ thống ghi nhận."
+            icon={Card3}
+          />
+
+          <FeatureCard
+            title="học biển báo"
+            description="Các biển báo được sử dụng trong tham gia giao thông."
+            icon={Card4}
+          />
+        </div>
       </div>
     </div>
   )

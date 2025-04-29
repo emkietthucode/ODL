@@ -1,6 +1,6 @@
 'use client'
 import ScrollToTopButton from '@/components/scroll-to-top-button'
-import TestComponent from '@/components/test-component'
+import TestComponent from '@/components/test-component-v2'
 import supabase from '@/utils/supabase/supabase'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
@@ -76,18 +76,13 @@ const TestPage = () => {
   }, [])
   return (
     <main className="bg-white mx-auto my-auto max-h-full">
-      <div className="flex flex-col justify-around items-center h-full ">
-        <div className="flex flex-col gap-[16px] justify-between items-center h-full w-[71%] ml-16">
-          <div className="flex flex-col gap-[32px] z-20 mt-10 ">
-            <div className="text-purple text-4xl font-bold">{t('title')}</div>
-            <div className="w-[75%] text-sm">{t('description')}</div>
-          </div>
-        </div>
-        <TestComponent
+      <div className="flex flex-col justify-around items-center h-full my-10 ">
+        {/* <TestComponent
           title={testTitle}
           questions={questions}
           setQuestions={setQuestions}
-        />
+        /> */}
+        <TestComponent />
       </div>
       <ScrollToTopButton />
     </main>

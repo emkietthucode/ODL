@@ -187,7 +187,7 @@ function LearningPathComponent({
     <div className="flex flex-col gap-10 my-10 w-[71%]">
       <div className="h-[600px] w-full flex gap-2">
         <div className="w-[22%] bg-light-purple-admin flex flex-col justify-between items-center">
-          <QuestionCarousel ref={carouselRef}>
+          <QuestionCarousel ref={carouselRef} isLastSlide={10}>
             {chunkedQuestions.map((questionGroup, groupIndex) => (
               <ul
                 key={groupIndex}
