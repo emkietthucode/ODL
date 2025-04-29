@@ -9,6 +9,7 @@ const AllMissedQuestions = ({ questions }: { questions: any[] }) => {
   const [expandedQuestion, setExpandedQuestion] = useState<number | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [bookmarkedQuestions, setBookmarkedQuestions] = useState<number[]>([])
+  const [searchQuery, setSearchQuery] = useState('')
 
   const toggleBookmark = (id: number) => {
     if (bookmarkedQuestions.includes(id)) {
@@ -26,11 +27,15 @@ const AllMissedQuestions = ({ questions }: { questions: any[] }) => {
     }
   }
 
+  const filteredQuestions = questions.filter((q) =>
+    q.noi_dung_cau_hoi.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8 flex flex-col justify-center w-[97%] self-center">
       <div className="bg-custom-normal-violet font-bold text-sm text-white py-2 px-4">
         <div className="flex justify-center items-center">
-          <span>{`SỐ CÂU: ${questions.length || 0}`}</span>
+          <span>{`SỐ CÂU: ${filteredQuestions.length || 0}`}</span>
         </div>
       </div>
 
@@ -44,11 +49,13 @@ const AllMissedQuestions = ({ questions }: { questions: any[] }) => {
             type="text"
             placeholder="Tìm kiếm"
             className="pl-10 border-gray-300 rounded-full w-[524px]"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
       </div>
       <div className="space-y-4 w-[95%] self-center">
-        {questions.map((q) => (
+        {filteredQuestions.map((q) => (
           <div
             key={q.id}
             className="border rounded-xl overflow-hidden bg-gray-50"
