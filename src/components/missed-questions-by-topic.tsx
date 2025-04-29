@@ -13,6 +13,7 @@ const MissedQuestionsByTopic = ({
   const [expandedQuestion, setExpandedQuestion] = useState<number | null>(null)
   const [bookmarkedQuestions, setBookmarkedQuestions] = useState<number[]>([])
   const [expandedChapters, setExpandedChapters] = useState<number[]>([])
+  const [searchQuery, setSearchQuery] = useState('')
 
   const toggleBookmark = (id: number) => {
     if (bookmarkedQuestions.includes(id)) {
@@ -38,6 +39,15 @@ const MissedQuestionsByTopic = ({
     }
   }
 
+  const filteredChapters = chuongWithCauHoi
+    .map((chapter) => ({
+      ...chapter,
+      cau_hoi: chapter.cau_hoi.filter((q: any) =>
+        q.noi_dung_cau_hoi.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
+    }))
+    .filter((chapter) => chapter.cau_hoi.length > 0)
+
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8 flex flex-col justify-center w-[97%] self-center">
       <div className="bg-custom-normal-violet font-bold text-sm text-white py-2 px-4">
@@ -56,11 +66,13 @@ const MissedQuestionsByTopic = ({
             type="text"
             placeholder="Tìm kiếm"
             className="pl-10 border-gray-300 rounded-full w-[524px]"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
       </div>
       <div className="space-y-4 w-[95%] self-center mb-8">
-        {chuongWithCauHoi.map((chapter) => (
+        {filteredChapters.map((chapter) => (
           <div
             key={chapter.id}
             className="border rounded-xl overflow-hidden bg-gray-50"
