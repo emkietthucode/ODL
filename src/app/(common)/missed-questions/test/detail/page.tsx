@@ -1,5 +1,5 @@
 'use client'
-import ResultDetailPage from '@/components/result-detail'
+import ResultDetailPage from '@/components/result-missed-questions-detail'
 import useAuth from '@/hooks/useAuth'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { QuestionDTO } from '@/types/dto/types'
@@ -30,6 +30,9 @@ const TestDetailPage = () => {
     const checkAndRemoveCorrectAnswers = async () => {
       if (!questions || questions.length === 0) return
 
+      let correctCount = 0
+      const totalQuestions = questions.length
+
       for (const question of questions) {
         if (!question.question || !question.answers || !question.userAnswerId)
           continue
@@ -40,8 +43,11 @@ const TestDetailPage = () => {
         )
         if (!correctAnswer) continue
 
-        // If user's answer matches the correct answer, remove from cau_hoi_thuong_sai
+        // If user's answer matches the correct answer
         if (question.userAnswerId === correctAnswer.id) {
+          correctCount++
+
+          // Remove from cau_hoi_thuong_sai
           const { error } = await supabase
             .from('cau_hoi_thuong_sai')
             .delete()
@@ -49,24 +55,27 @@ const TestDetailPage = () => {
             .eq('nguoi_dung_id', user?.id)
 
           if (error) {
-            console.error(
+            console.log(
               'Error removing question from cau_hoi_thuong_sai:',
               error
             )
           }
         }
       }
+
+      // Calculate score (assuming each question is worth 1 point)
+      setUserScore(correctCount)
+      setTestTotalScore(questions.length || 0) // Total possible score is 100
     }
+
     if (user?.id == null) return
 
     checkAndRemoveCorrectAnswers()
-  }, [questions])
+  }, [questions, user?.id])
 
   return (
     <ResultDetailPage
       questions={questions}
-      testDesc={testDesc}
-      userCompleteTime={userCompleteTime}
       userScore={userScore}
       testTotalScore={testTotalScore}
     />
