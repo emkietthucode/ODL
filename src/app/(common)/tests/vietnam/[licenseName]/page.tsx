@@ -25,6 +25,12 @@ const TestsLicensePage = () => {
   const pathname = usePathname()
   const t = useTranslations('ChooseTestPage')
 
+  const handleRandomTest = () => {
+    if (tests.length === 0) return
+    const randomIndex = Math.floor(Math.random() * tests.length)
+    router.push(`${pathname}/${tests[randomIndex].id}`)
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const { data: licenseData, error: licenseError } = await supabase
@@ -92,6 +98,7 @@ const TestsLicensePage = () => {
                   variant="main"
                   size="auto"
                   className="rounded-xl shadow-xl text-xl font-medium w-[191px] h-[44px] uppercase bg-custom-dark-violet"
+                  onClick={handleRandomTest}
                 >
                   {t('randomButton')}
                 </Button>
