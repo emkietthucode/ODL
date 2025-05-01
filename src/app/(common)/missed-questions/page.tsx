@@ -1,19 +1,17 @@
 'use client'
 import ScrollToTopButton from '@/components/scroll-to-top-button'
 import { useEffect, useState } from 'react'
-import { Search, Bookmark, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import Overlay1 from '../../../../public/images/F8Overlay1.svg'
 import Overlay2 from '../../../../public/images/F8Overlay2.svg'
 import Image from 'next/image'
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 import MissedQuestionsByTopic from '@/components/missed-questions-by-topic'
 import AllMissedQuestions from '@/components/all-missed-questions'
 import useAuth from '@/hooks/useAuth'
 import supabase from '@/utils/supabase/supabase'
-import { map } from 'lodash'
 import useStoreMissedQuestions from '@/hooks/useStoreMissedQuestions'
+import Loading from '@/components/loading'
+import { usePathname, useRouter } from 'next/navigation'
 
 const MissedQuestionsPage = () => {
   const [activeTab, setActiveTab] = useState('all')
@@ -21,6 +19,8 @@ const MissedQuestionsPage = () => {
   const { user } = useAuth()
   const [chuongWithCauHoi, setChuongWithCauHoi] = useState<any[]>([])
   const { questions, setQuestions } = useStoreMissedQuestions()
+  const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     const fetchMissedQuestions = async () => {
@@ -85,7 +85,7 @@ const MissedQuestionsPage = () => {
   }, [user?.id])
 
   if (loading) {
-    return <div>Loading...</div>
+    return <Loading />
   }
 
   return (
@@ -152,6 +152,7 @@ const MissedQuestionsPage = () => {
               font-bold
               text-xl
               px-8 ml-auto"
+              onClick={() => router.push(`${pathname}/test`)}
             >
               KIỂM TRA
             </Button>

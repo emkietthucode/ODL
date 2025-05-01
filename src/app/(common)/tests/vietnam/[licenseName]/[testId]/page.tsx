@@ -9,6 +9,7 @@ import { DeThi, LuaChon } from '@/types/types'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { useParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import Loading from '@/components/loading'
 
 const shuffleAnswers = (answers: LuaChon[]) => {
   const shuffled = [...answers]
@@ -22,6 +23,7 @@ const shuffleAnswers = (answers: LuaChon[]) => {
 const TestPage = () => {
   const { item: questions, setQuestions } = useConfirmSubmitTestModal()
   const [testTitle, setTestTitle] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
   const params = useParams<{
     licenseName: string
     testId: string
@@ -46,6 +48,7 @@ const TestPage = () => {
 
   useEffect(() => {
     const fetchQuestions = async () => {
+      setIsLoading(true)
       const { data, error } = await supabase
         .from('cau_hoi_de_thi')
         .select(
@@ -70,6 +73,7 @@ const TestPage = () => {
       }))
 
       setQuestions(formattedQuestions)
+      setIsLoading(false)
     }
 
     fetchQuestions()
@@ -77,12 +81,7 @@ const TestPage = () => {
   return (
     <main className="bg-white mx-auto my-auto max-h-full">
       <div className="flex flex-col justify-around items-center h-full my-10 ">
-        {/* <TestComponent
-          title={testTitle}
-          questions={questions}
-          setQuestions={setQuestions}
-        /> */}
-        <TestComponent />
+        {isLoading ? <Loading /> : <TestComponent />}
       </div>
       <ScrollToTopButton />
     </main>

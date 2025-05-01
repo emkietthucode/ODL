@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 import { useEffect, useState } from 'react'
 import { LearningQuestionDTO, QuestionDTO } from '@/types/dto/types'
-import { useParams } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import supabase from '@/utils/supabase/supabase'
 import Timer from '@/components/timer'
 import useAuth from '@/hooks/useAuth'
@@ -35,7 +35,7 @@ const convertLearningQuestionsToQuestionDTO = (
   }))
 }
 
-const TestComponent = () => {
+const TestMissedQuestions = () => {
   const {
     onOpen,
     setQuestions: setQuestionsForDetail,
@@ -52,40 +52,76 @@ const TestComponent = () => {
     thoi_gian_lam_bai: number
     ten_de_thi: string
   } | null>(null)
+  const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     const handleFetchData = async () => {
       setIsActive(false)
       try {
-        const [
-          { data: questionsData, error: questionsError },
-          { data: testInfoData, error: testInfoError },
-        ] = await Promise.all([
-          supabase.rpc('fetch_test_questions', {
-            test_id: testId,
-          }),
-          supabase.rpc('fetch_test_info', {
-            test_id: testId,
-          }),
-        ])
+        const { data: cauHoiThuongSaiList, error: error1 } = await supabase
+          .from('cau_hoi_thuong_sai')
+          .select('cau_hoi_id, duoc_danh_dau')
+          .eq('nguoi_dung_id', user?.id)
+
+        if (error1) {
+          console.log('error1: ', error1)
+          return
+        }
+
+        const cauHoiIds =
+          cauHoiThuongSaiList?.map((item) => item.cau_hoi_id) || []
+
+        const { data: cauHoiList, error: error2 } = await supabase
+          .from('cau_hoi')
+          .select(
+            'id, noi_dung_cau_hoi, ma_chuong, lua_chon(id, noi_dung_lua_chon, la_lua_chon_dung, so_thu_tu)'
+          )
+          .in('id', cauHoiIds)
+
+        if (error2) {
+          console.log('error2', error2)
+          return
+        }
+
+        const questionsData: LearningQuestionDTO[] = (cauHoiList || []).map(
+          (cauHoi: any) => ({
+            id: cauHoi.id,
+            noi_dung_cau_hoi: cauHoi.noi_dung_cau_hoi,
+            ds_lua_chon: (cauHoi.lua_chon || []).map((luaChon: any) => ({
+              id: luaChon.id,
+              noi_dung_lua_chon: luaChon.noi_dung_lua_chon,
+              la_lua_chon_dung: luaChon.la_lua_chon_dung,
+              ma_cau_hoi: cauHoi.id, // you can assign cauHoi.id here
+              so_thu_tu: luaChon.so_thu_tu,
+            })),
+            cau_tra_loi: '',
+            giai_thich: '',
+            goi_y: [],
+            hinh_anh: 0,
+          })
+        )
 
         setQuestions(questionsData as LearningQuestionDTO[])
         setQuestionsForDetail(
           convertLearningQuestionsToQuestionDTO(questionsData)
         )
-        setTestInfo(testInfoData)
-        setCurrentTimeLeft(testInfoData.thoi_gian_lam_bai * 60)
+        setTestInfo({
+          thoi_gian_lam_bai: 20,
+          ten_de_thi: 'CÂU HỎI THƯỜNG SAI',
+        })
+        setCurrentTimeLeft(20 * 60)
         setIsActive(true)
       } catch (error: any) {
         console.log('error', error.message)
       }
     }
-
+    if (user?.id == null) return
     handleFetchData()
-  }, [testId])
+  }, [testId, user?.id])
 
   const getButtonCss = (index: number) => {
-    if (questions[index].cau_tra_loi) {
+    if (questions[index]?.cau_tra_loi) {
       return 'bg-[#907ECF] text-white'
     } else {
       return 'bg-[#E2DBF7] text-purple'
@@ -141,9 +177,7 @@ const TestComponent = () => {
 
   const handleSubmit = (time: number) => {
     setTestCompletionTimeSec(time)
-    onOpen(() => {
-      setIsActive(false)
-    })
+    router.push(`${pathname}/detail`)
   }
 
   useEffect(() => {
@@ -189,7 +223,7 @@ const TestComponent = () => {
   }, [handleChangeQuestion, changeAnswerWithIndex, changeAnswerByArrow])
 
   return (
-    <div className="w-[960px] mx-auto">
+    <div className="w-[960px] mx-auto my-10">
       <div className="bg-[#A08CE6] h-9 leading-9 text-center text-[18] font-bold text-white">
         {testInfo?.ten_de_thi || ''}
       </div>
@@ -197,39 +231,39 @@ const TestComponent = () => {
         <div className="w-[164px] bg-[#F1EEFB] h-80">
           <div className=" flex items-start h-full relative">
             <QuestionCarousel
-              totalSlide={Math.ceil(questions.length / 25)}
+              totalSlide={Math.ceil(questions?.length / 25)}
               className="!items-start pt-3"
               secondary
             >
-              {Array.from({ length: Math.ceil(questions.length / 25) }).map(
-                (_, groupIndex) => (
-                  <div
-                    key={groupIndex}
-                    className="flex justify-center gap-[6px] h-[full] flex-wrap"
-                  >
-                    {Array.from({ length: questions.length }).map(
-                      (_, qIndex) => (
-                        <button
-                          key={qIndex}
-                          disabled={!isActive}
-                          onClick={() =>
-                            setSelectedQuestion(qIndex + groupIndex * 25)
-                          }
-                          className={cn(
-                            `cursor-pointer w-6 h-6 ${getButtonCss(
-                              qIndex + groupIndex * 25
-                            )}  rounded-full text-center font-bold disabled:opacity-50`,
-                            qIndex + groupIndex * 25 === selectedQuestion &&
-                              'ring ring-purple ring-offset-2'
-                          )}
-                        >
-                          {qIndex + groupIndex * 25 + 1}
-                        </button>
-                      )
-                    )}
-                  </div>
-                )
-              )}
+              {Array.from({
+                length: Math.ceil(questions?.length / 25),
+              }).map((_, groupIndex) => (
+                <div
+                  key={groupIndex}
+                  className="flex px-[9px] gap-[6px] h-[full] flex-wrap"
+                >
+                  {Array.from({ length: questions?.length }).map(
+                    (_, qIndex) => (
+                      <button
+                        key={qIndex}
+                        disabled={!isActive}
+                        onClick={() =>
+                          setSelectedQuestion(qIndex + groupIndex * 25)
+                        }
+                        className={cn(
+                          `cursor-pointer w-6 h-6 ${getButtonCss(
+                            qIndex + groupIndex * 25
+                          )}  rounded-full text-center font-bold disabled:opacity-50`,
+                          qIndex + groupIndex * 25 === selectedQuestion &&
+                            'ring ring-purple ring-offset-2'
+                        )}
+                      >
+                        {qIndex + groupIndex * 25 + 1}
+                      </button>
+                    )
+                  )}
+                </div>
+              ))}
             </QuestionCarousel>
           </div>
         </div>
@@ -313,4 +347,4 @@ const TestComponent = () => {
   )
 }
 
-export default TestComponent
+export default TestMissedQuestions
