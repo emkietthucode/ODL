@@ -10,6 +10,8 @@ import AllMissedQuestions from '@/components/all-missed-questions'
 import useAuth from '@/hooks/useAuth'
 import supabase from '@/utils/supabase/supabase'
 import useStoreMissedQuestions from '@/hooks/useStoreMissedQuestions'
+import Loading from '@/components/loading'
+import { usePathname, useRouter } from 'next/navigation'
 
 const MissedQuestionsPage = () => {
   const [activeTab, setActiveTab] = useState('all')
@@ -17,6 +19,8 @@ const MissedQuestionsPage = () => {
   const { user } = useAuth()
   const [chuongWithCauHoi, setChuongWithCauHoi] = useState<any[]>([])
   const { questions, setQuestions } = useStoreMissedQuestions()
+  const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     const fetchMissedQuestions = async () => {
@@ -81,7 +85,7 @@ const MissedQuestionsPage = () => {
   }, [user?.id])
 
   if (loading) {
-    return <div>Loading...</div>
+    return <Loading />
   }
 
   return (
@@ -148,6 +152,7 @@ const MissedQuestionsPage = () => {
               font-bold
               text-xl
               px-8 ml-auto"
+              onClick={() => router.push(`${pathname}/test`)}
             >
               KIỂM TRA
             </Button>
