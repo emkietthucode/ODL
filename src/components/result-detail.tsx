@@ -277,13 +277,15 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
                     questions[selectedQuestionIndex]?.userAnswerId ===
                     answer?.id
                   const isCorrect = answer?.la_lua_chon_dung
+                  const hasUserAnswer =
+                    !!questions[selectedQuestionIndex]?.userAnswerId
 
                   let bgColor = 'bg-custom-bg-gray' // Default background
 
                   if (isCorrect) {
                     bgColor = 'bg-custom-light-green' // Always highlight the correct answer in green
-                  } else if (isSelected) {
-                    bgColor = 'bg-custom-light-brown' // Highlight wrong selected answers in red
+                  } else if (isSelected && hasUserAnswer) {
+                    bgColor = 'bg-custom-light-brown' // Only highlight wrong selected answers in red if user has answered
                   }
 
                   return (
