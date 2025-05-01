@@ -207,24 +207,26 @@ const TestComponent = () => {
                     key={groupIndex}
                     className="flex justify-center gap-[6px] h-[full] flex-wrap"
                   >
-                    {Array.from({ length: 25 }).map((_, qIndex) => (
-                      <button
-                        key={qIndex}
-                        disabled={!isActive}
-                        onClick={() =>
-                          setSelectedQuestion(qIndex + groupIndex * 25)
-                        }
-                        className={cn(
-                          `cursor-pointer w-6 h-6 ${getButtonCss(
-                            qIndex + groupIndex * 25
-                          )}  rounded-full text-center font-bold disabled:opacity-50`,
-                          qIndex + groupIndex * 25 === selectedQuestion &&
-                            'ring ring-purple ring-offset-2'
-                        )}
-                      >
-                        {qIndex + groupIndex * 25 + 1}
-                      </button>
-                    ))}
+                    {Array.from({ length: questions.length }).map(
+                      (_, qIndex) => (
+                        <button
+                          key={qIndex}
+                          disabled={!isActive}
+                          onClick={() =>
+                            setSelectedQuestion(qIndex + groupIndex * 25)
+                          }
+                          className={cn(
+                            `cursor-pointer w-6 h-6 ${getButtonCss(
+                              qIndex + groupIndex * 25
+                            )}  rounded-full text-center font-bold disabled:opacity-50`,
+                            qIndex + groupIndex * 25 === selectedQuestion &&
+                              'ring ring-purple ring-offset-2'
+                          )}
+                        >
+                          {qIndex + groupIndex * 25 + 1}
+                        </button>
+                      )
+                    )}
                   </div>
                 )
               )}
