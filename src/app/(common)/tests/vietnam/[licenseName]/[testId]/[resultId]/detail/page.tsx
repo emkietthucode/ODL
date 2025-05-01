@@ -1,4 +1,5 @@
 'use client'
+import Loading from '@/components/loading'
 import ResultDetailPage from '@/components/result-detail'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { QuestionDTO } from '@/types/dto/types'
@@ -23,6 +24,7 @@ const TestDetailPage = () => {
   const [userCompleteTime, setUserCompleteTime] = useState<string>('')
   const [userScore, setUserScore] = useState<number>(0)
   const [testTotalScore, setTestTotalScore] = useState<number>(0)
+  const [isLoading, setIsLoading] = useState(true)
   const params = useParams<{
     licenseName: string
     testId: string
@@ -39,6 +41,7 @@ const TestDetailPage = () => {
 
   useEffect(() => {
     const fetchQuestions = async () => {
+      setIsLoading(true)
       const { data, error } = await supabase
         .from('cau_hoi_de_thi')
         .select(
@@ -50,6 +53,7 @@ const TestDetailPage = () => {
 
       if (error) {
         console.log(error)
+        setIsLoading(false)
         return toast.error('Lỗi trong quá trình lấy dữ liệu câu hỏi')
       }
 
@@ -62,6 +66,7 @@ const TestDetailPage = () => {
 
       if (userAnswersError) {
         console.log(userAnswersError)
+        setIsLoading(false)
         return toast.error('Lỗi trong quá trình lấy dữ liệu câu hỏi')
       }
       const userAnswersMap = userAnswersData.reduce((acc: any, item: any) => {
@@ -87,6 +92,7 @@ const TestDetailPage = () => {
       }))
 
       setQuestions(formattedQuestions)
+      setIsLoading(false)
     }
     if (questions.length === 0) {
       fetchQuestions()
@@ -95,6 +101,7 @@ const TestDetailPage = () => {
 
   useEffect(() => {
     const fetchTestDesc = async () => {
+      setIsLoading(true)
       const { data, error } = await supabase
         .from('de_thi')
         .select('ten_de_thi')
@@ -102,15 +109,18 @@ const TestDetailPage = () => {
         .single()
       if (error || !data) {
         console.log(error)
+        setIsLoading(false)
         return toast.error('Lỗi trong quá trình lấy tên đề thi')
       }
       setTestDesc(data.ten_de_thi)
+      setIsLoading(false)
     }
     fetchTestDesc()
   }, [testDesc])
 
   useEffect(() => {
     const fetchTestTotalScore = async () => {
+      setIsLoading(true)
       const { data, error } = await supabase
         .from('de_thi')
         .select('ma_cau_truc (so_cau_de_dat)')
@@ -118,16 +128,19 @@ const TestDetailPage = () => {
         .single()
       if (error || !data.ma_cau_truc) {
         console.log(error)
+        setIsLoading(false)
         return toast.error('Lỗi trong quá trình lấy tổng số điểm')
       }
       // @ts-ignore
       setTestTotalScore(data.ma_cau_truc.so_cau_de_dat)
+      setIsLoading(false)
     }
     fetchTestTotalScore()
   }, [testTotalScore])
 
   useEffect(() => {
     const fetchUserTestResult = async () => {
+      setIsLoading(true)
       const { data, error } = await supabase
         .from('ket_qua_lam_bai')
         .select('diem, thoi_gian_lam_bai ')
@@ -135,13 +148,19 @@ const TestDetailPage = () => {
         .single()
       if (error || !data) {
         console.log(error)
+        setIsLoading(false)
         return toast.error('Lỗi trong quá trình lấy kết quả thi')
       }
       setUserScore(data.diem)
       setUserCompleteTime(formatTime(data.thoi_gian_lam_bai))
+      setIsLoading(false)
     }
     fetchUserTestResult()
   }, [testTotalScore])
+
+  if (isLoading) {
+    return <Loading />
+  }
 
   return (
     <ResultDetailPage
