@@ -1,18 +1,14 @@
 'use client'
 import ScrollToTopButton from '@/components/scroll-to-top-button'
 import { useEffect, useState } from 'react'
-import { Search, Bookmark, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import Overlay1 from '../../../../public/images/F8Overlay1.svg'
 import Overlay2 from '../../../../public/images/F8Overlay2.svg'
 import Image from 'next/image'
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 import MissedQuestionsByTopic from '@/components/missed-questions-by-topic'
 import AllMissedQuestions from '@/components/all-missed-questions'
 import useAuth from '@/hooks/useAuth'
 import supabase from '@/utils/supabase/supabase'
-import { map } from 'lodash'
 import useStoreMissedQuestions from '@/hooks/useStoreMissedQuestions'
 
 const MissedQuestionsPage = () => {
