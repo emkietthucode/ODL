@@ -4,28 +4,12 @@ import NavBar from '@/components/navbar'
 import SideBar from '@/components/sidebar'
 import ModalProvider from '@/providers/modal-provider'
 import ToasterProvider from '@/providers/toaster-provider'
-import { useEffect, useState } from 'react'
 import useAuth from '@/hooks/useAuth'
 import UnauthorizedNotification from '@/components/unauthorized-notification'
+import { AuthProvider } from '@/contexts/AuthContext'
+import { useEffect, useState } from 'react'
 
 const AdminDashboard = ({ children }: { children: React.ReactNode }) => {
-  const { userData } = useAuth()
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    if (userData) {
-      setIsLoading(false)
-    }
-  }, [userData])
-
-  if (isLoading) {
-    return null
-  }
-
-  if (!userData || userData.vai_tro !== 'admin') {
-    return <UnauthorizedNotification />
-  }
-
   return (
     <div className="flex flex-col min-h-screen">
       <NavBar />
@@ -33,7 +17,9 @@ const AdminDashboard = ({ children }: { children: React.ReactNode }) => {
         <ModalProvider />
         <SideBar />
         <ToasterProvider />
-        <div className="grow relative z-0">{children}</div>
+        <div className="grow relative z-0">
+          <AuthProvider>{children}</AuthProvider>
+        </div>
       </div>
     </div>
   )

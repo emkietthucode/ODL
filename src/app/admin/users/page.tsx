@@ -34,6 +34,8 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import useDeleteUserModal from '@/hooks/useDeleteUserModal'
 import useUpdateUserModal from '@/hooks/useUpdateUserModal'
+import useAuth from '@/hooks/useAuth'
+import UnauthorizedNotification from '@/components/unauthorized-notification'
 
 const ITEMS_PER_PAGE = 8
 const ADMIN_ROLE = 'admin'
@@ -100,6 +102,11 @@ export default function UserDashboard() {
         .filter((nguoiDung: NguoiDung) => nguoiDung.vai_tro !== ADMIN_ROLE)
         .slice(startIndex, endIndex)
     }
+  }
+  const { userData } = useAuth()
+
+  if (!userData || userData?.vai_tro !== 'admin') {
+    return <UnauthorizedNotification />
   }
 
   return (

@@ -14,6 +14,8 @@ import useDeleteChapterModal from '@/hooks/useDeleteChapterModal'
 import ChuongTable from '@/components/chuong-table'
 import { cn } from '@/lib/utils'
 import useUpdateChapterModal from '@/hooks/useUpdateChapterModal'
+import useAuth from '@/hooks/useAuth'
+import UnauthorizedNotification from '@/components/unauthorized-notification'
 
 export default function ChapterDashboard() {
   const { onOpen: insertOnOpen, refreshTrigger: insertRefreshTrigger } =
@@ -64,6 +66,12 @@ export default function ChapterDashboard() {
         (c) => c.ma_khu_vuc !== process.env.NEXT_PUBLIC_VIETNAM_UUID
       )
     }
+  }
+
+  const { userData } = useAuth()
+
+  if (!userData || userData?.vai_tro !== 'admin') {
+    return <UnauthorizedNotification />
   }
 
   return (
