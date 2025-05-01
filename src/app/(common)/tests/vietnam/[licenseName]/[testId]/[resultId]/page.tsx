@@ -12,6 +12,7 @@ import { QuestionDTO } from '@/types/dto/types'
 import { Button } from '@/components/ui/button'
 import useAuth from '@/hooks/useAuth'
 import { useTranslations } from 'next-intl'
+import Loading from '@/components/loading'
 
 const ResultPage = () => {
   const { user } = useAuth()
@@ -21,6 +22,7 @@ const ResultPage = () => {
   const [isFailOnSpecialQuestion, setIsFailedOnSpecialTest] =
     useState<boolean>(false)
   const [testStructure, setTestStructure] = useState<CauTrucDeThi[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const pathname = usePathname()
   const router = useRouter()
   const params = useParams<{
@@ -48,12 +50,14 @@ const ResultPage = () => {
   // Get Test Structure
   useEffect(() => {
     const fetchTestStructure = async () => {
+      setIsLoading(true)
       const { data, error } = await supabase.rpc('get_cau_truc_by_de_thi', {
         de_thi_id: params.testId,
       })
 
       if (error) {
         console.error('Error:', error)
+        setIsLoading(false)
         return toast.error('Lỗi khi lấy cấu trúc đề thi')
       }
       setTestStructure(data)
@@ -102,21 +106,25 @@ const ResultPage = () => {
   // Separate useEffect for checkTestStatus
   useEffect(() => {
     const fetchResult = async () => {
+      setIsLoading(true)
       const { data, error } = await supabase
         .from('ket_qua_lam_bai')
         .select()
         .eq('id', params.resultId)
       if (error || !data) {
         console.log(error)
+        setIsLoading(false)
         return toast.error('Lỗi khi lấy kết quả bài thi')
       }
       setUserCorrectAnswers(data[0].diem)
       setTestResult(data[0].diem < testStructure[0].so_cau_de_dat)
       setIsFailedOnSpecialTest(data[0].ket_qua_bai_lam)
+      setIsLoading(false)
     }
 
     if (testStructure.length > 0 && questions.length > 0) {
       checkTestStatus(questions)
+      setIsLoading(false)
     } else if (testStructure.length > 0 && questions.length === 0) {
       fetchResult()
     }
@@ -124,6 +132,7 @@ const ResultPage = () => {
 
   useEffect(() => {
     const insertResult = async () => {
+      setIsLoading(true)
       const { error: insertResultError } = await supabase
         .from('ket_qua_lam_bai')
         .insert({
@@ -137,6 +146,7 @@ const ResultPage = () => {
         })
       if (insertResultError) {
         console.log(insertResultError)
+        setIsLoading(false)
         return toast.error('Lỗi khi thêm kết kết quả vào cơ sở dữ liệu')
       }
 
@@ -153,8 +163,10 @@ const ResultPage = () => {
         })
 
         await Promise.all(insertPromises)
+        setIsLoading(false)
       } catch (error) {
         console.log(error)
+        setIsLoading(false)
         return toast.error('Lỗi khi thêm kết quả vào cơ sở dữ liệu')
       }
     }
@@ -165,6 +177,10 @@ const ResultPage = () => {
 
   if (!testStructure) {
     return null
+  }
+
+  if (isLoading) {
+    return <Loading />
   }
 
   return (
