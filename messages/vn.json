@@ -1,4 +1,9 @@
 {
+  "unauthorized": {
+    "title": "Không có quyền truy cập",
+    "message": "Bạn không có quyền truy cập vào trang này.",
+    "returnHome": "Quay về trang chủ"
+  },
   "Navbar": {
     "homePage": "Trang chủ",
     "testPage": "Thi thử",
