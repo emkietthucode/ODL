@@ -6,7 +6,8 @@
     "contactPage": "Liên hệ",
     "login": "Đăng nhập",
     "register": "Đăng ký",
-    "logout": "Đăng xuất"
+    "logout": "Đăng xuất",
+    "adminPanel": "Trang quản trị"
   },
   "LoginPage": {
     "login": "Đăng nhập",

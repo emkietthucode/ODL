@@ -6,7 +6,8 @@
     "contactPage": "Contact",
     "login": "Login",
     "register": "Register",
-    "logout": "Log out"
+    "logout": "Log out",
+    "adminPanel": "Admin Panel"
   },
   "Footer": {
     "addressTitle": "Address",

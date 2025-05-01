@@ -20,6 +20,9 @@ import { FaCheck } from 'react-icons/fa6'
 import Image from 'next/image'
 import { FaRegCircleUser } from 'react-icons/fa6'
 import Logo from '../../public/images/Logo.png'
+import { NguoiDung } from '@/types/types'
+import { useState, useEffect } from 'react'
+import supabase from '@/utils/supabase/supabase'
 
 const defaultFlag =
   'https://cgtsomijxwpcyqgznjqx.supabase.co/storage/v1/object/public/quoc_ky//Flag_of_the_United_Kingdom_(1-2).svg.png'
@@ -29,7 +32,7 @@ const NavBar = () => {
   const { locale, languages, setLocale } = useLanguage()
   const router = useRouter()
 
-  const { user, setUser } = useAuth()
+  const { user, userData, setUser } = useAuth()
 
   const handleLogout = async () => {
     await signOut()
@@ -113,6 +116,14 @@ const NavBar = () => {
                     >
                       {t('logout')}
                     </Button>
+                    {userData?.vai_tro === 'admin' && (
+                      <Button
+                        onClick={() => router.push('/admin')}
+                        className="w-full bg-transparent hover:bg-[#888] outline-none text-black border-none shadow-none "
+                      >
+                        {t('adminPanel')}
+                      </Button>
+                    )}
                   </PopoverContent>
                 </Popover>
               </div>
