@@ -202,29 +202,29 @@ const ResultPage = () => {
         <div className="flex flex-col gap-10 w-[60%] justify-center items-center">
           <div className="flex flex-col gap-6 text-blue-400 w-full justify-center items-center">
             <hr className="h-1 bg-purple border-0 dark:bg-purple w-full"></hr>
-            <div className="flex justify-between items-center gap-[96px] w-[70%] font-medium text-base">
+            <div className="flex justify-between items-center gap-[96px] w-[75%] font-medium text-base">
               <div>{t('notSatisfied')}</div>
               <Button
                 onClick={handleRedoTest}
-                className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] w-[112px] shadow-md uppercase"
+                className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] min-w-[112px] shadow-md uppercase"
               >
                 {t('retestButton')}
               </Button>
             </div>
-            <div className="flex justify-between items-center gap-[96px] w-[70%] font-medium text-base">
+            <div className="flex justify-between items-center gap-[96px] w-[75%] font-medium text-base">
               <div>{t('otherTest')}</div>
               <Button
                 onClick={handleDoOtherTest}
-                className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] w-[123px] shadow-md uppercase"
+                className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] min-w-[123px] shadow-md uppercase"
               >
                 {t('otherTestButton')}
               </Button>
             </div>
-            <div className="flex justify-between items-center gap-[96px] w-[70%] font-medium text-base">
+            <div className="flex justify-between items-center gap-[96px] w-[75%] font-medium text-base">
               <div>{t('reviewWrongQuestion')}</div>
               <Button
                 onClick={() => router.push('/missed-questions')}
-                className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] w-[150px] shadow-md uppercase"
+                className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] min-w-[150px] shadow-md uppercase"
               >
                 {t('reviewWrongButton')}
               </Button>

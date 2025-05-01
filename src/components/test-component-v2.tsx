@@ -38,6 +38,7 @@ const convertLearningQuestionsToQuestionDTO = (
 const TestComponent = () => {
   const {
     onOpen,
+    onClose,
     setQuestions: setQuestionsForDetail,
     setTestCompletionTimeSec,
   } = useConfirmSubmitTestModal()
@@ -83,6 +84,16 @@ const TestComponent = () => {
 
     handleFetchData()
   }, [testId])
+
+  useEffect(() => {
+    const handleModalClose = () => {
+      setIsActive(true)
+    }
+
+    if (!isActive) {
+      handleModalClose()
+    }
+  }, [isActive])
 
   const getButtonCss = (index: number) => {
     if (questions[index].cau_tra_loi) {
@@ -141,9 +152,10 @@ const TestComponent = () => {
 
   const handleSubmit = (time: number) => {
     setTestCompletionTimeSec(time)
-    onOpen(() => {
-      setIsActive(false)
-    })
+    onOpen(
+      () => setIsActive(false),
+      () => setIsActive(true)
+    )
   }
 
   useEffect(() => {

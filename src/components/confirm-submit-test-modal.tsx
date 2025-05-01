@@ -27,6 +27,10 @@ const ConfirmSubmitTestModal = () => {
     setIsLoading(false)
   }
 
+  const handleCancelClick = () => {
+    onClose()
+  }
+
   return (
     <div>
       <Modal
@@ -48,7 +52,7 @@ const ConfirmSubmitTestModal = () => {
             className="bg-neutral-400 hover:bg-neutral-400/90 text-white font-semibold min-w-36 self-center"
             disabled={isLoading}
             type="submit"
-            onClick={() => onClose()}
+            onClick={handleCancelClick}
           >
             HỦY
           </Button>
