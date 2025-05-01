@@ -6,7 +6,6 @@ import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { useEffect, useState } from 'react'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import supabase from '@/utils/supabase/supabase'
-import toast from 'react-hot-toast'
 import { CauTrucDeThi } from '@/types/types'
 import { QuestionDTO } from '@/types/dto/types'
 import { Button } from '@/components/ui/button'
@@ -58,7 +57,7 @@ const ResultPage = () => {
       if (error) {
         console.error('Error:', error)
         setIsLoading(false)
-        return toast.error('Lỗi khi lấy cấu trúc đề thi')
+        return
       }
       setTestStructure(data)
     }
@@ -114,7 +113,7 @@ const ResultPage = () => {
       if (error || !data) {
         console.log(error)
         setIsLoading(false)
-        return toast.error('Lỗi khi lấy kết quả bài thi')
+        return
       }
       setUserCorrectAnswers(data[0].diem)
       setTestResult(data[0].diem < testStructure[0].so_cau_de_dat)
@@ -147,7 +146,7 @@ const ResultPage = () => {
       if (insertResultError) {
         console.log(insertResultError)
         setIsLoading(false)
-        return toast.error('Lỗi khi thêm kết kết quả vào cơ sở dữ liệu')
+        return
       }
 
       try {
@@ -167,7 +166,7 @@ const ResultPage = () => {
       } catch (error) {
         console.log(error)
         setIsLoading(false)
-        return toast.error('Lỗi khi thêm kết quả vào cơ sở dữ liệu')
+        return
       }
     }
     if (user && testStructure.length > 0 && questions.length > 0) {
