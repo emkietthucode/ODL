@@ -134,13 +134,19 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
         <div className="flex flex-col justify-start gap-5  h-full w-[75%]">
           <div className="w-full h-[116px] bg-light-purple flex items-center">
             <div className="flex justify-between items-center w-full p-10">
-              <div className="flex flex-col justify-center items-center w-[20%]">
+              <div className="flex flex-col justify-center items-center w-[23%]">
                 <div className="font-bold text-xl text-custom-normal-violet">
                   KẾT QUẢ THI THỬ
                 </div>
-                <div className="font-extrabold text-4xl text-custom-green">
-                  ĐẠT
-                </div>
+                {userScore >= testTotalScore ? (
+                  <div className="font-extrabold text-4xl text-custom-green">
+                    ĐẠT
+                  </div>
+                ) : (
+                  <div className="font-extrabold text-4xl text-custom-brown">
+                    KHÔNG ĐẠT
+                  </div>
+                )}
               </div>
               <div className="flex flex-col text-custom-normal-active-violet italic w-[20%]">
                 <div>Đề: {testDesc}</div>
