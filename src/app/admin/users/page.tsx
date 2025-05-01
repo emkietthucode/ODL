@@ -55,25 +55,62 @@ export default function UserDashboard() {
   const debounceValue = useDebounce<string>(searchText, 500)
 
   const getNguoiDung = async (debounceValue: string) => {
-    const { data, error } = await supabase.rpc('search_nguoi_dung', {
-      search_text: debounceValue,
-    })
-    if (error) {
-      return toast.error(error.message)
+    const searchText = debounceValue
+    let query = supabase.from('nguoi_dung').select(`
+      id, email, ho_ten, vai_tro, gioi_tinh, ma_khu_vuc,
+      khu_vuc:ma_khu_vuc ( ten_khu_vuc ),
+      ngay_sinh, anh_dai_dien, created_at, updated_at
+    `)
+
+    if (searchText !== '') {
+      query = query.or(
+        `
+        email.ilike.%${searchText}%,
+        ho_ten.ilike.%${searchText}%,
+        vai_tro.ilike.%${searchText}%,
+        gioi_tinh.ilike.%${searchText}%,
+        id::text.ilike.%${searchText}%
+      `
+      )
     }
-    setNguoiDung(data)
-    setTotalUserPages(
-      Math.ceil(
-        data.filter((nguoiDung: NguoiDung) => nguoiDung.vai_tro !== ADMIN_ROLE)
-          .length / ITEMS_PER_PAGE
+
+    const { data, error } = await query.order('ho_ten')
+
+    if (error) {
+      console.log('Lỗi truy vấn:', error)
+    } else {
+      console.log('Kết quả truy vấn:', data)
+    }
+
+    if (data) {
+      const formattedData: NguoiDung[] = data.map((item) => ({
+        id: item.id,
+        email: item.email,
+        ho_ten: item.ho_ten,
+        vai_tro: item.vai_tro,
+        gioi_tinh: item.gioi_tinh,
+        ma_khu_vuc: item.ma_khu_vuc,
+        ngay_sinh: item.ngay_sinh,
+        ten_khu_vuc: item.khu_vuc?.[0]?.ten_khu_vuc || '',
+        anh_dai_dien: item.anh_dai_dien || '',
+        created_at: item.created_at || '',
+        updated_at: item.updated_at || '',
+      }))
+
+      setNguoiDung(formattedData)
+      setTotalUserPages(
+        Math.ceil(
+          formattedData.filter((nguoiDung) => nguoiDung.vai_tro !== ADMIN_ROLE)
+            .length / ITEMS_PER_PAGE
+        )
       )
-    )
-    setTotalAdminPages(
-      Math.ceil(
-        data.filter((nguoiDung: NguoiDung) => nguoiDung.vai_tro === ADMIN_ROLE)
-          .length / ITEMS_PER_PAGE
+      setTotalAdminPages(
+        Math.ceil(
+          formattedData.filter((nguoiDung) => nguoiDung.vai_tro === ADMIN_ROLE)
+            .length / ITEMS_PER_PAGE
+        )
       )
-    )
+    }
   }
 
   useEffect(() => {
@@ -89,17 +126,19 @@ export default function UserDashboard() {
   }, [debounceValue, router, updateRefreshTrigger, deleteRefreshTrigger])
 
   const getCurrentPageData = (isAdmin: boolean) => {
+    if (!nguoiDung) return []
+
     if (isAdmin) {
       const startIndex = (currentAdminPage - 1) * ITEMS_PER_PAGE
       const endIndex = startIndex + ITEMS_PER_PAGE
       return nguoiDung
-        .filter((nguoiDung: NguoiDung) => nguoiDung.vai_tro === ADMIN_ROLE)
+        .filter((nguoiDung) => nguoiDung.vai_tro === ADMIN_ROLE)
         .slice(startIndex, endIndex)
     } else {
       const startIndex = (currentUserPage - 1) * ITEMS_PER_PAGE
       const endIndex = startIndex + ITEMS_PER_PAGE
       return nguoiDung
-        .filter((nguoiDung: NguoiDung) => nguoiDung.vai_tro !== ADMIN_ROLE)
+        .filter((nguoiDung) => nguoiDung.vai_tro !== ADMIN_ROLE)
         .slice(startIndex, endIndex)
     }
   }
