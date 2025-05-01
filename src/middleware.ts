@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
 
   const path = new URL(request.url).pathname
 
-  const protectedRoutes = ['/admin', '/tests']
+  const protectedRoutes = ['/admin', '/tests, //missed-questions']
   const authRoutes = ['/auth/login', '/auth/signup']
 
   const isProtectedRoute = protectedRoutes.some((route) =>
