@@ -58,7 +58,7 @@ const NavBar = () => {
             <Link href="/tests" className="hover:opacity-80">
               {t('testPage')}
             </Link>
-            <Link href="/learn" className="hover:opacity-80">
+            <Link href="/learning-path" className="hover:opacity-80">
               {t('learningPage')}
             </Link>
             <Link href="#" className="hover:opacity-80">

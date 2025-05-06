@@ -11,15 +11,16 @@ import { FaLock } from 'react-icons/fa'
 import WorkingDesk from '../../../../../public/images/working-desk.svg'
 import Image from 'next/image'
 import { Progress } from '@/components/ui/progress'
-import Card1 from '../../../../../public/images/card-1.png'
-import Card2 from '../../../../../public/images/card-2.png'
-import Card3 from '../../../../../public/images/card-3.png'
-import Card4 from '../../../../../public/images/card-4.png'
+import Card1 from '../../../../../public/images/f11LearningCardIcon1.svg'
+import Card2 from '../../../../../public/images/f11LearningCardIcon2.svg'
+import Card3 from '../../../../../public/images/f11LearningCardIcon3.svg'
+import Card4 from '../../../../../public/images/f11LearningCardIcon4.svg'
 import FeatureCard from '@/components/feature-card'
 import { Chuong, LoTrinh } from '@/types/types'
 import { cn } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 import { FaCircleCheck } from 'react-icons/fa6'
+import { useTranslations } from 'next-intl'
 
 const chartConfig = {
   count: {
@@ -44,21 +45,24 @@ function LearningPathPage() {
   const [selectedChapter, setSelectedChapter] = useState<ChuongExtended | null>(
     null
   )
+  const [isTestCreated, setIsTestCreated] = useState<boolean>(false)
 
   const { user, loading } = useAuth()
   const router = useRouter()
+
+  const t = useTranslations('LearningCategory')
 
   const chartData = useMemo(
     () => [
       {
         status: 'done',
-        count: chaptersData.filter((chapter) => chapter.passed).length,
+        count: chaptersData?.filter((chapter) => chapter.passed).length,
       },
       {
         status: 'not done',
         count:
-          chaptersData.length -
-            chaptersData.filter((chapter) => chapter.passed).length || 0,
+          chaptersData?.length -
+            chaptersData?.filter((chapter) => chapter.passed).length || 0,
       },
     ],
     [chaptersData]
@@ -79,6 +83,7 @@ function LearningPathPage() {
         )
 
         setLearningPathData(pathData)
+        console.log(pathData)
 
         const { data: chaptersData, error: chaptersError } = await supabase.rpc(
           'find_chapters',
@@ -100,31 +105,52 @@ function LearningPathPage() {
 
     fetchData()
   }, [user, licenseName])
+
+  const handleCreateTest = async () => {
+    try {
+      setIsTestCreated(false)
+      const { data, error } = await supabase.rpc('create_test', {
+        user_id: user?.id,
+        chapter_id: selectedChapter?.id,
+        license_name: licenseName,
+      })
+
+      if (error) {
+        console.error(error)
+      } else {
+        router.push(
+          `/learning-path/${licenseName}/${selectedChapter?.id}/${data}`
+        )
+      }
+    } catch (error: any) {
+      console.log(error)
+    }
+  }
+
   if (loading) return <div>Loading...</div>
+
+  console.log(chaptersData)
 
   return (
     <div>
       <div className="w-full max-w-[1080px]  mt-10 mb-[52px] mx-auto relative ">
         <div className="w-20 h-[3px] bg-[#907ECF] rounded-full"></div>
         <p className="uppercase font-bold text-[26px] text-purple my-[14px]">
-          Lộ trình học bằng lái
+          {t('title')}
         </p>
         <p className="max-w-[682px] text-purple text-[14px]">
-          Lộ trình học giúp bạn theo dõi quá trình ôn tập một cách khoa học và
-          tuần tự. Hoàn thành từng chương để mở khóa nội dung tiếp theo và tiến
-          gần hơn đến việc vượt qua kỳ thi bằng lái!
+          {t('description')}
         </p>
       </div>
       <div className="w-full bg-light-purple h-[482px] ">
         <div className="max-w-[1065px] mx-auto pt-[23px] pb-[28px]">
           <p className="uppercase font-semibold text-[20px] text-purple">
-            Tiến trình của bạn
+            {t('yourProgress')}
           </p>
-
           <div className="flex gap-[65px] h-[382px] mt-[25px]">
             <div className="w-60 h-full bg-[#F6F4FD] rounded-[16px]">
               <p className="w-full text-center font-medium text-[14px] text-[#3D7199] mt-[25px] mb-[36px]">
-                Số chương đã hoàn thành:
+                {t('doneChapter')}
               </p>
 
               <ChartContainer config={chartConfig}>
@@ -144,11 +170,11 @@ function LearningPathPage() {
               </ChartContainer>
 
               <p className="font-extrabold text-4xl text-purple mt-[57px] w-full text-center">
-                {chaptersData.filter((chapter) => chapter.passed).length}/
-                {chaptersData.length}
+                {chaptersData?.filter((chapter) => chapter.passed).length}/
+                {chaptersData?.length || 0}
               </p>
               <p className="w-full text-center text-[14px] font-medium text-purple mt-[11px]">
-                Cùng bắt đầu nào!
+                {t('letStart')}
               </p>
             </div>
 
@@ -199,11 +225,9 @@ function LearningPathPage() {
                 <div className="flex h-full gap-[165px]">
                   <div className="relative">
                     <p className="text-[14px]">
-                      Trạng thái:{' '}
+                      {t('status')}:{' '}
                       <b>
-                        {selectedChapter?.passed
-                          ? 'Đã hoàn thành'
-                          : 'Chưa hoàn thành'}
+                        {selectedChapter?.passed ? t('done') : t('notDone')}
                       </b>
                     </p>
                     <Image
@@ -216,7 +240,7 @@ function LearningPathPage() {
                   </div>
 
                   <div className="w-[200px]">
-                    <p className="text-[14px] mb-[5px]">Tiến trình:</p>
+                    <p className="text-[14px] mb-[5px]">{t('progress')}:</p>
 
                     <p className="w-full text-end text-[14px] text-[#5CAAE6]">
                       {selectedChapter?.so_cau_da_lam}/
@@ -241,20 +265,24 @@ function LearningPathPage() {
                         }
                         className="hover:opacity-80 text-[14px] bg-purple text-white shadow-sm font-semibold w-[98px] h-[37px] rounded-full uppercase"
                       >
-                        luyện thi
+                        {t('learn')}
                       </button>
 
                       {selectedChapter?.so_cau_da_lam ===
                       selectedChapter?.tong_so_cau ? (
-                        <button className="hover:opacity-80 text-[14px] bg-[#F5D5F1] text-[#C96BBC] shadow-sm font-semibold w-[98px] h-[37px] rounded-full uppercase">
-                          kiểm tra
+                        <button
+                          onClick={handleCreateTest}
+                          disabled={isTestCreated}
+                          className="hover:opacity-80 text-[14px] bg-[#F5D5F1] text-[#C96BBC] shadow-sm font-semibold w-[98px] h-[37px] rounded-full uppercase"
+                        >
+                          {t('test')}
                         </button>
                       ) : (
                         <button
                           disabled
                           className="relative cursor-auto text-[14px] bg-[#D8D8D8] text-[#979797] shadow-sm font-semibold w-[98px] h-[37px] rounded-full uppercase"
                         >
-                          kiểm tra
+                          {t('test')}
                           <FaLock
                             className="absolute right-0 -bottom-2"
                             fill="#979797"
@@ -274,32 +302,36 @@ function LearningPathPage() {
 
       <div className="max-w-[1065px] mx-auto mb-[61px]">
         <p className="text-[20px] font-light text-[#7869AD] w-full text-center mt-[46px]">
-          Các tính năng khác
+          {t('otherFunctions')}
         </p>
 
         <div className="flex gap-10 justify-center mt-8 ">
           <FeatureCard
-            title="thi thử"
-            description="Mô phỏng bài thi lý thuyết, giúp bạn làm quen."
+            title={t('testFunction')}
+            description={t('testFuncDescription')}
             icon={Card1}
+            to="/tests"
           />
 
           <FeatureCard
-            title="học câu điểm liệt"
-            description="Những câu hỏi về tình huống gây mất an toàn giao thông nghiêm trọng."
+            title={t('signFunction')}
+            description={t('signFuncDescription')}
             icon={Card2}
+            to="/"
           />
 
           <FeatureCard
-            title="học những câu sai"
-            description="Những câu bạn đã từng làm sai, được hệ thống ghi nhận."
+            title={t('criticalFunction')}
+            description={t('criticalFuncDescription')}
             icon={Card3}
+            to="/"
           />
 
           <FeatureCard
-            title="học biển báo"
-            description="Các biển báo được sử dụng trong tham gia giao thông."
+            title={t('challengeBankFunction')}
+            description={t('challengeBankFuncDescription')}
             icon={Card4}
+            to="/missed-questions"
           />
         </div>
       </div>

@@ -77,7 +77,8 @@
     "c1Description": "Xe ô tô tải và ô tô chuyên dùng có khối lượng toàn bộ theo thiết kế trên 3.500 kg đến 7.500 kg; các loại xe ô tô tải quy định cho giấy phép lái xe hạng C1 kéo rơ moóc có khối lượng toàn bộ theo thiết kế đến 750 kg; các loại xe quy định cho giấy phép lái xe hạng B.",
     "defTitle": "Nâng hạng DEF",
     "defDescription": "dành cho người điều khiển ô tô chở người 10 đến 30 chỗ; trên 30 chỗ; lái xe kéo rơ-mooc.",
-    "startButton": "Thi thử"
+    "startButton": "Thi thử",
+    "learnButton": "Luyện thi"
   },
   "ChooseTestPage": {
     "title": "Loại bằng lái",
@@ -159,5 +160,27 @@
   "LearningTestPage": {
     "question": "Câu hỏi",
     "submit": "Nộp bài"
+  },
+  "LearningCategory": {
+    "title": "LỘ TRÌNH HỌC BẰNG LÁI",
+    "description": "Lộ trình học giúp bạn theo dõi quá trình ôn tập một cách khoa học và tuần tự. Hoàn thành từng chương để mở khóa nội dung tiếp theo và tiến gần hơn đến việc vượt qua kỳ thi bằng lái!",
+    "yourProgress": "TIẾN TRÌNH CỦA BẠN",
+    "doneChapter": "Số chương đã hoàn thành",
+    "letStart": "Cùng bắt đầu nào!",
+    "status": "Trạng thái",
+    "done": "Đã hoàn thành",
+    "notDone": "Chưa hoàn thành",
+    "progress": "Tiến trình",
+    "learn": "LUYỆN THI",
+    "test": "KIỂM TRA",
+    "otherFunctions": "Các tính năng khác",
+    "testFunction": "THI THỬ",
+    "testFuncDescription": "Khi bạn  đã sẵn sàng với bài thi thử, hãy bắt đầu ngay với những đề thi bám sát thực tế.",
+    "signFunction": "HỌC BIỂN BÁO GIAO THÔNG",
+    "signFuncDescription": "Cung cấp danh sách biển báo kèm giải thích chi tiết, giúp bạn ghi nhớ nhanh và chính xác.",
+    "criticalFunction": "HỌC CÂU ĐIỂM LIỆT",
+    "criticalFuncDescription": "Tập trung ôn luyện các câu hỏi quan trọng, bắt buộc phải trả lời đúng để vượt qua kỳ thi.",
+    "challengeBankFunction": "LÀM LẠI NHỮNG CÂU SAI:",
+    "challengeBankFuncDescription": "Lưu lại và giúp bạn luyện tập các câu hỏi đã trả lời sai để cải thiện điểm số và nắm chắc kiến thức."
   }
 }

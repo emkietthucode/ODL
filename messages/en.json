@@ -78,7 +78,8 @@
     "cDescription": "for drivers of trucks and tractors with a load capacity of 3,500 kg or more.",
     "defTitle": "Upgrade DEF",
     "defDescription": "for drivers of passenger cars with 10 to 30 seats; over 30 seats; drivers of trailers",
-    "startButton": "Start testing"
+    "startButton": "Start testing",
+    "learnButton": "Learn"
   },
   "ChooseTestPage": {
     "title": "Type of license",
@@ -160,5 +161,27 @@
   "LearningTestPage": {
     "question": "Question",
     "submit": "Submit"
+  },
+  "LearningCategory": {
+    "title": "DRIVING LICENSE LEARNING ROADMAP",
+    "description": "The study path helps you track your review process in a scientific and sequential way. Complete each chapter to unlock the next content and get closer to passing the driving test!",
+    "yourProgress": "Your progress",
+    "doneChapter": "Number of chapters completed:",
+    "letStart": "Let's start!",
+    "status": "Status",
+    "done": "Completed",
+    "notDone": "Not completed",
+    "progress": "Progress",
+    "learn": "LEARN",
+    "test": "TEST",
+    "otherFunctions": "Other functions",
+    "testFunction": "PRACTICE TEST",
+    "testFuncDescription": "When you are ready for the practice test, start with the tests that closely match",
+    "signFunction": "LEARNING TRAFFIC SIGNS",
+    "signFuncDescription": "Provides a list of signs with detailed explanations, helping you memorize quickly and accurately.",
+    "criticalFunction": "CRITICAL QUESTIONS",
+    "criticalFuncDescription": "Focus on reviewing important questions that must be answered correctly to pass the exam.",
+    "challengeBankFunction": "REDO WRONG QUESTIONS:",
+    "challengeBankFuncDescription": "Save and help you practice your wrongly answered questions to improve your score and master your knowledge."
   }
 }

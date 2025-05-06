@@ -1,25 +1,25 @@
 import Image, { StaticImageData } from 'next/image'
+import Link from 'next/link'
 
 interface FeatureCardProps {
   title: string
   description: string
   icon: StaticImageData
+  to: string
 }
 
-function FeatureCard({ title, description, icon }: FeatureCardProps) {
+function FeatureCard({ title, description, icon, to }: FeatureCardProps) {
   return (
-    <div className="relative w-60 h-[158px] p-[10px] rounded-[30px] shadow-[2px_4px_10px_4px_rgba(0,0,0,0.18)]">
-      <p className="mt-[40px] mb-[12px] text-[14px] font-semibold text-[#7869AD] uppercase ">
+    <Link
+      href={to}
+      className="relative py-7 px-[15px] shadow-[5px_5px_7px_5px_rgba(0,0,0,0.25)]"
+    >
+      <Image width={45} height={45} src={icon} alt="card-1" />
+      <p className="mt-[27px] w-[230px] mb-[12px] text-[14px] font-semibold text-purple uppercase ">
         {title}
       </p>
-      <p className="text-[14px] text-[#7869AD]">{description}</p>
-
-      <Image
-        className="absolute top-[14px] right-[27px]"
-        src={icon}
-        alt="card-1"
-      />
-    </div>
+      <p className="text-[14px] w-[230px] text-purple">{description}</p>
+    </Link>
   )
 }
 
