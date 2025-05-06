@@ -5,6 +5,7 @@ import { AuthProvider } from '@/contexts/AuthContext'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
 import { LanguageProvider } from '@/contexts/LanguageContext'
+import { Toaster } from 'react-hot-toast'
 
 const montserrat = Montserrat({
   subsets: ['vietnamese'],
@@ -28,6 +29,7 @@ export default async function RootLayout({
     <html lang={locale}>
       <body className={`${montserrat.className} antialiased`}>
         <LanguageProvider>
+          <Toaster position="top-center" reverseOrder={false} />
           <NextIntlClientProvider messages={messages}>
             <AuthProvider>{children}</AuthProvider>
           </NextIntlClientProvider>

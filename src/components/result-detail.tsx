@@ -10,6 +10,7 @@ import Image from 'next/image'
 import { LuaChon } from '@/types/types'
 import { QuestionDTO } from '@/types/dto/types'
 import CriticalStar from './critical-star'
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '500',
@@ -33,6 +34,13 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
 }) => {
   const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([])
+  const [currentPage, setCurrentPage] = useState<number>(0)
+  const questionsPerPage = 22 // Number of questions to show per page
+
+  const totalPages = Math.ceil(questions.length / questionsPerPage)
+  const startIndex = currentPage * questionsPerPage
+  const endIndex = startIndex + questionsPerPage
+  const currentQuestions = questions.slice(startIndex, endIndex)
 
   useEffect(() => {
     if (questions) {
@@ -70,6 +78,18 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
     }
   }
 
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage((prev) => prev - 1)
+    }
+  }
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage((prev) => prev + 1)
+    }
+  }
+
   const getQuestionImg = (imgId: string) => {
     return ''
   }
@@ -77,9 +97,21 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'ArrowLeft') {
-        handlePrevious()
+        if (selectedQuestionIndex > 0) {
+          setSelectedQuestion((prev) => prev - 1)
+          // If we're at the first question of the current page, go to previous page
+          if (selectedQuestionIndex === startIndex) {
+            handlePreviousPage()
+          }
+        }
       } else if (event.key === 'ArrowRight') {
-        handleNext()
+        if (selectedQuestionIndex < questions.length - 1) {
+          setSelectedQuestion((prev) => prev + 1)
+          // If we're at the last question of the current page, go to next page
+          if (selectedQuestionIndex === endIndex - 1) {
+            handleNextPage()
+          }
+        }
       }
     }
 
@@ -89,35 +121,76 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [selectedQuestionIndex, handleNext, handlePrevious]) // Re-run effect if selectedQuestionIndex changes
+  }, [
+    selectedQuestionIndex,
+    currentPage,
+    startIndex,
+    endIndex,
+    questions.length,
+  ]) // Add dependencies
   return (
-    <main className="bg-white mx-auto max-h-full my-[64px] h-full">
+    <main className="bg-white mx-auto max-h-full my-[32px] h-full">
       <div className="flex flex-col justify-around items-center h-full">
-        <div className="flex flex-col justify-start gap-5  h-full w-[60%]">
-          <div className="text-5xl font-bold text-purple ml-10">
-            KẾT QUẢ THI THỬ
-          </div>
-          <div className="w-full h-[20%] bg-violet-300 flex items-center">
+        <div className="flex flex-col justify-start gap-5  h-full w-[75%]">
+          <div className="w-full h-[116px] bg-light-purple flex items-center">
             <div className="flex justify-between items-center w-full p-10">
-              <div className="flex flex-col text-white italic">
+              <div className="flex flex-col justify-center items-center w-[23%]">
+                <div className="font-bold text-xl text-custom-normal-violet">
+                  KẾT QUẢ THI THỬ
+                </div>
+                {userScore >= testTotalScore ? (
+                  <div className="font-extrabold text-4xl text-custom-green">
+                    ĐẠT
+                  </div>
+                ) : (
+                  <div className="font-extrabold text-4xl text-custom-brown">
+                    KHÔNG ĐẠT
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col text-custom-normal-active-violet italic w-[20%]">
                 <div>Đề: {testDesc}</div>
                 <div>Hoàn thành: {userCompleteTime}</div>
                 <div>
                   Điểm: {userScore}/{testTotalScore}
                 </div>
               </div>
-              <div className="bg-violet-50 rounded-2xl h-[120px] w-[739px] flex items-center">
-                <ol className="list-none flex flex-wrap gap-2 px-8">
-                  {questions.map((ele, index: number) => (
+              <div className="bg-violet-50 rounded-2xl h-[90px] w-[459px] relative flex justify-center items-start">
+                <div className="absolute left-2 top-1/2 -translate-y-1/2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 0}
+                    className="text-purple hover:text-purple/80 disabled:opacity-50"
+                  >
+                    <MdKeyboardArrowLeft />
+                  </Button>
+                </div>
+                <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages - 1}
+                    className="text-purple hover:text-purple/80 disabled:opacity-50"
+                  >
+                    <MdKeyboardArrowRight />
+                  </Button>
+                </div>
+                <ol className="list-none flex flex-wrap gap-[5px] w-[329px] h-[52px] mx-auto select-none mt-2">
+                  {currentQuestions.map((ele, index: number) => (
                     <div className="relative" key={index}>
                       <li key={index} className="flex justify-center">
                         <Button
-                          onClick={() => setSelectedQuestion(index)}
+                          onClick={() =>
+                            setSelectedQuestion(startIndex + index)
+                          }
                           variant="outline"
                           size="icon"
                           className={cn(
                             `
-                        w-8 h-8 text-lg
+                        w-6 h-6 text-sm
                         font-semibold 
                         rounded-full 
                         p-0 m-0 
@@ -128,35 +201,32 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
                         transition-all
                         border-separate"
                         `,
-                            selectedQuestionIndex === index &&
+                            selectedQuestionIndex === startIndex + index &&
                               'ring-2 ring-purple ring-offset-2 font-bold',
-                            !questions[index].userAnswerId
+                            !questions[startIndex + index].userAnswerId
                               ? `` // No answer chosen
-                              : questions[index].userAnswerId ===
-                                questions[index].answers?.find(
+                              : questions[startIndex + index].userAnswerId ===
+                                questions[startIndex + index].answers?.find(
                                   (a) => a.la_lua_chon_dung
                                 )?.id
                               ? `bg-custom-ol-green text-white hover:bg-custom-ol-green/70 hover:text-white/90` // Correct answer
                               : `bg-custom-brown text-white hover:bg-custom-brown/70 hover:text-white/90` // Incorrect answer
                           )}
                         >
-                          {index + 1}
+                          {startIndex + index + 1}
                         </Button>
                       </li>
-                      {ele.question?.la_cau_diem_liet && (
-                        <CriticalStar
-                          displayText={false}
-                          className="absolute bottom-[23px] left-[20px]"
-                        />
-                      )}
                     </div>
                   ))}
                 </ol>
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-sm text-purple">
+                  {currentPage + 1}/{totalPages}
+                </div>
               </div>
             </div>
           </div>
-          <div className="flex gap-2 h-[550px]">
-            <div className="w-[65%] bg-neutral-200 flex flex-col justify-start items-center p-5 gap-2">
+          <div className="flex gap-2 h-full">
+            <div className="w-[65%] bg-custom-bg-gray flex flex-col justify-start items-center p-5 gap-2">
               <div className="flex justify-between items-center w-full text-lg">
                 <div className="relative">
                   <FaArrowLeft
@@ -170,7 +240,7 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
                     </div>
                   )}
                 </div>
-                <div className="font-bold">{`Câu hỏi ${
+                <div className="font-bold text-base select-none">{`Câu hỏi ${
                   selectedQuestionIndex + 1
                 }`}</div>
                 <FaArrowRight
@@ -179,7 +249,7 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
                 />
               </div>
               <div
-                className={`${montserratAlternates.className} self-start mb-2`}
+                className={`${montserratAlternates.className} self-start mb-2 text-sm`}
               >
                 {questions[selectedQuestionIndex]?.question?.noi_dung_cau_hoi}
               </div>
@@ -200,26 +270,29 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
                 className="h-full"
                 disabled={true}
               >
-                {questions[selectedQuestionIndex]?.answers?.map(
-                  (answer: LuaChon, index: number) => {
-                    const isSelected =
-                      questions[selectedQuestionIndex]?.userAnswerId ===
-                      answer.id
-                    const isCorrect = answer.la_lua_chon_dung
+                {Array.from({ length: 4 }).map((_, index) => {
+                  const answer =
+                    questions[selectedQuestionIndex]?.answers?.[index]
+                  const isSelected =
+                    questions[selectedQuestionIndex]?.userAnswerId ===
+                    answer?.id
+                  const isCorrect = answer?.la_lua_chon_dung
+                  const hasUserAnswer =
+                    !!questions[selectedQuestionIndex]?.userAnswerId
 
-                    let bgColor = 'bg-neutral-200' // Default background
+                  let bgColor = 'bg-custom-bg-gray' // Default background
 
-                    if (isCorrect) {
-                      bgColor = 'bg-custom-light-green' // Always highlight the correct answer in green
-                    } else if (isSelected) {
-                      bgColor = 'bg-custom-light-brown' // Highlight wrong selected answers in red
-                    }
+                  if (isCorrect) {
+                    bgColor = 'bg-custom-light-green' // Always highlight the correct answer in green
+                  } else if (isSelected && hasUserAnswer) {
+                    bgColor = 'bg-custom-light-brown' // Only highlight wrong selected answers in red if user has answered
+                  }
 
-                    return (
-                      <Label
-                        key={index}
-                        htmlFor={`r${selectedQuestionIndex}-${index}`}
-                        className={cn(`
+                  return (
+                    <Label
+                      key={index}
+                      htmlFor={`r${selectedQuestionIndex}-${index}`}
+                      className={cn(`
                         grow
                         ${bgColor}
                         flex 
@@ -229,19 +302,21 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
                         cursor-pointer
                         border
                         border-transparent 
+                        h-[120px]
                       `)}
-                      >
+                    >
+                      {answer && (
                         <RadioGroupItem
                           value={`answer-${selectedQuestionIndex}-${index}`}
                           id={`r${selectedQuestionIndex}-${index}`}
                         />
-                        <div className="text-sm text-neutral-500 font-medium">
-                          {answer.noi_dung_lua_chon}
-                        </div>
-                      </Label>
-                    )
-                  }
-                )}
+                      )}
+                      <div className="text-xs text-neutral-500 font-medium">
+                        {answer?.noi_dung_lua_chon || ''}
+                      </div>
+                    </Label>
+                  )
+                })}
               </RadioGroup>
             </div>
           </div>

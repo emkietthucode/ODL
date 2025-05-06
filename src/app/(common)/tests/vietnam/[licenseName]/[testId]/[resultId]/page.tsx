@@ -6,12 +6,12 @@ import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { useEffect, useState } from 'react'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import supabase from '@/utils/supabase/supabase'
-import toast from 'react-hot-toast'
 import { CauTrucDeThi } from '@/types/types'
 import { QuestionDTO } from '@/types/dto/types'
 import { Button } from '@/components/ui/button'
 import useAuth from '@/hooks/useAuth'
 import { useTranslations } from 'next-intl'
+import Loading from '@/components/loading'
 
 const ResultPage = () => {
   const { user } = useAuth()
@@ -21,6 +21,7 @@ const ResultPage = () => {
   const [isFailOnSpecialQuestion, setIsFailedOnSpecialTest] =
     useState<boolean>(false)
   const [testStructure, setTestStructure] = useState<CauTrucDeThi[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const pathname = usePathname()
   const router = useRouter()
   const params = useParams<{
@@ -48,13 +49,15 @@ const ResultPage = () => {
   // Get Test Structure
   useEffect(() => {
     const fetchTestStructure = async () => {
+      setIsLoading(true)
       const { data, error } = await supabase.rpc('get_cau_truc_by_de_thi', {
         de_thi_id: params.testId,
       })
 
       if (error) {
         console.error('Error:', error)
-        return toast.error('Lỗi khi lấy cấu trúc đề thi')
+        setIsLoading(false)
+        return
       }
       setTestStructure(data)
     }
@@ -102,21 +105,25 @@ const ResultPage = () => {
   // Separate useEffect for checkTestStatus
   useEffect(() => {
     const fetchResult = async () => {
+      setIsLoading(true)
       const { data, error } = await supabase
         .from('ket_qua_lam_bai')
         .select()
         .eq('id', params.resultId)
       if (error || !data) {
         console.log(error)
-        return toast.error('Lỗi khi lấy kết quả bài thi')
+        setIsLoading(false)
+        return
       }
       setUserCorrectAnswers(data[0].diem)
       setTestResult(data[0].diem < testStructure[0].so_cau_de_dat)
       setIsFailedOnSpecialTest(data[0].ket_qua_bai_lam)
+      setIsLoading(false)
     }
 
     if (testStructure.length > 0 && questions.length > 0) {
       checkTestStatus(questions)
+      setIsLoading(false)
     } else if (testStructure.length > 0 && questions.length === 0) {
       fetchResult()
     }
@@ -124,6 +131,7 @@ const ResultPage = () => {
 
   useEffect(() => {
     const insertResult = async () => {
+      setIsLoading(true)
       const { error: insertResultError } = await supabase
         .from('ket_qua_lam_bai')
         .insert({
@@ -137,7 +145,8 @@ const ResultPage = () => {
         })
       if (insertResultError) {
         console.log(insertResultError)
-        return toast.error('Lỗi khi thêm kết kết quả vào cơ sở dữ liệu')
+        setIsLoading(false)
+        return
       }
 
       try {
@@ -153,9 +162,11 @@ const ResultPage = () => {
         })
 
         await Promise.all(insertPromises)
+        setIsLoading(false)
       } catch (error) {
         console.log(error)
-        return toast.error('Lỗi khi thêm kết quả vào cơ sở dữ liệu')
+        setIsLoading(false)
+        return
       }
     }
     if (user && testStructure.length > 0 && questions.length > 0) {
@@ -165,6 +176,10 @@ const ResultPage = () => {
 
   if (!testStructure) {
     return null
+  }
+
+  if (isLoading) {
+    return <Loading />
   }
 
   return (
@@ -187,29 +202,29 @@ const ResultPage = () => {
         <div className="flex flex-col gap-10 w-[60%] justify-center items-center">
           <div className="flex flex-col gap-6 text-blue-400 w-full justify-center items-center">
             <hr className="h-1 bg-purple border-0 dark:bg-purple w-full"></hr>
-            <div className="flex justify-between items-center gap-[96px] w-[70%] font-medium text-base">
+            <div className="flex justify-between items-center gap-[96px] w-[75%] font-medium text-base">
               <div>{t('notSatisfied')}</div>
               <Button
                 onClick={handleRedoTest}
-                className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] w-[112px] shadow-md uppercase"
+                className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] min-w-[112px] shadow-md uppercase"
               >
                 {t('retestButton')}
               </Button>
             </div>
-            <div className="flex justify-between items-center gap-[96px] w-[70%] font-medium text-base">
+            <div className="flex justify-between items-center gap-[96px] w-[75%] font-medium text-base">
               <div>{t('otherTest')}</div>
               <Button
                 onClick={handleDoOtherTest}
-                className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] w-[123px] shadow-md uppercase"
+                className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] min-w-[123px] shadow-md uppercase"
               >
                 {t('otherTestButton')}
               </Button>
             </div>
-            <div className="flex justify-between items-center gap-[96px] w-[70%] font-medium text-base">
+            <div className="flex justify-between items-center gap-[96px] w-[75%] font-medium text-base">
               <div>{t('reviewWrongQuestion')}</div>
               <Button
                 onClick={() => router.push('/missed-questions')}
-                className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] w-[150px] shadow-md uppercase"
+                className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] min-w-[150px] shadow-md uppercase"
               >
                 {t('reviewWrongButton')}
               </Button>

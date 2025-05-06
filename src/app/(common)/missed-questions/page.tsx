@@ -1,115 +1,183 @@
 'use client'
-import F81MissedQuestions from '../../../../public/images/f8.1.svg'
 import ScrollToTopButton from '@/components/scroll-to-top-button'
-import TestComponent from '@/components/test-component'
-import supabase from '@/utils/supabase/supabase'
-import { useEffect } from 'react'
-import { toast } from 'react-hot-toast'
-import { QuestionDTO } from '@/types/dto/types'
-import { LuaChon } from '@/types/types'
-import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
+import Overlay1 from '../../../../public/images/F8Overlay1.svg'
+import Overlay2 from '../../../../public/images/F8Overlay2.svg'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-
-const shuffleAnswers = (answers: LuaChon[]) => {
-  const shuffled = [...answers]
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-  }
-  return shuffled
-}
+import MissedQuestionsByTopic from '@/components/missed-questions-by-topic'
+import AllMissedQuestions from '@/components/all-missed-questions'
+import useAuth from '@/hooks/useAuth'
+import supabase from '@/utils/supabase/supabase'
+import useStoreMissedQuestions from '@/hooks/useStoreMissedQuestions'
+import Loading from '@/components/loading'
+import { usePathname, useRouter } from 'next/navigation'
 
 const MissedQuestionsPage = () => {
-  const { item: questions, setQuestions } = useConfirmSubmitTestModal()
+  const [activeTab, setActiveTab] = useState('all')
+  const [loading, setLoading] = useState(true)
+  const { user } = useAuth()
+  const [chuongWithCauHoi, setChuongWithCauHoi] = useState<any[]>([])
+  const { questions, setQuestions } = useStoreMissedQuestions()
   const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
-    const fetchQuestions = async () => {
-      const { data, error } = await supabase
-        .from('cau_hoi')
-        .select(
-          `
-          *,
-          lua_chon (
-            *
-          )
-        `
-        )
-        .limit(25)
+    const fetchMissedQuestions = async () => {
+      setLoading(true)
 
-      if (error) {
-        console.error(error)
-        return toast.error('Lỗi trong quá trình lấy dữ liệu câu hỏi')
+      const { data: cauHoiThuongSaiList, error: error1 } = await supabase
+        .from('cau_hoi_thuong_sai')
+        .select('cau_hoi_id, duoc_danh_dau')
+        .eq('nguoi_dung_id', user?.id)
+
+      if (error1) {
+        console.log(error1)
+        setLoading(false)
+        return
       }
 
-      const formattedQuestions: QuestionDTO[] = data.map((item: any) => ({
-        question: item,
-        answers: item.lua_chon.some((a: LuaChon) => a.so_thu_tu === 0)
-          ? shuffleAnswers(item.lua_chon)
-          : item.lua_chon.sort(
-              (a: LuaChon, b: LuaChon) => a.so_thu_tu - b.so_thu_tu
-            ),
-      }))
+      const cauHoiIds =
+        cauHoiThuongSaiList?.map((item) => item.cau_hoi_id) || []
 
-      setQuestions(formattedQuestions)
+      const { data: cauHoiList, error: error2 } = await supabase
+        .from('cau_hoi')
+        .select(
+          'id, noi_dung_cau_hoi, ma_chuong, lua_chon(id, noi_dung_lua_chon, la_lua_chon_dung, so_thu_tu)'
+        )
+        .in('id', cauHoiIds)
+
+      if (error2) {
+        console.log(error2)
+        setLoading(false)
+        return
+      }
+      const mergedCauHoiList =
+        cauHoiList?.map((cauHoi) => {
+          const found = cauHoiThuongSaiList?.find(
+            (item) => item.cau_hoi_id === cauHoi.id
+          )
+          return {
+            ...cauHoi,
+            duoc_danh_dau: found?.duoc_danh_dau || false, // or whatever default you want
+          }
+        }) || []
+      setQuestions(mergedCauHoiList || [])
+
+      const chuongIds = cauHoiList?.map((item) => item.ma_chuong) || []
+
+      const { data: chuongList, error: error3 } = await supabase
+        .from('chuong')
+        .select('id, ten_chuong, mo_ta_chuong')
+        .in('id', chuongIds)
+
+      if (error3) {
+        console.log(error3)
+        setLoading(false)
+        return
+      }
+
+      setChuongWithCauHoi(chuongList || [])
+      setLoading(false)
     }
 
-    fetchQuestions()
-  }, [])
+    fetchMissedQuestions()
+  }, [user?.id])
+
+  if (loading) {
+    return <Loading />
+  }
+
   return (
-    <main className="bg-white mx-auto my-auto max-h-full">
-      <div className="flex flex-col justify-around items-center h-full ">
-        <div className="flex flex-col gap-[16px] justify-between items-center h-full w-[71%] ml-16">
-          <div className="flex flex-col gap-[32px] z-20 mt-10 ">
-            <div className="text-purple text-4xl font-bold">
-              ÔN LUYỆN NHỮNG CÂU HỎI THƯỜNG SAI
-            </div>
-            <div className="w-[75%] text-sm">
-              Lưu trữ các câu hỏi mà người dùng đã trả lời sai trong quá trình
-              luyện thi. Tính năng này giúp bạn tập trung ôn lại những kiến thức
-              chưa vững, cải thiện điểm số và nâng cao khả năng vượt qua kỳ thi
-              lý thuyết.
-            </div>
-          </div>
-        </div>
-        {questions.length === 0 ? (
-          <div className="flex flex-col w-[71%] my-[64px] justify-center items-center">
-            <div
-              className="
-              w-full h-[46px] 
-              bg-custom-beige 
-              flex justify-center items-center 
-              font-bold text-xl text-white"
-            >
-              SỐ CÂU: 0
-            </div>
-            <Image src={F81MissedQuestions} alt="" className="my-10" />
-            <div className="font-medium text-xl">
-              CHÚC MỪNG! HIỆN TẠI BẠN KHÔNG CÓ CÂU HỎI THƯỜNG SAI
-            </div>
-            <div className="font-medium text-xl text-blue-400 mt-[96px] mb-[16px]">
-              Chúng tôi còn nhiều đề khác, xem ngay!
-            </div>
+    <main className="bg-white mx-auto my-auto max-h-full flex justify-center relative">
+      <Image
+        src={Overlay1}
+        alt="Overlay"
+        className="absolute top-[140px] left-0 z-10"
+      />
+      <Image
+        src={Overlay2}
+        alt="Overlay"
+        className="absolute top-0 right-0 z-0"
+      />
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white w-[80%] relative z-20">
+        <div className="container mx-auto px-4 py-8 flex flex-col">
+          <h1 className="text-2xl font-bold text-custom-dark-violet">
+            ÔN LUYỆN NHỮNG CÂU HỎI THƯỜNG SAI
+          </h1>
+          <p className="text-custom-dark-violet mb-8 text-sm w-[70%]">
+            Đây là nơi lưu trữ các câu hỏi người dùng thường trả lời sai hoặc
+            gặp khó khăn trong quá trình học, giúp người dùng dễ dàng ôn lại
+            những kiến thức chưa vững, từ đó cải thiện điểm số và cũng có kỹ
+            năng.
+          </p>
+
+          <div className="flex flex-wrap gap-5">
             <Button
-              onClick={() => router.push('/tests')}
-              className="
-              bg-blue-100 hover:bg-blue-100/90 
-              rounded-2xl text-sm 
-              text-blue-400 font-semibold
-              h-full shadow-md"
+              className={`bg-light-purple-admin hover:bg-light-purple-admin w-[260px] h-[52px] ${
+                activeTab === 'all' &&
+                'border-purple-200 ring-4 ring-custom-dark-violet'
+              } rounded-md px-8 font-bold text-xl text-custom-dark-violet`}
+              onClick={() => setActiveTab('all')}
             >
-              LÀM ĐỀ KHÁC
+              Tất cả
+            </Button>
+            <Button
+              className={`bg-light-purple-admin hover:bg-light-purple-admin w-[260px] h-[52px] ${
+                activeTab === 'topic' &&
+                'border-purple-200 ring-4 ring-custom-dark-violet'
+              } rounded-md px-8 font-bold text-xl text-custom-dark-violet`}
+              onClick={() => setActiveTab('topic')}
+            >
+              Theo chủ đề
+            </Button>
+            <Button
+              className={`bg-light-purple-admin hover:bg-light-purple-admin w-[260px] h-[52px] ${
+                activeTab === 'bookmark' &&
+                'border-purple-200 ring-4 ring-custom-dark-violet'
+              } rounded-md px-8 font-bold text-xl text-custom-dark-violet`}
+              onClick={() => setActiveTab('bookmark')}
+            >
+              Đánh dấu
+            </Button>
+            <Button
+              className="
+              bg-custom-light-hover-blue 
+              text-custom-dark-violet 
+              hover:bg-custom-light-hover-blue 
+              ring-custom-normal-light-blue
+              ring-2
+              rounded-3xl 
+              w-[182px] h-[52px] 
+              font-bold
+              text-xl
+              px-8 ml-auto"
+              onClick={() => router.push(`${pathname}/test`)}
+            >
+              KIỂM TRA
             </Button>
           </div>
-        ) : (
-          <TestComponent
-            title="25 cau dau"
-            questions={questions}
-            setQuestions={setQuestions}
-          />
-        )}
+          <hr className="h-[2px] mt-5 mb-3 w-[95%] self-center bg-gray-300 border-0 dark:bg-gray-700"></hr>
+
+          {activeTab === 'all' ? (
+            <AllMissedQuestions questions={questions} />
+          ) : activeTab === 'topic' ? (
+            <MissedQuestionsByTopic
+              chuongWithCauHoi={chuongWithCauHoi?.map((chuong) => ({
+                ...chuong,
+                cau_hoi:
+                  questions?.filter(
+                    (cauHoi) => cauHoi.ma_chuong === chuong.id
+                  ) || [],
+              }))}
+              totalQuestions={questions.length || 0}
+            />
+          ) : activeTab === 'bookmark' ? (
+            <AllMissedQuestions
+              questions={questions.filter((q) => q.duoc_danh_dau)}
+            />
+          ) : null}
+        </div>
       </div>
       <ScrollToTopButton />
     </main>
