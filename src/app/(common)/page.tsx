@@ -92,7 +92,7 @@ const Home = () => {
         </p>
 
         <div className="flex mt-[90px] gap-[100px] items-center">
-          <Link href="/tests">
+          <Link href="/learning-path">
             <Button
               variant="main"
               size="auto"
@@ -102,7 +102,7 @@ const Home = () => {
             </Button>
           </Link>
 
-          <Link href="/">
+          <Link href="/tests">
             <button className="flex items-center gap-[17px]">
               <IoMdArrowDroprightCircle size={67} fill="#DF6951" />
 
@@ -492,7 +492,10 @@ const Home = () => {
             trình học tập hiệu quả và thú vị hơn!"
           </p>
 
-          <a href="/">
+          <a
+            target="_blank"
+            href="https://drive.google.com/file/d/1Dx1Sw2QuZUq2ccYqTd67w0waAcztO9bf/view?usp=drive_link"
+          >
             <Image
               src={GooglePlay}
               alt="google play"
