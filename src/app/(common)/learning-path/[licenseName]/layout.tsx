@@ -16,14 +16,14 @@ export default function LearningPathLayout({
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true)
+      if (!licenseName) return
 
       try {
+        setLoading(true)
         const { data: learningPathData, error: learningPathError } =
           await supabase.rpc('fetch_learning_path_info', {
             path_name: licenseName,
           })
-
         setLearningPath(learningPathData)
       } catch (error: any) {
         console.log(error)
@@ -33,7 +33,7 @@ export default function LearningPathLayout({
     }
 
     fetchData()
-  }, [licenseName])
+  }, [licenseName, supabase])
   if (loading) return <div>Loading...</div>
 
   return (

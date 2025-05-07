@@ -12,6 +12,7 @@ import Timer from '@/components/timer'
 import useAuth from '@/hooks/useAuth'
 import { useTranslations } from 'next-intl'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 function LearningTestPage() {
   const { testId } = useParams<{ testId: string }>()
@@ -25,6 +26,7 @@ function LearningTestPage() {
     thoi_gian_lam_bai: number
     ten_de_thi: string
   } | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
     const handleFetchData = async () => {
@@ -115,7 +117,7 @@ function LearningTestPage() {
         q.ds_lua_chon.find((a) => a.la_lua_chon_dung && a.id === q.cau_tra_loi)
       ).length
 
-      const { data, error } = await supabase.rpc('save_test_result', {
+      const { data } = await supabase.rpc('save_test_result', {
         point: correctAnswers,
         test_duration: time,
         test_date: new Date(),
@@ -123,15 +125,12 @@ function LearningTestPage() {
         user_id: user?.id,
       })
 
-      const { data: saved, error: saveError } = await supabase.rpc(
-        'save_test_answer',
-        {
-          items: questions.map((q) => q.cau_tra_loi),
-          result_id: data,
-        }
-      )
+      await supabase.rpc('save_test_answer', {
+        items: questions.map((q) => q.cau_tra_loi),
+        result_id: data,
+      })
 
-      console.log('Saved:', saved)
+      router.push(`/learning-path/test-result/${data}`)
     } catch (error: any) {
       console.log(error.message)
     }
