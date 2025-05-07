@@ -1,6 +1,7 @@
 'use client'
 import ConfirmSubmitTestModal from '@/components/confirm-submit-test-modal'
 import ToasterProvider from '@/providers/toaster-provider'
+import { ThemeProvider } from 'next-themes'
 import { useEffect, useState } from 'react'
 
 function MissedQuestionsLayout({ children }: { children: React.ReactNode }) {
@@ -18,7 +19,14 @@ function MissedQuestionsLayout({ children }: { children: React.ReactNode }) {
     <div>
       <ToasterProvider />
       <ConfirmSubmitTestModal />
-      {children}
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="light"
+        enableSystem
+        disableTransitionOnChange
+      >
+        {children}
+      </ThemeProvider>
     </div>
   )
 }

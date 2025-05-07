@@ -5,7 +5,7 @@ interface ConfirmSubmitTestModal {
   testCompletionTimeSec: number
   isOpen: boolean
   item: QuestionDTO[]
-  onOpen: (callback?: () => void) => void
+  onOpen: (openCallback?: () => void, closeCallback?: () => void) => void
   onClose: () => void
   onCloseCallback: (() => void) | null
   setQuestions: (questions: QuestionDTO[]) => void
@@ -17,10 +17,17 @@ const useConfirmSubmitTestModal = create<ConfirmSubmitTestModal>((set) => ({
   isOpen: false,
   item: [],
   onCloseCallback: null,
-  onOpen: (callback) => set({ isOpen: true, onCloseCallback: callback }),
+  onOpen: (openCallback, closeCallback) => {
+    if (openCallback) {
+      openCallback()
+    }
+    set({ isOpen: true, onCloseCallback: closeCallback })
+  },
   onClose: () =>
     set((state) => {
-      if (state.onCloseCallback) state.onCloseCallback() // Execute callback if defined
+      if (state.onCloseCallback) {
+        state.onCloseCallback()
+      }
       return { isOpen: false, onCloseCallback: null }
     }),
   setQuestions: (questions) => set({ item: questions }),

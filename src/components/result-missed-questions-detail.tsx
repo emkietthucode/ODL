@@ -19,16 +19,12 @@ const montserratAlternates = Montserrat_Alternates({
 
 interface ResultDetailPageProps {
   questions: QuestionDTO[]
-  testDesc: string
-  userCompleteTime: string
   userScore: number
   testTotalScore: number
 }
 
 const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
   questions,
-  testDesc,
-  userCompleteTime,
   userScore,
   testTotalScore,
 }) => {
@@ -134,23 +130,8 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
         <div className="flex flex-col justify-start gap-5  h-full w-[75%]">
           <div className="w-full h-[116px] bg-light-purple flex items-center">
             <div className="flex justify-between items-center w-full p-10">
-              <div className="flex flex-col justify-center items-center w-[23%]">
-                <div className="font-bold text-xl text-custom-normal-violet">
-                  KẾT QUẢ THI THỬ
-                </div>
-                {userScore >= testTotalScore ? (
-                  <div className="font-extrabold text-4xl text-custom-green">
-                    ĐẠT
-                  </div>
-                ) : (
-                  <div className="font-extrabold text-4xl text-custom-brown">
-                    KHÔNG ĐẠT
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col text-custom-normal-active-violet italic w-[20%]">
-                <div>Đề: {testDesc}</div>
-                <div>Hoàn thành: {userCompleteTime}</div>
+              <div className="flex flex-col text-custom-normal-active-violet italic w-[30%]">
+                <div>Đề: Các câu hỏi thường sai</div>
                 <div>
                   Điểm: {userScore}/{testTotalScore}
                 </div>
@@ -277,15 +258,13 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
                     questions[selectedQuestionIndex]?.userAnswerId ===
                     answer?.id
                   const isCorrect = answer?.la_lua_chon_dung
-                  const hasUserAnswer =
-                    !!questions[selectedQuestionIndex]?.userAnswerId
 
                   let bgColor = 'bg-custom-bg-gray' // Default background
 
                   if (isCorrect) {
                     bgColor = 'bg-custom-light-green' // Always highlight the correct answer in green
-                  } else if (isSelected && hasUserAnswer) {
-                    bgColor = 'bg-custom-light-brown' // Only highlight wrong selected answers in red if user has answered
+                  } else if (isSelected) {
+                    bgColor = 'bg-custom-light-brown' // Highlight wrong selected answers in red
                   }
 
                   return (

@@ -17,7 +17,11 @@ export const AuthContext = createContext<AuthContextType | null>(null)
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [userData, setUserData] = useState<NguoiDung | null>(null)
+
   const [loading, setLoading] = useState(false)
+
+
+
 
   const [supabase] = useState(() => createClient())
 
@@ -38,6 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             .eq('id', session.user.id)
             .single()
 
+
           if (!error && data) {
             setUserData(data)
           }
@@ -48,7 +53,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } finally {
         setLoading(false)
         console.log('disabled loadding 1::', loading)
-      }
+      }     
+
     }
 
     fetchUser()
@@ -56,27 +62,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
+
+      console.log(event)
       setUser(session?.user || null)
 
       if (session?.user) {
-        console.log('into')
-        try {
-          const { data, error } = await supabase
-            .from('nguoi_dung')
-            .select('*')
-            .eq('id', session.user.id)
-            .single()
+        const { data, error } = await supabase
+          .from('nguoi_dung')
+          .select('*')
+          .eq('id', session.user.id)
+          .single()
 
-          if (!error && data) {
-            setUserData(data)
-          }
-        } catch (error) {
-        } finally {
-          setLoading(false)
-          console.log('disabled loadding 2::', loading)
+        if (!error && data) {
+          setUserData(data)
         }
       } else {
-        setLoading(false)
+        setUserData(null)
       }
     })
 
