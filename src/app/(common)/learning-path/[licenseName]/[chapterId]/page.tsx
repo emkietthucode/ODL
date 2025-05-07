@@ -283,7 +283,9 @@ function LearningPage() {
                             )} text-center`,
                             index + bigIndex * 24 === selectedQuestion &&
                               'ring ring-purple ring-offset-2',
-                            q.cau_tra_loi && 'text-white'
+                            q.cau_tra_loi && 'text-white',
+                            !isQuestionUnlocked(index + bigIndex * 24) &&
+                              'opacity-65'
                           )}
                         >
                           {index + 1 + bigIndex * 24}

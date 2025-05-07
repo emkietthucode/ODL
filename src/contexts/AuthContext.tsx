@@ -17,22 +17,21 @@ export const AuthContext = createContext<AuthContextType | null>(null)
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [userData, setUserData] = useState<NguoiDung | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   const [supabase] = useState(() => createClient())
 
   useEffect(() => {
     const fetchUser = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
+      setLoading(true)
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession()
 
-      console.log('auth session', session)
+        setUser(session?.user || null)
 
-      setUser(session?.user || null)
-
-      if (session?.user) {
-        try {
+        if (session?.user) {
           const { data, error } = await supabase
             .from('nguoi_dung')
             .select('*')
@@ -42,13 +41,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           if (!error && data) {
             setUserData(data)
           }
-        } catch (error) {
-        } finally {
+        } else {
           setLoading(false)
         }
-      } else {
-        setUserData(null)
+      } catch (error) {
+      } finally {
         setLoading(false)
+        console.log('disabled loadding 1::', loading)
       }
     }
 
@@ -57,11 +56,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log(event)
       setUser(session?.user || null)
-      setLoading(false)
 
       if (session?.user) {
+        console.log('into')
         try {
           const { data, error } = await supabase
             .from('nguoi_dung')
@@ -75,19 +73,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } catch (error) {
         } finally {
           setLoading(false)
+          console.log('disabled loadding 2::', loading)
         }
       } else {
-        setUserData(null)
         setLoading(false)
       }
     })
 
     return () => {
+      setLoading(false)
       subscription?.unsubscribe()
     }
   }, [supabase])
 
-  console.log(user)
+  console.log(loading)
 
   return (
     <AuthContext.Provider value={{ user, userData, loading, setUser }}>

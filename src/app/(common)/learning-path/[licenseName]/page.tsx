@@ -127,9 +127,9 @@ function LearningPathPage() {
     }
   }
 
-  if (loading) return <div>Loading...</div>
+  console.log(loading, 'loading')
 
-  console.log(chaptersData)
+  if (loading) return <div></div>
 
   return (
     <div>

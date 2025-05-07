@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter, usePathname } from 'next/navigation'
 import { FaCircleCheck } from 'react-icons/fa6'
 import { IoCloseCircle } from 'react-icons/io5'
 
@@ -23,6 +23,8 @@ function TestResult() {
     pass: false,
     yeu_cau: 0,
   })
+  const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,7 +97,10 @@ function TestResult() {
             </p>
           </div>
 
-          <button className="w-60 h-10 text-2xl font-bold mx-auto bg-[#A08CE6] text-white rounded-full">
+          <button
+            onClick={() => router.push(pathname + '/details')}
+            className="w-60 h-10 text-2xl font-bold mx-auto bg-[#A08CE6] text-white rounded-full"
+          >
             XEM CHI TIẾT
           </button>
         </div>
