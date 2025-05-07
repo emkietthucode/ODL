@@ -92,7 +92,7 @@ const Home = () => {
           lái xe dễ dàng nhất.
         </p>
         <div className="flex mt-[90px] gap-[100px] items-center">
-          <Link href="/tests">
+          <Link href="/learning-path">
             <Button
               variant="main"
               size="auto"
@@ -102,7 +102,7 @@ const Home = () => {
             </Button>
           </Link>
 
-          <Link href="/">
+          <Link href="/tests">
             <button className="flex items-center gap-[17px]">
               <IoMdArrowDroprightCircle size={67} fill="#DF6951" />
 
@@ -111,23 +111,12 @@ const Home = () => {
           </Link>
         </div>
 
-        <Link href="/tests">
-          <Button
-            variant="main"
-            size="auto"
-            className="text-[28px] h-[54px] ml-20 mt-36 p-[10px] rounded-full shadow-lg w-[246px]"
-          >
-            {t('testButton')}
-          </Button>
-        </Link>
-
-
         <div className="absolute top-24 right-0 h-[550px] w-[680px] object-right">
           <Image src={HomeImage} alt="Landing image" />
         </div>
       </div>
 
-      <div className="pt-[38px]">
+      <div className="pt-[38px] mt-6">
         <p className="w-full text-center uppercase font-semibold text-[#5E6282]">
           thi thử
         </p>
@@ -138,56 +127,62 @@ const Home = () => {
         </p>
 
         <div className="mt-16 flex w-full justify-center gap-[86px]">
-          <Card className="w-[267px] h-[308px] rounded-[36px] px-[50px] py-20 relative">
-            <CardHeader className="mb-8 p-0">
-              <h1 className="w-full leading-[48px]  text-center text-[48px] font-bold">
-                A1
-              </h1>
-            </CardHeader>
-            <CardContent className="p-0">
-              <p className="text-center w-full max-w-[167px] mx-auto">
-                Xe mô tô hai bánh có dung tích xi-lanh từ 50 đến 125 cm3.
-              </p>
-            </CardContent>
-            <div className="bg-[#FF9ABB] text-center leading-[60px] w-[60px] h-[60px] rounded-full font-bold text-4xl text-[#DF5753] absolute left-1/2 -top-[30px] -translate-x-1/2">
-              1
-            </div>
-          </Card>
+          <Link href="/tests/vietnam/a1">
+            <Card className="w-[267px] h-[308px] rounded-[36px] px-[50px] py-20 relative">
+              <CardHeader className="mb-8 p-0">
+                <h1 className="w-full leading-[48px]  text-center text-[48px] font-bold">
+                  A1
+                </h1>
+              </CardHeader>
+              <CardContent className="p-0">
+                <p className="text-center w-full max-w-[167px] mx-auto">
+                  Xe mô tô hai bánh có dung tích xi-lanh từ 50 đến 125 cm3.
+                </p>
+              </CardContent>
+              <div className="bg-[#FF9ABB] text-center leading-[60px] w-[60px] h-[60px] rounded-full font-bold text-4xl text-[#DF5753] absolute left-1/2 -top-[30px] -translate-x-1/2">
+                1
+              </div>
+            </Card>
+          </Link>
 
-          <Card className="w-[267px] h-[308px] rounded-[36px] px-[28px] pt-20 relative">
-            <CardHeader className="mb-8 p-0">
-              <p className="w-full text-center text-[48px] leading-[48px] font-bold">
-                A
-              </p>
-            </CardHeader>
-            <CardContent className="p-0">
-              <p className="text-center w-full  mx-auto">
-                Xe mô tô hai bánh có dung tích xi-lanh từ 125 cm3 trở lên và các
-                loại xe quy định cho giấy phép lái xe hạng A1.{' '}
-              </p>
-            </CardContent>
-            <div className="bg-[#BBE7D9] text-center leading-[60px] w-[60px] h-[60px] rounded-full font-bold text-4xl text-[#11513C] absolute left-1/2 -top-[30px] -translate-x-1/2">
-              2
-            </div>
-          </Card>
+          <Link href="/tests/vietnam/a">
+            <Card className="w-[267px] h-[308px] rounded-[36px] px-[28px] pt-20 relative">
+              <CardHeader className="mb-8 p-0">
+                <p className="w-full text-center text-[48px] leading-[48px] font-bold">
+                  A
+                </p>
+              </CardHeader>
+              <CardContent className="p-0">
+                <p className="text-center w-full  mx-auto">
+                  Xe mô tô hai bánh có dung tích xi-lanh từ 125 cm3 trở lên và
+                  các loại xe quy định cho giấy phép lái xe hạng A1.{' '}
+                </p>
+              </CardContent>
+              <div className="bg-[#BBE7D9] text-center leading-[60px] w-[60px] h-[60px] rounded-full font-bold text-4xl text-[#11513C] absolute left-1/2 -top-[30px] -translate-x-1/2">
+                2
+              </div>
+            </Card>
+          </Link>
 
-          <Card className="w-[267px] h-[308px] rounded-[36px] py-20 relative">
-            <CardHeader className="mb-8 p-0">
-              <h1 className="w-full text-center leading-[48px]  text-[48px] font-bold">
-                B1
-              </h1>
-            </CardHeader>
-            <CardContent className="p-0">
-              <p className="text-center w-full max-w-[207px] mx-auto">
-                Xe ô tô chở người đến 08 chỗ; xe ô tô có khối lượng theo thiết
-                kế đến 3.500 kg; kéo rơ moóc có khối lượng theo thiết kế đến 750
-                kg.
-              </p>
-            </CardContent>
-            <div className="bg-[#D6B07A] text-center leading-[60px] w-[60px] h-[60px] rounded-full font-bold text-4xl text-white absolute left-1/2 -top-[30px] -translate-x-1/2">
-              3
-            </div>
-          </Card>
+          <Link href="/tests/vietnam/b1">
+            <Card className="w-[267px] h-[308px] rounded-[36px] py-20 relative">
+              <CardHeader className="mb-8 p-0">
+                <h1 className="w-full text-center leading-[48px]  text-[48px] font-bold">
+                  B1
+                </h1>
+              </CardHeader>
+              <CardContent className="p-0">
+                <p className="text-center w-full max-w-[207px] mx-auto">
+                  Xe ô tô chở người đến 08 chỗ; xe ô tô có khối lượng theo thiết
+                  kế đến 3.500 kg; kéo rơ moóc có khối lượng theo thiết kế đến
+                  750 kg.
+                </p>
+              </CardContent>
+              <div className="bg-[#D6B07A] text-center leading-[60px] w-[60px] h-[60px] rounded-full font-bold text-4xl text-white absolute left-1/2 -top-[30px] -translate-x-1/2">
+                3
+              </div>
+            </Card>
+          </Link>
         </div>
 
         <div className="mt-[144px] max-w-[1116px] mx-auto flex">
@@ -497,13 +492,16 @@ const Home = () => {
             trình học tập hiệu quả và thú vị hơn!"
           </p>
 
-          <Link href="/youtube.com">
+          <a
+            target="_blank"
+            href="https://drive.google.com/file/d/1Dx1Sw2QuZUq2ccYqTd67w0waAcztO9bf/view?usp=drive_link"
+          >
             <Image
               src={GooglePlay}
               alt="google play"
               className="w-[135px] h-[40px]"
             />
-          </Link>
+          </a>
         </div>
       </div>
       <ScrollToTopButton />
