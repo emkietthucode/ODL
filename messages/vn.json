@@ -1,4 +1,9 @@
 {
+  "unauthorized": {
+    "title": "Không có quyền truy cập",
+    "message": "Bạn không có quyền truy cập vào trang này.",
+    "returnHome": "Quay về trang chủ"
+  },
   "Navbar": {
     "homePage": "Trang chủ",
     "testPage": "Thi thử",
@@ -6,7 +11,8 @@
     "contactPage": "Liên hệ",
     "login": "Đăng nhập",
     "register": "Đăng ký",
-    "logout": "Đăng xuất"
+    "logout": "Đăng xuất",
+    "adminPanel": "Trang quản trị"
   },
   "LoginPage": {
     "login": "Đăng nhập",
@@ -18,7 +24,9 @@
     "loginButton": "Đăng nhập",
     "googleButton": "Đăng nhập bằng Google",
     "noAccount": "Chưa có tài khoản?",
-    "registerButton": "Đăng ký ngay"
+    "registerButton": "Đăng ký ngay",
+    "invalidEmail": "Email không hợp lệ",
+    "passwordRequired": "Vui lòng nhập mật khẩu"
   },
   "RegisterPage": {
     "register": "Đăng ký",
@@ -30,7 +38,10 @@
     "continue": "Tiếp tục",
     "Male": "Nam",
     "Female": "Nữ",
-    "Other": "Khác"
+    "Other": "Khác",
+    "invalidEmail": "Email không hợp lệ",
+    "passwordRequired": "Mật khẩu phải có ít nhất 6 ký tự",
+    "nameRequired": "Tên phải có ít nhất 6 ký tự"
   },
   "HomePage": {
     "title": "Chinh phục tay lái, vượt mọi giới hạn!",
@@ -54,16 +65,20 @@
   },
   "VietnamTestPage": {
     "title": "THI THỬ LÝ THUYẾT",
+    "licenseClasses": "Các hạng bằng lái",
+    "motorbikes": "Mô-tô",
+    "vehicle_wheels": "Hai bánh và ba bánh",
     "description": "Chức năng Thi thử lý thuyết mô phỏng bài thi sát hạch chính thức, giúp người dùng kiểm tra kiến thức về luật giao thông, biển báo, và kỹ năng xử lý tình huống. Đề thi được xây dựng đúng cấu trúc và nội dung theo quy định, bao gồm cả câu hỏi điểm liệt (nếu có), mang lại trải nghiệm sát với kỳ thi thực tế.",
-    "a1Description": "dành cho người điều khiển xe mô tô hai bánh có dung tích xi-lanh từ 50cc đến dưới 175cc.",
-    "a2Description": "dành cho người điều khiển xe mô tô hai bánh có dung tích xi-lanh từ 175cc trở lên.",
-    "a3Description": "Bằng A3 cấp cho người điều khiển xe mô tô ba bánh, Bằng A4 cấp cho người điều khiển máy kéo có trọng tải đến 1.000 kg.",
-    "b1Description": "dành cho người điều khiển ô tô chở người dưới 9 chỗ và xe tải dưới 3.500 kg, không dùng để kinh doanh vận tải.",
+    "a1Description": "Xe mô tô hai bánh có dung tích xi-lanh từ 50 đến 125 cm3.",
+    "aDescription": "Xe mô tô hai bánh có dung tích xi-lanh từ 125 cm3 trở lên và các loại xe quy định cho giấy phép lái xe hạng A1.",
+    "bDescription": "Xe ô tô chở người đến 08 chỗ (không kể chỗ của người lái xe); xe ô tô tải và ô tô chuyên dùng có khối lượng toàn bộ theo thiết kế đến 3.500 kg; các loại xe ô tô quy định cho giấy phép lái xe hạng B kéo rơ moóc có khối lượng toàn bộ theo thiết kế đến 750 kg.",
+    "b1Description": "Xe mô tô ba bánh và các loại xe quy định cho giấy phép lái xe hạng A1.",
     "b2Description": "dành cho người điều khiển ô tô chở người dưới 9 chỗ, xe tải dưới 3.500 kg và được hành nghề lái xe kinh doanh vận tải.",
-    "cDescription": "dành cho người điều khiển ô tô tải, máy kéo có trọng tải từ 3.500 kg trở lên.",
+    "c1Description": "Xe ô tô tải và ô tô chuyên dùng có khối lượng toàn bộ theo thiết kế trên 3.500 kg đến 7.500 kg; các loại xe ô tô tải quy định cho giấy phép lái xe hạng C1 kéo rơ moóc có khối lượng toàn bộ theo thiết kế đến 750 kg; các loại xe quy định cho giấy phép lái xe hạng B.",
     "defTitle": "Nâng hạng DEF",
     "defDescription": "dành cho người điều khiển ô tô chở người 10 đến 30 chỗ; trên 30 chỗ; lái xe kéo rơ-mooc.",
-    "startButton": "Thi thử"
+    "startButton": "Thi thử",
+    "learnButton": "Luyện thi"
   },
   "ChooseTestPage": {
     "title": "Loại bằng lái",
@@ -121,5 +136,51 @@
     "readyToTest": "Sẵn sàng để thi thử?",
     "readyToTestDescription": " Nếu bạn đã sẵn sàng, hãy bắt đầu Thi thử ngay để kiểm tra kiến thức và đánh giá mức độ chuẩn bị của mình!",
     "readyToTestButton": "THI THỬ"
+  },
+  "Profile": {
+    "saveButton": "Lưu",
+    "nameLabel": "Họ tên",
+    "phoneLabel": "Số điện thoại",
+    "genderLabel": "Giới tính",
+    "countryLabel": "Quốc gia",
+    "dobLabel": "Ngày sinh",
+    "stateLabel": "Tỉnh/Thành phố",
+    "pickDateLabel": "Chọn ngày"
+  },
+  "LearningPathPage": {
+    "progress": "Tiến độ",
+    "ratio": "Tỉ lệ đúng",
+    "question": "Câu hỏi",
+    "congratulation": "Chúc mừng!",
+    "done": "Bạn đã hoàn thành",
+    "testReady": "Bạn có muốn thực hiện bài kiểm tra cuối chương?",
+    "testButton": "Kiểm tra",
+    "backButton": "Quay lại"
+  },
+  "LearningTestPage": {
+    "question": "Câu hỏi",
+    "submit": "Nộp bài"
+  },
+  "LearningCategory": {
+    "title": "LỘ TRÌNH HỌC BẰNG LÁI",
+    "description": "Lộ trình học giúp bạn theo dõi quá trình ôn tập một cách khoa học và tuần tự. Hoàn thành từng chương để mở khóa nội dung tiếp theo và tiến gần hơn đến việc vượt qua kỳ thi bằng lái!",
+    "yourProgress": "TIẾN TRÌNH CỦA BẠN",
+    "doneChapter": "Số chương đã hoàn thành",
+    "letStart": "Cùng bắt đầu nào!",
+    "status": "Trạng thái",
+    "done": "Đã hoàn thành",
+    "notDone": "Chưa hoàn thành",
+    "progress": "Tiến trình",
+    "learn": "LUYỆN THI",
+    "test": "KIỂM TRA",
+    "otherFunctions": "Các tính năng khác",
+    "testFunction": "THI THỬ",
+    "testFuncDescription": "Khi bạn  đã sẵn sàng với bài thi thử, hãy bắt đầu ngay với những đề thi bám sát thực tế.",
+    "signFunction": "HỌC BIỂN BÁO GIAO THÔNG",
+    "signFuncDescription": "Cung cấp danh sách biển báo kèm giải thích chi tiết, giúp bạn ghi nhớ nhanh và chính xác.",
+    "criticalFunction": "HỌC CÂU ĐIỂM LIỆT",
+    "criticalFuncDescription": "Tập trung ôn luyện các câu hỏi quan trọng, bắt buộc phải trả lời đúng để vượt qua kỳ thi.",
+    "challengeBankFunction": "LÀM LẠI NHỮNG CÂU SAI:",
+    "challengeBankFuncDescription": "Lưu lại và giúp bạn luyện tập các câu hỏi đã trả lời sai để cải thiện điểm số và nắm chắc kiến thức."
   }
 }

@@ -15,4 +15,12 @@ export const SignUpFormSchema = z.object({
   gender: z.nativeEnum(Genders),
 })
 
+export const createSignUpFormSchema = (t: (key: string) => string) =>
+  z.object({
+    email: z.string().email({ message: t('invalidEmail') }),
+    password: z.string().min(6, { message: t('passwordRequired') }),
+    name: z.string().min(6, { message: t('nameRequired') }),
+    gender: z.nativeEnum(Genders),
+  })
+
 export type SignUpFormType = z.infer<typeof SignUpFormSchema>

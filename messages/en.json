@@ -1,4 +1,9 @@
 {
+  "unauthorized": {
+    "title": "Access Denied",
+    "message": "You do not have permission to access this page",
+    "returnHome": "Return to Home"
+  },
   "Navbar": {
     "homePage": "Home Page",
     "testPage": "Test",
@@ -6,7 +11,8 @@
     "contactPage": "Contact",
     "login": "Login",
     "register": "Register",
-    "logout": "Log out"
+    "logout": "Log out",
+    "adminPanel": "Admin Panel"
   },
   "Footer": {
     "addressTitle": "Address",
@@ -24,7 +30,9 @@
     "loginButton": "Log in",
     "googleButton": "Sign in with Google",
     "noAccount": "Don't have an account?",
-    "registerButton": "Sign up here"
+    "registerButton": "Sign up here",
+    "invalidEmail": "Invalid email address",
+    "passwordRequired": "Password is required"
   },
   "RegisterPage": {
     "register": "Account SignUp",
@@ -36,7 +44,10 @@
     "continue": "Continue",
     "Male": "Male",
     "Female": "Female",
-    "Other": "Other"
+    "Other": "Other",
+    "invalidEmail": "Invalid email address",
+    "passwordRequired": "Password must be at least 6 characters",
+    "nameRequired": "Name must be at least 6 characters"
   },
   "HomePage": {
     "title": "Conquer the steering wheel, surpass all limits!",
@@ -54,16 +65,21 @@
   },
   "VietnamTestPage": {
     "title": "THEORY TEST",
+    "licenseClasses": "Driver's license classes",
+    "motorbikes": "Motorbikes",
+    "vehicle_wheels": "Two-wheeled and three-wheeled",
     "description": "The Theory Test function simulates the official driving test, helping users test their knowledge of traffic laws, signs, and situation handling skills. The test is structured and contains the correct content according to regulations, including failing questions (if any), providing an experience close to the actual exam.",
-    "a1Description": "for drivers of two-wheeled motorcycles with a cylinder capacity from 50cc to under 175cc.",
-    "a2Description": "for drivers of two-wheeled motorcycles with a cylinder capacity of 175cc or more.",
-    "a3Description": "A3 license is issued to drivers of three-wheeled motorbikes, A4 license is issued to drivers of tractors with a load capacity of up to 1,000 kg.",
-    "b1Description": "for drivers of passenger cars with less than 9 seats and trucks under 3,500 kg, not used for transportation business.",
+    "a1Description": "Two-wheeled motorcycles have a cylinder capacity of 50cc to 125cc.",
+    "aDescription": "Two-wheeled motorcycles with a cylinder capacity of 125 cm3 or more and other types of vehicles specified for class A1 driving license.",
+    "bDescription": "Passenger cars with up to 8 seats (excluding the driver's seat); trucks and specialized vehicles with a total designed weight of up to 3,500 kg; types of cars identified for a Class B driving license pulling a trailer with a total designed weight of up to 750 kg.",
+    "b1Description": "Three-wheeled motorcycles and other vehicles specified for class A1 driving license.",
     "b2Description": "for drivers of passenger cars with less than 9 seats, trucks under 3,500 kg and are allowed to work as drivers in the transport business.",
+    "c1Description": "Trucks and special-purpose vehicles with a total designed weight of over 3,500 kg to 7,500 kg; types of trucks specified for class C1 driving licenses pulling trailers with a total designed weight of up to 750 kg; types of vehicles specified for class B driving licenses.",
     "cDescription": "for drivers of trucks and tractors with a load capacity of 3,500 kg or more.",
     "defTitle": "Upgrade DEF",
     "defDescription": "for drivers of passenger cars with 10 to 30 seats; over 30 seats; drivers of trailers",
-    "startButton": "Start testing"
+    "startButton": "Start testing",
+    "learnButton": "Learn"
   },
   "ChooseTestPage": {
     "title": "Type of license",
@@ -121,5 +137,51 @@
     "readyToTest": "Ready to take the test?",
     "readyToTestDescription": "If you're ready, start the Practice Test now to test your knowledge and assess your level of preparation!",
     "readyToTestButton": "Take a test"
+  },
+  "Profile": {
+    "saveButton": "Save",
+    "nameLabel": "Name",
+    "phoneLabel": "Phone number",
+    "genderLabel": "Gender",
+    "countryLabel": "Country",
+    "dobLabel": "Date of birth",
+    "stateLabel": "State",
+    "pickDateLabel": "Pick a date"
+  },
+  "LearningPathPage": {
+    "progress": "Progress",
+    "ratio": "Correct Ratio",
+    "question": "Question",
+    "congratulation": "Congratulations!",
+    "done": "You have completed",
+    "testReady": "Do you want to take the final chapter test?",
+    "testButton": "Test",
+    "backButton": "Back"
+  },
+  "LearningTestPage": {
+    "question": "Question",
+    "submit": "Submit"
+  },
+  "LearningCategory": {
+    "title": "DRIVING LICENSE LEARNING ROADMAP",
+    "description": "The study path helps you track your review process in a scientific and sequential way. Complete each chapter to unlock the next content and get closer to passing the driving test!",
+    "yourProgress": "Your progress",
+    "doneChapter": "Number of chapters completed:",
+    "letStart": "Let's start!",
+    "status": "Status",
+    "done": "Completed",
+    "notDone": "Not completed",
+    "progress": "Progress",
+    "learn": "LEARN",
+    "test": "TEST",
+    "otherFunctions": "Other functions",
+    "testFunction": "PRACTICE TEST",
+    "testFuncDescription": "When you are ready for the practice test, start with the tests that closely match",
+    "signFunction": "LEARNING TRAFFIC SIGNS",
+    "signFuncDescription": "Provides a list of signs with detailed explanations, helping you memorize quickly and accurately.",
+    "criticalFunction": "CRITICAL QUESTIONS",
+    "criticalFuncDescription": "Focus on reviewing important questions that must be answered correctly to pass the exam.",
+    "challengeBankFunction": "REDO WRONG QUESTIONS:",
+    "challengeBankFuncDescription": "Save and help you practice your wrongly answered questions to improve your score and master your knowledge."
   }
 }

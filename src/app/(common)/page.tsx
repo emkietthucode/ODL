@@ -84,13 +84,13 @@ const Home = () => {
         >
           Chinh phục tay lái, vượt mọi giới hạn!
         </p>
+
         <p className="max-w-[470px] mt-[26px]">
           ODL mang đến giải pháp ôn thi bằng lái xe nhanh chóng và tiện lợi,
           giúp bạn học mọi lúc, mọi nơi. Hệ thống bài thi sát thực tế và hỗ trợ
           đa quốc gia, ODL đồng hành cùng bạn trên hành trình chinh phục kỳ thi
           lái xe dễ dàng nhất.
         </p>
-
         <div className="flex mt-[90px] gap-[100px] items-center">
           <Link href="/learning-path">
             <Button
@@ -110,6 +110,17 @@ const Home = () => {
             </button>
           </Link>
         </div>
+
+        <Link href="/tests">
+          <Button
+            variant="main"
+            size="auto"
+            className="text-[28px] h-[54px] ml-20 mt-36 p-[10px] rounded-full shadow-lg w-[246px]"
+          >
+            {t('testButton')}
+          </Button>
+        </Link>
+
 
         <div className="absolute top-24 right-0 h-[550px] w-[680px] object-right">
           <Image src={HomeImage} alt="Landing image" />

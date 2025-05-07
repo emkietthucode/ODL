@@ -25,6 +25,12 @@ const TestsLicensePage = () => {
   const pathname = usePathname()
   const t = useTranslations('ChooseTestPage')
 
+  const handleRandomTest = () => {
+    if (tests.length === 0) return
+    const randomIndex = Math.floor(Math.random() * tests.length)
+    router.push(`${pathname}/${tests[randomIndex].id}`)
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const { data: licenseData, error: licenseError } = await supabase
@@ -55,39 +61,44 @@ const TestsLicensePage = () => {
   return (
     <main className="bg-white mx-auto my-auto max-h-full">
       <div className="flex flex-col items-center h-full">
-        <div className="flex flex-col gap-[32px] justify-between items-center h-full w-[60%]">
+        <div className="flex flex-col gap-[20px] justify-between items-center h-full w-[85%]">
           <div className="flex justify-start relative w-[90%]">
-            <div className="flex flex-col gap-10 z-20 mt-20">
-              <div className="text-purple text-5xl font-semibold uppercase">
-                {`${t('title')}: ${license?.ten_hang_bang}`}
+            <div className="flex flex-col gap-6 z-20 mt-5">
+              <div className="text-purple text-3xl font-bold uppercase">
+                {`${t('title')}: ${license?.ten_hang_bang || ''}`}
               </div>
-              <div className="w-[60%]">{license?.mo_ta_hang_bang}</div>
+              <div className="w-[60%] font-light text-sm">
+                {license?.mo_ta_hang_bang}
+              </div>
             </div>
           </div>
 
-          <div className="relative w-full mt-[100px]">
+          <div className="relative w-full mt-[50px]">
             <Image
               src={Overlay}
               alt=""
-              className="absolute z-0 -top-[350px] -right-[110px] opacity-50"
+              className="absolute z-0 -top-[250px] -right-[110px]"
             />
-            <div className="bg-light-purple-admin w-full h-[350px] rounded-3xl flex justify-center items-center relative z-20 ">
-              <div className="w-[80%] flex justify-between items-center">
+            <div className="bg-light-purple-admin w-[1214px] h-[192px] rounded-3xl flex justify-center items-center relative z-20 ">
+              <div className="w-[70%] flex justify-between items-center">
                 <Image
                   src={Student}
                   alt=""
-                  className="absolute z-20 -top-[105px] -left-[30px]"
+                  className="absolute z-20 top-[100px] -left-[30px]"
                 />
 
-                <div className="flex flex-col gap-[32px] w-[60%] justify-center">
-                  <div className="text-2xl font-medium">{t('readyTitle')}</div>
-                  <div>{t('testDescription')}</div>
+                <div className="flex flex-col gap-[16px] w-[65%] justify-center">
+                  <div className="text-xl font-medium">{t('readyTitle')}</div>
+                  <div className="font-light text-sm">
+                    {t('testDescription')}
+                  </div>
                 </div>
 
                 <Button
                   variant="main"
                   size="auto"
-                  className="rounded-xl shadow-xl font-medium w-[150px] h-full"
+                  className="rounded-xl shadow-xl text-xl font-medium w-[191px] h-[44px] uppercase bg-custom-dark-violet"
+                  onClick={handleRandomTest}
                 >
                   {t('randomButton')}
                 </Button>
@@ -105,15 +116,17 @@ const TestsLicensePage = () => {
                 <Button
                   key={index}
                   className={`${montserratAlternates.className} 
-                  rounded-xl 
+                  rounded-full
+                  uppercase
                   text-white 
                   font-bold 
-                  text-2xl 
-                  bg-blue-400
+                  text-xl 
+                  drop-shadow-lg
+                  bg-custom-normal-light-blue
                   hover:bg-blue-400/80
                   text-center
-                  w-[150px]
-                  h-[45px]`}
+                  w-[115px]
+                  h-[49px]`}
                   onClick={() => router.push(`${pathname}/${test.id}`)}
                 >
                   {t('exam')} {index + 1}
@@ -122,10 +135,10 @@ const TestsLicensePage = () => {
             </div>
           </div>
         </div>
-        <div className="w-full h-full bg-blue-100/40 flex justify-center py-20">
-          <div className="w-[60%] h-full flex justify-between items-center">
+        <div className="w-full h-[200px] bg-custom-light-hover-blue flex justify-center">
+          <div className="w-[75%] h-full flex justify-between items-center">
             <div className="flex flex-col gap-10 w-[70%]">
-              <div className="text-purple text-3xl font-semibold">
+              <div className="text-purple text-3xl font-bold">
                 {t('notReadyTitle')}
               </div>
               <div>
@@ -136,7 +149,7 @@ const TestsLicensePage = () => {
             <Button
               variant="main"
               size="auto"
-              className="font-medium w-[150px]"
+              className="drop-shadow-lg font-medium text-xl w-[189px] h-[53px] bg-custom-normal-violet rounded-2xl uppercase"
               onClick={() =>
                 router.push(`/learn/vietnam/${license?.ten_hang_bang}`)
               }

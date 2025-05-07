@@ -20,6 +20,9 @@ import { FaCheck } from 'react-icons/fa6'
 import Image from 'next/image'
 import { FaRegCircleUser } from 'react-icons/fa6'
 import Logo from '../../public/images/Logo.png'
+import { NguoiDung } from '@/types/types'
+import { useState, useEffect } from 'react'
+import supabase from '@/utils/supabase/supabase'
 
 const defaultFlag =
   'https://cgtsomijxwpcyqgznjqx.supabase.co/storage/v1/object/public/quoc_ky//Flag_of_the_United_Kingdom_(1-2).svg.png'
@@ -29,7 +32,7 @@ const NavBar = () => {
   const { locale, languages, setLocale } = useLanguage()
   const router = useRouter()
 
-  const { user, setUser } = useAuth()
+  const { user, userData, setUser } = useAuth()
 
   const handleLogout = async () => {
     await signOut()
@@ -43,8 +46,6 @@ const NavBar = () => {
 
   const selectedLanguage = languages.find((lang) => lang.ky_hieu === locale)
 
-  console.log(selectedLanguage)
-
   return (
     <div className="h-10 bg-custom-light-violet flex justify-center text-purple">
       <div className="max-w-[1080px] w-full flex justify-start items-center gap-[60px]">
@@ -57,7 +58,7 @@ const NavBar = () => {
             <Link href="/tests" className="hover:opacity-80">
               {t('testPage')}
             </Link>
-            <Link href="/learn" className="hover:opacity-80">
+            <Link href="/learning-path" className="hover:opacity-80">
               {t('learningPage')}
             </Link>
             <Link href="#" className="hover:opacity-80">
@@ -115,6 +116,14 @@ const NavBar = () => {
                     >
                       {t('logout')}
                     </Button>
+                    {userData?.vai_tro === 'admin' && (
+                      <Button
+                        onClick={() => router.push('/admin')}
+                        className="w-full bg-transparent hover:bg-[#888] outline-none text-black border-none shadow-none "
+                      >
+                        {t('adminPanel')}
+                      </Button>
+                    )}
                   </PopoverContent>
                 </Popover>
               </div>

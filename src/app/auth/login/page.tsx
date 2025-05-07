@@ -1,6 +1,6 @@
 'use client'
 
-import { LoginFormSchema, LoginFormType } from '@/types/schemas/login'
+import { LoginFormType } from '@/types/schemas/login'
 import LoginForm from './LoginForm'
 import Link from 'next/link'
 
