@@ -111,17 +111,6 @@ const Home = () => {
           </Link>
         </div>
 
-        <Link href="/tests">
-          <Button
-            variant="main"
-            size="auto"
-            className="text-[28px] h-[54px] ml-20 mt-36 p-[10px] rounded-full shadow-lg w-[246px]"
-          >
-            {t('testButton')}
-          </Button>
-        </Link>
-
-
         <div className="absolute top-24 right-0 h-[550px] w-[680px] object-right">
           <Image src={HomeImage} alt="Landing image" />
         </div>
