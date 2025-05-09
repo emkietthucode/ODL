@@ -18,7 +18,7 @@ function LearningTestPage() {
   const { testId } = useParams<{ testId: string }>()
   const [questions, setQuestions] = useState<LearningQuestionDTO[]>([])
   const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
-  const [isActive, setIsActive] = useState<boolean>(true)
+  const [isActive, setIsActive] = useState<boolean>(false)
   const { user } = useAuth()
   const t = useTranslations('LearningTestPage')
   const [currentTimeLeft, setCurrentTimeLeft] = useState(0)
@@ -26,11 +26,11 @@ function LearningTestPage() {
     thoi_gian_lam_bai: number
     ten_de_thi: string
   } | null>(null)
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
     const handleFetchData = async () => {
-      setIsActive(false)
       try {
         const [
           { data: questionsData, error: questionsError },
@@ -50,6 +50,8 @@ function LearningTestPage() {
         setIsActive(true)
       } catch (error: any) {
         console.log('error', error.message)
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -57,7 +59,7 @@ function LearningTestPage() {
   }, [testId])
 
   const getButtonCss = (index: number) => {
-    if (questions[index].cau_tra_loi) {
+    if (questions[index]?.cau_tra_loi) {
       return 'bg-[#907ECF] text-white'
     } else {
       return 'bg-[#E2DBF7] text-purple'
@@ -109,6 +111,7 @@ function LearningTestPage() {
   }
 
   const handleSubmit = async (time: number) => {
+    console.log('submit::')
     try {
       setIsActive(false)
       const answeredQuestions = questions.filter((q) => q.cau_tra_loi !== null)
@@ -134,6 +137,12 @@ function LearningTestPage() {
     } catch (error: any) {
       console.log(error.message)
     }
+  }
+
+  const handleTimeUp = async (time: number) => {
+    console.log('time up::')
+    setIsActive(false)
+    await handleSubmit(time)
   }
 
   useEffect(() => {
@@ -197,7 +206,7 @@ function LearningTestPage() {
                     key={groupIndex}
                     className="flex justify-center gap-[6px] h-[full] flex-wrap"
                   >
-                    {Array.from({ length: 25 }).map((_, qIndex) => (
+                    {questions.slice(groupIndex * 25, groupIndex * 25 + 25).map((_, qIndex) => (
                       <button
                         key={qIndex}
                         disabled={!isActive}
@@ -247,19 +256,18 @@ function LearningTestPage() {
         </div>
         <div className="w-[164px] h-full bg-[#F1EEFB] py-3 flex flex-col justify-between">
           <div className="mx-auto w-[106px] h-[47px] font-bold bg-light-purple text-center leading-[47px] rounded-[8px] text-[28px] text-purple">
-            <Timer
-              time={
-                testInfo?.thoi_gian_lam_bai
-                  ? testInfo?.thoi_gian_lam_bai * 60
-                  : 0
-              }
-              isActive={isActive}
-              onTimeUp={async (time: number) => {
-                setIsActive(false)
-                await handleSubmit(time)
-              }}
-              onTimeChange={setCurrentTimeLeft}
-            />
+            {!loading && (
+              <Timer
+                time={
+                  testInfo?.thoi_gian_lam_bai
+                    ? testInfo?.thoi_gian_lam_bai * 60
+                    : 0
+                }
+                isActive={isActive}
+                onTimeUp={handleTimeUp}
+                onTimeChange={setCurrentTimeLeft}
+              />
+            )}
           </div>
 
           <button

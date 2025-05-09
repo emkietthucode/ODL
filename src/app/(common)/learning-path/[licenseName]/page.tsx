@@ -46,27 +46,30 @@ function LearningPathPage() {
     null
   )
   const [isTestCreated, setIsTestCreated] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
-  const { user, loading } = useAuth()
+  const { user } = useAuth()
   const router = useRouter()
 
   const t = useTranslations('LearningCategory')
 
-  const chartData = useMemo(
-    () => [
+  const chartData = useMemo(() => {
+    setLoading(false)
+    return [
       {
         status: 'done',
         count: chaptersData?.filter((chapter) => chapter.passed).length,
+        fill: '#A08CE6',
       },
       {
         status: 'not done',
         count:
           chaptersData?.length -
             chaptersData?.filter((chapter) => chapter.passed).length || 0,
+        fill: '#DBDBDB',
       },
-    ],
-    [chaptersData]
-  )
+    ]
+  }, [chaptersData])
 
   useEffect(() => {
     if (!user) {
@@ -81,9 +84,6 @@ function LearningPathPage() {
             path_name: licenseName,
           }
         )
-
-        setLearningPathData(pathData)
-        console.log(pathData)
 
         const { data: chaptersData, error: chaptersError } = await supabase.rpc(
           'find_chapters',
@@ -127,9 +127,7 @@ function LearningPathPage() {
     }
   }
 
-  console.log(loading, 'loading')
-
-  if (loading) return <div></div>
+  console.log('chartData::', chartData)
 
   return (
     <div>
@@ -153,21 +151,23 @@ function LearningPathPage() {
                 {t('doneChapter')}
               </p>
 
-              <ChartContainer config={chartConfig}>
-                <PieChart width={136} height={136}>
-                  <Pie
-                    dataKey="count"
-                    nameKey="status"
-                    data={chartData}
-                    innerRadius={40}
-                    outerRadius={65}
-                    fill="#DBDBDB"
-                    direction="clokewise"
-                    startAngle={90} // Start at the bottom
-                    endAngle={450} // End at the top
-                  ></Pie>
-                </PieChart>
-              </ChartContainer>
+              {!loading && (
+                <ChartContainer config={chartConfig}>
+                  <PieChart width={136} height={136}>
+                    <Pie
+                      dataKey="count"
+                      nameKey="status"
+                      data={chartData}
+                      innerRadius={40}
+                      outerRadius={65}
+                      fill="#DBDBDB"
+                      direction="clokewise"
+                      startAngle={90} // Start at the bottom
+                      endAngle={450} // End at the top
+                    ></Pie>
+                  </PieChart>
+                </ChartContainer>
+              )}
 
               <p className="font-extrabold text-4xl text-purple mt-[57px] w-full text-center">
                 {chaptersData?.filter((chapter) => chapter.passed).length}/
@@ -222,8 +222,8 @@ function LearningPathPage() {
 
                 <div className="bg-purple w-full rounded-full h-[1px] my-[25px]"></div>
 
-                <div className="flex h-full gap-[165px]">
-                  <div className="relative">
+                <div className="flex h-full gap-[165px] ">
+                  <div className="relative min-w-[220px]">
                     <p className="text-[14px]">
                       {t('status')}:{' '}
                       <b>
@@ -235,7 +235,7 @@ function LearningPathPage() {
                       height={200}
                       src={WorkingDesk}
                       alt="image"
-                      className="absolute bottom-16"
+                      className="absolute bottom-16 !w-[200px] !h-[200px]"
                     />
                   </div>
 

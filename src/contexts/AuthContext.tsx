@@ -20,9 +20,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [loading, setLoading] = useState(false)
 
-
-
-
   const [supabase] = useState(() => createClient())
 
   useEffect(() => {
@@ -34,27 +31,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } = await supabase.auth.getSession()
 
         setUser(session?.user || null)
-
-        if (session?.user) {
-          const { data, error } = await supabase
-            .from('nguoi_dung')
-            .select('*')
-            .eq('id', session.user.id)
-            .single()
-
-
-          if (!error && data) {
-            setUserData(data)
-          }
-        } else {
-          setLoading(false)
-        }
       } catch (error) {
       } finally {
         setLoading(false)
         console.log('disabled loadding 1::', loading)
-      }     
-
+      }
     }
 
     fetchUser()
@@ -62,32 +43,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-
       console.log(event)
       setUser(session?.user || null)
-
-      if (session?.user) {
-        const { data, error } = await supabase
-          .from('nguoi_dung')
-          .select('*')
-          .eq('id', session.user.id)
-          .single()
-
-        if (!error && data) {
-          setUserData(data)
-        }
-      } else {
-        setUserData(null)
-      }
     })
 
     return () => {
-      setLoading(false)
       subscription?.unsubscribe()
     }
   }, [supabase])
-
-  console.log(loading)
 
   return (
     <AuthContext.Provider value={{ user, userData, loading, setUser }}>

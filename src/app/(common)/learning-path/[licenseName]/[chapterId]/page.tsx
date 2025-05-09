@@ -12,7 +12,7 @@ import QuestionCarousel from '@/components/question-carousel'
 import QuestionTable from '@/components/learning-path/question-table'
 import usePathInfo from '@/hooks/use-path-info'
 import { LearningQuestionDTO } from '@/types/dto/types'
-import { Chuong } from '@/types/types'
+import { Chuong, LoTrinh } from '@/types/types'
 import { useTranslations } from 'next-intl'
 import {
   Dialog,
@@ -29,7 +29,6 @@ function LearningPage() {
     licenseName: string
   }>()
 
-  const pathInfo = usePathInfo()
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 200,
@@ -46,6 +45,7 @@ function LearningPage() {
     lastAnsweredQuestion === questions.length - 1 && !isChapterPassed
   )
   const [isTestCreated, setIsTestCreated] = useState<boolean>(true)
+  const [learningPath, setLearningPath] = useState<LoTrinh | null>(null)
 
   const t = useTranslations('LearningPathPage')
   const router = useRouter()
@@ -64,6 +64,15 @@ function LearningPage() {
     const fetchData = async () => {
       try {
         setIsLoading(true)
+
+        const { data: pathData, error: pathError } = await supabase.rpc(
+          'fetch_learning_path_info',
+          {
+            path_name: licenseName,
+          }
+        )
+        setLearningPath(pathData)
+
         const [{ data, error }, { data: chapter_data, error: chapter_error }] =
           await Promise.all([
             await supabase.rpc('fetch_user_questions', {
@@ -71,7 +80,7 @@ function LearningPage() {
               user_id: user.id,
               page: pagination.page,
               record_limit: pagination.limit,
-              learning_path_id: pathInfo?.learningPath?.id,
+              learning_path_id: pathData?.id,
             }),
             await supabase.rpc('fetch_chapter_info', {
               chapter_id: chapterId,
@@ -83,7 +92,7 @@ function LearningPage() {
           {
             user_id: user?.id,
             chapter_id: chapter_data?.id,
-            level_id: pathInfo?.learningPath?.ma_hang_bang,
+            level_id: pathData?.ma_hang_bang,
           }
         )
 
@@ -112,7 +121,7 @@ function LearningPage() {
     }
 
     fetchData()
-  }, [user, pagination.page])
+  }, [])
 
   useEffect(() => {
     const lastIndex = questions.findLastIndex((q) => q.cau_tra_loi !== null)
@@ -126,7 +135,7 @@ function LearningPage() {
         question_id: questions[selectedQuestion]?.id,
         user_id: user?.id,
         answer_id: answerId,
-        path_id: pathInfo?.learningPath?.id,
+        path_id: learningPath?.id,
       })
 
       if (error) {
