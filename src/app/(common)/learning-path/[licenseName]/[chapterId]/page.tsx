@@ -121,7 +121,7 @@ function LearningPage() {
     }
 
     fetchData()
-  }, [])
+  }, [user])
 
   useEffect(() => {
     const lastIndex = questions.findLastIndex((q) => q.cau_tra_loi !== null)
@@ -197,7 +197,9 @@ function LearningPage() {
       return true
     }
 
-    return index === lastAnsweredQuestion + 1
+    return (
+      index === lastAnsweredQuestion + 1 && questions[index - 1]?.cau_tra_loi
+    )
   }
 
   const getCorrectRatio = () => {
