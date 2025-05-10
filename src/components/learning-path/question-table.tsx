@@ -210,7 +210,7 @@ function QuestionTable({
           onValueChange={(value) => onAnswerChange(value, index)}
         >
           {question &&
-            Array.from({ length: 4 }).map((_, selectionIndex) => (
+            question?.ds_lua_chon.map((_, selectionIndex) => (
               <Label
                 key={selectionIndex}
                 htmlFor={`r${selectionIndex}`}
