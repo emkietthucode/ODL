@@ -5,6 +5,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { useEffect, useState, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
+import { cn } from '@/lib/utils'
 
 interface QuestionTableProps {
   question: LearningQuestionDTO
@@ -27,6 +28,7 @@ function QuestionTable({
       ? question.ds_lua_chon.findIndex((c) => c.id === question?.cau_tra_loi)
       : -1
   })
+  const [showHint, setShowHint] = useState<boolean>(false)
 
   const t = useTranslations('LearningPathPage')
 
@@ -136,6 +138,10 @@ function QuestionTable({
     return () => window.removeEventListener('keydown', handleKeyDown, true)
   }, [onQuestionChange, changeAnswer])
 
+  const handleTriggerHint = () => {
+    setShowHint((prev) => !prev)
+  }
+
   return (
     <div className="w-[938px] flex gap-2 my-[10px] h-[464px] mx-auto">
       {/* Question info */}
@@ -166,16 +172,33 @@ function QuestionTable({
             {question?.noi_dung_cau_hoi || 'Question text here'}
           </p>
         </div>
-        <div className="absolute bottom-[10px] left-[10px]">
+        <div
+          className={cn(
+            'absolute bottom-[10px] left-1/2 -translate-x-1/2 rounded-[8px] w-[481px] p-[1px] flex items-center',
+            showHint && 'bg-light-purple'
+          )}
+        >
           <button
-            disabled
+            onClick={handleTriggerHint}
+            disabled={question?.goi_y === null}
             className="disabled:cursor-auto disabled:opacity-35 disabled:border-light-purple disabled:bg-[#F6F4FD]
-             cursor-pointer w-[60px] h-[60px] border-2 rounded-[8px] border-light-purple text-center 
-             flex justify-center flex-col items-center bg-[#F6F4FD] hover:border-purple hover:bg-light-purple"
+               cursor-pointer w-[60px] h-[60px] border-2 rounded-[8px] border-light-purple text-center
+               flex justify-center flex-col items-center bg-[#F6F4FD] hover:border-purple hover:bg-light-purple"
           >
-            <HiOutlineLightBulb className="w-8 h-8 text-[#979797]" />
-            <span className="text-[12px] uppercase text-purple">Hint</span>
+            <HiOutlineLightBulb
+              className={cn(
+                'w-8 h-8 text-[#979797]',
+                showHint && 'fill-yellow-300 text-yellow-300'
+              )}
+            />
+            <p className="text-[12px] w-full  uppercase text-purple">Hint</p>
           </button>
+          {showHint && (
+            <p className="px-3 max-w-[400px] text-sm">
+              Some hint for your question, hope it can make you make your
+              decision
+            </p>
+          )}
         </div>
       </div>
 
@@ -191,7 +214,8 @@ function QuestionTable({
               <Label
                 key={selectionIndex}
                 htmlFor={`r${selectionIndex}`}
-                className={`
+                className={cn(
+                  `
                   grow 
                   ${answered(
                     question,
@@ -206,17 +230,21 @@ function QuestionTable({
                   border-transparent 
                   active:scale-80
                   transition-all 
-                  duration-150`}
+                  duration-150
+                  font-medium
+                   text-sm text-neutral-500
+                  `,
+                  question?.ds_lua_chon[selectionIndex]?.id ===
+                    question?.cau_tra_loi && 'font-semibold text-black'
+                )}
               >
                 <RadioGroupItem
                   disabled={selectionIndex >= question?.ds_lua_chon.length}
                   value={question?.ds_lua_chon[selectionIndex]?.id || ''}
                   id={`r${selectionIndex}`}
                 />
-                <div className="text-sm text-neutral-500 font-medium">
-                  {question?.ds_lua_chon[selectionIndex]?.noi_dung_lua_chon ||
-                    ''}
-                </div>
+
+                {question?.ds_lua_chon[selectionIndex]?.noi_dung_lua_chon || ''}
               </Label>
             ))}
         </RadioGroup>
