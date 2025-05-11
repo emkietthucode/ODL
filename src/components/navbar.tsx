@@ -31,12 +31,34 @@ const NavBar = () => {
   const t = useTranslations('Navbar')
   const { locale, languages, setLocale } = useLanguage()
   const router = useRouter()
+  const [userData, setUserData] = useState<NguoiDung | null>(null)
 
-  const { user, userData, setUser } = useAuth()
+  const { user, setUser } = useAuth()
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user?.id) {
+        const { data, error } = await supabase
+          .from('nguoi_dung')
+          .select('*')
+          .eq('id', user.id)
+          .single()
+
+        if (error) {
+          console.error('Error fetching user data:', error)
+        } else {
+          setUserData(data)
+        }
+      }
+    }
+
+    fetchUserData()
+  }, [user])
 
   const handleLogout = async () => {
     await signOut()
     setUser(null)
+    setUserData(null)
   }
 
   const handleLanguageChange = (language: string) => {

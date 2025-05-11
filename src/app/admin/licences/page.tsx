@@ -15,8 +15,6 @@ import HangBangTable from '@/components/hang-bang-table'
 import useUpdateLicenceModal from '@/hooks/useUpdateLicenceModal'
 import { cn } from '@/lib/utils'
 import { Tab } from '@/components/tab'
-import useAuth from '@/hooks/useAuth'
-import UnauthorizedNotification from '@/components/unauthorized-notification'
 
 export const tabsVN = [
   { label: 'Tất cả' },
@@ -86,12 +84,6 @@ export default function LicenceDashboard() {
 
     const filterFn = filters[activeTab] || (() => false)
     return hangBang.filter(filterFn)
-  }
-
-  const { userData } = useAuth()
-
-  if (!userData || userData?.vai_tro !== 'admin') {
-    return <UnauthorizedNotification />
   }
 
   return (

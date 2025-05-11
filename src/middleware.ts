@@ -23,10 +23,48 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/auth/login', request.url))
     }
 
+    // Check for admin role if accessing admin routes
+    if (path.startsWith('/admin')) {
+      const supabaseClient = createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+          cookies: {
+            getAll() {
+              return request.cookies.getAll()
+            },
+            setAll(cookiesToSet) {
+              cookiesToSet.forEach(({ name, value, options }) =>
+                request.cookies.set(name, value)
+              )
+              response = NextResponse.next({
+                request,
+              })
+              cookiesToSet.forEach(({ name, value, options }) =>
+                response.cookies.set(name, value, options)
+              )
+            },
+          },
+        }
+      )
+
+      const { data: userData } = await supabaseClient
+        .from('nguoi_dung')
+        .select('vai_tro')
+        .eq('id', user?.id)
+        .single()
+
+      if (!userData || userData.vai_tro !== 'admin') {
+        return NextResponse.redirect(new URL('/', request.url))
+      }
+    }
+
     if (isAuthRoute && user) {
       return NextResponse.redirect(new URL('/', request.url))
     }
   }
+
+  return response
 }
 
 export const config = {
