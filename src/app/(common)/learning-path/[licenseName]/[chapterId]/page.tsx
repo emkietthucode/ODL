@@ -63,6 +63,7 @@ function LearningPage() {
       !isChapterPassed &&
       !hasShownDialog
     ) {
+      console.log('into::')
       setIsDialogOpen(true)
     }
   }, [lastAnsweredQuestion])
@@ -130,20 +131,10 @@ function LearningPage() {
           !pass &&
           !JSON.parse(
             localStorage.getItem(
-              `hasShownCompletionDialog-${learningPath?.id}-${chapterData?.id}`
+              `hasShownCompletionDialog-${pathData?.id}-${chapter_data?.id}`
             ) || 'false'
           )
-        console.log(
-          'shouldOpen',
-          lastIndex === questions.length - 1,
-          lastIndex,
-          pass,
-          !JSON.parse(
-            localStorage.getItem(
-              `hasShownCompletionDialog-${learningPath?.id}-${chapterData?.id}`
-            ) || 'false'
-          )
-        )
+
         setIsDialogOpen(shouldOpen)
 
         setLastAnsweredQuestion(lastIndex)
