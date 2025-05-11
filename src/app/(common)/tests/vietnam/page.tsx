@@ -68,7 +68,7 @@ const TestsCategoryPage = () => {
                 <Button
                   variant="main"
                   size="auto"
-                  className="font-medium w-[50%] self-end mx-auto uppercase"
+                  className="font-medium min-w-[50%] self-start mx-auto uppercase"
                   onClick={() => router.push(pathname + '/a1')}
                 >
                   {t('startButton')}
@@ -84,7 +84,7 @@ const TestsCategoryPage = () => {
                 <Button
                   variant="main"
                   size="auto"
-                  className="font-medium w-[50%] self-end mx-auto uppercase"
+                  className="font-medium min-w-[50%] self-start self-end mx-auto uppercase"
                   onClick={() => router.push(pathname + '/a')}
                 >
                   {t('startButton')}
@@ -102,7 +102,7 @@ const TestsCategoryPage = () => {
                 <Button
                   variant="main"
                   size="auto"
-                  className="font-medium w-[50%] self-end mx-auto uppercase"
+                  className="font-medium min-w-[50%] self-start mx-auto uppercase"
                   onClick={() => router.push(pathname + '/b1')}
                 >
                   {t('startButton')}
@@ -123,7 +123,7 @@ const TestsCategoryPage = () => {
               <Button
                 variant="main"
                 size="auto"
-                className="font-medium w-[100px] uppercase"
+                className="font-medium min-w-[100px] self-start uppercase"
                 onClick={() => router.push(pathname + '/b')}
               >
                 {t('startButton')}
@@ -138,7 +138,7 @@ const TestsCategoryPage = () => {
               <Button
                 variant="main"
                 size="auto"
-                className="font-medium w-[100px] uppercase"
+                className="font-medium min-w-[100px] self-start uppercase"
                 onClick={() => router.push(pathname + '/c1')}
               >
                 {t('startButton')}
