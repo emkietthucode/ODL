@@ -34,8 +34,6 @@ import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import useDeleteCountryModal from '@/hooks/useDeleteCountryModal'
-import useAuth from '@/hooks/useAuth'
-import UnauthorizedNotification from '@/components/unauthorized-notification'
 
 const ITEMS_PER_PAGE = 10
 
@@ -93,12 +91,6 @@ export default function CountryDashboard() {
       .from('quoc_ky')
       .getPublicUrl(`quoc-ky-${item.id}`)
     return quoc_ky.publicUrl
-  }
-
-  const { userData } = useAuth()
-
-  if (!userData || userData?.vai_tro !== 'admin') {
-    return <UnauthorizedNotification />
   }
 
   return (

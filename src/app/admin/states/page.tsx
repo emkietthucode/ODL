@@ -34,8 +34,6 @@ import Image from 'next/image'
 import useInsertStateModal from '@/hooks/useInsertStateModal'
 import useDeleteStateModal from '@/hooks/useDeleteStateModal'
 import useUpdateStateModal from '@/hooks/useUpdateStateModal'
-import useAuth from '@/hooks/useAuth'
-import UnauthorizedNotification from '@/components/unauthorized-notification'
 
 const ITEMS_PER_PAGE = 8
 
@@ -93,12 +91,6 @@ export default function StateDashboard() {
       .from('quoc_ky')
       .getPublicUrl(`quoc-ky-${item.id}`)
     return quoc_ky.publicUrl
-  }
-
-  const { userData } = useAuth()
-
-  if (!userData || userData?.vai_tro !== 'admin') {
-    return <UnauthorizedNotification />
   }
 
   return (
