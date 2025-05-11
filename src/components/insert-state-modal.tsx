@@ -21,7 +21,6 @@ const InsertStateModal = () => {
   } = useForm<FieldValues>({
     defaultValues: {
       stateName: '',
-      //language: '',
       symbol: null,
     },
   })
@@ -36,11 +35,8 @@ const InsertStateModal = () => {
     try {
       setIsLoading(true)
 
-      const flagFile = values.symbol?.[0]
+      const flagFile = values.flag?.[0]
 
-      if (!values.stateName || !flagFile) {
-        return toast.error('Vui lòng điền đầy đủ thông tin.')
-      }
       const uniqueID = uuidv4()
 
       const { data: imageData, error: imageError } = await supabase.storage
@@ -52,6 +48,7 @@ const InsertStateModal = () => {
 
       if (imageError) {
         setIsLoading(false)
+        console.log('Error uploading image:', imageError)
         return toast.error('Lỗi khi thêm quốc kỳ.')
       }
 
