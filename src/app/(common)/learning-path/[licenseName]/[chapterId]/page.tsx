@@ -12,7 +12,7 @@ import QuestionCarousel from '@/components/question-carousel'
 import QuestionTable from '@/components/learning-path/question-table'
 import usePathInfo from '@/hooks/use-path-info'
 import { LearningQuestionDTO } from '@/types/dto/types'
-import { Chuong } from '@/types/types'
+import { Chuong, LoTrinh } from '@/types/types'
 import { useTranslations } from 'next-intl'
 import {
   Dialog,
@@ -29,7 +29,6 @@ function LearningPage() {
     licenseName: string
   }>()
 
-  const pathInfo = usePathInfo()
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 200,
@@ -42,19 +41,32 @@ function LearningPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [chapterData, setChapterData] = useState<Chuong | null>(null)
   const [isChapterPassed, setIsChapterPassed] = useState<boolean>(false)
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(
-    lastAnsweredQuestion === questions.length - 1 && !isChapterPassed
-  )
+  const [learningPath, setLearningPath] = useState<LoTrinh | null>(null)
+
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
   const [isTestCreated, setIsTestCreated] = useState<boolean>(true)
 
   const t = useTranslations('LearningPathPage')
   const router = useRouter()
 
   useEffect(() => {
-    if (lastAnsweredQuestion === questions.length - 1 && !isChapterPassed) {
+    if (!questions.length) {
+      return
+    }
+    const hasShownDialog = JSON.parse(
+      localStorage.getItem(
+        `hasShownCompletionDialog-${learningPath?.id}-${chapterData?.id}`
+      ) || 'false'
+    )
+    if (
+      lastAnsweredQuestion === questions.length - 1 &&
+      !isChapterPassed &&
+      !hasShownDialog
+    ) {
+      console.log('into::')
       setIsDialogOpen(true)
     }
-  }, [lastAnsweredQuestion, questions.length, isChapterPassed])
+  }, [lastAnsweredQuestion])
 
   useEffect(() => {
     if (!user) {
@@ -64,6 +76,15 @@ function LearningPage() {
     const fetchData = async () => {
       try {
         setIsLoading(true)
+
+        const { data: pathData, error: pathError } = await supabase.rpc(
+          'fetch_learning_path_info',
+          {
+            path_name: licenseName,
+          }
+        )
+        setLearningPath(pathData)
+
         const [{ data, error }, { data: chapter_data, error: chapter_error }] =
           await Promise.all([
             await supabase.rpc('fetch_user_questions', {
@@ -71,7 +92,7 @@ function LearningPage() {
               user_id: user.id,
               page: pagination.page,
               record_limit: pagination.limit,
-              learning_path_id: pathInfo?.learningPath?.id,
+              learning_path_id: pathData?.id,
             }),
             await supabase.rpc('fetch_chapter_info', {
               chapter_id: chapterId,
@@ -83,7 +104,7 @@ function LearningPage() {
           {
             user_id: user?.id,
             chapter_id: chapter_data?.id,
-            level_id: pathInfo?.learningPath?.ma_hang_bang,
+            level_id: pathData?.ma_hang_bang,
           }
         )
 
@@ -104,6 +125,19 @@ function LearningPage() {
         setSelectedQuestion(
           lastIndex + 1 >= data.length ? lastIndex : lastIndex + 1
         )
+
+        const shouldOpen =
+          lastIndex === data.length - 1 &&
+          !pass &&
+          !JSON.parse(
+            localStorage.getItem(
+              `hasShownCompletionDialog-${pathData?.id}-${chapter_data?.id}`
+            ) || 'false'
+          )
+
+        setIsDialogOpen(shouldOpen)
+
+        setLastAnsweredQuestion(lastIndex)
       } catch (error: any) {
         console.log(error)
       } finally {
@@ -112,13 +146,7 @@ function LearningPage() {
     }
 
     fetchData()
-  }, [user, pagination.page])
-
-  useEffect(() => {
-    const lastIndex = questions.findLastIndex((q) => q.cau_tra_loi !== null)
-
-    setLastAnsweredQuestion(lastIndex !== -1 ? lastIndex : 0)
-  }, [questions])
+  }, [user])
 
   const handleAnswerChange = async (answerId: string, index: number) => {
     try {
@@ -126,7 +154,7 @@ function LearningPage() {
         question_id: questions[selectedQuestion]?.id,
         user_id: user?.id,
         answer_id: answerId,
-        path_id: pathInfo?.learningPath?.id,
+        path_id: learningPath?.id,
       })
 
       if (error) {
@@ -188,7 +216,9 @@ function LearningPage() {
       return true
     }
 
-    return index === lastAnsweredQuestion + 1
+    return (
+      index === lastAnsweredQuestion + 1 && questions[index - 1]?.cau_tra_loi
+    )
   }
 
   const getCorrectRatio = () => {
@@ -226,6 +256,17 @@ function LearningPage() {
       }
     } catch (error: any) {
       console.log(error)
+    }
+  }
+
+  const handleOpenChange = (open: boolean) => {
+    setIsDialogOpen(open)
+
+    if (!open) {
+      localStorage.setItem(
+        `hasShownCompletionDialog-${learningPath?.id}-${chapterData?.id}`,
+        'true'
+      )
     }
   }
 
@@ -306,7 +347,19 @@ function LearningPage() {
         canGoToQuestion={canGoToQuestion}
       />
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      {lastAnsweredQuestion === questions.length - 1 && !isChapterPassed && (
+        <div className="my-5 h-[50px] w-full bg-[#E8F5FF] flex justify-center items-center gap-[66px] ">
+          <p className="uppercase text-sm font-medium">
+            BẠN ĐÃ HOÀN THÀNH {chapterData?.ten_chuong}{' '}
+          </p>
+
+          <button className="min-w-20 text-white h-9 text-xs uppercase font-medium rounded-[16px] bg-[#5CAAE6]">
+            KIEM TRA
+          </button>
+        </div>
+      )}
+
+      <Dialog open={isDialogOpen} onOpenChange={handleOpenChange}>
         <DialogContent className="w-[469px] py-9 px-[35px]">
           <DialogHeader className="text-[20px] font-bold text-purple">
             <DialogTitle className="w-full text-center">
@@ -333,7 +386,13 @@ function LearningPage() {
             </button>
             <button
               disabled={!isTestCreated}
-              onClick={() => setIsDialogOpen(false)}
+              onClick={() => {
+                setIsDialogOpen(false)
+                localStorage.setItem(
+                  `hasShownCompletionDialog-${learningPath?.id}-${chapterData?.id}`,
+                  'true'
+                )
+              }}
               className="font-bold text-[14px] text-white bg-[#979797] rounded-[6px] w-[160px] h-[34px] uppercase"
             >
               {t('backButton')}

@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } catch (error) {
       } finally {
         setLoading(false)
-        console.log('disabled loading 1::', loading)
+        console.log('disabled loadding 1::', loading)
       }
     }
 
@@ -39,11 +39,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log(event)
       setUser(session?.user || null)
     })
 
     return () => {
-      setLoading(false)
       subscription?.unsubscribe()
     }
   }, [supabase])

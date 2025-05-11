@@ -17,11 +17,17 @@ function TestResult() {
     so_cau_dung: number
     pass: boolean
     yeu_cau: number
+    ma_de_thi: string
+    ten_hang_bang: string
+    ma_chuong: string
   }>({
     so_luong_cau_hoi: 0,
     so_cau_dung: 0,
     pass: false,
     yeu_cau: 0,
+    ma_de_thi: '',
+    ten_hang_bang: '',
+    ma_chuong: '',
   })
   const router = useRouter()
   const pathname = usePathname()
@@ -42,7 +48,7 @@ function TestResult() {
     fetchData()
   }, [testResultId])
 
-  console.log('Result:', result)
+  console.log(result)
 
   return (
     <div className="w-full max-w-screen-lg mx-auto mt-[60px]">
@@ -119,17 +125,31 @@ function TestResult() {
           <p className="text-[#5297CC] font-medium">
             Chưa hài lòng với kết quả? Làm bài lại ngay
           </p>
-          <button className="h-9 text-[#5297CC] bg-[#D0EBFF] rounded-full px-2">
+          <button
+            onClick={() =>
+              router.push(
+                `/learning-path/${result.ten_hang_bang}/${result.ma_chuong}/${result.ma_de_thi}`
+              )
+            }
+            className="h-9 text-[#5297CC] bg-[#D0EBFF] rounded-full px-2"
+          >
             LÀM BÀI LẠI
           </button>
         </div>
 
         <div className="flex justify-between items-center">
           <p className="text-[#5297CC] font-medium">
-            Chúng tôi còn nhiều đề khác, xem ngay!
+            Bạn muốn học lại chương này
           </p>
-          <button className="h-9 text-[#5297CC] bg-[#D0EBFF] rounded-full px-2">
-            LÀM ĐỀ KHÁC
+          <button
+            onClick={() =>
+              router.push(
+                `/learning-path/${result.ten_hang_bang}/${result.ma_chuong}`
+              )
+            }
+            className="h-9 text-[#5297CC] bg-[#D0EBFF] rounded-full px-2"
+          >
+            HỌC LẠI
           </button>
         </div>
 
