@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
 import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
 import qs from 'query-string'
@@ -15,8 +14,6 @@ import CauHoiTable from '@/components/cau-hoi-table'
 import useUpdateQuestionModal from '@/hooks/useUpdateQuestionModal'
 import { cn } from '@/lib/utils'
 import { Tab } from '@/components/tab'
-import useAuth from '@/hooks/useAuth'
-import UnauthorizedNotification from '@/components/unauthorized-notification'
 
 export const tabsVN = [
   { label: 'Tất cả' },
@@ -78,12 +75,6 @@ export default function QuestionDashboard() {
       return cauHoi.filter((row) => row.la_cau_diem_liet === true)
     }
     return cauHoi.filter((row) => row.loai_cau_hoi === activeTab)
-  }
-
-  const { userData } = useAuth()
-
-  if (!userData || userData?.vai_tro !== 'admin') {
-    return <UnauthorizedNotification />
   }
 
   return (

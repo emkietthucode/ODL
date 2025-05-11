@@ -68,12 +68,6 @@ export default function ChapterDashboard() {
     }
   }
 
-  const { userData } = useAuth()
-
-  if (!userData || userData?.vai_tro !== 'admin') {
-    return <UnauthorizedNotification />
-  }
-
   return (
     <div className="flex flex-col min-h-screen">
       <div className="bg-light-purple-admin p-8 flex justify-between items-center">

@@ -4,10 +4,7 @@ import NavBar from '@/components/navbar'
 import SideBar from '@/components/sidebar'
 import ModalProvider from '@/providers/modal-provider'
 import ToasterProvider from '@/providers/toaster-provider'
-import useAuth from '@/hooks/useAuth'
-import UnauthorizedNotification from '@/components/unauthorized-notification'
 import { AuthProvider } from '@/contexts/AuthContext'
-import { useEffect, useState } from 'react'
 
 const AdminDashboard = ({ children }: { children: React.ReactNode }) => {
   return (

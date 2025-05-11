@@ -24,18 +24,14 @@ import {
   Trash2,
 } from 'lucide-react'
 import supabase from '@/utils/supabase/supabase'
-import toast from 'react-hot-toast'
 import qs from 'query-string'
 import { format, parseISO } from 'date-fns'
 import useDebounce from '@/hooks/useDebounce'
 import { NguoiDung } from '@/types/types'
 import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import useDeleteUserModal from '@/hooks/useDeleteUserModal'
 import useUpdateUserModal from '@/hooks/useUpdateUserModal'
-import useAuth from '@/hooks/useAuth'
-import UnauthorizedNotification from '@/components/unauthorized-notification'
 
 const ITEMS_PER_PAGE = 8
 const ADMIN_ROLE = 'admin'
@@ -141,11 +137,6 @@ export default function UserDashboard() {
         .filter((nguoiDung) => nguoiDung.vai_tro !== ADMIN_ROLE)
         .slice(startIndex, endIndex)
     }
-  }
-  const { userData } = useAuth()
-
-  if (!userData || userData?.vai_tro !== 'admin') {
-    return <UnauthorizedNotification />
   }
 
   return (

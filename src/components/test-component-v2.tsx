@@ -9,7 +9,8 @@ import { LearningQuestionDTO, QuestionDTO } from '@/types/dto/types'
 import { useParams } from 'next/navigation'
 import supabase from '@/utils/supabase/supabase'
 import Timer from '@/components/timer'
-import useAuth from '@/hooks/useAuth'
+import { v4 as uuidv4 } from 'uuid'
+import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { Button } from './ui/button'
@@ -46,7 +47,8 @@ const TestComponent = () => {
   const [questions, setQuestions] = useState<LearningQuestionDTO[]>([])
   const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
   const [isActive, setIsActive] = useState<boolean>(true)
-  const { user } = useAuth()
+  const router = useRouter()
+  const pathname = usePathname()
   const t = useTranslations('LearningTestPage')
   const [currentTimeLeft, setCurrentTimeLeft] = useState(0)
   const [testInfo, setTestInfo] = useState<{
@@ -157,6 +159,10 @@ const TestComponent = () => {
       () => setIsActive(true)
     )
   }
+  const handleTimeUp = () => {
+    const uniqueID = uuidv4()
+    router.push(`${pathname}/${uniqueID}`)
+  }
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -262,7 +268,7 @@ const TestComponent = () => {
                   : 0
               }
               isActive={isActive}
-              onTimeUp={() => {}}
+              onTimeUp={() => handleTimeUp()}
               onTimeChange={setCurrentTimeLeft}
             />
           </div>

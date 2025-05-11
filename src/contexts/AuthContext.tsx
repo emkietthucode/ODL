@@ -3,11 +3,9 @@
 import { createClient } from '@/utils/supabase/client'
 import { User } from '@supabase/supabase-js'
 import { createContext, useEffect, useState } from 'react'
-import { NguoiDung } from '@/types/types'
 
 interface AuthContextType {
   user: User | null
-  userData: NguoiDung | null
   loading: boolean
   setUser: (user: User | null) => void
 }
@@ -16,8 +14,6 @@ export const AuthContext = createContext<AuthContextType | null>(null)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
-  const [userData, setUserData] = useState<NguoiDung | null>(null)
-
   const [loading, setLoading] = useState(false)
 
   const [supabase] = useState(() => createClient())
@@ -53,7 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [supabase])
 
   return (
-    <AuthContext.Provider value={{ user, userData, loading, setUser }}>
+    <AuthContext.Provider value={{ user, loading, setUser }}>
       {children}
     </AuthContext.Provider>
   )
