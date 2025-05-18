@@ -79,7 +79,7 @@ function ProfileForm({ onSubmit, user, regions, states }: ProfileFormProps) {
       country: user?.ma_khu_vuc || '',
       state: user?.ma_tinh || '',
       dob: new Date(user?.ngay_sinh) || new Date(),
-      avatar: user?.anh_dai_dien || null,
+      avatar: user?.anh_dai_dien || 'https://github.com/shadcn.png',
     },
     resolver: zodResolver(ProfileFormSchema),
   })

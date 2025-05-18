@@ -17,6 +17,8 @@ function Profile() {
         values.country = values.state
       }
 
+      console.log(values.avatar)
+
       let newAvatar = values.avatar
 
       if (values.avatar && typeof values.avatar !== 'string') {
