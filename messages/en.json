@@ -183,5 +183,25 @@
     "criticalFuncDescription": "Focus on reviewing important questions that must be answered correctly to pass the exam.",
     "challengeBankFunction": "REDO WRONG QUESTIONS:",
     "challengeBankFuncDescription": "Save and help you practice your wrongly answered questions to improve your score and master your knowledge."
+  },
+  "CriticalQuestionsPage": {
+    "criticalQuestions": "Critical questions",
+    "criticalDescription": "Critical questions are questions that must be answered correctly to pass the exam. The system will automatically select these questions for you to practice, helping you get used to the exam format and improve your knowledge.",
+    "motorbike": "Motorbike",
+    "car": "Car, Truck",
+    "progress": "Progress",
+    "seeMore": "See more",
+    "seeMoreDescription": "Questionnaire for other popular vehicles in circulation",
+    "carCritical": "Includes 60 serious traffic violation situations.",
+    "learnNow": "Learn now",
+    "card1Title": "test",
+    "card1Description": "Once you're ready for the practice test, start with the real test questions.",
+    "card2Title": "Learning Signs",
+    "card2Description": "Provides a list of signs with detailed explanations, helping you remember quickly and accurately.",
+    "card3Title": "Learning Theory ",
+    "card3Description": "Study and review theoretical questions, classified into chapters, according to a pre-existing roadmap.",
+    "card4Title": "Redo wrong questions:",
+    "card4Description": "Save and help you practice your wrongly answered questions to improve your score and master your knowledge.",
+    "otherFeatures": "Other features"
   }
 }

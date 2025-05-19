@@ -182,5 +182,25 @@
     "criticalFuncDescription": "Tập trung ôn luyện các câu hỏi quan trọng, bắt buộc phải trả lời đúng để vượt qua kỳ thi.",
     "challengeBankFunction": "LÀM LẠI NHỮNG CÂU SAI:",
     "challengeBankFuncDescription": "Lưu lại và giúp bạn luyện tập các câu hỏi đã trả lời sai để cải thiện điểm số và nắm chắc kiến thức."
+  },
+  "CriticalQuestionsPage": {
+    "criticalQuestions": "Câu điểm liệt",
+    "criticalDescription": "Những câu hỏi về tình huống mất an toàn giao thông nghiêm trọng, nếu trả lời sai sẽ khiến người dùng không thể vượt qua kì thi.",
+    "motorbike": "XE MÁY",
+    "car": "Ô TÔ, xe tải",
+    "progress": "Tiến độ",
+    "seeMore": "THAM KHẢO THÊM:",
+    "seeMoreDescription": "Bộ câu hỏi điểm liệt của các loại phương tiện phổ biến đang lưu hành khác",
+    "carCritical": "Bao gồm 60 câu tình huống vi phạm giao thông nghiêm trọng.",
+    "learnNow": " Học ngay",
+    "card1Title": "THI THỬ",
+    "card1Description": "Khi bạn  đã sẵn sàng với bài thi thử, hãy bắt đầu ngay với những đề thi bám sát thực tế.",
+    "card2Title": "HỌC BIỂN BÁO GIAO THÔNG:",
+    "card2Description": "Cung cấp danh sách biển báo kèm giải thích chi tiết, giúp bạn ghi nhớ nhanh và chính xác.",
+    "card3Title": "HỌC LÝ THUYẾT:",
+    "card3Description": "Học và ôn tập những câu hỏi lý thuyết, được phân loại thành từng chương, theo một lộ trình có sẵn.",
+    "card4Title": "LÀM LẠI NHỮNG CÂU SAI:",
+    "card4Description": "Lưu lại và giúp bạn luyện tập các câu hỏi đã trả lời sai để cải thiện điểm số và nắm chắc kiến thức.",
+    "otherFeatures": "Các tính năng khác"
   }
 }
