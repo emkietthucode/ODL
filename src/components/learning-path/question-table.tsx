@@ -180,7 +180,7 @@ function QuestionTable({
         >
           <button
             onClick={handleTriggerHint}
-            disabled={question?.goi_y === null}
+            disabled={!question?.goi_y}
             className="disabled:cursor-auto disabled:opacity-35 disabled:border-light-purple disabled:bg-[#F6F4FD]
                cursor-pointer w-[60px] h-[60px] border-2 rounded-[8px] border-light-purple text-center
                flex justify-center flex-col items-center bg-[#F6F4FD] hover:border-purple hover:bg-light-purple"
