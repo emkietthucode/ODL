@@ -30,7 +30,7 @@ const TestPage = () => {
         )
 
         if (regionData) {
-          router.push(`/tests/${regionData.slug}`)
+          router.push(`category/${regionData.slug}`)
         }
       }
     }
