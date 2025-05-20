@@ -45,7 +45,7 @@ function TestDashboard() {
     router.push(url)
 
     fetchData()
-  }, [router, updateRefreshTrigger, insertRefreshTrigger])
+  }, [router, updateRefreshTrigger, insertRefreshTrigger, activeTab])
 
   return (
     <div>
