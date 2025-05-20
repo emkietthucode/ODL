@@ -6,6 +6,8 @@ import { Label } from '@/components/ui/label'
 import { useEffect, useState, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
+import { LuaChon } from '@/types/types'
+
 
 interface QuestionTableProps {
   question: LearningQuestionDTO

@@ -1,4 +1,4 @@
-import { PathInfoContext } from '@/app/(common)/learning-path/[licenseName]/layout'
+import { PathInfoContext } from '@/contexts/PathInfoContext'
 import { useContext } from 'react'
 
 export default function usePathInfo() {

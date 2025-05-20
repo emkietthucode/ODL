@@ -66,10 +66,6 @@ const TestComponent: React.FC<TestComponentProps> = ({
     }
   }, [isTesting, timeLeft])
 
-  if (!questions) {
-    return null
-  }
-
   const formatTime = (totalSeconds: number) => {
     const minutes = Math.floor(totalSeconds / 60)
     const seconds = totalSeconds % 60
