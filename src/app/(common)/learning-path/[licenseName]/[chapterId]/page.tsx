@@ -158,7 +158,7 @@ function LearningPage() {
       })
 
       if (error) {
-        console.error(error)
+        console.log(error)
       } else {
         setQuestions((prev) =>
           prev.map((q, i) =>
@@ -250,7 +250,7 @@ function LearningPage() {
       })
 
       if (error) {
-        console.error(error)
+        console.log(error)
       } else {
         router.push(`/learning-path/${licenseName}/${chapterId}/${data}`)
       }

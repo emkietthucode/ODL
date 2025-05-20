@@ -116,7 +116,7 @@ function LearningPathPage() {
       })
 
       if (error) {
-        console.error(error)
+        console.log(error)
       } else {
         router.push(
           `/learning-path/${licenseName}/${selectedChapter?.id}/${data}`

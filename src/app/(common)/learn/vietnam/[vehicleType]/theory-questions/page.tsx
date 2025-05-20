@@ -72,7 +72,7 @@ const LearnTheoryPage = () => {
         .limit(25)
 
       if (error) {
-        console.error(error)
+        console.log(error)
         return toast.error('Lỗi trong quá trình lấy dữ liệu câu hỏi')
       }
 
