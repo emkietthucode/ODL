@@ -62,10 +62,6 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
     }
   }, [questions]) // Runs when `questions` changes
 
-  if (!questions) {
-    return null
-  }
-
   const handlePrevious = () => {
     if (selectedQuestionIndex > 0) {
       setSelectedQuestion((prev) => prev - 1)

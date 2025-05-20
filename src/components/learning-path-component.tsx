@@ -51,10 +51,6 @@ function LearningPathComponent({
     setSelectedQuestion(0)
   }, [initialQuestions])
 
-  if (!questions) {
-    return null
-  }
-
   const handlePrevious = () => {
     if (selectedQuestionIndex > 0) {
       setSelectedQuestion((prev) => prev - 1)

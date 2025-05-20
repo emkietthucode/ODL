@@ -30,10 +30,6 @@ const LearnComponent: React.FC<TestComponentProps> = ({ initialQuestions }) => {
     setQuestions(initialQuestions)
   }, [initialQuestions])
 
-  if (!questions) {
-    return null
-  }
-
   const handlePrevious = () => {
     if (selectedQuestionIndex > 0) {
       setSelectedQuestion((prev) => prev - 1)
