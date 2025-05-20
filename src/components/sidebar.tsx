@@ -14,7 +14,7 @@ import TestHoverIcon from '../../public/icons/test-hover.png'
 import UserHoverIcon from '../../public/icons/user-hover.png'
 import Box from './box'
 import SidebarItem from './sidebar-item'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, GraduationCap } from 'lucide-react'
 
 const SideBar = () => {
   const pathname = usePathname()
@@ -61,6 +61,13 @@ const SideBar = () => {
             active: pathname === '/admin/questions/roadmap',
           },
         ],
+      },
+      {
+        icon: UserIcon,
+        hoverIcon: UserHoverIcon,
+        label: 'Bài test',
+        active: pathname.startsWith('/admin/tests'),
+        href: '/admin/tests',
       },
       {
         icon: UserIcon,

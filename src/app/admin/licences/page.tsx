@@ -16,7 +16,7 @@ import useUpdateLicenceModal from '@/hooks/useUpdateLicenceModal'
 import { cn } from '@/lib/utils'
 import { Tab } from '@/components/tab'
 
-export const tabsVN = [
+const tabsVN = [
   { label: 'Tất cả' },
   { label: 'Mô tô' },
   { label: 'Ô tô - Tải - Khách' },

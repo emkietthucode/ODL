@@ -100,3 +100,16 @@ export interface LoTrinh {
   mo_ta_lo_trinh: string
   ma_hang_bang?: string
 }
+
+export interface CauTrucBaiTest {
+  id: string
+  so_cau_de_dat: number
+  so_cau_diem_liet: number
+  thoi_gian_lam_bai: number
+  ma_hang_bang: string
+  ten_hang_bang: string
+  so_luong_cau_hoi: number
+  loai_cau_truc: string
+  chuong_test: string
+  ten_chuong: string
+}
