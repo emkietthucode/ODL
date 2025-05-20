@@ -20,7 +20,7 @@ export default getRequestConfig(async () => {
 
         locale = data?.language_record.ky_hieu || 'en'
       } catch (error) {
-        console.error('Error fetching user language:', error)
+        console.log('Error fetching user language:', error)
         locale = 'en'
       }
     } else {

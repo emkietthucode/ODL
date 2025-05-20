@@ -55,7 +55,7 @@ const ResultPage = () => {
       })
 
       if (error) {
-        console.error('Error:', error)
+        console.log('Error:', error)
         setIsLoading(false)
         return
       }
