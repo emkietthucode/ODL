@@ -124,7 +124,7 @@ const InsertQuestionModal = () => {
       const { error: errorCauHoi } = await supabase.from('cau_hoi').insert({
         id: uniqueID,
         noi_dung_cau_hoi: values.noi_dung_cau_hoi,
-        hinh_anh: `cau-hoi-${uniqueID}`,
+        hinh_anh: `${uniqueID}`,
         giai_thich: values.giai_thich,
         goi_y: values.goi_y,
         la_cau_diem_liet: isCriticalQuestion,

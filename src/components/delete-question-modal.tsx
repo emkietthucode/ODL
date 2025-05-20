@@ -30,7 +30,7 @@ const DeleteQuestionModal = () => {
     try {
       const { error: storageError } = await supabase.storage
         .from('hinh_anh_cau_hoi')
-        .remove([`cau-hoi-${id}`])
+        .remove([`${id}`])
 
       if (storageError) {
         return toast.error('Xóa câu hỏi không thành công.')
