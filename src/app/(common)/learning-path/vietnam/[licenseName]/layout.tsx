@@ -3,7 +3,7 @@
 import { LoTrinh } from '@/types/types'
 import supabase from '@/utils/supabase/supabase'
 import { useParams } from 'next/navigation'
-import { createContext, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { PathInfoContext } from '@/contexts/PathInfoContext'
 
 export default function LearningPathLayout({
