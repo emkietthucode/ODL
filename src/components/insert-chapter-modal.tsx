@@ -144,7 +144,7 @@ const InsertChapterModal = () => {
 
       results.forEach((result, index) => {
         if (result.error) {
-          console.error(result.error)
+          console.log(result.error)
           toast.error(
             `Thêm câu hỏi ${currentQuestions[index].id} không thành công`
           )
@@ -153,7 +153,7 @@ const InsertChapterModal = () => {
 
       toast.success('Cập nhật câu hỏi thành công!')
     } catch (error) {
-      console.error(error)
+      console.log(error)
       toast.error('Đã xảy ra lỗi khi cập nhật câu hỏi.')
     }
   }

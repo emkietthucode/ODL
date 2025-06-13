@@ -2,15 +2,14 @@
 
 import useAuth from '@/hooks/useAuth'
 import supabase from '@/utils/supabase/supabase'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import PathBar from '../../../../../../public/images/path-bar-vector.svg'
+import PathBar from '../../../../../../../public/images/path-bar-vector.svg'
 import Image from 'next/image'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 import QuestionCarousel from '@/components/question-carousel'
 import QuestionTable from '@/components/learning-path/question-table'
-import usePathInfo from '@/hooks/use-path-info'
 import { LearningQuestionDTO } from '@/types/dto/types'
 import { Chuong, LoTrinh } from '@/types/types'
 import { useTranslations } from 'next-intl'
@@ -48,6 +47,7 @@ function LearningPage() {
 
   const t = useTranslations('LearningPathPage')
   const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     if (!questions.length) {
@@ -160,7 +160,7 @@ function LearningPage() {
       console.log('data::', data)
 
       if (error) {
-        console.error(error)
+        console.log(error)
       } else {
         setQuestions((prev) =>
           prev.map((q, i) =>
@@ -256,9 +256,9 @@ function LearningPage() {
       })
 
       if (error) {
-        console.error(error)
+        console.log(error)
       } else {
-        router.push(`/learning-path/${licenseName}/${chapterId}/${data}`)
+        router.push(pathname + `/${chapterId}/${data}`)
       }
     } catch (error: any) {
       console.log(error)

@@ -111,7 +111,7 @@ const InsertQuestionModal = () => {
       if (values.hinh_anh?.[0]) {
         const { data: imageData, error: imageError } = await supabase.storage
           .from('hinh_anh_cau_hoi')
-          .upload(`cau-hoi-${uniqueID}`, values.hinh_anh[0], {
+          .upload(`${uniqueID}`, values.hinh_anh[0], {
             cacheControl: '3600',
             upsert: false,
           })
@@ -124,7 +124,7 @@ const InsertQuestionModal = () => {
       const { error: errorCauHoi } = await supabase.from('cau_hoi').insert({
         id: uniqueID,
         noi_dung_cau_hoi: values.noi_dung_cau_hoi,
-        hinh_anh: `cau-hoi-${uniqueID}`,
+        hinh_anh: `${uniqueID}`,
         giai_thich: values.giai_thich,
         goi_y: values.goi_y,
         la_cau_diem_liet: isCriticalQuestion,

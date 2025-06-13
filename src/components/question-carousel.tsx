@@ -79,7 +79,7 @@ const QuestionCarousel = forwardRef(
           try {
             carouselRef.current.goToSlide(initialSlide, false)
           } catch (error) {
-            console.error('Error calling goToSlide:', error)
+            console.log('Error calling goToSlide:', error)
           }
         }, 100)
 

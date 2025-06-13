@@ -157,7 +157,7 @@ const UpdateQuestionModal = () => {
       if (values.hinh_anh?.[0]) {
         const { error: imageError } = await supabase.storage
           .from('hinh_anh_cau_hoi')
-          .upload(`cau-hoi-${cauHoi.id}`, values.hinh_anh[0], {
+          .upload(`${cauHoi.id}`, values.hinh_anh[0], {
             cacheControl: '3600',
             upsert: true,
           })
@@ -171,7 +171,7 @@ const UpdateQuestionModal = () => {
         .from('cau_hoi')
         .update({
           noi_dung_cau_hoi: values.noi_dung_cau_hoi,
-          hinh_anh: `cau-hoi-${cauHoi.id}`,
+          ...(values.hinh_anh?.[0] && { hinh_anh: `${cauHoi.id}` }),
           giai_thich: values.giai_thich,
           goi_y: values.goi_y,
           la_cau_diem_liet: isCriticalQuestion,
@@ -194,9 +194,20 @@ const UpdateQuestionModal = () => {
       console.log(isShuffleAnswer)
       console.log(luaChonArr)
 
+      // First delete all existing choices for this question
+      const { error: deleteError } = await supabase
+        .from('lua_chon')
+        .delete()
+        .eq('ma_cau_hoi', cauHoi.id)
+
+      if (deleteError) {
+        return toast.error('Cập nhật câu hỏi không thành công.')
+      }
+
+      // Then insert the new choices
       const { error: errorLuaChon } = await supabase
         .from('lua_chon')
-        .upsert(luaChonArr)
+        .insert(luaChonArr)
 
       if (errorLuaChon) {
         return toast.error('Cập nhật câu hỏi không thành công.')

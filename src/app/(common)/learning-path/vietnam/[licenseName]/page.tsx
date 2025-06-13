@@ -2,19 +2,19 @@
 
 import useAuth from '@/hooks/useAuth'
 import supabase from '@/utils/supabase/supabase'
-import { useParams } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 
 import { Pie, PieChart } from 'recharts'
 import { ChartConfig, ChartContainer } from '@/components/ui/chart'
 import { FaLock } from 'react-icons/fa'
-import WorkingDesk from '../../../../../public/images/working-desk.svg'
+import WorkingDesk from '../../../../../../public/images/working-desk.svg'
 import Image from 'next/image'
 import { Progress } from '@/components/ui/progress'
-import Card1 from '../../../../../public/images/f11LearningCardIcon1.svg'
-import Card2 from '../../../../../public/images/f11LearningCardIcon2.svg'
-import Card3 from '../../../../../public/images/f11LearningCardIcon3.svg'
-import Card4 from '../../../../../public/images/f11LearningCardIcon4.svg'
+import Card1 from '../../../../../../public/images/f11LearningCardIcon1.svg'
+import Card2 from '../../../../../../public/images/f11LearningCardIcon2.svg'
+import Card3 from '../../../../../../public/images/f11LearningCardIcon3.svg'
+import Card4 from '../../../../../../public/images/f11LearningCardIcon4.svg'
 import FeatureCard from '@/components/feature-card'
 import { Chuong, LoTrinh } from '@/types/types'
 import { cn } from '@/lib/utils'
@@ -50,6 +50,7 @@ function LearningPathPage() {
 
   const { user } = useAuth()
   const router = useRouter()
+  const pathname = usePathname()
 
   const t = useTranslations('LearningCategory')
 
@@ -116,11 +117,9 @@ function LearningPathPage() {
       })
 
       if (error) {
-        console.error(error)
+        console.log(error)
       } else {
-        router.push(
-          `/learning-path/${licenseName}/${selectedChapter?.id}/${data}`
-        )
+        router.push(pathname + `/${selectedChapter?.id}/${data}`)
       }
     } catch (error: any) {
       console.log(error)
@@ -259,9 +258,7 @@ function LearningPathPage() {
                     <div className="mt-[74px] flex gap-[16px]">
                       <button
                         onClick={() =>
-                          router.push(
-                            `/learning-path/${licenseName}/${selectedChapter?.id}`
-                          )
+                          router.push(pathname + `/${selectedChapter?.id}`)
                         }
                         className="hover:opacity-80 text-[14px] bg-purple text-white shadow-sm font-semibold w-[98px] h-[37px] rounded-full uppercase"
                       >

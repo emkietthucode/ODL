@@ -110,7 +110,7 @@ const UpdateChapterModal = () => {
         setRegion(selectedRegion)
         setRegionName(selectedRegion?.ten_khu_vuc || '')
       } catch (error) {
-        console.error(error)
+        console.log(error)
         toast.error('Lỗi khi lấy dữ liệu câu hỏi.')
       }
     }
@@ -202,7 +202,7 @@ const UpdateChapterModal = () => {
       // Handle errors for remove
       removeResults.forEach((result, index) => {
         if (result.error) {
-          console.error(result.error)
+          console.log(result.error)
           toast.error(
             `Xóa liên kết của câu hỏi ${questionsToRemove[index].id} không thành công`
           )
@@ -212,7 +212,7 @@ const UpdateChapterModal = () => {
       // Handle errors for update
       updateResults.forEach((result, index) => {
         if (result.error) {
-          console.error(result.error)
+          console.log(result.error)
           toast.error(
             `Cập nhật liên kết của câu hỏi ${questionsToAddOrUpdate[index].id} không thành công`
           )
@@ -221,7 +221,7 @@ const UpdateChapterModal = () => {
 
       toast.success('Cập nhật câu hỏi thành công!')
     } catch (error) {
-      console.error(error)
+      console.log(error)
       toast.error('Đã xảy ra lỗi khi cập nhật câu hỏi.')
     }
   }

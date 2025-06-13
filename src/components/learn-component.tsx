@@ -48,14 +48,14 @@ const LearnComponent: React.FC<TestComponentProps> = ({ initialQuestions }) => {
 
     // Ensure the answerIndex is a valid number
     if (isNaN(answerIndex)) {
-      console.error('Invalid answer index:', value)
+      console.log('Invalid answer index:', value)
       return
     }
 
     // Safely get the selected answer
     const selectedAnswer = questions[questionIndex]?.answers?.[answerIndex].id
     if (!selectedAnswer) {
-      console.error(
+      console.log(
         'Selected answer not found for question index:',
         questionIndex
       )
