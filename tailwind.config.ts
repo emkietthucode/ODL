@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {
+      scrollbarGutter: {
+        stable: 'stable',
+      },
       backgroundImage: {
         worldMapImg: "url('/images/world-map.png')",
       },
