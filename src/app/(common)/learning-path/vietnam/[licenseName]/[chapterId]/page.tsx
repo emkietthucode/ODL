@@ -157,6 +157,8 @@ function LearningPage() {
         path_id: learningPath?.id,
       })
 
+      console.log('data::', data)
+
       if (error) {
         console.log(error)
       } else {
@@ -165,6 +167,10 @@ function LearningPage() {
             i === index ? { ...q, cau_tra_loi: answerId } : q
           )
         )
+
+        if (index > lastAnsweredQuestion) {
+          setLastAnsweredQuestion(index)
+        }
       }
     } catch (error: any) {
       console.log(error)
