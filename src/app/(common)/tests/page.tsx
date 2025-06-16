@@ -31,6 +31,9 @@ const TestPage = () => {
 
         if (regionData) {
           router.push(`tests/${regionData.slug}`)
+        } else if (localStorage.getItem('selectedCountry')) {
+          const selectedCountry = localStorage.getItem('selectedCountry')
+          router.push(`tests/${selectedCountry}`)
         }
       }
     }
