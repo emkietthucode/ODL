@@ -1,14 +1,14 @@
 'use client'
 
 import SignCard from '@/components/sign-card'
-import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { Sign } from '@/types/dto/types'
 import supabase from '@/utils/supabase/supabase'
-import Image from 'next/image'
 import { useEffect, useState } from 'react'
-
 import { IoIosSearch } from 'react-icons/io'
+
+import Amico from '../../../../../../public/images/amico.svg'
+import Image from 'next/image'
 
 const sign_types = [
   'Biển báo cấm',
@@ -73,7 +73,13 @@ function LearnSigns() {
             quan và dễ hiểu.
           </p>
         </div>
-        {/* <Image src="" alt="something" className="w-[126px] h-[120px]" /> */}
+        <Image
+          src={Amico}
+          alt="something"
+          width={126}
+          height={120}
+          className="w-[126px] h-[120px]"
+        />
       </div>
 
       <div className="max-w-[1400px] mb-5 ">

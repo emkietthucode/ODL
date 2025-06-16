@@ -321,7 +321,7 @@ function LearningPathPage() {
             title={t('criticalFunction')}
             description={t('criticalFuncDescription')}
             icon={Card3}
-            to="/"
+            to="/learn/vietnam/signs"
           />
 
           <FeatureCard
