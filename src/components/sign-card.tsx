@@ -7,7 +7,7 @@ interface SignCardProps {
   url: string
 }
 
-function SignCard({ name, description, url }: SignCardProps) {
+function SignCard({ id, name, description, url }: SignCardProps) {
   return (
     <div className="w-[390px] min-h-[180px] rounded-[16px] border-[1px] bg-light-purple-admin border-[#C7C7C7] flex p-[10px] gap-[15px]">
       <Image
@@ -19,7 +19,9 @@ function SignCard({ name, description, url }: SignCardProps) {
       />
 
       <div>
-        <p className="mt-[5px] text-sm font-bold">{name}</p>
+        <p className="mt-[5px] text-sm font-bold">
+          {id}: {name}
+        </p>
         <p className="mt-2">{description}</p>
       </div>
     </div>

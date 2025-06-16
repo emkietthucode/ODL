@@ -7,7 +7,8 @@ import { Sign } from '@/types/dto/types'
 import supabase from '@/utils/supabase/supabase'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { TbWashDryP } from 'react-icons/tb'
+
+import { IoIosSearch } from 'react-icons/io'
 
 const sign_types = [
   'Biển báo cấm',
@@ -25,6 +26,7 @@ const prefix =
 function LearnSigns() {
   const [type, setType] = useState<string>(sign_types[0])
   const [signs, setSigns] = useState<Sign[]>([])
+  const [search, setSearch] = useState<string>('')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +44,22 @@ function LearnSigns() {
     fetchData()
   }, [type])
 
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    try {
+      const { data, error } = await supabase.rpc(
+        'fetch_vietnam_signs_by_name',
+        {
+          type: type,
+          search_name: search,
+        }
+      )
+
+      setSigns(data as Sign[])
+
+      console.log(data)
+    } catch (error: any) {}
+  }
   return (
     <div>
       <div className="max-w-screen-lg mx-auto flex gap-[124px] items-center my-3">
@@ -81,7 +99,18 @@ function LearnSigns() {
             danh sách biển báo cấm
           </p>
 
-          <Input />
+          <form
+            onSubmit={handleSearch}
+            className="w-[524px] rounded-[16px] bg-[#F8FAFC] flex gap-2 px-4 py-2 items-center"
+          >
+            <IoIosSearch width={24} height={24} className="w-6 h-6" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search"
+              className="bg-[#F8FAFC] outline-none border-none"
+            />
+          </form>
         </div>
 
         <div className="flex flex-wrap gap-2 mt-6 overflow-y-auto max-h-[650px] scrollbar-gutter-stable">
