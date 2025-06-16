@@ -18,6 +18,7 @@ const CountrySelection = () => {
   const t = useTranslations('ChooseRegionPage')
 
   const handleCountrySelect = (country: 'vietnam' | 'australia') => {
+    localStorage.setItem('selectedCountry', country)
     router.push(`${pathname}/${country}`)
   }
   return (

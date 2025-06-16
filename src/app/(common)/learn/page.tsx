@@ -31,7 +31,10 @@ const LearnPage = () => {
         )
 
         if (regionData) {
-          router.push(`/category/${regionData.slug}`)
+          router.push(`/learn/${regionData.slug}`)
+        } else if (localStorage.getItem('selectedCountry')) {
+          const selectedCountry = localStorage.getItem('selectedCountry')
+          router.push(`/learn/${selectedCountry}`)
         }
       }
     }
