@@ -1,12 +1,7 @@
 'use client'
 
 import ScrollToTopButton from '@/components/scroll-to-top-button'
-import LearnCategory from '../../../../public/images/f5-learn-category.svg'
-import ThreeWhiteDot from '../../../../public/images/three-white-dot.svg'
-import BCar from '../../../../public/images/F5BCar.svg'
-import C1Car from '../../../../public/images/F5C1Car.svg'
-import Image from 'next/image'
-import { Button } from '@/components/ui/button'
+
 import { useTranslations } from 'next-intl'
 import { usePathname, useRouter } from 'next/navigation'
 import useAuth from '@/hooks/useAuth'
