@@ -1,4 +1,5 @@
 'use client'
+
 import ScrollToTopButton from '@/components/scroll-to-top-button'
 import LearnCategory from '../../../../public/images/f5-learn-category.svg'
 import ThreeWhiteDot from '../../../../public/images/three-white-dot.svg'

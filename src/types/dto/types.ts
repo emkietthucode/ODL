@@ -15,3 +15,11 @@ export interface LearningQuestionDTO {
   goi_y?: LuaChon[]
   hinh_anh?: number
 }
+
+export interface Sign {
+  id: string
+  ma_bien_bao: string
+  ten_bien_bao: string
+  loai_bien_bao: string
+  noi_dung: string
+}
