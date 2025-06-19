@@ -13,7 +13,7 @@ export interface LearningQuestionDTO {
   cau_tra_loi?: string
   giai_thich?: string
   goi_y?: LuaChon[]
-  hinh_anh?: number
+  hinh_anh?: string
 }
 
 export interface Sign {
