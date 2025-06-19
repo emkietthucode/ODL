@@ -26,7 +26,9 @@
     "noAccount": "Chưa có tài khoản?",
     "registerButton": "Đăng ký ngay",
     "invalidEmail": "Email không hợp lệ",
-    "passwordRequired": "Vui lòng nhập mật khẩu"
+    "passwordRequired": "Vui lòng nhập mật khẩu",
+    "wrongCredentials": "Email hoặc mật khẩu không đúng",
+    "internalError": "Có lỗi xảy ra, vui lòng thử lại sau"
   },
   "RegisterPage": {
     "register": "Đăng ký",

@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label'
 import { useEffect, useState, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
+import Image from 'next/image'
 
 interface QuestionTableProps {
   question: LearningQuestionDTO
@@ -14,6 +15,9 @@ interface QuestionTableProps {
   onQuestionChange?: (change: number) => void
   canGoToQuestion: (index: number) => boolean
 }
+
+const prefix =
+  'https://cgtsomijxwpcyqgznjqx.supabase.co/storage/v1/object/public/hinh_anh_cau_hoi//'
 
 function QuestionTable({
   question,
@@ -172,6 +176,16 @@ function QuestionTable({
             {question?.noi_dung_cau_hoi || 'Question text here'}
           </p>
         </div>
+
+        {question?.hinh_anh && (
+          <div className="mx-auto mt-4">
+            <img
+              className="max-w-[370px] mx-auto"
+              src={prefix + question.hinh_anh}
+              alt="image"
+            />
+          </div>
+        )}
         <div
           className={cn(
             'absolute bottom-[10px] left-1/2 -translate-x-1/2 rounded-[8px] w-[481px] p-[1px] flex items-center',
