@@ -37,9 +37,9 @@ function Login() {
       router.push('/')
     } catch (error: AuthError | any) {
       if (error.message === 'Invalid login credentials') {
-        setError('Wrong email or password')
+        setError(t('wrongCredentials'))
       } else {
-        setError('An error occurred! Please try again')
+        setError(t('internalError'))
       }
     } finally {
       setIsloading(false)

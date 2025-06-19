@@ -32,7 +32,9 @@
     "noAccount": "Don't have an account?",
     "registerButton": "Sign up here",
     "invalidEmail": "Invalid email address",
-    "passwordRequired": "Password is required"
+    "passwordRequired": "Password is required",
+    "wrongCredentials": "Incorrect email or password",
+    "internalError": "An error occurred, please try again later."
   },
   "RegisterPage": {
     "register": "Account SignUp",
