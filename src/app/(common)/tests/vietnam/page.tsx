@@ -7,11 +7,11 @@ import C1Car from '../../../../../public/images/F5C1Car.svg'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 
 const TestsCategoryPage = () => {
   const t = useTranslations('VietnamTestPage')
-  const router = useRouter()
   const pathname = usePathname()
   return (
     <main className="bg-white mx-auto my-auto max-h-full">
@@ -65,14 +65,15 @@ const TestsCategoryPage = () => {
                 <div className="text-sm font-normal w-[70%]">
                   {t('a1Description')}
                 </div>
-                <Button
-                  variant="main"
-                  size="auto"
-                  className="font-medium min-w-[50%] self-start mx-auto uppercase"
-                  onClick={() => router.push(pathname + '/a1')}
-                >
-                  {t('startButton')}
-                </Button>
+                <Link href={pathname + '/a1'}>
+                  <Button
+                    variant="main"
+                    size="auto"
+                    className="font-medium min-w-[50%] self-start mx-auto uppercase"
+                  >
+                    {t('startButton')}
+                  </Button>
+                </Link>
               </div>
               <div
                 className="bg-custom-light-blue rounded-2xl border-4 border-custom-normal-light-blue 
@@ -81,14 +82,15 @@ const TestsCategoryPage = () => {
               >
                 <div className="font-bold text-3xl">A</div>
                 <div className="text-sm font-normal">{t('aDescription')}</div>
-                <Button
-                  variant="main"
-                  size="auto"
-                  className="font-medium min-w-[50%] self-start self-end mx-auto uppercase"
-                  onClick={() => router.push(pathname + '/a')}
-                >
-                  {t('startButton')}
-                </Button>
+                <Link href={pathname + '/a'}>
+                  <Button
+                    variant="main"
+                    size="auto"
+                    className="font-medium min-w-[50%] self-start self-end mx-auto uppercase"
+                  >
+                    {t('startButton')}
+                  </Button>
+                </Link>
               </div>
               <div
                 className="bg-custom-light-blue rounded-2xl border-4 border-custom-normal-light-blue 
@@ -99,14 +101,15 @@ const TestsCategoryPage = () => {
                 <div className="text-sm font-normal w-[80%]">
                   {t('b1Description')}
                 </div>
-                <Button
-                  variant="main"
-                  size="auto"
-                  className="font-medium min-w-[50%] self-start mx-auto uppercase"
-                  onClick={() => router.push(pathname + '/b1')}
-                >
-                  {t('startButton')}
-                </Button>
+                <Link href={pathname + '/b1'}>
+                  <Button
+                    variant="main"
+                    size="auto"
+                    className="font-medium min-w-[50%] self-start mx-auto uppercase"
+                  >
+                    {t('startButton')}
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -120,14 +123,15 @@ const TestsCategoryPage = () => {
               <hr className="w-[100px] h-1 my-1 bg-purple border-0 rounded dark:bg-purple"></hr>
               <div className="font-bold text-4xl">B</div>
               <div className="text-sm font-light">{t('bDescription')}</div>
-              <Button
-                variant="main"
-                size="auto"
-                className="font-medium min-w-[100px] self-start uppercase"
-                onClick={() => router.push(pathname + '/b')}
-              >
-                {t('startButton')}
-              </Button>
+              <Link href={pathname + '/b'}>
+                <Button
+                  variant="main"
+                  size="auto"
+                  className="font-medium min-w-[100px] self-start uppercase"
+                >
+                  {t('startButton')}
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="w-full flex justify-between gap-20">
@@ -135,14 +139,15 @@ const TestsCategoryPage = () => {
               <hr className="w-[100px] h-1 my-1 bg-purple border-0 rounded dark:bg-purple"></hr>
               <div className="font-bold text-4xl">C1</div>
               <div>{t('c1Description')}</div>
-              <Button
-                variant="main"
-                size="auto"
-                className="font-medium min-w-[100px] self-start uppercase"
-                onClick={() => router.push(pathname + '/c1')}
-              >
-                {t('startButton')}
-              </Button>
+              <Link href={pathname + '/c1'}>
+                <Button
+                  variant="main"
+                  size="auto"
+                  className="font-medium min-w-[100px] self-start uppercase"
+                >
+                  {t('startButton')}
+                </Button>
+              </Link>
             </div>
             <div className="w-[50%] flex justify-center">
               <Image src={C1Car} alt="" />

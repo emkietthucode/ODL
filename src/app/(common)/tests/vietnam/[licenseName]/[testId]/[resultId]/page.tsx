@@ -4,7 +4,8 @@ import TestPass from '@/components/test-pass'
 import TestFail from '@/components/test-fail'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { useEffect, useState } from 'react'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
+import Link from 'next/link'
 import supabase from '@/utils/supabase/supabase'
 import { CauTrucDeThi } from '@/types/types'
 import { QuestionDTO } from '@/types/dto/types'
@@ -23,7 +24,6 @@ const ResultPage = () => {
   const [testStructure, setTestStructure] = useState<CauTrucDeThi[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const pathname = usePathname()
-  const router = useRouter()
   const params = useParams<{
     licenseName: string
     testId: string
@@ -37,32 +37,6 @@ const ResultPage = () => {
     const baseUrl = `/${segments.slice(1, 4).join('/')}` // Keep only `/tests/{country}/{licenseName}`
     return baseUrl
   }
-
-  const handleRedoTest = () => {
-    router.push(`${getBaseUrl()}/${params.testId}`)
-  }
-
-  const handleDoOtherTest = () => {
-    router.push(`${getBaseUrl()}`)
-  }
-
-  // Get Test Structure
-  useEffect(() => {
-    const fetchTestStructure = async () => {
-      setIsLoading(true)
-      const { data, error } = await supabase.rpc('get_cau_truc_by_de_thi', {
-        de_thi_id: params.testId,
-      })
-
-      if (error) {
-        console.log('Error:', error)
-        setIsLoading(false)
-        return
-      }
-      setTestStructure(data)
-    }
-    fetchTestStructure()
-  }, [])
 
   const checkTestStatus = (questions: QuestionDTO[]) => {
     let totalCorrectAnswers = 0
@@ -174,6 +148,24 @@ const ResultPage = () => {
     }
   }, [userCorrectAnswers, testResult])
 
+  // Get Test Structure
+  useEffect(() => {
+    const fetchTestStructure = async () => {
+      setIsLoading(true)
+      const { data, error } = await supabase.rpc('get_cau_truc_by_de_thi', {
+        de_thi_id: params.testId,
+      })
+
+      if (error) {
+        console.log('Error:', error)
+        setIsLoading(false)
+        return
+      }
+      setTestStructure(data)
+    }
+    fetchTestStructure()
+  }, [])
+
   if (!testStructure) {
     return null
   }
@@ -204,30 +196,27 @@ const ResultPage = () => {
             <hr className="h-1 bg-purple border-0 dark:bg-purple w-full"></hr>
             <div className="flex justify-between items-center gap-[96px] w-[75%] font-medium text-base">
               <div>{t('notSatisfied')}</div>
-              <Button
-                onClick={handleRedoTest}
-                className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] min-w-[112px] shadow-md uppercase"
-              >
-                {t('retestButton')}
-              </Button>
+              <Link href={`${getBaseUrl()}/${params.testId}`}>
+                <Button className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] min-w-[112px] shadow-md uppercase">
+                  {t('retestButton')}
+                </Button>
+              </Link>
             </div>
             <div className="flex justify-between items-center gap-[96px] w-[75%] font-medium text-base">
               <div>{t('otherTest')}</div>
-              <Button
-                onClick={handleDoOtherTest}
-                className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] min-w-[123px] shadow-md uppercase"
-              >
-                {t('otherTestButton')}
-              </Button>
+              <Link href={`${getBaseUrl()}`}>
+                <Button className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] min-w-[123px] shadow-md uppercase">
+                  {t('otherTestButton')}
+                </Button>
+              </Link>
             </div>
             <div className="flex justify-between items-center gap-[96px] w-[75%] font-medium text-base">
               <div>{t('reviewWrongQuestion')}</div>
-              <Button
-                onClick={() => router.push('/missed-questions')}
-                className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] min-w-[150px] shadow-md uppercase"
-              >
-                {t('reviewWrongButton')}
-              </Button>
+              <Link href="/missed-questions">
+                <Button className="bg-custom-light-active-blue hover:bg-custom-light-hover-blue rounded-full text-sm text-custom-normal-blue h-[30px] min-w-[150px] shadow-md uppercase">
+                  {t('reviewWrongButton')}
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

@@ -5,12 +5,13 @@ import Overlay from '../../../../../../public/images/f6-overlay.svg'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Montserrat_Alternates } from 'next/font/google'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { DeThi, HangBang } from '@/types/types'
 import supabase from '@/utils/supabase/supabase'
 import toast from 'react-hot-toast'
 import { useTranslations } from 'next-intl'
+import Link from 'next/link'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '700',
@@ -21,15 +22,8 @@ const TestsLicensePage = () => {
   const params = useParams<{ licenseName: string }>()
   const [license, setLicense] = useState<HangBang>()
   const [tests, setTests] = useState<DeThi[]>([])
-  const router = useRouter()
   const pathname = usePathname()
   const t = useTranslations('ChooseTestPage')
-
-  const handleRandomTest = () => {
-    if (tests.length === 0) return
-    const randomIndex = Math.floor(Math.random() * tests.length)
-    router.push(`${pathname}/${tests[randomIndex].id}`)
-  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,14 +88,30 @@ const TestsLicensePage = () => {
                   </div>
                 </div>
 
-                <Button
-                  variant="main"
-                  size="auto"
-                  className="rounded-xl shadow-xl text-xl font-medium w-[191px] h-[44px] uppercase bg-custom-dark-violet"
-                  onClick={handleRandomTest}
-                >
-                  {t('randomButton')}
-                </Button>
+                {tests.length > 0 ? (
+                  <Link
+                    href={`${pathname}/${
+                      tests[Math.floor(Math.random() * tests.length)].id
+                    }`}
+                  >
+                    <Button
+                      variant="main"
+                      size="auto"
+                      className="rounded-xl shadow-xl text-xl font-medium w-[191px] h-[44px] uppercase bg-custom-dark-violet"
+                    >
+                      {t('randomButton')}
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button
+                    variant="main"
+                    size="auto"
+                    className="rounded-xl shadow-xl text-xl font-medium w-[191px] h-[44px] uppercase bg-custom-dark-violet opacity-50 cursor-not-allowed"
+                    disabled
+                  >
+                    {t('randomButton')}
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -113,24 +123,24 @@ const TestsLicensePage = () => {
             </div>
             <div className="mb-[128px] mt-[16px] w-[60%] flex flex-wrap gap-10 justify-center">
               {tests.map((test, index) => (
-                <Button
-                  key={index}
-                  className={`${montserratAlternates.className} 
-                  rounded-full
-                  uppercase
-                  text-white 
-                  font-bold 
-                  text-xl 
-                  drop-shadow-lg
-                  bg-custom-normal-light-blue
-                  hover:bg-blue-400/80
-                  text-center
-                  w-[115px]
-                  h-[49px]`}
-                  onClick={() => router.push(`${pathname}/${test.id}`)}
-                >
-                  {t('exam')} {index + 1}
-                </Button>
+                <Link key={index} href={`${pathname}/${test.id}`}>
+                  <Button
+                    className={`${montserratAlternates.className} 
+                    rounded-full
+                    uppercase
+                    text-white 
+                    font-bold 
+                    text-xl 
+                    drop-shadow-lg
+                    bg-custom-normal-light-blue
+                    hover:bg-blue-400/80
+                    text-center
+                    w-[115px]
+                    h-[49px]`}
+                  >
+                    {t('exam')} {index + 1}
+                  </Button>
+                </Link>
               ))}
             </div>
           </div>
@@ -146,16 +156,15 @@ const TestsLicensePage = () => {
                 {t('notReadyDescriptionP2')}
               </div>
             </div>
-            <Button
-              variant="main"
-              size="auto"
-              className="drop-shadow-lg font-medium text-xl w-[189px] h-[53px] bg-custom-normal-violet rounded-2xl uppercase"
-              onClick={() =>
-                router.push(`/learn/vietnam/${license?.ten_hang_bang}`)
-              }
-            >
-              {t('learningButton')} {license?.ten_hang_bang}
-            </Button>
+            <Link href={`/learn/vietnam/${license?.ten_hang_bang}`}>
+              <Button
+                variant="main"
+                size="auto"
+                className="drop-shadow-lg font-medium text-xl w-[189px] h-[53px] bg-custom-normal-violet rounded-2xl uppercase"
+              >
+                {t('learningButton')} {license?.ten_hang_bang}
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
