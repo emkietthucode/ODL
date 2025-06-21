@@ -11,7 +11,7 @@ export async function middleware(request: NextRequest) {
   const protectedRoutes = [
     '/admin',
     '/tests',
-    //'/missed-questions',
+    '/missed-questions',
     '/learning-path',
   ]
   const authRoutes = ['/auth/login', '/auth/signup']
