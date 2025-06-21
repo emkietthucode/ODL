@@ -141,7 +141,7 @@ const MissedQuestionsPage = () => {
               Đánh dấu
             </Button>
             <Button
-              className="
+              className={`
               bg-custom-light-hover-blue 
               text-custom-dark-violet 
               hover:bg-custom-light-hover-blue 
@@ -151,14 +151,15 @@ const MissedQuestionsPage = () => {
               w-[182px] h-[52px] 
               font-bold
               text-xl
-              px-8 ml-auto"
+              select-none
+              px-8 ml-auto ${questions.length === 0 && 'cursor-not-allowed'}`}
+              disabled={questions.length === 0}
               onClick={() => router.push(`${pathname}/test`)}
             >
               KIỂM TRA
             </Button>
           </div>
           <hr className="h-[2px] mt-5 mb-3 w-[95%] self-center bg-gray-300 border-0 dark:bg-gray-700"></hr>
-
           {activeTab === 'all' ? (
             <AllMissedQuestions questions={questions} />
           ) : activeTab === 'topic' ? (
