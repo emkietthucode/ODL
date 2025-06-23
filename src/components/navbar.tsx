@@ -23,15 +23,43 @@ import Logo from '../../public/images/Logo.png'
 import { NguoiDung } from '@/types/types'
 import { useState, useEffect } from 'react'
 import supabase from '@/utils/supabase/supabase'
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSub,
+  MenubarSubContent,
+  MenubarSubTrigger,
+  MenubarTrigger,
+} from './ui/menubar'
+import toast from 'react-hot-toast'
+import { id } from 'date-fns/locale'
+
+const prefix =
+  'https://cgtsomijxwpcyqgznjqx.supabase.co/storage/v1/object/public/quoc_ky//'
 
 const defaultFlag =
   'https://cgtsomijxwpcyqgznjqx.supabase.co/storage/v1/object/public/quoc_ky//Flag_of_the_United_Kingdom_(1-2).svg.png'
+
+interface Nation {
+  id: string
+  locale: string
+  flag: string
+  name: string
+  slug: string
+  regions?: Nation[]
+}
 
 const NavBar = () => {
   const t = useTranslations('Navbar')
   const { locale, languages, setLocale } = useLanguage()
   const router = useRouter()
   const [userData, setUserData] = useState<NguoiDung | null>(null)
+  const [nations, setNations] = useState<Nation[]>([])
+  const [selectedNation, setSelectedNation] = useState<
+    Nation | null | undefined
+  >(null)
 
   const { user, setUser } = useAuth()
 
@@ -55,6 +83,56 @@ const NavBar = () => {
     fetchUserData()
   }, [user])
 
+  useEffect(() => {
+    const fetchNations = async () => {
+      const { data, error } = await supabase.rpc('search_khu_vuc_proc', {
+        search_text: '',
+      })
+
+      if (error) {
+        toast.error('Error fetching regions')
+      }
+      const formattedNations = data.map((nation: any) => ({
+        id: nation.id,
+        locale: nation.ky_hieu,
+        flag: nation.quoc_ky,
+        name: nation.ten_khu_vuc,
+        slug: nation.slug,
+      }))
+
+      const { data: stateData, error: stateError } = await supabase.rpc(
+        'search_tieu_bang',
+        {
+          search_text: '',
+        }
+      )
+
+      if (stateError) {
+        toast.error('Error fetching states')
+      }
+      const formattedStates = stateData.map((state: any) => ({
+        name: state.ten_khu_vuc,
+        flag: state.quoc_ky,
+        locale: state.ky_hieu,
+        nation: state.quoc_gia,
+        id: state.id,
+      }))
+      const nationsWithRegions = formattedNations.map((nation: any) => {
+        const regions = formattedStates.filter(
+          (state: any) => state.nation === nation.id
+        )
+        return {
+          ...nation,
+          regions: regions.length > 0 ? regions : undefined,
+        }
+      })
+
+      setNations(nationsWithRegions)
+    }
+
+    fetchNations()
+  }, [])
+
   const handleLogout = async () => {
     await signOut()
     setUser(null)
@@ -66,7 +144,38 @@ const NavBar = () => {
     router.refresh()
   }
 
-  const selectedLanguage = languages.find((lang) => lang.ky_hieu === locale)
+  const handleNationChange = (nation: Nation) => {
+    setSelectedNation(nation)
+    // setLocale(nation.locale)
+    localStorage.setItem('nation', JSON.stringify(nation))
+    router.refresh()
+  }
+
+  useEffect(() => {
+    if (!user) {
+      const temp = JSON.parse(localStorage.getItem('nation') || '{}') as Nation
+      if (temp) {
+        setSelectedNation(temp)
+        // setLocale(temp.locale)
+      } else {
+        setSelectedNation(
+          nations ? nations.find((n) => n.name === 'Việt Nam') : null
+        )
+      }
+    } else {
+      const temp = JSON.parse(localStorage.getItem('nation') || '{}') as Nation
+      if (temp) {
+        setSelectedNation(temp)
+        // setLocale(temp.locale)
+      } else {
+        setSelectedNation(
+          nations ? nations.find((n) => n.name === 'Việt Nam') : null
+        )
+      }
+    }
+  }, [user, nations])
+
+  console.log(nations)
 
   return (
     <div className="h-10 bg-custom-light-violet flex justify-center text-purple">
@@ -88,38 +197,58 @@ const NavBar = () => {
             </Link>
           </nav>
           <nav className="flex gap-9 justify-end">
-            <Popover>
-              <PopoverTrigger asChild>
-                <button className="w-10 h-8 p-1 hover:bg-gray-200 rounded-md">
-                  {/* <AiOutlineGlobal className="w-full h-full" /> */}
+            <Menubar>
+              <MenubarMenu>
+                <MenubarTrigger className="p-0 w-8 h-4 cursor-pointer">
                   <Image
                     width={40}
                     height={20}
-                    src={selectedLanguage?.quoc_ky || defaultFlag}
+                    src={
+                      selectedNation
+                        ? prefix + selectedNation.flag
+                        : defaultFlag
+                    }
                     alt="flag"
                   />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent align="end" className="w-64 max-h-80">
-                {languages.map((language, index) => (
-                  <button
-                    onClick={() => handleLanguageChange(language.ky_hieu)}
-                    key={index}
-                    className={cn(
-                      'w-full text-start my-3 text-gray-500 hover:text-black transition-colors flex items-center justify-between',
-                      locale === language.ky_hieu && 'text-[#c4202b]'
-                    )}
-                  >
-                    <span>{language.ten_ngon_ngu}</span>{' '}
-                    {locale === language.ky_hieu && (
-                      <span>
-                        <FaCheck />
-                      </span>
-                    )}
-                  </button>
-                ))}
-              </PopoverContent>
-            </Popover>
+                </MenubarTrigger>
+
+                <MenubarContent>
+                  {nations.map((nation, index) =>
+                    nation.regions ? (
+                      <MenubarSub key={index}>
+                        <MenubarSubTrigger>{nation.name}</MenubarSubTrigger>
+                        <MenubarSubContent>
+                          {nation.regions.map((region, regionIndex) => (
+                            <MenubarItem
+                              onClick={() => handleNationChange(region)}
+                              key={'region' + regionIndex}
+                              className={cn(
+                                region.id === selectedNation?.id
+                                  ? 'bg-gray-200'
+                                  : 'bg-auto'
+                              )}
+                            >
+                              {region.name}
+                            </MenubarItem>
+                          ))}
+                        </MenubarSubContent>
+                      </MenubarSub>
+                    ) : (
+                      <MenubarItem
+                        onClick={() => handleNationChange(nation)}
+                        key={index}
+                        className={cn(
+                          nation.id === selectedNation?.id ? 'bg-gray-200' : ''
+                        )}
+                      >
+                        {nation.name}
+                      </MenubarItem>
+                    )
+                  )}
+                </MenubarContent>
+              </MenubarMenu>
+            </Menubar>
+
             {user ? (
               <div className="flex gap-8">
                 <Popover>
