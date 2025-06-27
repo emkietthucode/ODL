@@ -144,38 +144,95 @@ const NavBar = () => {
     router.refresh()
   }
 
-  const handleNationChange = (nation: Nation) => {
+  const handleNationChange = async (nation: Nation) => {
     setSelectedNation(nation)
-    // setLocale(nation.locale)
+
     localStorage.setItem('nation', JSON.stringify(nation))
+    localStorage.setItem('selectedCountry', nation.slug)
+    if (user) {
+      try {
+        await supabase
+          .from('nguoi_dung')
+          .update({
+            ma_khu_vuc: nation.id,
+          })
+          .eq('id', user.id)
+      } catch (erro: any) {
+        console.error('Error updating user nation:', erro)
+        toast.error('Error updating nation')
+      }
+    }
+
+    const { data, error } = await supabase
+      .from('khu_vuc')
+      .select(
+        `
+            *,
+            ngon_ngu (
+              id,
+              ky_hieu
+            )
+          `
+      )
+      .eq('id', nation?.id)
+    if (data) {
+      setLocale(data[0].ngon_ngu?.ky_hieu)
+    }
+
     router.refresh()
   }
 
   useEffect(() => {
-    if (!user) {
-      const temp = JSON.parse(localStorage.getItem('nation') || '{}') as Nation
-      if (temp) {
-        setSelectedNation(temp)
-        // setLocale(temp.locale)
-      } else {
-        setSelectedNation(
-          nations ? nations.find((n) => n.name === 'Việt Nam') : null
-        )
+    const fetchedNation = async () => {
+      if (nations.length === 0) {
+        return
       }
-    } else {
-      const temp = JSON.parse(localStorage.getItem('nation') || '{}') as Nation
-      if (temp) {
-        setSelectedNation(temp)
-        // setLocale(temp.locale)
+      if (!user) {
+        const temp = JSON.parse(
+          localStorage.getItem('nation') || '{}'
+        ) as Nation
+        if (Object.keys(temp).length > 0) {
+          setSelectedNation(temp)
+          localStorage.setItem('nation', JSON.stringify(temp))
+          localStorage.setItem('selectedCountry', temp.slug)
+        } else {
+          const defaultNation = nations
+            ? nations.find((n) => n.slug === 'vietnam')
+            : null
+          console.log(defaultNation)
+
+          localStorage.setItem('nation', JSON.stringify(defaultNation))
+          setSelectedNation(defaultNation)
+          localStorage.setItem(
+            'selectedCountry',
+            defaultNation?.slug || 'vietnam'
+          )
+        }
       } else {
-        setSelectedNation(
-          nations ? nations.find((n) => n.name === 'Việt Nam') : null
-        )
+        const temp = JSON.parse(
+          localStorage.getItem('nation') || '{}'
+        ) as Nation
+        if (Object.keys(temp).length > 0) {
+          setSelectedNation(temp)
+          localStorage.setItem('nation', JSON.stringify(temp))
+          localStorage.setItem('selectedCountry', temp.slug)
+        } else {
+          const defaultNation = nations
+            ? nations.find((n) => n.slug === 'vietnam')
+            : null
+          console.log(defaultNation)
+          localStorage.setItem('nation', JSON.stringify(defaultNation))
+          setSelectedNation(defaultNation)
+          localStorage.setItem(
+            'selectedCountry',
+            defaultNation?.slug || 'vietnam'
+          )
+        }
       }
     }
-  }, [user, nations])
 
-  console.log(nations)
+    fetchedNation()
+  }, [user, nations])
 
   return (
     <div className="h-10 bg-custom-light-violet flex justify-center text-purple">
@@ -190,6 +247,9 @@ const NavBar = () => {
               {t('testPage')}
             </Link>
             <Link href="/learning-path" className="hover:opacity-80">
+              {t('roadMap')}
+            </Link>
+            <Link href="/learning" className="hover:opacity-80">
               {t('learningPage')}
             </Link>
             <Link href="#" className="hover:opacity-80">

@@ -12,7 +12,8 @@
     "login": "Đăng nhập",
     "register": "Đăng ký",
     "logout": "Đăng xuất",
-    "adminPanel": "Trang quản trị"
+    "adminPanel": "Trang quản trị",
+    "roadMap": "Lộ trình"
   },
   "LoginPage": {
     "login": "Đăng nhập",

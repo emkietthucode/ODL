@@ -19,6 +19,10 @@ const TestsCategoryPage = () => {
   useEffect(() => {
     const getUserDetails = async () => {
       if (!user) {
+        const selectedCountry = localStorage.getItem('selectedCountry')
+        if (selectedCountry) {
+          router.push(`learning-path/${selectedCountry}`)
+        }
         return
       }
 

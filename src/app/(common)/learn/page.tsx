@@ -15,6 +15,10 @@ const LearnPage = () => {
   useEffect(() => {
     const getUserDetails = async () => {
       if (!user) {
+        const selectedCountry = localStorage.getItem('selectedCountry')
+        if (selectedCountry) {
+          router.push(`/learn/${selectedCountry}`)
+        }
         return
       }
 

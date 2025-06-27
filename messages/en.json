@@ -12,7 +12,8 @@
     "login": "Login",
     "register": "Register",
     "logout": "Log out",
-    "adminPanel": "Admin Panel"
+    "adminPanel": "Admin Panel",
+    "roadMap": "Roadmap"
   },
   "Footer": {
     "addressTitle": "Address",
