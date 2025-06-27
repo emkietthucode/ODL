@@ -45,6 +45,15 @@ function Profile() {
         dob: values.dob,
         country: values.country,
       })
+
+      let newRegion: any = regions.find((r: any) => r.id === values.country)
+      if (!newRegion) {
+        newRegion = states.find((s: any) => s.id === values.country)
+      }
+
+      localStorage.setItem('nation', JSON.stringify(newRegion))
+      localStorage.setItem('selectedCountry', newRegion?.slug || 'vietnam')
+
       return toast.success('Profile updated successfully')
     } catch (error: any) {
       console.log(error)
