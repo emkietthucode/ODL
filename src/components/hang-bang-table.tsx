@@ -1,5 +1,5 @@
 // HangBangTable.tsx
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import {
   Table,
   TableBody,
@@ -35,11 +35,16 @@ interface HangBangTableProps {
 
 const HangBangTable: React.FC<HangBangTableProps> = ({
   data,
-  itemsPerPage = 10,
+  itemsPerPage = 8,
 }) => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const { onOpen: updateOnOpen } = useUpdateLicenceModal()
   const { onOpen: deleteOnOpen } = useDeleteLicenceModal()
+
+  // Reset to page 1 when data changes (e.g., when switching tabs)
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [data])
 
   const totalPages = useMemo(() => {
     return Math.ceil(data.length / itemsPerPage)
@@ -51,48 +56,50 @@ const HangBangTable: React.FC<HangBangTableProps> = ({
   }, [currentPage, itemsPerPage, data])
 
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-      <Table>
-        <TableHeader className="bg-gray-50">
-          <TableRow className="border-b border-gray-100">
-            <TableHead className="px-8 font-bold text-black w-[15%]">
-              HẠNG BẰNG
-            </TableHead>
-            <TableHead className="font-bold text-black w-[30%]">
-              MÔ TẢ
-            </TableHead>
-            <TableHead className="font-bold w-[10%]"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {getCurrentPageData.map((item: HangBang) => (
-            <TableRow key={item.id} className="border-b border-gray-100">
-              <TableCell className="px-8">{item.ten_hang_bang}</TableCell>
-              <TableCell>{item.mo_ta_hang_bang}</TableCell>
-              <TableCell className="pr-8 text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal className="h-4 w-4" />
-                      <span className="sr-only">Open menu</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => updateOnOpen(item)}>
-                      <Pencil className="h-4 w-4 mr-2" />
-                      Chỉnh sửa
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => deleteOnOpen(item)}>
-                      <Trash2 className="h-4 w-4 mr-2 text-red-600" />
-                      Xóa
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+    <div className="bg-white rounded-lg shadow-lg overflow-hidden h-[735px] flex flex-col">
+      <div className="flex-1 overflow-auto">
+        <Table className="h-full">
+          <TableHeader className="bg-gray-50">
+            <TableRow className="border-b border-gray-100">
+              <TableHead className="px-8 font-bold text-black w-[15%]">
+                HẠNG BẰNG
+              </TableHead>
+              <TableHead className="font-bold text-black w-[30%]">
+                MÔ TẢ
+              </TableHead>
+              <TableHead className="font-bold w-[10%]"></TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {getCurrentPageData.map((item: HangBang) => (
+              <TableRow key={item.id} className="border-b border-gray-100">
+                <TableCell className="px-8">{item.ten_hang_bang}</TableCell>
+                <TableCell>{item.mo_ta_hang_bang}</TableCell>
+                <TableCell className="pr-8 text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">Open menu</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => updateOnOpen(item)}>
+                        <Pencil className="h-4 w-4 mr-2" />
+                        Chỉnh sửa
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => deleteOnOpen(item)}>
+                        <Trash2 className="h-4 w-4 mr-2 text-red-600" />
+                        Xóa
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
       <div className="flex gap-5 justify-center items-center p-4 border-t border-gray-100">
         <Button
           variant="outline"

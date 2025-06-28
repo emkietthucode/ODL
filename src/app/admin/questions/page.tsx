@@ -23,13 +23,36 @@ export const tabsVN = [
   { label: 'Sa hình' },
 ]
 
+export const tabsAU = [
+  { label: 'All' },
+  { label: 'Defensive' },
+  { label: 'Substances' },
+  { label: 'General' },
+  { label: 'Negligence' },
+  { label: 'Signs' },
+  { label: 'Pedestrians' },
+  { label: 'Lights/Lanes' },
+  { label: 'Seatbelts' },
+  { label: 'Intersections' },
+  { label: 'Speed' },
+]
+
+// Add a new interface for questions with language info
+interface CauHoiWithLanguage extends CauHoi {
+  chuong?: {
+    khu_vuc?: {
+      ngon_ngu: string
+    }
+  }
+}
+
 export default function QuestionDashboard() {
   const { onOpen: insertOnOpen, refreshTrigger: insertRefreshTrigger } =
     useInsertQuestionModal()
   const { refreshTrigger: updateRefreshTrigger } = useUpdateQuestionModal()
   const { refreshTrigger: deleteRefreshTrigger } = useDeleteQuestionModal()
   const [searchText, setSearchText] = useState('')
-  const [cauHoi, setCauHoi] = useState<CauHoi[]>([])
+  const [cauHoi, setCauHoi] = useState<CauHoiWithLanguage[]>([])
   const router = useRouter()
   const debounceValue = useDebounce<string>(searchText, 500)
   const [flipCountry, setFlipCountry] = useState<boolean>(true)
@@ -39,14 +62,35 @@ export default function QuestionDashboard() {
     setActiveTab(label)
   }
 
+  // Reset active tab when switching countries
+  useEffect(() => {
+    if (flipCountry) {
+      setActiveTab(tabsVN[0].label)
+    } else {
+      setActiveTab(tabsAU[0].label)
+    }
+  }, [flipCountry])
+
   const getCauHoi = async (debounceValue: string) => {
-    const { data, error } = await supabase.rpc('search_cau_hoi', {
-      search_text: debounceValue,
-    })
+    // Use a direct query instead of RPC to get language information
+    const { data, error } = await supabase
+      .from('cau_hoi')
+      .select(
+        `
+        *,
+        chuong:ma_chuong (
+          khu_vuc:ma_khu_vuc (
+            ngon_ngu
+          )
+        )
+      `
+      )
+      .ilike('noi_dung_cau_hoi', `%${debounceValue}%`)
+
     if (error) {
       return toast.error(error.message)
     }
-    setCauHoi(data)
+    setCauHoi(data || [])
   }
 
   useEffect(() => {
@@ -67,14 +111,49 @@ export default function QuestionDashboard() {
     insertRefreshTrigger,
   ])
 
-  const getFilterData = (): CauHoi[] => {
-    if (activeTab === tabsVN[0].label) {
-      return cauHoi // Return all rows for "Tất cả"
+  const getFilterData = (): CauHoiWithLanguage[] => {
+    if (flipCountry) {
+      // For Vietnam, use the existing logic
+      if (activeTab === tabsVN[0].label) {
+        return cauHoi // Return all rows for "Tất cả"
+      }
+      if (activeTab === tabsVN[1].label) {
+        return cauHoi.filter((row) => row.la_cau_diem_liet === true)
+      }
+      return cauHoi.filter((row) => row.loai_cau_hoi === activeTab)
+    } else {
+      // For Australia, filter by language
+      const englishQuestions = cauHoi.filter(
+        (row) => row.chuong?.khu_vuc?.ngon_ngu?.toLowerCase() === 'english'
+      )
+
+      if (activeTab === 'All') {
+        return englishQuestions // Return all English questions for "Tất cả"
+      }
+
+      // Map short tab labels to actual question types in the database
+      const tabToQuestionTypeMap: { [key: string]: string } = {
+        [tabsAU[1].label]: 'Defensive Driving', // Defensive -> Defensive Driving
+        [tabsAU[2].label]: 'Alcohol and Drugs', // Substances -> Alcohol and Drugs
+        [tabsAU[3].label]: 'General Knowledge', // General -> General Knowledge
+        [tabsAU[4].label]: 'Negligent Driving', // Negligence -> Negligent Driving
+        [tabsAU[5].label]: 'Traffic Signs', // Signs -> Traffic Signs
+        [tabsAU[6].label]: 'Pedestrians', // Pedestrians -> Pedestrians
+        [tabsAU[7].label]: 'Traffic Lights and Lanes', // Lights/Lanes -> Traffic Lights and Lanes
+        [tabsAU[8].label]: 'Seat Belts and Restraints', // Seatbelts -> Seat Belts and Restraints
+        [tabsAU[9].label]: 'Intersections', // Intersections -> Intersections
+        [tabsAU[10].label]: 'Speed Limits', // Speed -> Speed Limits
+      }
+
+      const questionType = tabToQuestionTypeMap[activeTab]
+      if (questionType) {
+        return englishQuestions.filter(
+          (row) => row.loai_cau_hoi === questionType
+        )
+      }
+
+      return englishQuestions
     }
-    if (activeTab === tabsVN[1].label) {
-      return cauHoi.filter((row) => row.la_cau_diem_liet === true)
-    }
-    return cauHoi.filter((row) => row.loai_cau_hoi === activeTab)
   }
 
   return (
@@ -130,8 +209,8 @@ export default function QuestionDashboard() {
           </div>
 
           {flipCountry === true ? (
-            <div className="flex flex-col text-sm  rounded-xl w-full shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-              <div className="pl-[50px] pt-5 flex gap-5 justify-start items-center w-full bg-white rounded-md border-b border-zinc-400 border-opacity-60">
+            <div className="flex flex-col justify-between text-sm h-[670px] rounded-xl w-full shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+              <div className="pr-5 pl-[50px] pt-5 flex gap-5 justify-start items-center w-full bg-white rounded-md border-b border-zinc-400 border-opacity-60">
                 {tabsVN.map((tab) => (
                   <div
                     key={tab.label}
@@ -145,12 +224,19 @@ export default function QuestionDashboard() {
               <CauHoiTable data={getFilterData()} />
             </div>
           ) : (
-            <div className="flex flex-col text-sm  rounded-xl w-full shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
-              <div className="pl-[50px] pt-5 flex gap-5 justify-start items-center w-full bg-white rounded-md border-b border-zinc-400 border-opacity-60">
-                <div className="cursor-pointer self-center">
-                  <Tab label="Learner" isActive />
-                </div>
+            <div className="flex flex-col justify-between text-sm h-[670px] rounded-xl w-full shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+              <div className="pl-5 pt-5 flex gap-5 justify-start items-center w-full bg-white rounded-md border-b border-zinc-400 border-opacity-60">
+                {tabsAU.map((tab) => (
+                  <div
+                    key={tab.label}
+                    onClick={() => handleTabClick(tab.label)}
+                    className="cursor-pointer self-center"
+                  >
+                    <Tab label={tab.label} isActive={tab.label === activeTab} />
+                  </div>
+                ))}
               </div>
+              <CauHoiTable data={getFilterData()} />
             </div>
           )}
         </div>
