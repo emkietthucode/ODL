@@ -36,6 +36,17 @@ const convertLearningQuestionsToQuestionDTO = (
   }))
 }
 
+const prefix =
+  'https://cgtsomijxwpcyqgznjqx.supabase.co/storage/v1/object/public/hinh_anh_cau_hoi//'
+
+// Function to get optimized image URL
+const getOptimizedImageUrl = (imageName: string, width: number = 370) => {
+  if (!imageName) return ''
+
+  // Use Supabase transformations for better performance
+  return `https://cgtsomijxwpcyqgznjqx.supabase.co/storage/v1/object/public/hinh_anh_cau_hoi/${imageName}?width=${width}&quality=80`
+}
+
 const TestComponent = () => {
   const {
     onOpen,
@@ -55,6 +66,10 @@ const TestComponent = () => {
     thoi_gian_lam_bai: number
     ten_de_thi: string
   } | null>(null)
+  const [preloadedImages, setPreloadedImages] = useState<Set<string>>(new Set())
+  const [imageLoadingStates, setImageLoadingStates] = useState<
+    Record<number, boolean>
+  >({})
 
   useEffect(() => {
     const handleFetchData = async () => {
@@ -206,6 +221,57 @@ const TestComponent = () => {
     return () => window.removeEventListener('keydown', handleKeyDown, true)
   }, [handleChangeQuestion, changeAnswerWithIndex, changeAnswerByArrow])
 
+  // Preload images function
+  const preloadImage = (imageUrl: string) => {
+    if (preloadedImages.has(imageUrl)) return
+
+    const img = new Image()
+    img.onload = () => {
+      setPreloadedImages((prev) => new Set(prev).add(imageUrl))
+    }
+    img.src = imageUrl
+  }
+
+  // Handle image load state
+  const handleImageLoad = (questionIndex: number) => {
+    setImageLoadingStates((prev) => ({ ...prev, [questionIndex]: false }))
+  }
+
+  const handleImageError = (questionIndex: number) => {
+    setImageLoadingStates((prev) => ({ ...prev, [questionIndex]: false }))
+  }
+
+  // Set loading state when question changes
+  useEffect(() => {
+    if (questions[selectedQuestion]?.hinh_anh) {
+      setImageLoadingStates((prev) => ({ ...prev, [selectedQuestion]: true }))
+    }
+  }, [selectedQuestion, questions])
+
+  // Preload next few images when question changes
+  useEffect(() => {
+    if (questions.length === 0) return
+
+    // Preload current image
+    if (questions[selectedQuestion]?.hinh_anh) {
+      preloadImage(getOptimizedImageUrl(questions[selectedQuestion].hinh_anh))
+    }
+
+    // Preload next 2 images
+    for (let i = 1; i <= 2; i++) {
+      const nextIndex = selectedQuestion + i
+      if (nextIndex < questions.length && questions[nextIndex]?.hinh_anh) {
+        preloadImage(getOptimizedImageUrl(questions[nextIndex].hinh_anh))
+      }
+    }
+
+    // Preload previous image
+    const prevIndex = selectedQuestion - 1
+    if (prevIndex >= 0 && questions[prevIndex]?.hinh_anh) {
+      preloadImage(getOptimizedImageUrl(questions[prevIndex].hinh_anh))
+    }
+  }, [selectedQuestion, questions])
+
   return (
     <div className="w-[960px] mx-auto">
       <div className="bg-[#A08CE6] h-9 leading-9 text-center text-[18] font-bold text-white">
@@ -265,6 +331,28 @@ const TestComponent = () => {
           <p className="text-[12px] my-4">
             {questions[selectedQuestion]?.noi_dung_cau_hoi || ''}
           </p>
+          {questions[selectedQuestion]?.hinh_anh && (
+            <div className="mx-auto mt-4">
+              {imageLoadingStates[selectedQuestion] && (
+                <div className="max-w-[370px] mx-auto h-48 bg-gray-200 animate-pulse rounded flex items-center justify-center">
+                  <div className="text-gray-500">Loading...</div>
+                </div>
+              )}
+              <img
+                className={cn(
+                  'max-w-[370px] max-h-[200px] mx-auto',
+                  imageLoadingStates[selectedQuestion] && 'hidden'
+                )}
+                src={getOptimizedImageUrl(
+                  questions[selectedQuestion]?.hinh_anh
+                )}
+                alt="image"
+                onLoad={() => handleImageLoad(selectedQuestion)}
+                onError={() => handleImageError(selectedQuestion)}
+                loading="eager"
+              />
+            </div>
+          )}
         </div>
         <div className="w-[164px] h-full bg-[#F1EEFB] py-3 flex flex-col justify-between">
           <div className="mx-auto w-[106px] h-[47px] font-bold bg-light-purple text-center leading-[47px] rounded-[8px] text-[28px] text-purple">
