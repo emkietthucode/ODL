@@ -33,11 +33,16 @@ interface CauHoiTableProps {
 
 const CauHoiTable: React.FC<CauHoiTableProps> = ({
   data,
-  itemsPerPage = 10,
+  itemsPerPage = 9,
 }) => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const { onOpen: updateOnOpen } = useUpdateQuestionModal()
   const { onOpen: deleteOnOpen } = useDeleteQuestionModal()
+
+  // Reset to page 1 when data changes (e.g., when switching tabs)
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [data])
 
   const totalPages = useMemo(() => {
     return Math.ceil(data.length / itemsPerPage)
@@ -53,45 +58,47 @@ const CauHoiTable: React.FC<CauHoiTableProps> = ({
   }, [data.length])
 
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-      <Table>
-        <TableHeader className="bg-gray-50">
-          <TableRow className="border-b border-gray-100">
-            <TableHead className="px-8 font-bold text-black w-[85%]">
-              CÂU HỎI
-            </TableHead>
-            <TableHead className="font-bold w-[10%]"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {getCurrentPageData.map((item: CauHoi) => (
-            <TableRow key={item.id} className="border-b border-gray-100">
-              <TableCell className="px-8">{item.noi_dung_cau_hoi}</TableCell>
-              <TableCell className="pr-8 text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal className="h-4 w-4" />
-                      <span className="sr-only">Open menu</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => updateOnOpen(item)}>
-                      <Pencil className="h-4 w-4 mr-2" />
-                      Chỉnh sửa
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => deleteOnOpen(item)}>
-                      <Trash2 className="h-4 w-4 mr-2 text-red-600" />
-                      Xóa
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
+    <div className="bg-white rounded-lg shadow-lg overflow-hidden h-[735px] flex flex-col">
+      <div className="flex-1 overflow-auto">
+        <Table className="h-full">
+          <TableHeader className="bg-gray-50">
+            <TableRow className="border-b border-gray-100">
+              <TableHead className="px-8 font-bold text-black w-[85%]">
+                CÂU HỎI
+              </TableHead>
+              <TableHead className="font-bold w-[10%]"></TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <div className="flex gap-5 justify-center items-center p-4 border-t border-gray-100">
+          </TableHeader>
+          <TableBody>
+            {getCurrentPageData.map((item: CauHoi) => (
+              <TableRow key={item.id} className="border-b border-gray-100">
+                <TableCell className="px-8">{item.noi_dung_cau_hoi}</TableCell>
+                <TableCell className="pr-8 text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">Open menu</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => updateOnOpen(item)}>
+                        <Pencil className="h-4 w-4 mr-2" />
+                        Chỉnh sửa
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => deleteOnOpen(item)}>
+                        <Trash2 className="h-4 w-4 mr-2 text-red-600" />
+                        Xóa
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex gap-5 justify-center items-center p-4 border-t border-gray-100 flex-shrink-0">
         <Button
           variant="outline"
           size="icon"
