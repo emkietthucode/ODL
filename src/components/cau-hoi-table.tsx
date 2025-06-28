@@ -26,8 +26,17 @@ import { CauHoi } from '@/types/types'
 import useDeleteQuestionModal from '@/hooks/useDeleteQuestionModal'
 import useUpdateQuestionModal from '@/hooks/useUpdateQuestionModal'
 
+// Add interface for questions with language info
+interface CauHoiWithLanguage extends CauHoi {
+  chuong?: {
+    khu_vuc?: {
+      ngon_ngu: string
+    }
+  }
+}
+
 interface CauHoiTableProps {
-  data: CauHoi[]
+  data: CauHoiWithLanguage[]
   itemsPerPage?: number
 }
 
@@ -70,7 +79,7 @@ const CauHoiTable: React.FC<CauHoiTableProps> = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {getCurrentPageData.map((item: CauHoi) => (
+            {getCurrentPageData.map((item: CauHoiWithLanguage) => (
               <TableRow key={item.id} className="border-b border-gray-100">
                 <TableCell className="px-8">{item.noi_dung_cau_hoi}</TableCell>
                 <TableCell className="pr-8 text-right">
@@ -98,7 +107,7 @@ const CauHoiTable: React.FC<CauHoiTableProps> = ({
           </TableBody>
         </Table>
       </div>
-      <div className="flex gap-5 justify-center items-center p-4 border-t border-gray-100 flex-shrink-0">
+      <div className="flex items-center justify-center space-x-2 py-4 border-t border-gray-100">
         <Button
           variant="outline"
           size="icon"
