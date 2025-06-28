@@ -4,6 +4,7 @@ import Image from 'next/image'
 import F721TestPass from '../../public/images/f7.2.1-pass.svg'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import Link from 'next/link'
 const TestPass = ({
   totalQuestion = 0,
   requiredCorrectAnswer = 0,
@@ -46,13 +47,14 @@ const TestPass = ({
               </div>
             </div>
           </div>
-          <Button
-            variant="main"
-            className="font-bold text-2xl rounded-full w-[240px] h-[40px] uppercase bg-custom-normal-violet twx"
-            onClick={() => router.push(`${pathname}/detail`)}
-          >
-            {t('showDetails')}
-          </Button>
+          <Link href={`${pathname}/detail`}>
+            <Button
+              variant="main"
+              className="font-bold text-2xl rounded-full w-[240px] h-[40px] uppercase bg-custom-normal-violet twx"
+            >
+              {t('showDetails')}
+            </Button>
+          </Link>
         </div>
         <Image
           src={F721TestPass}

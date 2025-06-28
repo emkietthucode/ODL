@@ -382,7 +382,7 @@ const Home = () => {
                 />
               </button>
             )}
-            {index <= 2 && (
+            {index < carousels.length - 1 && (
               <button
                 className="absolute top-1/2 -translate-y-1/2 -right-16"
                 onClick={() => setIndex((prev) => prev + 1)}
@@ -407,8 +407,8 @@ const Home = () => {
           </p>
           <ul className="list-disc list-inside ml-6 text-[#696984] text-[22px]">
             <li>Học câu điểm liệt.</li>
-            <li>Học câu điểm liệt.</li>
-            <li>Học câu điểm liệt.</li>
+            <li>Học biển báo.</li>
+            <li>Học những câu thường sai.</li>
           </ul>
         </div>
       </div>
@@ -454,9 +454,9 @@ const Home = () => {
               className={`text-[#5E6282] pt-7 pl-[34px] pb-[34px] ${poppins.className}`}
             >
               <p className=" max-w-[402px] leading-8">
-                “On the Windows talking painted pasture yet its express parties
+                "On the Windows talking painted pasture yet its express parties
                 use. Sure last upon he same as knew next. Of believed or
-                diverted no.”
+                diverted no."
               </p>
               <p className="mt-[34px] text-lg font-semibold">Mike taylor</p>
               <p className="text-sm font-medium">Lahore, Pakistan</p>
@@ -467,9 +467,9 @@ const Home = () => {
               className={`text-[#5E6282] pt-7 pl-[34px] pb-[16px] bg-[#f7f7f7] ${poppins.className}`}
             >
               <p className=" max-w-[402px] leading-8">
-                “Onno n the Windows talking painted pasture yet its express parf
+                "Onno n the Windows talking painted pasture yet its express parf
                 believed or diverted . Onno n the Windows talking painted
-                pasture yet its expres nno n t”
+                pasture yet its expres nno n t"
               </p>
               <p className="mt-[34px] text-lg font-semibold">Chris Thomas</p>
               <p className="text-sm font-medium">CEO of Red Button</p>

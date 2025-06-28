@@ -2,8 +2,9 @@ import { MdCancel } from 'react-icons/md'
 import { CiWarning } from 'react-icons/ci'
 import { Button } from './ui/button'
 import Image from 'next/image'
+import Link from 'next/link'
 import F722TestFail from '../../public/images/f7.2.2-fail.svg'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 const TestFail = ({
   totalQuestion = 0,
@@ -12,7 +13,6 @@ const TestFail = ({
   isFailOnSpecialQuestion = false,
 }) => {
   const t = useTranslations('ResultPage')
-  const router = useRouter()
   const pathname = usePathname()
   return (
     <div className="flex flex-col gap-10 mt-[32px] w-[60%] justify-center items-center">
@@ -56,13 +56,14 @@ const TestFail = ({
               </div>
             </div>
           </div>
-          <Button
-            variant="main"
-            className="font-bold text-2xl rounded-full w-[240px] h-[40px] uppercase bg-custom-normal-violet twx"
-            onClick={() => router.push(`${pathname}/detail`)}
-          >
-            {t('showDetails')}
-          </Button>
+          <Link href={`${pathname}/detail`}>
+            <Button
+              variant="main"
+              className="font-bold text-2xl rounded-full w-[240px] h-[40px] uppercase bg-custom-normal-violet twx"
+            >
+              {t('showDetails')}
+            </Button>
+          </Link>
         </div>
         <Image
           src={F722TestFail}

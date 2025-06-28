@@ -2,13 +2,13 @@
 
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import Modal from './Modal'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button } from './ui/button'
 import { v4 as uuidv4 } from 'uuid'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 
 const ConfirmSubmitTestModal = () => {
-  const router = useRouter()
   const pathname = usePathname()
   const { isOpen, onClose } = useConfirmSubmitTestModal()
   const [isLoading, setIsLoading] = useState(false)
@@ -19,16 +19,14 @@ const ConfirmSubmitTestModal = () => {
     }
   }
 
-  const handleConfirmClick = () => {
-    setIsLoading(true)
-    const uniqueID = uuidv4()
-    router.push(`${pathname}/${uniqueID}`)
-    onClose()
-    setIsLoading(false)
-  }
-
   const handleCancelClick = () => {
     onClose()
+  }
+
+  const handleConfirmClick = () => {
+    setIsLoading(true)
+    onClose()
+    setIsLoading(false)
   }
 
   return (
@@ -40,14 +38,16 @@ const ConfirmSubmitTestModal = () => {
         onChange={onChange}
       >
         <div className="mt-3 flex gap-10 justify-center">
-          <Button
-            className="bg-purple hover:bg-purple/90 text-white font-semibold min-w-36 self-center"
-            disabled={isLoading}
-            type="submit"
-            onClick={handleConfirmClick}
-          >
-            XÁC NHẬN
-          </Button>
+          <Link href={`${pathname}/${uuidv4()}`}>
+            <Button
+              className="bg-purple hover:bg-purple/90 text-white font-semibold min-w-36 self-center"
+              disabled={isLoading}
+              type="submit"
+              onClick={handleConfirmClick}
+            >
+              XÁC NHẬN
+            </Button>
+          </Link>
           <Button
             className="bg-neutral-400 hover:bg-neutral-400/90 text-white font-semibold min-w-36 self-center"
             disabled={isLoading}
