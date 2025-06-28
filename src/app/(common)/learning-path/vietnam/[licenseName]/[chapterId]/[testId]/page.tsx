@@ -14,6 +14,14 @@ import { useTranslations } from 'next-intl'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
+// Function to get optimized image URL
+const getOptimizedImageUrl = (imageName: string, width: number = 370) => {
+  if (!imageName) return ''
+
+  // Use Supabase transformations for better performance
+  return `https://cgtsomijxwpcyqgznjqx.supabase.co/storage/v1/object/public/hinh_anh_cau_hoi/${imageName}?width=${width}&quality=80`
+}
+
 function LearningTestPage() {
   const { testId } = useParams<{ testId: string }>()
   const [questions, setQuestions] = useState<LearningQuestionDTO[]>([])
@@ -27,6 +35,10 @@ function LearningTestPage() {
     ten_de_thi: string
   } | null>(null)
   const [loading, setLoading] = useState(true)
+  const [preloadedImages, setPreloadedImages] = useState<Set<string>>(new Set())
+  const [imageLoadingStates, setImageLoadingStates] = useState<
+    Record<number, boolean>
+  >({})
   const router = useRouter()
 
   useEffect(() => {
@@ -57,6 +69,57 @@ function LearningTestPage() {
 
     handleFetchData()
   }, [testId])
+
+  // Preload images function
+  const preloadImage = (imageUrl: string) => {
+    if (preloadedImages.has(imageUrl)) return
+
+    const img = new Image()
+    img.onload = () => {
+      setPreloadedImages((prev) => new Set(prev).add(imageUrl))
+    }
+    img.src = imageUrl
+  }
+
+  // Handle image load state
+  const handleImageLoad = (questionIndex: number) => {
+    setImageLoadingStates((prev) => ({ ...prev, [questionIndex]: false }))
+  }
+
+  const handleImageError = (questionIndex: number) => {
+    setImageLoadingStates((prev) => ({ ...prev, [questionIndex]: false }))
+  }
+
+  // Set loading state when question changes
+  useEffect(() => {
+    if (questions[selectedQuestion]?.hinh_anh) {
+      setImageLoadingStates((prev) => ({ ...prev, [selectedQuestion]: true }))
+    }
+  }, [selectedQuestion, questions])
+
+  // Preload next few images when question changes
+  useEffect(() => {
+    if (questions.length === 0) return
+
+    // Preload current image
+    if (questions[selectedQuestion]?.hinh_anh) {
+      preloadImage(getOptimizedImageUrl(questions[selectedQuestion].hinh_anh))
+    }
+
+    // Preload next 2 images
+    for (let i = 1; i <= 2; i++) {
+      const nextIndex = selectedQuestion + i
+      if (nextIndex < questions.length && questions[nextIndex]?.hinh_anh) {
+        preloadImage(getOptimizedImageUrl(questions[nextIndex].hinh_anh))
+      }
+    }
+
+    // Preload previous image
+    const prevIndex = selectedQuestion - 1
+    if (prevIndex >= 0 && questions[prevIndex]?.hinh_anh) {
+      preloadImage(getOptimizedImageUrl(questions[prevIndex].hinh_anh))
+    }
+  }, [selectedQuestion, questions])
 
   const getButtonCss = (index: number) => {
     if (questions[index]?.cau_tra_loi) {
@@ -190,7 +253,7 @@ function LearningTestPage() {
   return (
     <div className="w-[960px] mt-12 mx-auto">
       <div className="bg-[#A08CE6] h-9 leading-9 text-center text-[18] font-bold text-white">
-        BẰNG A1 - ĐỀ SỐ 1
+        {testInfo?.ten_de_thi || 'BẰNG A1 - ĐỀ SỐ 1'}
       </div>
       <div className="my-2 h-80 gap-[10px] flex flex-wrap">
         <div className="w-[164px] bg-[#F1EEFB] h-80">
@@ -201,31 +264,40 @@ function LearningTestPage() {
               secondary
             >
               {Array.from({ length: Math.ceil(questions.length / 25) }).map(
-                (_, groupIndex) => (
-                  <div
-                    key={groupIndex}
-                    className="flex justify-center gap-[6px] h-[full] flex-wrap"
-                  >
-                    {questions.slice(groupIndex * 25, groupIndex * 25 + 25).map((_, qIndex) => (
-                      <button
-                        key={qIndex}
-                        disabled={!isActive}
-                        onClick={() =>
-                          setSelectedQuestion(qIndex + groupIndex * 25)
+                (_, groupIndex) => {
+                  const startIndex = groupIndex * 25
+                  const endIndex = Math.min(startIndex + 25, questions.length)
+                  const questionsInThisGroup = endIndex - startIndex
+
+                  return (
+                    <div
+                      key={groupIndex}
+                      className="flex justify-center gap-[6px] h-[full] flex-wrap"
+                    >
+                      {Array.from({ length: questionsInThisGroup }).map(
+                        (_, qIndex) => {
+                          const questionIndex = startIndex + qIndex
+                          return (
+                            <button
+                              key={questionIndex}
+                              disabled={!isActive}
+                              onClick={() => setSelectedQuestion(questionIndex)}
+                              className={cn(
+                                `cursor-pointer w-6 h-6 ${getButtonCss(
+                                  questionIndex
+                                )}  rounded-full text-center font-bold disabled:opacity-50`,
+                                questionIndex === selectedQuestion &&
+                                  'ring ring-purple ring-offset-2'
+                              )}
+                            >
+                              {questionIndex + 1}
+                            </button>
+                          )
                         }
-                        className={cn(
-                          `cursor-pointer w-6 h-6 ${getButtonCss(
-                            qIndex + groupIndex * 25
-                          )}  rounded-full text-center font-bold disabled:opacity-50`,
-                          qIndex + groupIndex * 25 === selectedQuestion &&
-                            'ring ring-purple ring-offset-2'
-                        )}
-                      >
-                        {qIndex + groupIndex * 25 + 1}
-                      </button>
-                    ))}
-                  </div>
-                )
+                      )}
+                    </div>
+                  )
+                }
               )}
             </QuestionCarousel>
           </div>
@@ -237,6 +309,28 @@ function LearningTestPage() {
           <p className="text-[12px] my-4">
             {questions[selectedQuestion]?.noi_dung_cau_hoi || ''}
           </p>
+          {questions[selectedQuestion]?.hinh_anh && (
+            <div className="mx-auto mt-4">
+              {imageLoadingStates[selectedQuestion] && (
+                <div className="max-w-[370px] mx-auto h-48 bg-gray-200 animate-pulse rounded flex items-center justify-center">
+                  <div className="text-gray-500">Loading...</div>
+                </div>
+              )}
+              <img
+                className={cn(
+                  'max-w-[370px] max-h-[200px] mx-auto',
+                  imageLoadingStates[selectedQuestion] && 'hidden'
+                )}
+                src={getOptimizedImageUrl(
+                  questions[selectedQuestion]?.hinh_anh
+                )}
+                alt="image"
+                onLoad={() => handleImageLoad(selectedQuestion)}
+                onError={() => handleImageError(selectedQuestion)}
+                loading="eager"
+              />
+            </div>
+          )}
 
           <div className="flex justify-between">
             <button

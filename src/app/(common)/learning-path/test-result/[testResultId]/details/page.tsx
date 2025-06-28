@@ -11,6 +11,14 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 
+// Function to get optimized image URL
+const getOptimizedImageUrl = (imageName: string, width: number = 370) => {
+  if (!imageName) return ''
+
+  // Use Supabase transformations for better performance
+  return `https://cgtsomijxwpcyqgznjqx.supabase.co/storage/v1/object/public/hinh_anh_cau_hoi/${imageName}?width=${width}&quality=80`
+}
+
 function ResultDetails() {
   const { testResultId } = useParams<{ testResultId: string }>()
   const [result, setResult] = useState<{
@@ -30,6 +38,10 @@ function ResultDetails() {
   })
   const [questions, setQuestions] = useState<LearningQuestionDTO[]>([])
   const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
+  const [preloadedImages, setPreloadedImages] = useState<Set<string>>(new Set())
+  const [imageLoadingStates, setImageLoadingStates] = useState<
+    Record<number, boolean>
+  >({})
 
   useEffect(() => {
     const fetchResult = async () => {
@@ -68,6 +80,57 @@ function ResultDetails() {
 
     fetchResult()
   }, [testResultId])
+
+  // Preload images function
+  const preloadImage = (imageUrl: string) => {
+    if (preloadedImages.has(imageUrl)) return
+
+    const img = new Image()
+    img.onload = () => {
+      setPreloadedImages((prev) => new Set(prev).add(imageUrl))
+    }
+    img.src = imageUrl
+  }
+
+  // Handle image load state
+  const handleImageLoad = (questionIndex: number) => {
+    setImageLoadingStates((prev) => ({ ...prev, [questionIndex]: false }))
+  }
+
+  const handleImageError = (questionIndex: number) => {
+    setImageLoadingStates((prev) => ({ ...prev, [questionIndex]: false }))
+  }
+
+  // Set loading state when question changes
+  useEffect(() => {
+    if (questions[selectedQuestion]?.hinh_anh) {
+      setImageLoadingStates((prev) => ({ ...prev, [selectedQuestion]: true }))
+    }
+  }, [selectedQuestion, questions])
+
+  // Preload next few images when question changes
+  useEffect(() => {
+    if (questions.length === 0) return
+
+    // Preload current image
+    if (questions[selectedQuestion]?.hinh_anh) {
+      preloadImage(getOptimizedImageUrl(questions[selectedQuestion].hinh_anh))
+    }
+
+    // Preload next 2 images
+    for (let i = 1; i <= 2; i++) {
+      const nextIndex = selectedQuestion + i
+      if (nextIndex < questions.length && questions[nextIndex]?.hinh_anh) {
+        preloadImage(getOptimizedImageUrl(questions[nextIndex].hinh_anh))
+      }
+    }
+
+    // Preload previous image
+    const prevIndex = selectedQuestion - 1
+    if (prevIndex >= 0 && questions[prevIndex]?.hinh_anh) {
+      preloadImage(getOptimizedImageUrl(questions[prevIndex].hinh_anh))
+    }
+  }, [selectedQuestion, questions])
 
   const getAnswerBackground = (question: LearningQuestionDTO) => {
     if (question.cau_tra_loi) {
@@ -194,11 +257,33 @@ function ResultDetails() {
       <div className="w-full my-[9px] min-h-[464px] flex gap-[11px] items-stretch">
         <div className="w-[740px] min-h-[426px] bg-[#EDEDED] p-3">
           <p className="w-full font-bold text-center">
-            Question {selectedQuestion + 1}
+            Câu hỏi {selectedQuestion + 1}
           </p>
           <p className="text-[12px] my-4">
             {questions[selectedQuestion]?.noi_dung_cau_hoi || ''}
           </p>
+          {questions[selectedQuestion]?.hinh_anh && (
+            <div className="mx-auto mt-4">
+              {imageLoadingStates[selectedQuestion] && (
+                <div className="max-w-[370px] mx-auto h-48 bg-gray-200 animate-pulse rounded flex items-center justify-center">
+                  <div className="text-gray-500">Loading...</div>
+                </div>
+              )}
+              <img
+                className={cn(
+                  'max-w-[370px] mx-auto',
+                  imageLoadingStates[selectedQuestion] && 'hidden'
+                )}
+                src={getOptimizedImageUrl(
+                  questions[selectedQuestion]?.hinh_anh
+                )}
+                alt="image"
+                onLoad={() => handleImageLoad(selectedQuestion)}
+                onError={() => handleImageError(selectedQuestion)}
+                loading="eager"
+              />
+            </div>
+          )}
         </div>
         <div className="flex-1 flex flex-col min-h-[426px]">
           <RadioGroup

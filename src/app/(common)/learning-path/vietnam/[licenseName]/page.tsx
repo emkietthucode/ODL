@@ -314,14 +314,14 @@ function LearningPathPage() {
             title={t('signFunction')}
             description={t('signFuncDescription')}
             icon={Card2}
-            to="/"
+            to="/learn/vietnam/signs"
           />
 
           <FeatureCard
             title={t('criticalFunction')}
             description={t('criticalFuncDescription')}
             icon={Card3}
-            to="/learn/vietnam/signs"
+            to="/"
           />
 
           <FeatureCard
