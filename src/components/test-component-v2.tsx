@@ -98,7 +98,7 @@ const TestComponent = () => {
   }, [isActive])
 
   const getButtonCss = (index: number) => {
-    if (questions[index].cau_tra_loi) {
+    if (questions[index]?.cau_tra_loi) {
       return 'bg-[#907ECF] text-white'
     } else {
       return 'bg-[#E2DBF7] text-purple'
@@ -220,33 +220,40 @@ const TestComponent = () => {
               secondary
             >
               {Array.from({ length: Math.ceil(questions.length / 25) }).map(
-                (_, groupIndex) => (
-                  <div
-                    key={groupIndex}
-                    className="flex justify-center gap-[6px] h-[full] flex-wrap"
-                  >
-                    {Array.from({ length: questions.length }).map(
-                      (_, qIndex) => (
-                        <button
-                          key={qIndex}
-                          disabled={!isActive}
-                          onClick={() =>
-                            setSelectedQuestion(qIndex + groupIndex * 25)
-                          }
-                          className={cn(
-                            `cursor-pointer w-6 h-6 ${getButtonCss(
-                              qIndex + groupIndex * 25
-                            )}  rounded-full text-center font-bold disabled:opacity-50`,
-                            qIndex + groupIndex * 25 === selectedQuestion &&
-                              'ring ring-purple ring-offset-2'
-                          )}
-                        >
-                          {qIndex + groupIndex * 25 + 1}
-                        </button>
-                      )
-                    )}
-                  </div>
-                )
+                (_, groupIndex) => {
+                  const startIndex = groupIndex * 25
+                  const endIndex = Math.min(startIndex + 25, questions.length)
+                  const questionsInThisGroup = endIndex - startIndex
+
+                  return (
+                    <div
+                      key={groupIndex}
+                      className="flex justify-center gap-[6px] h-[full] flex-wrap"
+                    >
+                      {Array.from({ length: questionsInThisGroup }).map(
+                        (_, qIndex) => {
+                          const questionIndex = startIndex + qIndex
+                          return (
+                            <button
+                              key={questionIndex}
+                              disabled={!isActive}
+                              onClick={() => setSelectedQuestion(questionIndex)}
+                              className={cn(
+                                `cursor-pointer w-6 h-6 ${getButtonCss(
+                                  questionIndex
+                                )}  rounded-full text-center font-bold disabled:opacity-50`,
+                                questionIndex === selectedQuestion &&
+                                  'ring ring-purple ring-offset-2'
+                              )}
+                            >
+                              {questionIndex + 1}
+                            </button>
+                          )
+                        }
+                      )}
+                    </div>
+                  )
+                }
               )}
             </QuestionCarousel>
           </div>

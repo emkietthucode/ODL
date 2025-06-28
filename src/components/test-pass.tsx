@@ -4,6 +4,7 @@ import Image from 'next/image'
 import F721TestPass from '../../public/images/f7.2.1-pass.svg'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import Link from 'next/link'
 const TestPass = ({
   totalQuestion = 0,
   requiredCorrectAnswer = 0,
@@ -35,24 +36,25 @@ const TestPass = ({
             </div>
             <div className="flex justify-between text-purple p-2">
               <div>{t('correctAnswers')}</div>
-              <div className="font-semibold text-lg">
+              <div className="font-semibold text-lg text-custom-green">
                 {userCorrectAnswers + '/' + totalQuestion}
               </div>
             </div>
-            <div className="flex justify-between text-purple p-2">
+            <div className="flex justify-between text-purple p-2 ">
               <div>{t('wrongAnswers')}</div>
-              <div className="font-semibold text-lg">
+              <div className="font-semibold text-lg text-custom-brown">
                 {totalQuestion - userCorrectAnswers + '/' + totalQuestion}
               </div>
             </div>
           </div>
-          <Button
-            variant="main"
-            className="font-bold text-2xl rounded-full w-[240px] h-[40px] uppercase bg-custom-normal-violet twx"
-            onClick={() => router.push(`${pathname}/detail`)}
-          >
-            {t('showDetails')}
-          </Button>
+          <Link href={`${pathname}/detail`}>
+            <Button
+              variant="main"
+              className="font-bold text-2xl rounded-full w-[240px] h-[40px] uppercase bg-custom-normal-violet twx"
+            >
+              {t('showDetails')}
+            </Button>
+          </Link>
         </div>
         <Image
           src={F721TestPass}
