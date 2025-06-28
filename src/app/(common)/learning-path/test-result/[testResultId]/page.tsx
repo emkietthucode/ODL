@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image'
-import { useParams, useRouter, usePathname } from 'next/navigation'
+import Link from 'next/link'
+import { useParams, usePathname } from 'next/navigation'
 import { FaCircleCheck } from 'react-icons/fa6'
 import { IoCloseCircle } from 'react-icons/io5'
 
@@ -29,7 +30,6 @@ function TestResult() {
     ten_hang_bang: '',
     ma_chuong: '',
   })
-  const router = useRouter()
   const pathname = usePathname()
 
   useEffect(() => {
@@ -90,25 +90,25 @@ function TestResult() {
 
           <div className="flex items-center gap-[96px] mb-7">
             <p className="text-[#7869AD] flex-1">Số câu đúng</p>
-            <p className="font-semibold text-purple text-lg text-end">
+            <p className="font-semibold text-custom-green text-lg text-end">
               {result.so_cau_dung}/{result.so_luong_cau_hoi}
             </p>
           </div>
 
           <div className="flex items-center gap-[96px] mb-7">
             <p className="text-[#7869AD] flex-1">Số câu sai</p>
-            <p className="font-semibold text-purple text-lg text-end">
+            <p className="font-semibold text-custom-brown text-lg text-end">
               {result.so_luong_cau_hoi - result.so_cau_dung}/
               {result.so_luong_cau_hoi}
             </p>
           </div>
 
-          <button
-            onClick={() => router.push(pathname + '/details')}
-            className="w-60 h-10 text-2xl font-bold mx-auto bg-[#A08CE6] text-white rounded-full"
+          <Link
+            href={pathname + '/details'}
+            className="w-60 h-10 text-2xl font-bold mx-auto bg-[#A08CE6] text-white rounded-full flex items-center justify-center"
           >
             XEM CHI TIẾT
-          </button>
+          </Link>
         </div>
 
         <Image
@@ -125,41 +125,36 @@ function TestResult() {
           <p className="text-[#5297CC] font-medium">
             Chưa hài lòng với kết quả? Làm bài lại ngay
           </p>
-          <button
-            onClick={() =>
-              router.push(
-                `/learning-path/${result.ten_hang_bang}/${result.ma_chuong}/${result.ma_de_thi}`
-              )
-            }
-            className="h-9 text-[#5297CC] bg-[#D0EBFF] rounded-full px-2"
+          <Link
+            href={`/learning-path/vietnam/${result.ten_hang_bang}/${result.ma_chuong}/${result.ma_de_thi}`}
+            className="h-9 text-[#5297CC] bg-[#D0EBFF] rounded-full px-2 flex items-center"
           >
             LÀM BÀI LẠI
-          </button>
+          </Link>
         </div>
 
         <div className="flex justify-between items-center">
           <p className="text-[#5297CC] font-medium">
             Bạn muốn học lại chương này
           </p>
-          <button
-            onClick={() =>
-              router.push(
-                `/learning-path/${result.ten_hang_bang}/${result.ma_chuong}`
-              )
-            }
-            className="h-9 text-[#5297CC] bg-[#D0EBFF] rounded-full px-2"
+          <Link
+            href={`/learning-path/vietnam/${result.ten_hang_bang}/${result.ma_chuong}`}
+            className="h-9 text-[#5297CC] bg-[#D0EBFF] rounded-full px-2 flex items-center"
           >
             HỌC LẠI
-          </button>
+          </Link>
         </div>
 
         <div className="flex justify-between items-center">
           <p className="text-[#5297CC] font-medium">
             Ôn tập lại những câu mà bạn đã làm sai
           </p>
-          <button className="h-9 text-[#5297CC] bg-[#D0EBFF] rounded-full px-2">
+          <Link
+            href="/missed-questions"
+            className="h-9 text-[#5297CC] bg-[#D0EBFF] rounded-full px-2 flex items-center"
+          >
             CHALLENGE BANK
-          </button>
+          </Link>
         </div>
       </div>
     </div>

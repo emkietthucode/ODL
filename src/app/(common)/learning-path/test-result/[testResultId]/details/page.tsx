@@ -194,7 +194,7 @@ function ResultDetails() {
       <div className="w-full my-[9px] min-h-[464px] flex gap-[11px] items-stretch">
         <div className="w-[740px] min-h-[426px] bg-[#EDEDED] p-3">
           <p className="w-full font-bold text-center">
-            Question {selectedQuestion + 1}
+            Câu hỏi {selectedQuestion + 1}
           </p>
           <p className="text-[12px] my-4">
             {questions[selectedQuestion]?.noi_dung_cau_hoi || ''}
