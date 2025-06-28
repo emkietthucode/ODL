@@ -25,6 +25,17 @@ interface ResultDetailPageProps {
   testTotalScore: number
 }
 
+const prefix =
+  'https://cgtsomijxwpcyqgznjqx.supabase.co/storage/v1/object/public/hinh_anh_cau_hoi//'
+
+// Function to get optimized image URL
+const getOptimizedImageUrl = (imageName: string, width: number = 370) => {
+  if (!imageName) return ''
+
+  // Use Supabase transformations for better performance
+  return `https://cgtsomijxwpcyqgznjqx.supabase.co/storage/v1/object/public/hinh_anh_cau_hoi/${imageName}?width=${width}&quality=80`
+}
+
 const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
   questions,
   testDesc,
@@ -35,6 +46,10 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
   const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState<number>(0)
+  const [preloadedImages, setPreloadedImages] = useState<Set<string>>(new Set())
+  const [imageLoadingStates, setImageLoadingStates] = useState<
+    Record<number, boolean>
+  >({})
   const questionsPerPage = 22 // Number of questions to show per page
 
   const totalPages = Math.ceil(questions.length / questionsPerPage)
@@ -89,6 +104,67 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
   const getQuestionImg = (imgId: string) => {
     return ''
   }
+
+  // Preload images function
+  const preloadImage = (imageUrl: string) => {
+    if (preloadedImages.has(imageUrl)) return
+
+    const img = new window.Image()
+    img.onload = () => {
+      setPreloadedImages((prev) => new Set(prev).add(imageUrl))
+    }
+    img.src = imageUrl
+  }
+
+  // Handle image load state
+  const handleImageLoad = (questionIndex: number) => {
+    setImageLoadingStates((prev) => ({ ...prev, [questionIndex]: false }))
+  }
+
+  const handleImageError = (questionIndex: number) => {
+    setImageLoadingStates((prev) => ({ ...prev, [questionIndex]: false }))
+  }
+
+  // Set loading state when question changes
+  useEffect(() => {
+    if (questions[selectedQuestionIndex]?.question?.hinh_anh) {
+      setImageLoadingStates((prev) => ({
+        ...prev,
+        [selectedQuestionIndex]: true,
+      }))
+    }
+  }, [selectedQuestionIndex, questions])
+
+  // Preload next few images when question changes
+  useEffect(() => {
+    if (questions.length === 0) return
+
+    // Preload current image
+    if (questions[selectedQuestionIndex]?.question?.hinh_anh) {
+      preloadImage(
+        getOptimizedImageUrl(questions[selectedQuestionIndex].question.hinh_anh)
+      )
+    }
+
+    // Preload next 2 images
+    for (let i = 1; i <= 2; i++) {
+      const nextIndex = selectedQuestionIndex + i
+      if (
+        nextIndex < questions.length &&
+        questions[nextIndex]?.question?.hinh_anh
+      ) {
+        preloadImage(
+          getOptimizedImageUrl(questions[nextIndex].question.hinh_anh)
+        )
+      }
+    }
+
+    // Preload previous image
+    const prevIndex = selectedQuestionIndex - 1
+    if (prevIndex >= 0 && questions[prevIndex]?.question?.hinh_anh) {
+      preloadImage(getOptimizedImageUrl(questions[prevIndex].question.hinh_anh))
+    }
+  }, [selectedQuestionIndex, questions])
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -249,6 +325,28 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
               >
                 {questions[selectedQuestionIndex]?.question?.noi_dung_cau_hoi}
               </div>
+              {questions[selectedQuestionIndex]?.question?.hinh_anh && (
+                <div className="mx-auto mt-4">
+                  {imageLoadingStates[selectedQuestionIndex] && (
+                    <div className="max-w-[370px] mx-auto h-48 bg-gray-200 animate-pulse rounded flex items-center justify-center">
+                      <div className="text-gray-500">Loading...</div>
+                    </div>
+                  )}
+                  <img
+                    className={cn(
+                      'max-w-[370px] max-h-[200px] mx-auto',
+                      imageLoadingStates[selectedQuestionIndex] && 'hidden'
+                    )}
+                    src={getOptimizedImageUrl(
+                      questions[selectedQuestionIndex]?.question?.hinh_anh
+                    )}
+                    alt="image"
+                    onLoad={() => handleImageLoad(selectedQuestionIndex)}
+                    onError={() => handleImageError(selectedQuestionIndex)}
+                    loading="eager"
+                  />
+                </div>
+              )}
               {getQuestionImg(
                 questions[selectedQuestionIndex]?.question?.hinh_anh || ''
               ) && (
