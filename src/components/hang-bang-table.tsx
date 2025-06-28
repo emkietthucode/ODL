@@ -35,7 +35,7 @@ interface HangBangTableProps {
 
 const HangBangTable: React.FC<HangBangTableProps> = ({
   data,
-  itemsPerPage = 10,
+  itemsPerPage = 8,
 }) => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const { onOpen: updateOnOpen } = useUpdateLicenceModal()
@@ -51,8 +51,8 @@ const HangBangTable: React.FC<HangBangTableProps> = ({
   }, [currentPage, itemsPerPage, data])
 
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-      <Table>
+    <div className="bg-white rounded-lg shadow-lg overflow-hidden h-[735px]">
+      <Table className="h-[500px]">
         <TableHeader className="bg-gray-50">
           <TableRow className="border-b border-gray-100">
             <TableHead className="px-8 font-bold text-black w-[15%]">
