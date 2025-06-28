@@ -36,13 +36,13 @@ const TestPass = ({
             </div>
             <div className="flex justify-between text-purple p-2">
               <div>{t('correctAnswers')}</div>
-              <div className="font-semibold text-lg">
+              <div className="font-semibold text-lg text-custom-green">
                 {userCorrectAnswers + '/' + totalQuestion}
               </div>
             </div>
-            <div className="flex justify-between text-purple p-2">
+            <div className="flex justify-between text-purple p-2 ">
               <div>{t('wrongAnswers')}</div>
-              <div className="font-semibold text-lg">
+              <div className="font-semibold text-lg text-custom-brown">
                 {totalQuestion - userCorrectAnswers + '/' + totalQuestion}
               </div>
             </div>
