@@ -2,6 +2,7 @@
 
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
 import { Card, CardContent } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 
 interface SegmentedCircularChartProps {
   percentage: number
@@ -13,6 +14,7 @@ interface SegmentedCircularChartProps {
   backgroundColor?: string
   showCard?: boolean
   className?: string
+  fontSize?: string
 }
 
 export default function SegmentedCircularChart({
@@ -25,6 +27,7 @@ export default function SegmentedCircularChart({
   backgroundColor = '#e5e7eb', // gray-300
   showCard = false,
   className = '',
+  fontSize = '',
 }: SegmentedCircularChartProps) {
   // Ensure percentage is between 0 and 100
   const validPercentage = Math.min(Math.max(percentage, 0), 100)
@@ -75,7 +78,12 @@ export default function SegmentedCircularChart({
 
       {/* Center text */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="text-2xl font-bold text-gray-800">
+        <div
+          className={cn(
+            'text-2xl font-bold text-gray-800',
+            fontSize && `text-[${fontSize}]`
+          )}
+        >
           {validPercentage}%
         </div>
         {title && (

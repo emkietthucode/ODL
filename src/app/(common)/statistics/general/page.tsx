@@ -169,15 +169,17 @@ function GeneralStatistic() {
                     title="A1 - Chương 1"
                     subtitle="125 câu hỏi"
                     percentage={75}
-                    color="#3b82f6" // blue
+                    color="#3b82f6"
                     textColor="#ffffff"
+                    className="max-h-[60px]"
                   />
                   <ProgressCard
                     title="A1 - Chương 3"
                     subtitle="90 câu hỏi"
                     percentage={25}
-                    color="#91C54D" // blue
+                    color="#91C54D"
                     textColor="#ffffff"
+                    className="max-h-[60px]"
                   />
                 </div>
               </div>

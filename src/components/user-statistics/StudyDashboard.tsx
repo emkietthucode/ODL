@@ -64,10 +64,8 @@ export default function StudyDashboard() {
 
   return (
     <div className="w-[440px] bg-white rounded-lg shadow-sm border">
-      {/* Calendar Section */}
       <Card className="border-none shadow-none">
         <CardContent className="p-6">
-          {/* Calendar Header */}
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-medium text-gray-800">
               {monthNames[currentDate.getMonth()]}, {currentDate.getFullYear()}
@@ -92,7 +90,6 @@ export default function StudyDashboard() {
             </div>
           </div>
 
-          {/* Day Headers */}
           <div className="grid grid-cols-7 gap-1 mb-2">
             {dayNames.map((day) => (
               <div
@@ -104,7 +101,6 @@ export default function StudyDashboard() {
             ))}
           </div>
 
-          {/* Calendar Grid */}
           <div className="grid grid-cols-7 gap-1">
             {calendarDays.slice(0, 35).map((day, index) => {
               const isCurrentMonth = day.getMonth() === currentDate.getMonth()
@@ -130,7 +126,6 @@ export default function StudyDashboard() {
             })}
           </div>
 
-          {/* Streak Section */}
           <div className="mt-6">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-sm font-medium text-gray-800">

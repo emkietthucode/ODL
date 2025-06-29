@@ -9,7 +9,7 @@ interface SignCardProps {
 
 function SignCard({ id, name, description, url }: SignCardProps) {
   return (
-    <div className="w-[390px] min-h-[180px] rounded-[16px] border-[1px] bg-light-purple-admin border-[#C7C7C7] flex p-[10px] gap-[15px]">
+    <div className="min-w-[390px] min-h-[180px] rounded-[16px] border-[1px] bg-light-purple-admin border-[#C7C7C7] flex p-[10px] gap-[15px]">
       <Image
         src={url}
         alt="sign"

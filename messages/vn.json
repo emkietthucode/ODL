@@ -13,7 +13,8 @@
     "register": "Đăng ký",
     "logout": "Đăng xuất",
     "adminPanel": "Trang quản trị",
-    "roadMap": "Lộ trình"
+    "roadMap": "Lộ trình",
+    "statistics": "Thống kê"
   },
   "LoginPage": {
     "login": "Đăng nhập",

@@ -33,8 +33,8 @@ export default function ProgressCard({
 
   return (
     <div
-      className={`flex items-center px-4 max-h-[60px]
-         justify-between  rounded-2xl shadow-sm ${className}`}
+      className={`flex items-center px-4
+         justify-between rounded-2xl shadow-sm ${className}`}
       style={{ backgroundColor: color }}
     >
       {/* Left side - Text content */}

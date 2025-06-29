@@ -15,14 +15,14 @@ function StatisticsDashboard({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex">
-      <div className="w-60 h-full bg-light-purple-admin rounded-tr-[120px] pt-[66px] pb-[83px] px-[20px] mr-[50px]">
+      <div className="w-[200px] h-full bg-light-purple-admin rounded-tr-[120px] pt-[66px] pb-[83px] px-[20px] mr-[50px]">
         <div className=" font-bold text-2xl text-[#8070B8] pt-[32px] pb-[60px]">
           THỐNG KÊ
         </div>
 
         <div className="pt-[114px] text-[#BDBDBD]">
           <Link
-            href="/"
+            href="/statistics/general"
             className={cn(
               'flex items-center gap-8',
               pathname.includes('/statistics/general') && 'text-[#A08CE6]'
@@ -33,7 +33,13 @@ function StatisticsDashboard({ children }: { children: React.ReactNode }) {
           <Link href="/" className="flex items-center gap-8 my-12">
             <IoPencilSharp /> <span>Thi thử</span>
           </Link>
-          <Link href="/" className="flex items-center gap-8">
+          <Link
+            href="/statistics/learning"
+            className={cn(
+              'flex items-center gap-8',
+              pathname.includes('/statistics/learning') && 'text-[#A08CE6]'
+            )}
+          >
             <IoBookOutline /> <span>Luyện thi</span>
           </Link>
         </div>
