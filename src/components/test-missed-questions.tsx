@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 import { useEffect, useState } from 'react'
 import { LearningQuestionDTO, QuestionDTO } from '@/types/dto/types'
 import { useParams, usePathname, useRouter } from 'next/navigation'
+import Link from 'next/link'
 import supabase from '@/utils/supabase/supabase'
 import Timer from '@/components/timer-v2'
 import useAuth from '@/hooks/useAuth'
@@ -66,6 +67,7 @@ const TestMissedQuestions = () => {
   const [imageLoadingStates, setImageLoadingStates] = useState<
     Record<number, boolean>
   >({})
+  const [timeUp, setTimeUp] = useState<boolean>(false)
 
   useEffect(() => {
     const handleFetchData = async () => {
@@ -199,11 +201,10 @@ const TestMissedQuestions = () => {
 
   const handleSubmit = (time: number) => {
     setTestCompletionTimeSec(time)
-    router.push(`${pathname}/detail`)
   }
 
   const handleTimeUp = () => {
-    router.push(`${pathname}/detail`)
+    setTimeUp(true)
   }
 
   useEffect(() => {
@@ -395,13 +396,26 @@ const TestMissedQuestions = () => {
             />
           </div>
 
-          <Button
-            onClick={() => handleSubmit(currentTimeLeft)}
-            disabled={!isActive}
-            className="disabled:opacity-50 rounded-[5px] opacity-80 mx-auto w-[124px] h-10 text-white text-xl font-bold uppercase bg-purple text-center"
-          >
-            {t('submit')}
-          </Button>
+          {timeUp ? (
+            <Link href={`${pathname}/detail`} className="flex justify-center">
+              <Button
+                disabled={true}
+                className="disabled:opacity-50 rounded-[5px] opacity-80 mx-auto w-[124px] h-10 text-white text-xl font-bold uppercase bg-purple text-center"
+              >
+                {t('submit')}
+              </Button>
+            </Link>
+          ) : (
+            <Link href={`${pathname}/detail`} className="flex justify-center">
+              <Button
+                onClick={() => handleSubmit(currentTimeLeft)}
+                disabled={!isActive}
+                className="disabled:opacity-50 rounded-[5px] opacity-80 mx-auto w-[124px] h-10 text-white text-xl font-bold uppercase bg-purple text-center"
+              >
+                {t('submit')}
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
 
