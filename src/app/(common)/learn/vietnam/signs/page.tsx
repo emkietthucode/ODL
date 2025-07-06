@@ -119,7 +119,7 @@ function LearnSigns() {
           </form>
         </div>
 
-        <div className="flex flex-wrap gap-2 mt-6 overflow-y-auto max-h-[650px] scrollbar-gutter-stable">
+        <div className="grid grid-cols-3 gap-2 mt-6 overflow-y-auto max-h-[650px] scrollbar-gutter-stable">
           {signs.map((sign, index) => (
             <SignCard
               key={index}

@@ -13,6 +13,7 @@ export async function middleware(request: NextRequest) {
     '/tests',
     '/missed-questions',
     '/learning-path',
+    '/statistics',
   ]
   const authRoutes = ['/auth/login', '/auth/signup']
 

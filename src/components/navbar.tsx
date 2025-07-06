@@ -249,7 +249,7 @@ const NavBar = () => {
             <Link href="/learning-path" className="hover:opacity-80">
               {t('roadMap')}
             </Link>
-            <Link href="/learning" className="hover:opacity-80">
+            <Link href="/learn" className="hover:opacity-80">
               {t('learningPage')}
             </Link>
             <Link href="#" className="hover:opacity-80">
@@ -326,6 +326,12 @@ const NavBar = () => {
                       className="w-full bg-transparent hover:bg-[#888] outline-none text-black border-none shadow-none "
                     >
                       {t('logout')}
+                    </Button>
+                    <Button
+                      onClick={() => router.push('/statistics/general')}
+                      className="w-full bg-transparent hover:bg-[#888] outline-none text-black border-none shadow-none "
+                    >
+                      {t('statistics')}
                     </Button>
                     {userData?.vai_tro === 'admin' && (
                       <Button

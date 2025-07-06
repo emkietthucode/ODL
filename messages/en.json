@@ -13,7 +13,8 @@
     "register": "Register",
     "logout": "Log out",
     "adminPanel": "Admin Panel",
-    "roadMap": "Roadmap"
+    "roadMap": "Roadmap",
+    "statistics": "Statistics"
   },
   "Footer": {
     "addressTitle": "Address",
