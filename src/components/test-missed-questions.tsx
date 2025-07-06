@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import { LearningQuestionDTO, QuestionDTO } from '@/types/dto/types'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import supabase from '@/utils/supabase/supabase'
-import Timer from '@/components/timer'
+import Timer from '@/components/timer-v2'
 import useAuth from '@/hooks/useAuth'
 import { useTranslations } from 'next-intl'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
@@ -35,6 +35,14 @@ const convertLearningQuestionsToQuestionDTO = (
   }))
 }
 
+// Function to get optimized image URL
+const getOptimizedImageUrl = (imageName: string, width: number = 370) => {
+  if (!imageName) return ''
+
+  // Use Supabase transformations for better performance
+  return `https://cgtsomijxwpcyqgznjqx.supabase.co/storage/v1/object/public/hinh_anh_cau_hoi/${imageName}?width=${width}&quality=80`
+}
+
 const TestMissedQuestions = () => {
   const {
     onOpen,
@@ -54,6 +62,10 @@ const TestMissedQuestions = () => {
   } | null>(null)
   const router = useRouter()
   const pathname = usePathname()
+  const [preloadedImages, setPreloadedImages] = useState<Set<string>>(new Set())
+  const [imageLoadingStates, setImageLoadingStates] = useState<
+    Record<number, boolean>
+  >({})
 
   useEffect(() => {
     const handleFetchData = async () => {
@@ -75,7 +87,7 @@ const TestMissedQuestions = () => {
         const { data: cauHoiList, error: error2 } = await supabase
           .from('cau_hoi')
           .select(
-            'id, noi_dung_cau_hoi, ma_chuong, lua_chon(id, noi_dung_lua_chon, la_lua_chon_dung, so_thu_tu)'
+            'id, noi_dung_cau_hoi, ma_chuong, hinh_anh, lua_chon(id, noi_dung_lua_chon, la_lua_chon_dung, so_thu_tu)'
           )
           .in('id', cauHoiIds)
 
@@ -98,7 +110,7 @@ const TestMissedQuestions = () => {
             cau_tra_loi: '',
             giai_thich: '',
             goi_y: [],
-            hinh_anh: 0,
+            hinh_anh: cauHoi.hinh_anh || '',
           })
         )
 
@@ -119,6 +131,16 @@ const TestMissedQuestions = () => {
     if (user?.id == null) return
     handleFetchData()
   }, [testId, user?.id])
+
+  useEffect(() => {
+    const handleModalClose = () => {
+      setIsActive(true)
+    }
+
+    if (!isActive) {
+      handleModalClose()
+    }
+  }, [isActive])
 
   const getButtonCss = (index: number) => {
     if (questions[index]?.cau_tra_loi) {
@@ -180,6 +202,10 @@ const TestMissedQuestions = () => {
     router.push(`${pathname}/detail`)
   }
 
+  const handleTimeUp = () => {
+    router.push(`${pathname}/detail`)
+  }
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!isActive) return
@@ -222,48 +248,106 @@ const TestMissedQuestions = () => {
     return () => window.removeEventListener('keydown', handleKeyDown, true)
   }, [handleChangeQuestion, changeAnswerWithIndex, changeAnswerByArrow])
 
+  // Preload images function
+  const preloadImage = (imageUrl: string) => {
+    if (preloadedImages.has(imageUrl)) return
+
+    const img = new Image()
+    img.onload = () => {
+      setPreloadedImages((prev) => new Set(prev).add(imageUrl))
+    }
+    img.src = imageUrl
+  }
+
+  // Handle image load state
+  const handleImageLoad = (questionIndex: number) => {
+    setImageLoadingStates((prev) => ({ ...prev, [questionIndex]: false }))
+  }
+
+  const handleImageError = (questionIndex: number) => {
+    setImageLoadingStates((prev) => ({ ...prev, [questionIndex]: false }))
+  }
+
+  // Set loading state when question changes
+  useEffect(() => {
+    if (questions[selectedQuestion]?.hinh_anh) {
+      setImageLoadingStates((prev) => ({ ...prev, [selectedQuestion]: true }))
+    }
+  }, [selectedQuestion, questions])
+
+  // Preload next few images when question changes
+  useEffect(() => {
+    if (questions.length === 0) return
+
+    // Preload current image
+    if (questions[selectedQuestion]?.hinh_anh) {
+      preloadImage(getOptimizedImageUrl(questions[selectedQuestion].hinh_anh))
+    }
+
+    // Preload next 2 images
+    for (let i = 1; i <= 2; i++) {
+      const nextIndex = selectedQuestion + i
+      if (nextIndex < questions.length && questions[nextIndex]?.hinh_anh) {
+        preloadImage(getOptimizedImageUrl(questions[nextIndex].hinh_anh))
+      }
+    }
+
+    // Preload previous image
+    const prevIndex = selectedQuestion - 1
+    if (prevIndex >= 0 && questions[prevIndex]?.hinh_anh) {
+      preloadImage(getOptimizedImageUrl(questions[prevIndex].hinh_anh))
+    }
+  }, [selectedQuestion, questions])
+
   return (
     <div className="w-[960px] mx-auto my-10">
       <div className="bg-[#A08CE6] h-9 leading-9 text-center text-[18] font-bold text-white">
-        {testInfo?.ten_de_thi || ''}
+        CÂU HỎI THƯỜNG SAI
       </div>
       <div className="my-2 h-80 gap-[10px] flex flex-wrap">
         <div className="w-[164px] bg-[#F1EEFB] h-80">
           <div className=" flex items-start h-full relative">
             <QuestionCarousel
-              totalSlide={Math.ceil(questions?.length / 25)}
+              totalSlide={Math.ceil(questions.length / 25)}
               className="!items-start pt-3"
               secondary
             >
-              {Array.from({
-                length: Math.ceil(questions?.length / 25),
-              }).map((_, groupIndex) => (
-                <div
-                  key={groupIndex}
-                  className="flex px-[9px] gap-[6px] h-[full] flex-wrap"
-                >
-                  {Array.from({ length: questions?.length }).map(
-                    (_, qIndex) => (
-                      <button
-                        key={qIndex}
-                        disabled={!isActive}
-                        onClick={() =>
-                          setSelectedQuestion(qIndex + groupIndex * 25)
+              {Array.from({ length: Math.ceil(questions.length / 25) }).map(
+                (_, groupIndex) => {
+                  const startIndex = groupIndex * 25
+                  const endIndex = Math.min(startIndex + 25, questions.length)
+                  const questionsInThisGroup = endIndex - startIndex
+
+                  return (
+                    <div
+                      key={groupIndex}
+                      className="flex justify-center gap-[6px] h-[full] flex-wrap"
+                    >
+                      {Array.from({ length: questionsInThisGroup }).map(
+                        (_, qIndex) => {
+                          const questionIndex = startIndex + qIndex
+                          return (
+                            <button
+                              key={questionIndex}
+                              disabled={!isActive}
+                              onClick={() => setSelectedQuestion(questionIndex)}
+                              className={cn(
+                                `cursor-pointer w-6 h-6 ${getButtonCss(
+                                  questionIndex
+                                )}  rounded-full text-center font-bold disabled:opacity-50`,
+                                questionIndex === selectedQuestion &&
+                                  'ring ring-purple ring-offset-2'
+                              )}
+                            >
+                              {questionIndex + 1}
+                            </button>
+                          )
                         }
-                        className={cn(
-                          `cursor-pointer w-6 h-6 ${getButtonCss(
-                            qIndex + groupIndex * 25
-                          )}  rounded-full text-center font-bold disabled:opacity-50`,
-                          qIndex + groupIndex * 25 === selectedQuestion &&
-                            'ring ring-purple ring-offset-2'
-                        )}
-                      >
-                        {qIndex + groupIndex * 25 + 1}
-                      </button>
-                    )
-                  )}
-                </div>
-              ))}
+                      )}
+                    </div>
+                  )
+                }
+              )}
             </QuestionCarousel>
           </div>
         </div>
@@ -274,6 +358,28 @@ const TestMissedQuestions = () => {
           <p className="text-[12px] my-4">
             {questions[selectedQuestion]?.noi_dung_cau_hoi || ''}
           </p>
+          {questions[selectedQuestion]?.hinh_anh && (
+            <div className="mx-auto mt-4">
+              {imageLoadingStates[selectedQuestion] && (
+                <div className="max-w-[370px] mx-auto h-48 bg-gray-200 animate-pulse rounded flex items-center justify-center">
+                  <div className="text-gray-500">Loading...</div>
+                </div>
+              )}
+              <img
+                className={cn(
+                  'max-w-[370px] max-h-[200px] mx-auto',
+                  imageLoadingStates[selectedQuestion] && 'hidden'
+                )}
+                src={getOptimizedImageUrl(
+                  questions[selectedQuestion]?.hinh_anh
+                )}
+                alt="image"
+                onLoad={() => handleImageLoad(selectedQuestion)}
+                onError={() => handleImageError(selectedQuestion)}
+                loading="eager"
+              />
+            </div>
+          )}
         </div>
         <div className="w-[164px] h-full bg-[#F1EEFB] py-3 flex flex-col justify-between">
           <div className="mx-auto w-[106px] h-[47px] font-bold bg-light-purple text-center leading-[47px] rounded-[8px] text-[28px] text-purple">
@@ -284,7 +390,7 @@ const TestMissedQuestions = () => {
                   : 0
               }
               isActive={isActive}
-              onTimeUp={() => {}}
+              onTimeUp={() => handleTimeUp()}
               onTimeChange={setCurrentTimeLeft}
             />
           </div>
