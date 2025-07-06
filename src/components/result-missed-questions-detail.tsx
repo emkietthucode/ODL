@@ -11,6 +11,8 @@ import { LuaChon } from '@/types/types'
 import { QuestionDTO } from '@/types/dto/types'
 import CriticalStar from './critical-star'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
+import { IoClose } from 'react-icons/io5'
+import { useRouter } from 'next/navigation'
 
 const montserratAlternates = Montserrat_Alternates({
   weight: '500',
@@ -36,6 +38,7 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
   userScore,
   testTotalScore,
 }) => {
+  const router = useRouter()
   const [selectedQuestionIndex, setSelectedQuestion] = useState<number>(0)
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState<number>(0)
@@ -193,8 +196,23 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
     endIndex,
     questions.length,
   ]) // Add dependencies
+
+  const handleClose = () => {
+    router.push('/missed-questions')
+  }
+
   return (
-    <main className="bg-white mx-auto max-h-full my-[32px] h-full">
+    <main className="bg-white mx-auto max-h-full my-[32px] h-full relative">
+      {/* Close button */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={handleClose}
+        className="absolute top-[2px] left-[180px] z-10 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-full"
+      >
+        <IoClose className="h-8 w-8" />
+      </Button>
+
       <div className="flex flex-col justify-around items-center h-full">
         <div className="flex flex-col justify-start gap-5  h-full w-[75%]">
           <div className="w-full h-[116px] bg-light-purple flex items-center">
