@@ -15,6 +15,7 @@ import { useTranslations } from 'next-intl'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { Button } from './ui/button'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const convertLearningQuestionsToQuestionDTO = (
   learningQuestions: LearningQuestionDTO[]
@@ -73,7 +74,7 @@ const TestComponent = () => {
     Record<number, boolean>
   >({})
 
-  const questionsPerPage = 22 // Number of questions to show per page
+  const questionsPerPage = 25 // Number of questions to show per page
   const totalPages = Math.ceil(questions.length / questionsPerPage)
   const startIndex = currentPage * questionsPerPage
   const endIndex = startIndex + questionsPerPage
@@ -322,32 +323,10 @@ const TestComponent = () => {
         <div className="w-[164px] bg-[#F1EEFB] h-80">
           <div className="flex items-start h-full relative">
             <div className="w-full h-full flex flex-col">
-              <div className="flex-1 flex items-center justify-center">
-                <div className="relative w-full">
-                  <div className="absolute left-2 top-1/2 -translate-y-1/2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={handlePreviousPage}
-                      disabled={currentPage === 0 || !isActive}
-                      className="text-purple hover:text-purple/80 disabled:opacity-50"
-                    >
-                      <MdKeyboardArrowLeft />
-                    </Button>
-                  </div>
-                  <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={handleNextPage}
-                      disabled={currentPage === totalPages - 1 || !isActive}
-                      className="text-purple hover:text-purple/80 disabled:opacity-50"
-                    >
-                      <MdKeyboardArrowRight />
-                    </Button>
-                  </div>
-                  <div className="flex justify-center pt-3">
-                    <ol className="list-none flex flex-wrap gap-[6px] w-[120px] select-none">
+              <div className="flex-1 flex justify-around my-5">
+                <div className="relative w-full px-2">
+                  <div className="flex justify-center">
+                    <ol className="list-none flex flex-wrap gap-[7px] w-[220px] select-none">
                       {currentQuestions.map((_, index: number) => {
                         const questionIndex = startIndex + index
                         return (
@@ -376,6 +355,24 @@ const TestComponent = () => {
                   </div>
                   <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs text-purple">
                     {currentPage + 1}/{totalPages}
+                  </div>
+                  <div className="absolute left-[40px] top-[90%] -translate-y-1/2">
+                    <button
+                      onClick={handlePreviousPage}
+                      disabled={currentPage === 0 || !isActive}
+                      className="disabled:opacity-50 disabled:cursor-default cursor-pointer text-center bg-[#7869AD] w-6 h-6 text-white absolute right-2 rounded-full hover:opacity-80"
+                    >
+                      <ChevronLeft />
+                    </button>
+                  </div>
+                  <div className="absolute right-0 top-[90%] -translate-y-1/2">
+                    <button
+                      onClick={handleNextPage}
+                      disabled={currentPage === totalPages - 1 || !isActive}
+                      className="disabled:opacity-50 disabled:cursor-default cursor-pointer text-center bg-[#7869AD] w-6 h-6 text-white absolute right-2 rounded-full hover:opacity-80"
+                    >
+                      <ChevronRight />
+                    </button>
                   </div>
                 </div>
               </div>
