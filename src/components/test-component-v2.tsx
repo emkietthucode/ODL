@@ -14,6 +14,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { Button } from './ui/button'
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 
 const convertLearningQuestionsToQuestionDTO = (
   learningQuestions: LearningQuestionDTO[]
@@ -57,6 +58,7 @@ const TestComponent = () => {
   const { testId } = useParams<{ testId: string }>()
   const [questions, setQuestions] = useState<LearningQuestionDTO[]>([])
   const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
+  const [currentPage, setCurrentPage] = useState<number>(0)
   const [isActive, setIsActive] = useState<boolean>(true)
   const router = useRouter()
   const pathname = usePathname()
@@ -70,6 +72,12 @@ const TestComponent = () => {
   const [imageLoadingStates, setImageLoadingStates] = useState<
     Record<number, boolean>
   >({})
+
+  const questionsPerPage = 22 // Number of questions to show per page
+  const totalPages = Math.ceil(questions.length / questionsPerPage)
+  const startIndex = currentPage * questionsPerPage
+  const endIndex = startIndex + questionsPerPage
+  const currentQuestions = questions.slice(startIndex, endIndex)
 
   useEffect(() => {
     const handleFetchData = async () => {
@@ -139,6 +147,18 @@ const TestComponent = () => {
     setSelectedQuestion(changed)
   }
 
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage((prev) => prev - 1)
+    }
+  }
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages - 1) {
+      setCurrentPage((prev) => prev + 1)
+    }
+  }
+
   const changeAnswerWithIndex = (index: number) => {
     if (
       index - 1 < 0 ||
@@ -185,11 +205,23 @@ const TestComponent = () => {
       if (event.key === 'ArrowLeft') {
         event.preventDefault()
         event.stopPropagation()
-        handleChangeQuestion(-1)
+        if (selectedQuestion > 0) {
+          setSelectedQuestion((prev) => prev - 1)
+          // If we're at the first question of the current page, go to previous page
+          if (selectedQuestion === startIndex) {
+            handlePreviousPage()
+          }
+        }
       } else if (event.key === 'ArrowRight') {
         event.preventDefault()
         event.stopPropagation()
-        handleChangeQuestion?.(1)
+        if (selectedQuestion < questions.length - 1) {
+          setSelectedQuestion((prev) => prev + 1)
+          // If we're at the last question of the current page, go to next page
+          if (selectedQuestion === endIndex - 1) {
+            handleNextPage()
+          }
+        }
       } else if (event.key === 'ArrowUp') {
         event.preventDefault()
         event.stopPropagation()
@@ -219,7 +251,16 @@ const TestComponent = () => {
 
     window.addEventListener('keydown', handleKeyDown, true)
     return () => window.removeEventListener('keydown', handleKeyDown, true)
-  }, [handleChangeQuestion, changeAnswerWithIndex, changeAnswerByArrow])
+  }, [
+    handleChangeQuestion,
+    changeAnswerWithIndex,
+    changeAnswerByArrow,
+    selectedQuestion,
+    currentPage,
+    startIndex,
+    endIndex,
+    questions.length,
+  ])
 
   // Preload images function
   const preloadImage = (imageUrl: string) => {
@@ -279,49 +320,66 @@ const TestComponent = () => {
       </div>
       <div className="my-2 h-80 gap-[10px] flex flex-wrap">
         <div className="w-[164px] bg-[#F1EEFB] h-80">
-          <div className=" flex items-start h-full relative">
-            <QuestionCarousel
-              totalSlide={Math.ceil(questions.length / 25)}
-              className="!items-start pt-3"
-              secondary
-            >
-              {Array.from({ length: Math.ceil(questions.length / 25) }).map(
-                (_, groupIndex) => {
-                  const startIndex = groupIndex * 25
-                  const endIndex = Math.min(startIndex + 25, questions.length)
-                  const questionsInThisGroup = endIndex - startIndex
-
-                  return (
-                    <div
-                      key={groupIndex}
-                      className="flex justify-center gap-[6px] h-[full] flex-wrap"
+          <div className="flex items-start h-full relative">
+            <div className="w-full h-full flex flex-col">
+              <div className="flex-1 flex items-center justify-center">
+                <div className="relative w-full">
+                  <div className="absolute left-2 top-1/2 -translate-y-1/2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handlePreviousPage}
+                      disabled={currentPage === 0 || !isActive}
+                      className="text-purple hover:text-purple/80 disabled:opacity-50"
                     >
-                      {Array.from({ length: questionsInThisGroup }).map(
-                        (_, qIndex) => {
-                          const questionIndex = startIndex + qIndex
-                          return (
-                            <button
-                              key={questionIndex}
-                              disabled={!isActive}
-                              onClick={() => setSelectedQuestion(questionIndex)}
-                              className={cn(
-                                `cursor-pointer w-6 h-6 ${getButtonCss(
-                                  questionIndex
-                                )}  rounded-full text-center font-bold disabled:opacity-50`,
-                                questionIndex === selectedQuestion &&
-                                  'ring ring-purple ring-offset-2'
-                              )}
-                            >
-                              {questionIndex + 1}
-                            </button>
-                          )
-                        }
-                      )}
-                    </div>
-                  )
-                }
-              )}
-            </QuestionCarousel>
+                      <MdKeyboardArrowLeft />
+                    </Button>
+                  </div>
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleNextPage}
+                      disabled={currentPage === totalPages - 1 || !isActive}
+                      className="text-purple hover:text-purple/80 disabled:opacity-50"
+                    >
+                      <MdKeyboardArrowRight />
+                    </Button>
+                  </div>
+                  <div className="flex justify-center pt-3">
+                    <ol className="list-none flex flex-wrap gap-[6px] w-[120px] select-none">
+                      {currentQuestions.map((_, index: number) => {
+                        const questionIndex = startIndex + index
+                        return (
+                          <div className="relative" key={index}>
+                            <li className="flex justify-center">
+                              <button
+                                disabled={!isActive}
+                                onClick={() =>
+                                  setSelectedQuestion(questionIndex)
+                                }
+                                className={cn(
+                                  `cursor-pointer w-6 h-6 ${getButtonCss(
+                                    questionIndex
+                                  )} rounded-full text-center font-bold disabled:opacity-50`,
+                                  questionIndex === selectedQuestion &&
+                                    'ring-2 ring-purple ring-offset-2'
+                                )}
+                              >
+                                {questionIndex + 1}
+                              </button>
+                            </li>
+                          </div>
+                        )
+                      })}
+                    </ol>
+                  </div>
+                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs text-purple">
+                    {currentPage + 1}/{totalPages}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="w-[612px] h-full bg-[#EDEDED] p-3">
