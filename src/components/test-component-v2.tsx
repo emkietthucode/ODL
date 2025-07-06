@@ -161,6 +161,11 @@ const TestComponent = () => {
   }
 
   const changeAnswerWithIndex = (index: number) => {
+    // Check if current question exists and has answers
+    if (!questions[selectedQuestion]?.ds_lua_chon) {
+      return
+    }
+
     if (
       index - 1 < 0 ||
       index - 1 >= questions[selectedQuestion].ds_lua_chon.length
@@ -173,6 +178,11 @@ const TestComponent = () => {
   }
 
   const changeAnswerByArrow = (change: number) => {
+    // Check if current question exists and has answers
+    if (!questions[selectedQuestion]?.ds_lua_chon) {
+      return
+    }
+
     const initialIndex = questions[selectedQuestion].ds_lua_chon.findIndex(
       (q) => q.id === questions[selectedQuestion].cau_tra_loi
     )
