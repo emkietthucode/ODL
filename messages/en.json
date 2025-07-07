@@ -207,5 +207,23 @@
     "card4Title": "Redo wrong questions:",
     "card4Description": "Save and help you practice your wrongly answered questions to improve your score and master your knowledge.",
     "otherFeatures": "Other features"
+  },
+  "VietnamRoadmapPage": {
+    "title": "DRIVING LICENSE LEARNING ROADMAP",
+    "licenseClasses": "Driver's license classes",
+    "motorbikes": "Motorbikes",
+    "vehicle_wheels": "Two-wheeled and three-wheeled",
+    "description": "The Roadmap feature help users practice each question in the question pool. The system breaks down the content into chapters, helping you gradually familiarize yourself with the question set and improve your skills before taking the actual exam. ",
+    "a1Description": "Two-wheeled motorcycles have a cylinder capacity of 50cc to 125cc.",
+    "aDescription": "Two-wheeled motorcycles with a cylinder capacity of 125 cm3 or more and other types of vehicles specified for class A1 driving license.",
+    "bDescription": "Passenger cars with up to 8 seats (excluding the driver's seat); trucks and specialized vehicles with a total designed weight of up to 3,500 kg; types of cars identified for a Class B driving license pulling a trailer with a total designed weight of up to 750 kg.",
+    "b1Description": "Three-wheeled motorcycles and other vehicles specified for class A1 driving license.",
+    "b2Description": "for drivers of passenger cars with less than 9 seats, trucks under 3,500 kg and are allowed to work as drivers in the transport business.",
+    "c1Description": "Trucks and special-purpose vehicles with a total designed weight of over 3,500 kg to 7,500 kg; types of trucks specified for class C1 driving licenses pulling trailers with a total designed weight of up to 750 kg; types of vehicles specified for class B driving licenses.",
+    "cDescription": "for drivers of trucks and tractors with a load capacity of 3,500 kg or more.",
+    "defTitle": "Upgrade DEF",
+    "defDescription": "for drivers of passenger cars with 10 to 30 seats; over 30 seats; drivers of trailers",
+    "startButton": "Start learning",
+    "learnButton": "Learn"
   }
 }

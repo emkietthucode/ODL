@@ -13,7 +13,7 @@ import Image from 'next/image'
 const sign_types = [
   'Biển báo cấm',
   'Biển báo chỉ dẫn',
-  'Biển báo chỉ dẫn đường cao tốc',
+  'Biển báo chỉ dẫn trên đường cao tốc',
   'Biển báo hiệu lệnh',
   'Biển báo nguy hiểm',
   'Biển báo phụ',
@@ -102,7 +102,7 @@ function LearnSigns() {
       <div className="w-full max-h-[760px] rounded-[20px] border-[2px] border-[#A08CE6] pt-6 px-5 ">
         <div className="w-full flex justify-between">
           <p className="font-semibold text-2xl uppercase w-full">
-            danh sách biển báo cấm
+            DANH SÁCH {type}
           </p>
 
           <form

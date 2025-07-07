@@ -1,160 +1,124 @@
+'use client'
 import ScrollToTopButton from '@/components/scroll-to-top-button'
 import LearnCategory from '../../../../../public/images/f5-learn-category.svg'
-import B1Car from '../../../../../public/images/f5-b1-car.svg'
-import B2Car from '../../../../../public/images/f5-b2-car.svg'
+import ThreeWhiteDot from '../../../../../public/images/three-white-dot.svg'
+import BCar from '../../../../../public/images/F5BCar.svg'
+import C1Car from '../../../../../public/images/F5C1Car.svg'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
+import { useTranslations } from 'next-intl'
+import { usePathname, useRouter } from 'next/navigation'
+import Link from 'next/link'
+
+import Pana from '../../../../../public/images/pana.svg'
+import Card2 from '../../../../../public/images/f11LearningCardIcon2.svg'
+import Card3 from '../../../../../public/images/f11LearningCardIcon3.svg'
+import Card4 from '../../../../../public/images/f11LearningCardIcon4.svg'
 
 const TestsCategoryPage = () => {
+  const t = useTranslations('VietnamTestPage')
+  const pathname = usePathname()
+  const router = useRouter()
+
   return (
-    <main className="bg-white mx-auto my-auto max-h-full">
-      <div className="flex flex-col items-center h-full">
-        <div className="flex flex-col h-full w-[60%]">
-          <div className="flex justify-start relative">
-            <div className="w-[72%] flex flex-col gap-10 z-20 mt-20">
-              <div className="text-purple text-4xl font-semibold">
-                THI THỬ LÝ THUYẾT
-              </div>
-              <div>
-                Chức năng Thi thử lý thuyết mô phỏng bài thi sát hạch chính
-                thức, giúp người dùng kiểm tra kiến thức về luật giao thông,
-                biển báo, và kỹ năng xử lý tình huống. Đề thi được xây dựng đúng
-                cấu trúc và nội dung theo quy định, bao gồm cả câu hỏi điểm liệt
-                (nếu có), mang lại trải nghiệm sát với kỳ thi thực tế.
-              </div>
-            </div>
-            <Image
-              className="hidden xl:inline-block absolute z-10 right-0 top-[120px] "
-              src={LearnCategory}
-              alt=""
-            />
-          </div>
-          <div className="w-full h-[200px]"></div>
+    <div className="mt-8">
+      <div className="w-full h-[332px] bg-[#A08CE6] text-white py-[46px] px-[140px] flex justify-between">
+        <div>
+          <p className="font-bold text-[28px]">CHƯA BIẾT BẮT ĐẦU TỪ ĐÂU?</p>
+          <p className="max-w-[480px] font-medium text-sm mt-[41px] mb-8">
+            Chức năng Học theo lộ trình hướng dẫn người dùng ôn luyện từ cơ bản
+            đến nâng cao qua các bài thi được sắp xếp theo thứ tự hợp lý. Hệ
+            thống chia nhỏ nội dung thành các phần, giúp bạn từng bước làm quen
+            với bộ câu hỏi và nâng cao kỹ năng trước khi tham gia kỳ thi thực
+            tế.
+          </p>
+          <button
+            onClick={() => router.push('/learning-path/vietnam')}
+            className="w-[135px] h-[49px] bg-white text-purple font-bold text-2xl mx-auto block"
+          >
+            BẮT ĐẦU
+          </button>
         </div>
-        <div className="w-full h-full bg-blue-100/40 flex justify-center p-10">
-          <div className="w-[60%] h-full flex  justify-between items-center">
-            <div className="flex flex-col h-[300px] w-[25%] text-center gap-5 items-center justify-between">
-              <div className="font-bold text-5xl">A1</div>
-              <div>
-                dành cho người điều khiển xe mô tô hai bánh có dung tích xi-lanh
-                từ 50cc đến dưới 175cc.
-              </div>
-              <Button
-                variant="main"
-                size="auto"
-                className="font-medium w-[50%] self-end mx-auto"
-              >
-                THI THỬ
-              </Button>
-            </div>
-            <div className="flex flex-col h-[300px] w-[25%] text-center gap-5 items-center justify-between">
-              <div className="font-bold text-5xl">A2</div>
-              <div>
-                dành cho người điều khiển xe mô tô hai bánh có dung tích xi-lanh
-                từ 175cc trở lên.
-              </div>
-              <Button
-                variant="main"
-                size="auto"
-                className="font-medium w-[50%] self-end mx-auto"
-              >
-                THI THỬ
-              </Button>
-            </div>
-            <div className="flex flex-col h-[300px] w-[25%] text-center gap-5 items-center justify-between">
-              <div className="font-bold text-5xl">A3, A4</div>
-              <div>
-                Bằng A3 cấp cho người điều khiển xe mô tô ba bánh, Bằng A4 cấp
-                cho người điều khiển máy kéo có trọng tải đến 1.000 kg.
-              </div>
-              <Button
-                variant="main"
-                size="auto"
-                className="font-medium w-[50%] self-end mx-auto"
-              >
-                THI THỬ
-              </Button>
-            </div>
-          </div>
-        </div>
-        <div className="h-full w-[60%] flex flex-col my-10 gap-[64px]">
-          <div className="flex justify-between gap-20 w-full">
-            <Image src={B1Car} alt="" />
-            <div className="flex flex-col justify-center text-left gap-5">
-              <hr className="w-[150px] h-1 my-1 bg-purple border-0 rounded dark:bg-purple"></hr>
-              <div className="font-bold text-5xl">B1</div>
-              <div>
-                dành cho người điều khiển ô tô chở người dưới 9 chỗ và xe tải
-                dưới 3.500 kg, không dùng để kinh doanh vận tải.
-              </div>
-              <Button
-                variant="main"
-                size="auto"
-                className="font-medium w-[100px]"
-              >
-                THI THỬ
-              </Button>
-            </div>
-          </div>
-          <div className="flex justify-between gap-20 w-full">
-            <div className="flex flex-col justify-center text-left gap-5">
-              <hr className="w-[150px] h-1 my-1 bg-purple border-0 rounded dark:bg-purple"></hr>
-              <div className="font-bold text-5xl">B2</div>
-              <div>
-                dành cho người điều khiển ô tô chở người dưới 9 chỗ, xe tải dưới
-                3.500 kg và được hành nghề lái xe kinh doanh vận tải.
-              </div>
-              <Button
-                variant="main"
-                size="auto"
-                className="font-medium w-[100px]"
-              >
-                THI THỬ
-              </Button>
-            </div>
-            <Image src={B2Car} alt="" />
-          </div>
-          <hr className="w-[90%] h-[2px] my-1 mx-auto bg-light-purple border-0 rounded dark:bg-light-purp"></hr>
-          <div className="flex justify-between">
-            <div className="flex flex-col gap-[128px] justify-between w-[40%]">
-              <div className="flex flex-col">
-                <div className="font-bold text-5xl mb-[25px]">C</div>
-                <div>
-                  dành cho người điều khiển ô tô tải, máy kéo có trọng tải từ
-                  3.500 kg trở lên.
-                </div>
-              </div>
-              <Button
-                variant="main"
-                size="auto"
-                className="font-medium w-[100px]"
-              >
-                THI THỬ
-              </Button>
-            </div>
-            <div className="flex flex-col gap-[128px] justify-between w-[45%]">
-              <div className="flex flex-col">
-                <div className="font-bold text-5xl mb-[20px]">
-                  NÂNG HẠNG DEF
-                </div>
-                <div>
-                  dành cho người điều khiển ô tô chở người 10 đến 30 chỗ; trên
-                  30 chỗ; lái xe kéo rơ-mooc.
-                </div>
-              </div>
-              <Button
-                variant="main"
-                size="auto"
-                className="font-medium w-[100px]"
-              >
-                THI THỬ
-              </Button>
-            </div>
-          </div>
-        </div>
+        <Image src={Pana} alt="Pana" className="w-[371px] h-[234px]" />
       </div>
-      <ScrollToTopButton />
-    </main>
+
+      <p className="font-bold text-[28px] text-[#5CAAE6] mx-auto mt-[80px] mb-8 w-full text-center">
+        HỌC TỰ DO
+      </p>
+      <p className="max-w-[632px] text-center mx-auto mb-[100px] ">
+        cho phép bạn chọn bất kỳ câu hỏi, biển báo, hoặc nội dung nào để ôn
+        luyện theo ý thích, giúp học tập linh hoạt và tập trung vào những phần
+        bạn cần cải thiện.
+      </p>
+
+      <div className="mx-auto flex gap-[45px] mb-[145px] justify-center">
+        <Link
+          href="/learn/vietnam/signs"
+          className="w-[250px] h-[350px] shadow-[5px_5px_7px_5px_rgba(0,0,0,0.25)] px-4 py-7 flex flex-col "
+        >
+          <Image src={Card2} alt="logo" width={45} height={45} />
+
+          <div className="text-[#7869AD] text-sm mt-[120px]">
+            <p className="font-semibold">HỌC BIỂN BÁO GIAO THÔNG:</p>
+            <p className="mt-4">
+              Cung cấp danh sách biển báo kèm giải thích chi tiết, giúp bạn ghi
+              nhớ nhanh và chính xác.
+            </p>
+          </div>
+        </Link>
+
+        <Link
+          href="/vietnam/critical"
+          className="w-[250px] h-[350px] shadow-[5px_5px_7px_5px_rgba(0,0,0,0.25)] px-4 py-7 flex flex-col"
+        >
+          <Image src={Card3} alt="logo" width={45} height={45} />
+
+          <div className="text-[#7869AD] text-sm mt-[120px]">
+            <p className="font-semibold">HỌC CÂU ĐIỂM LIỆT:</p>
+            <p className="mt-4">
+              Tập trung ôn luyện các câu hỏi quan trọng, bắt buộc phải trả lời
+              đúng để vượt qua kỳ thi.
+            </p>
+          </div>
+        </Link>
+
+        <Link
+          href="/learn/vietnam/car/critical-questions"
+          className="w-[250px] h-[350px] shadow-[5px_5px_7px_5px_rgba(0,0,0,0.25)] px-4 py-7 flex flex-col"
+        >
+          <Image src={Card4} alt="logo" width={45} height={45} />
+
+          <div className="text-[#7869AD] text-sm mt-[120px]">
+            <p className="font-semibold">LÀM LẠI NHỮNG CÂU SAI:</p>
+
+            <p className="mt-4">
+              Lưu lại và giúp bạn luyện tập các câu hỏi đã trả lời sai để cải
+              thiện điểm số và nắm chắc kiến thức.
+            </p>
+          </div>
+        </Link>
+      </div>
+
+      <div className="w-full bg-[#E8F5FF] px-40 pt-[90px] pb-[116px] flex items-center justify-between">
+        <div>
+          <p className="text-[#8070B8] font-bold text-[28px]">
+            Sẵn sàng để thi thử?
+          </p>
+
+          <p className="text-sm max-w-[674px] mt-7">
+            Nếu bạn đã sẵn sàng, hãy bắt đầu Thi thử ngay để kiểm tra kiến thức
+            và đánh giá mức độ chuẩn bị của mình!
+          </p>
+        </div>
+
+        <button
+          onClick={() => router.push('/tests/vietnam')}
+          className="w-[189px] h-[53px] rounded-[16px] text-white bg-purple text-xl font-medium"
+        >
+          THI THỬ
+        </button>
+      </div>
+    </div>
   )
 }
 
