@@ -223,5 +223,24 @@
     "defDescription": "dành cho người điều khiển ô tô chở người 10 đến 30 chỗ; trên 30 chỗ; lái xe kéo rơ-mooc.",
     "startButton": "Thi thử",
     "learnButton": "Luyện thi"
+  },
+  "ContactPage": {
+    "contact": "Liên hệ với chúng tôi",
+    "contactNow": "Liên hệ ngay",
+    "info": "Thông tin liên hệ",
+    "description": "Đừng ngần ngại, hãy gửi tin nhắn cho chúng tôi!",
+    "address": "227 Đường Nguyễn Văn Cừ, Phường Chợ Quán, Thành phố Hồ Chí Minh",
+    "topic": "Chủ đề liên hệ",
+    "systemError": "Lỗi hệ thống",
+    "technicalSupport": "Hỗ trợ kỹ thuật",
+    "cooperation": "Liên hệ hợp tác",
+    "other": "Khác",
+    "firstName": "Họ",
+    "lastName": "Tên",
+    "email": "Email",
+    "phone": "Số điện thoại",
+    "content": "Nội dung",
+    "send": "Gửi",
+    "successMessage": "Tin nhắn của bạn đã được gửi thành công. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất."
   }
 }

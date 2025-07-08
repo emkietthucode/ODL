@@ -1,13 +1,8 @@
 'use client'
-import ScrollToTopButton from '@/components/scroll-to-top-button'
-import LearnCategory from '../../../../../public/images/f5-learn-category.svg'
-import ThreeWhiteDot from '../../../../../public/images/three-white-dot.svg'
-import BCar from '../../../../../public/images/F5BCar.svg'
-import C1Car from '../../../../../public/images/F5C1Car.svg'
+
 import Image from 'next/image'
-import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 import Pana from '../../../../../public/images/pana.svg'
@@ -17,7 +12,6 @@ import Card4 from '../../../../../public/images/f11LearningCardIcon4.svg'
 
 const TestsCategoryPage = () => {
   const t = useTranslations('VietnamTestPage')
-  const pathname = usePathname()
   const router = useRouter()
 
   return (

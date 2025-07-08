@@ -225,5 +225,24 @@
     "defDescription": "for drivers of passenger cars with 10 to 30 seats; over 30 seats; drivers of trailers",
     "startButton": "Start learning",
     "learnButton": "Learn"
+  },
+  "ContactPage": {
+    "contact": "Contact us",
+    "contactNow": "Contact us now",
+    "info": "Contact information",
+    "description": "Don't hesitate, send us a message!",
+    "address": "227 Nguyen Van Cu, Cho Quan Ward, Ho Chi Minh City",
+    "topic": "Contact topic",
+    "systemError": "System error",
+    "technicalSupport": "Technical support",
+    "cooperation": "Cooperation",
+    "other": "Other",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "phone": "Phone number",
+    "content": "Content",
+    "send": "Send",
+    "successMessage": "Your message has been sent successfully. We will contact you as soon as possible."
   }
 }
