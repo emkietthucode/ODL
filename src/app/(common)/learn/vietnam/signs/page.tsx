@@ -9,6 +9,7 @@ import { IoIosSearch } from 'react-icons/io'
 
 import Amico from '../../../../../../public/images/amico.svg'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 const sign_types = [
   'Biển báo cấm',
@@ -27,6 +28,7 @@ function LearnSigns() {
   const [type, setType] = useState<string>(sign_types[0])
   const [signs, setSigns] = useState<Sign[]>([])
   const [search, setSearch] = useState<string>('')
+  const t = useTranslations('SignPage')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,12 +67,10 @@ function LearnSigns() {
       <div className="max-w-screen-lg mx-auto flex gap-[124px] items-center my-3">
         <div className="max-w-[750px] mx-auto">
           <p className=" text-custom-dark-violet font-bold text-[26px]">
-            ÔN LUYỆN BIỂN BÁO GIAO THÔNG
+            {t('learnSigns')}
           </p>
           <p className="text-sm text-custom-dark-violet">
-            Dưới đây là tên, kí hiệu và ý nghĩa của các biển báo hiện hành giúp
-            bạn làm quen và ghi nhớ các loại biển báo giao thông một cách trực
-            quan và dễ hiểu.
+            {t('learnSignsDescription')}
           </p>
         </div>
         <Image
@@ -102,7 +102,7 @@ function LearnSigns() {
       <div className="w-full max-h-[760px] rounded-[20px] border-[2px] border-[#A08CE6] pt-6 px-5 ">
         <div className="w-full flex justify-between">
           <p className="font-semibold text-2xl uppercase w-full">
-            DANH SÁCH {type}
+            {t('list')} {type}
           </p>
 
           <form

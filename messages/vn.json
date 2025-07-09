@@ -258,5 +258,10 @@
     "readyToTest": "Sẵn sàng để thi thử?",
     "readyToTestDescription": "Nếu bạn đã sẵn sàng, hãy bắt đầu Thi thử ngay để kiểm tra kiến thức và đánh giá mức độ chuẩn bị của mình!",
     "testButton": "THI THỬ"
+  },
+  "SignPage": {
+    "learnSigns": "ÔN LUYỆN BIỂN BÁO GIAO THÔNG",
+    "learnSignsDescription": "Dưới đây là tên, kí hiệu và ý nghĩa của các biển báo hiện hành giúp bạn làm quen và ghi nhớ các loại biển báo giao thông một cách trực quan và dễ hiểu.",
+    "list": "DANH SÁCH "
   }
 }

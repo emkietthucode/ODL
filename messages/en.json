@@ -260,5 +260,10 @@
     "readyToTest": "Ready to take the test?",
     "readyToTestDescription": "If you're ready, start the Practice Test now to test your knowledge and assess your level of preparation!",
     "testButton": "Take a test"
+  },
+  "SignPage": {
+    "learnSigns": "LEARN TRAFFIC SIGNS",
+    "learnSignsDescription": "The Traffic Signs Learning function provides a list of signs with detailed explanations, helping you memorize quickly and accurately. The system divides the content into sections, helping you gradually get acquainted with the question set and improve your skills before taking the actual exam.",
+    "list": "LIST OF "
   }
 }
