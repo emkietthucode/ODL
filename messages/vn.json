@@ -242,5 +242,21 @@
     "content": "Nội dung",
     "send": "Gửi",
     "successMessage": "Tin nhắn của bạn đã được gửi thành công. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất."
+  },
+  "LearnPage": {
+    "start": "CHƯA BIẾT BẮT ĐẦU TỪ ĐÂU?",
+    "startDescription": "Chức năng Học theo lộ trình hướng dẫn người dùng ôn luyện từ cơ bản đến nâng cao qua các bài thi được sắp xếp theo thứ tự hợp lý. Hệ thống chia nhỏ nội dung thành các phần, giúp bạn từng bước làm quen với bộ câu hỏi và nâng cao kỹ năng trước khi tham gia kỳ thi thực tế.",
+    "startButton": "BẮT ĐẦU",
+    "learning": "HỌC TỰ DO",
+    "learningDescription": "cho phép bạn chọn bất kỳ câu hỏi, biển báo, hoặc nội dung nào để ôn luyện theo ý thích, giúp học tập linh hoạt và tập trung vào những phần bạn cần cải thiện.",
+    "signs": "HỌC BIỂN BÁO GIAO THÔNG:",
+    "signsDescription": "Cung cấp danh sách biển báo kèm giải thích chi tiết, giúp bạn ghi nhớ nhanh và chính xác.",
+    "criticalQuestions": "HỌC CÂU ĐIỂM LIỆT:",
+    "criticalQuestionsDescription": "Tập trung ôn luyện các câu hỏi quan trọng, bắt buộc phải trả lời đúng để vượt qua kỳ thi.",
+    "challengeBank": "LÀM LẠI NHỮNG CÂU SAI:",
+    "challengeBankDescription": "Lưu lại và giúp bạn luyện tập các câu hỏi đã trả lời sai để cải thiện điểm số và nắm chắc kiến thức.",
+    "readyToTest": "Sẵn sàng để thi thử?",
+    "readyToTestDescription": "Nếu bạn đã sẵn sàng, hãy bắt đầu Thi thử ngay để kiểm tra kiến thức và đánh giá mức độ chuẩn bị của mình!",
+    "testButton": "THI THỬ"
   }
 }

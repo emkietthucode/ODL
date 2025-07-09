@@ -244,5 +244,21 @@
     "content": "Content",
     "send": "Send",
     "successMessage": "Your message has been sent successfully. We will contact you as soon as possible."
+  },
+  "LearnPage": {
+    "start": "DON'T KNOW WHERE TO START?",
+    "startDescription": "The Roadmap function guides users to practice from basic to advanced through tests arranged in a logical order. The system divides the content into sections, helping you gradually get acquainted with the question set and improve your skills before taking the actual exam.",
+    "startButton": "Start",
+    "learning": "Learning",
+    "learningDescription": "allows you to choose any questions, signs, or content to review at your own pace, allowing for flexible learning and focusing on the areas you need to improve.",
+    "signs": "LEARN SIGNS:",
+    "signsDescription": "Provide a list of signs with detailed explanations, helping you to memorize quickly and accurately.",
+    "criticalQuestions": "LEARN CRITICAL QUESTIONS:",
+    "criticalQuestionsDescription": "Focus on reviewing important questions that must be answered correctly to pass the exam.",
+    "challengeBank": "CHALLENGE BANK:",
+    "challengeBankDescription": "Review and practice the questions you answered incorrectly in the previous tests, helping you to avoid repeating mistakes.",
+    "readyToTest": "Ready to take the test?",
+    "readyToTestDescription": "If you're ready, start the Practice Test now to test your knowledge and assess your level of preparation!",
+    "testButton": "Take a test"
   }
 }

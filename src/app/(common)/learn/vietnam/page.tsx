@@ -62,7 +62,7 @@ const TestsCategoryPage = () => {
         </Link>
 
         <Link
-          href="/vietnam/critical"
+          href="/learn/vietnam/car/critical-questions"
           className="w-[250px] h-[350px] shadow-[5px_5px_7px_5px_rgba(0,0,0,0.25)] px-4 py-7 flex flex-col"
         >
           <Image src={Card3} alt="logo" width={45} height={45} />
@@ -77,7 +77,7 @@ const TestsCategoryPage = () => {
         </Link>
 
         <Link
-          href="/learn/vietnam/car/critical-questions"
+          href="/missed-questions"
           className="w-[250px] h-[350px] shadow-[5px_5px_7px_5px_rgba(0,0,0,0.25)] px-4 py-7 flex flex-col"
         >
           <Image src={Card4} alt="logo" width={45} height={45} />
