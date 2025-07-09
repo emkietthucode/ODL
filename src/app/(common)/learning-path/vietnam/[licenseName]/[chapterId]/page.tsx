@@ -63,7 +63,6 @@ function LearningPage() {
       !isChapterPassed &&
       !hasShownDialog
     ) {
-      console.log('into::')
       setIsDialogOpen(true)
     }
   }, [lastAnsweredQuestion])
@@ -325,7 +324,7 @@ function LearningPage() {
                             setSelectedQuestion(index + bigIndex * 24)
                           }
                           className={cn(
-                            `w-6 h-6 rounded-full text-purple font-bold ${getAnswerBackground(
+                            `w-6 h-6 rounded-full text-sm text-purple font-bold ${getAnswerBackground(
                               q
                             )} text-center`,
                             index + bigIndex * 24 === selectedQuestion &&

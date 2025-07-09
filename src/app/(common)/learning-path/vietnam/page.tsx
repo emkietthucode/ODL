@@ -10,7 +10,7 @@ import { useTranslations } from 'next-intl'
 import { usePathname, useRouter } from 'next/navigation'
 
 function VietnameRoadmap() {
-  const t = useTranslations('VietnamTestPage')
+  const t = useTranslations('VietnamRoadmapPage')
   const router = useRouter()
   const pathname = usePathname()
 

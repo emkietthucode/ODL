@@ -146,6 +146,8 @@ function QuestionTable({
     setShowHint((prev) => !prev)
   }
 
+  console.log(question)
+
   return (
     <div className="w-[938px] flex gap-2 my-[10px] h-[464px] mx-auto">
       {/* Question info */}
@@ -224,7 +226,7 @@ function QuestionTable({
           onValueChange={(value) => onAnswerChange(value, index)}
         >
           {question &&
-            question?.ds_lua_chon.map((_, selectionIndex) => (
+            question?.ds_lua_chon?.map((_, selectionIndex) => (
               <Label
                 key={selectionIndex}
                 htmlFor={`r${selectionIndex}`}

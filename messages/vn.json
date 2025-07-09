@@ -206,5 +206,41 @@
     "card4Title": "LÀM LẠI NHỮNG CÂU SAI:",
     "card4Description": "Lưu lại và giúp bạn luyện tập các câu hỏi đã trả lời sai để cải thiện điểm số và nắm chắc kiến thức.",
     "otherFeatures": "Các tính năng khác"
+  },
+  "VietnamRoadmapPage": {
+    "title": "ÔN LUYỆN THEO LỘ TRÌNH",
+    "licenseClasses": "Các hạng bằng lái",
+    "motorbikes": "Mô-tô",
+    "vehicle_wheels": "Hai bánh và ba bánh",
+    "description": "Chức năng Ôn luyện theo lộ trình hướng dẫn người dùng ôn luyện từng câu hỏi. Hệ thống chia nhỏ nội dung thành các chương, giúp bạn từng bước làm quen với bộ câu hỏi và nâng cao kỹ năng trước khi tham gia kỳ thi thực tế.",
+    "a1Description": "Xe mô tô hai bánh có dung tích xi-lanh từ 50 đến 125 cm3.",
+    "aDescription": "Xe mô tô hai bánh có dung tích xi-lanh từ 125 cm3 trở lên và các loại xe quy định cho giấy phép lái xe hạng A1.",
+    "bDescription": "Xe ô tô chở người đến 08 chỗ (không kể chỗ của người lái xe); xe ô tô tải và ô tô chuyên dùng có khối lượng toàn bộ theo thiết kế đến 3.500 kg; các loại xe ô tô quy định cho giấy phép lái xe hạng B kéo rơ moóc có khối lượng toàn bộ theo thiết kế đến 750 kg.",
+    "b1Description": "Xe mô tô ba bánh và các loại xe quy định cho giấy phép lái xe hạng A1.",
+    "b2Description": "dành cho người điều khiển ô tô chở người dưới 9 chỗ, xe tải dưới 3.500 kg và được hành nghề lái xe kinh doanh vận tải.",
+    "c1Description": "Xe ô tô tải và ô tô chuyên dùng có khối lượng toàn bộ theo thiết kế trên 3.500 kg đến 7.500 kg; các loại xe ô tô tải quy định cho giấy phép lái xe hạng C1 kéo rơ moóc có khối lượng toàn bộ theo thiết kế đến 750 kg; các loại xe quy định cho giấy phép lái xe hạng B.",
+    "defTitle": "Nâng hạng DEF",
+    "defDescription": "dành cho người điều khiển ô tô chở người 10 đến 30 chỗ; trên 30 chỗ; lái xe kéo rơ-mooc.",
+    "startButton": "Thi thử",
+    "learnButton": "Luyện thi"
+  },
+  "ContactPage": {
+    "contact": "Liên hệ với chúng tôi",
+    "contactNow": "Liên hệ ngay",
+    "info": "Thông tin liên hệ",
+    "description": "Đừng ngần ngại, hãy gửi tin nhắn cho chúng tôi!",
+    "address": "227 Đường Nguyễn Văn Cừ, Phường Chợ Quán, Thành phố Hồ Chí Minh",
+    "topic": "Chủ đề liên hệ",
+    "systemError": "Lỗi hệ thống",
+    "technicalSupport": "Hỗ trợ kỹ thuật",
+    "cooperation": "Liên hệ hợp tác",
+    "other": "Khác",
+    "firstName": "Họ",
+    "lastName": "Tên",
+    "email": "Email",
+    "phone": "Số điện thoại",
+    "content": "Nội dung",
+    "send": "Gửi",
+    "successMessage": "Tin nhắn của bạn đã được gửi thành công. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất."
   }
 }

@@ -107,20 +107,11 @@ const LearnCriticalPage = () => {
           license_name: license,
         })
 
-        const formattedQuestions: LearningQuestionDTO[] = data.map(
-          (item: any) => ({
-            question: item,
-            answers: item.lua_chon.some((a: LuaChon) => a.so_thu_tu === 0)
-              ? shuffleAnswers(item.lua_chon)
-              : item.lua_chon.sort(
-                  (a: LuaChon, b: LuaChon) => a.so_thu_tu - b.so_thu_tu
-                ),
-          })
-        )
+        console.log(data)
 
         setPagination((prev) => ({ ...prev, total: data.length }))
 
-        setQuestions(formattedQuestions)
+        setQuestions(data)
       } catch (error) {
         console.log(error)
       }
