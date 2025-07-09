@@ -15,13 +15,6 @@ import { useState } from 'react'
 import { Textarea } from '@/components/ui/textarea'
 import toast from 'react-hot-toast'
 
-const options = [
-  { id: 'system-error', label: 'Lỗi hệ thống' },
-  { id: 'technical-support', label: 'Hỗ trợ kỹ thuật' },
-  { id: 'partnership', label: 'Liên hệ hợp tác' },
-  { id: 'other', label: 'Khác (Chi rõ nội dung)' },
-]
-
 function ContactPage() {
   const t = useTranslations('ContactPage')
   const [selectedOption, setSelectedOption] = useState('system-error')
@@ -31,6 +24,13 @@ function ContactPage() {
     toast.success(t('successMessage'))
   }
 
+  const options = [
+    { id: 'system-error', label: t('systemError') },
+    { id: 'technical-support', label: t('technicalSupport') },
+    { id: 'partnership', label: t('cooperation') },
+    { id: 'other', label: t('other') },
+  ]
+
   return (
     <div>
       <p className="w-full text-[40px] font-extrabold text-purple text-center">
@@ -38,7 +38,7 @@ function ContactPage() {
       </p>
       <p className="text-lg w-full text-center">{t('contactNow')}</p>
 
-      <div className="w-[1200px] h-[667px] mt-9 shadow-[0px_0px_50px_26px_rgba(0,0,0,0.04)] rounded-[10px] mx-auto p-[10px] flex">
+      <div className="w-[1200px] h-[667px] my-9 shadow-[0px_0px_50px_26px_rgba(0,0,0,0.04)] rounded-[10px] mx-auto p-[10px] flex">
         <div className="w-[491px] h-full p-10 text-white flex flex-col justify-between bg-[#7869AD] rounded-tl-[10px] rounded-bl-[10px]">
           <div>
             <p className="font-bold text-[32px]">{t('info')}</p>
