@@ -224,6 +224,20 @@
     "startButton": "Thi thử",
     "learnButton": "Luyện thi"
   },
+  "AustraliaRoadmapPage": {
+    "title": "ÔN LUYỆN THEO LỘ TRÌNH",
+    "licenseClasses": "Các hạng bằng lái",
+    "description": "Chức năng Ôn luyện theo lộ trình hướng dẫn người dùng ôn luyện từng câu hỏi. Hệ thống chia nhỏ nội dung thành các chương, giúp bạn từng bước làm quen với bộ câu hỏi và nâng cao kỹ năng trước khi tham gia kỳ thi thực tế.",
+    "startButton": "Thi thử",
+    "learnButton": "Luyện thi",
+    "rDescription": "Cho phép bạn lái xe máy và xe tay ga. Người mới bắt đầu phải hoàn thành Chương trình Xe máy được Người học Chấp thuận (LAMS) trước khi chuyển sang giấy phép Lái ​​xe chính thức.",
+    "cDescription": "Cho phép bạn lái xe ô tô, xe tải và xe bán tải có Tổng trọng lượng xe (GVM) lên đến 4,5 tấn và chở tối đa 12 người, bao gồm cả tài xế. Bạn cũng có thể kéo rơ moóc có GVM lên đến 9 tấn.",
+    "lrDescription": "Lái xe có tổng trọng tải toàn phần (GVM) trên 4,5 tấn nhưng không quá 8 tấn, bao gồm xe buýt trên 12 chỗ ngồi.",
+    "mrDescription": "Lái xe có hai trục và GVM trên 8 tấn, thường được sử dụng cho xe buýt cỡ trung.",
+    "hrDescription": "Lái xe có ba trục trở lên và GVM trên 8 tấn, bao gồm xe buýt có khớp nối (uốn cong).",
+    "hcDescription": "Lái xe tải nặng kéo theo rơ moóc có tổng trọng tải trên 9 tấn. Bao gồm cả sơ mi rơ moóc.",
+    "mcDescription": "Lái những tổ hợp xe lớn nhất như B-double và xe đường trường. Cần được đào tạo và kiểm tra thêm."
+  },
   "ContactPage": {
     "contact": "Liên hệ với chúng tôi",
     "contactNow": "Liên hệ ngay",
@@ -242,5 +256,26 @@
     "content": "Nội dung",
     "send": "Gửi",
     "successMessage": "Tin nhắn của bạn đã được gửi thành công. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất."
+  },
+  "LearnPage": {
+    "start": "CHƯA BIẾT BẮT ĐẦU TỪ ĐÂU?",
+    "startDescription": "Chức năng Học theo lộ trình hướng dẫn người dùng ôn luyện từ cơ bản đến nâng cao qua các bài thi được sắp xếp theo thứ tự hợp lý. Hệ thống chia nhỏ nội dung thành các phần, giúp bạn từng bước làm quen với bộ câu hỏi và nâng cao kỹ năng trước khi tham gia kỳ thi thực tế.",
+    "startButton": "BẮT ĐẦU",
+    "learning": "HỌC TỰ DO",
+    "learningDescription": "cho phép bạn chọn bất kỳ câu hỏi, biển báo, hoặc nội dung nào để ôn luyện theo ý thích, giúp học tập linh hoạt và tập trung vào những phần bạn cần cải thiện.",
+    "signs": "HỌC BIỂN BÁO GIAO THÔNG:",
+    "signsDescription": "Cung cấp danh sách biển báo kèm giải thích chi tiết, giúp bạn ghi nhớ nhanh và chính xác.",
+    "criticalQuestions": "HỌC CÂU ĐIỂM LIỆT:",
+    "criticalQuestionsDescription": "Tập trung ôn luyện các câu hỏi quan trọng, bắt buộc phải trả lời đúng để vượt qua kỳ thi.",
+    "challengeBank": "LÀM LẠI NHỮNG CÂU SAI:",
+    "challengeBankDescription": "Lưu lại và giúp bạn luyện tập các câu hỏi đã trả lời sai để cải thiện điểm số và nắm chắc kiến thức.",
+    "readyToTest": "Sẵn sàng để thi thử?",
+    "readyToTestDescription": "Nếu bạn đã sẵn sàng, hãy bắt đầu Thi thử ngay để kiểm tra kiến thức và đánh giá mức độ chuẩn bị của mình!",
+    "testButton": "THI THỬ"
+  },
+  "SignPage": {
+    "learnSigns": "ÔN LUYỆN BIỂN BÁO GIAO THÔNG",
+    "learnSignsDescription": "Dưới đây là tên, kí hiệu và ý nghĩa của các biển báo hiện hành giúp bạn làm quen và ghi nhớ các loại biển báo giao thông một cách trực quan và dễ hiểu.",
+    "list": "DANH SÁCH "
   }
 }

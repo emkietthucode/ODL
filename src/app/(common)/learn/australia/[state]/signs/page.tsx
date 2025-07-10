@@ -7,19 +7,11 @@ import supabase from '@/utils/supabase/supabase'
 import { useEffect, useState } from 'react'
 import { IoIosSearch } from 'react-icons/io'
 
-import Amico from '../../../../../../public/images/amico.svg'
+import Amico from '../../../../../../../public/images/amico.svg'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 
-const sign_types = [
-  'Biển báo cấm',
-  'Biển báo chỉ dẫn',
-  'Biển báo chỉ dẫn trên đường cao tốc',
-  'Biển báo hiệu lệnh',
-  'Biển báo nguy hiểm',
-  'Biển báo phụ',
-  'Vạch kẻ đường',
-]
+const sign_types = ['Regulatory signs', 'Warning signs']
 
 const prefix =
   'https://cgtsomijxwpcyqgznjqx.supabase.co/storage/v1/object/public/bienbao//'
@@ -83,7 +75,7 @@ function LearnSigns() {
       </div>
 
       <div className="max-w-[1400px] mb-5 ">
-        <div className="flex justify-between">
+        <div className="flex gap-2">
           {sign_types.map((item, index) => (
             <button
               key={index}

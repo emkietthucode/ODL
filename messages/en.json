@@ -226,6 +226,20 @@
     "startButton": "Start learning",
     "learnButton": "Learn"
   },
+  "AustraliaRoadmapPage": {
+    "title": "DRIVING LICENSE LEARNING ROADMAP",
+    "licenseClasses": "Driver's license classes",
+    "description": "The Roadmap feature help users practice each question in the question pool. The system breaks down the content into chapters, helping you gradually familiarize yourself with the question set and improve your skills before taking the actual exam. ",
+    "startButton": "Start learning",
+    "learnButton": "Learn",
+    "rDescription": "Allows you to ride motorcycles and scooters. Beginners must complete the Learner Approved Motorcycle Scheme (LAMS) before progressing to a full Rider licence.",
+    "cDescription": "Allows you to drive cars, vans, and utes with a Gross Vehicle Mass (GVM) of up to 4.5 tonnes and carry up to 12 people including the driver. You can also tow trailers up to 9 tonnes GVM.",
+    "lrDescription": "Drive vehicles with a GVM over 4.5 tonnes but not exceeding 8 tonnes, including buses with more than 12 seats.",
+    "mrDescription": "Drive vehicles with two axles and a GVM over 8 tonnes, commonly used for medium-sized buses.",
+    "hrDescription": "Drive vehicles with three or more axles and a GVM over 8 tonnes, including articulated (bendy) buses.",
+    "hcDescription": "Drive a heavy rigid vehicle towing a trailer over 9 tonnes GVM. Includes semi-trailers.",
+    "mcDescription": "Drive the largest combinations like B-doubles and road trains. Requires additional training and testing."
+  },
   "ContactPage": {
     "contact": "Contact us",
     "contactNow": "Contact us now",
@@ -244,5 +258,26 @@
     "content": "Content",
     "send": "Send",
     "successMessage": "Your message has been sent successfully. We will contact you as soon as possible."
+  },
+  "LearnPage": {
+    "start": "DON'T KNOW WHERE TO START?",
+    "startDescription": "The Roadmap function guides users to practice from basic to advanced through tests arranged in a logical order. The system divides the content into sections, helping you gradually get acquainted with the question set and improve your skills before taking the actual exam.",
+    "startButton": "Start",
+    "learning": "Learning",
+    "learningDescription": "allows you to choose any questions, signs, or content to review at your own pace, allowing for flexible learning and focusing on the areas you need to improve.",
+    "signs": "LEARN SIGNS:",
+    "signsDescription": "Provide a list of signs with detailed explanations, helping you to memorize quickly and accurately.",
+    "criticalQuestions": "LEARN CRITICAL QUESTIONS:",
+    "criticalQuestionsDescription": "Focus on reviewing important questions that must be answered correctly to pass the exam.",
+    "challengeBank": "CHALLENGE BANK:",
+    "challengeBankDescription": "Review and practice the questions you answered incorrectly in the previous tests, helping you to avoid repeating mistakes.",
+    "readyToTest": "Ready to take the test?",
+    "readyToTestDescription": "If you're ready, start the Practice Test now to test your knowledge and assess your level of preparation!",
+    "testButton": "Take a test"
+  },
+  "SignPage": {
+    "learnSigns": "LEARN TRAFFIC SIGNS",
+    "learnSignsDescription": "The Traffic Signs Learning function provides a list of signs with detailed explanations, helping you memorize quickly and accurately. The system divides the content into sections, helping you gradually get acquainted with the question set and improve your skills before taking the actual exam.",
+    "list": "LIST OF "
   }
 }
