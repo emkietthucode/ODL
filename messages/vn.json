@@ -224,6 +224,20 @@
     "startButton": "Thi thử",
     "learnButton": "Luyện thi"
   },
+  "AustraliaRoadmapPage": {
+    "title": "ÔN LUYỆN THEO LỘ TRÌNH",
+    "licenseClasses": "Các hạng bằng lái",
+    "description": "Chức năng Ôn luyện theo lộ trình hướng dẫn người dùng ôn luyện từng câu hỏi. Hệ thống chia nhỏ nội dung thành các chương, giúp bạn từng bước làm quen với bộ câu hỏi và nâng cao kỹ năng trước khi tham gia kỳ thi thực tế.",
+    "startButton": "Thi thử",
+    "learnButton": "Luyện thi",
+    "rDescription": "Cho phép bạn lái xe máy và xe tay ga. Người mới bắt đầu phải hoàn thành Chương trình Xe máy được Người học Chấp thuận (LAMS) trước khi chuyển sang giấy phép Lái ​​xe chính thức.",
+    "cDescription": "Cho phép bạn lái xe ô tô, xe tải và xe bán tải có Tổng trọng lượng xe (GVM) lên đến 4,5 tấn và chở tối đa 12 người, bao gồm cả tài xế. Bạn cũng có thể kéo rơ moóc có GVM lên đến 9 tấn.",
+    "lrDescription": "Lái xe có tổng trọng tải toàn phần (GVM) trên 4,5 tấn nhưng không quá 8 tấn, bao gồm xe buýt trên 12 chỗ ngồi.",
+    "mrDescription": "Lái xe có hai trục và GVM trên 8 tấn, thường được sử dụng cho xe buýt cỡ trung.",
+    "hrDescription": "Lái xe có ba trục trở lên và GVM trên 8 tấn, bao gồm xe buýt có khớp nối (uốn cong).",
+    "hcDescription": "Lái xe tải nặng kéo theo rơ moóc có tổng trọng tải trên 9 tấn. Bao gồm cả sơ mi rơ moóc.",
+    "mcDescription": "Lái những tổ hợp xe lớn nhất như B-double và xe đường trường. Cần được đào tạo và kiểm tra thêm."
+  },
   "ContactPage": {
     "contact": "Liên hệ với chúng tôi",
     "contactNow": "Liên hệ ngay",

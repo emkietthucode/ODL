@@ -8,13 +8,13 @@ import { useEffect, useMemo, useState } from 'react'
 import { Pie, PieChart } from 'recharts'
 import { ChartConfig, ChartContainer } from '@/components/ui/chart'
 import { FaLock } from 'react-icons/fa'
-import WorkingDesk from '../../../../../../public/images/working-desk.svg'
+import WorkingDesk from '../../../../../../../public/images/working-desk.svg'
 import Image from 'next/image'
 import { Progress } from '@/components/ui/progress'
-import Card1 from '../../../../../../public/images/f11LearningCardIcon1.svg'
-import Card2 from '../../../../../../public/images/f11LearningCardIcon2.svg'
-import Card3 from '../../../../../../public/images/f11LearningCardIcon3.svg'
-import Card4 from '../../../../../../public/images/f11LearningCardIcon4.svg'
+import Card1 from '../../../../../../../public/images/f11LearningCardIcon1.svg'
+import Card2 from '../../../../../../../public/images/f11LearningCardIcon2.svg'
+import Card3 from '../../../../../../../public/images/f11LearningCardIcon3.svg'
+import Card4 from '../../../../../../../public/images/f11LearningCardIcon4.svg'
 import FeatureCard from '@/components/feature-card'
 import { Chuong, LoTrinh } from '@/types/types'
 import { cn } from '@/lib/utils'
@@ -80,7 +80,7 @@ function LearningPathPage() {
     const fetchData = async () => {
       try {
         const { data: pathData, error: pathDataError } = await supabase.rpc(
-          'fetch_learning_path_info',
+          'fetch_australia_path_info',
           {
             path_name: licenseName,
           }
@@ -126,8 +126,6 @@ function LearningPathPage() {
     }
   }
 
-  console.log('chartData::', chartData)
-
   return (
     <div>
       <div className="w-full max-w-[1080px]  mt-10 mb-[52px] mx-auto relative ">
@@ -139,12 +137,12 @@ function LearningPathPage() {
           {t('description')}
         </p>
       </div>
-      <div className="w-full bg-light-purple h-[482px] ">
+      <div className="w-full bg-light-purple h-[600px]">
         <div className="max-w-[1065px] mx-auto pt-[23px] pb-[28px]">
           <p className="uppercase font-semibold text-[20px] text-purple">
             {t('yourProgress')}
           </p>
-          <div className="flex gap-[65px] h-[382px] mt-[25px]">
+          <div className="flex gap-[65px] h-[456px] mt-[25px]">
             <div className="w-60 h-full bg-[#F6F4FD] rounded-[16px]">
               <p className="w-full text-center font-medium text-[14px] text-[#3D7199] mt-[25px] mb-[36px]">
                 {t('doneChapter')}
@@ -178,8 +176,8 @@ function LearningPathPage() {
             </div>
 
             <div className="w-[760px] h-full flex flex-col">
-              <div className="w-full items-center flex-wrap flex-1 flex bg-light-purple-admin rounded-t-[16px] gap-4 justify-center">
-                {chaptersData?.map((chapter: ChuongExtended, index) => (
+              <div className="px-8 py-2 items-center flex-wrap flex-1 flex bg-light-purple-admin rounded-t-[16px] gap-4 justify-start">
+                {chaptersData?.map((chapter, index) => (
                   <button
                     disabled={!chaptersData[index - 1]?.passed && index > 0}
                     onClick={() => {

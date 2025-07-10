@@ -115,6 +115,7 @@ const NavBar = () => {
         flag: state.quoc_ky,
         locale: state.ky_hieu,
         nation: state.quoc_gia,
+        slug: state.slug,
         id: state.id,
       }))
       const nationsWithRegions = formattedNations.map((nation: any) => {
@@ -233,6 +234,8 @@ const NavBar = () => {
 
     fetchedNation()
   }, [user, nations])
+
+  console.log(nations)
 
   return (
     <div className="h-10 bg-custom-light-violet flex justify-center text-purple">
