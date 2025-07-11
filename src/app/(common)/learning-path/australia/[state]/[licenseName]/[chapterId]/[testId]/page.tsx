@@ -252,7 +252,7 @@ function LearningTestPage() {
 
   return (
     <div className="w-[960px] mt-12 mx-auto">
-      <div className="bg-[#A08CE6] h-9 leading-9 text-center text-[18] font-bold text-white uppercase">
+      <div className="bg-[#A08CE6] h-9 leading-9 text-center text-[18] font-bold text-white">
         {t('testName') || 'BÀI THI'}
       </div>
       <div className="my-2 h-80 gap-[10px] flex flex-wrap">

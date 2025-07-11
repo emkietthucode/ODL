@@ -110,7 +110,7 @@ function LearningPathPage() {
   const handleCreateTest = async () => {
     try {
       setIsTestCreated(false)
-      const { data, error } = await supabase.rpc('create_test', {
+      const { data, error } = await supabase.rpc('create_test_australia', {
         user_id: user?.id,
         chapter_id: selectedChapter?.id,
         license_name: licenseName,

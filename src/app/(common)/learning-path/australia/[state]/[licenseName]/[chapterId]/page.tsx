@@ -251,7 +251,7 @@ function LearningPage() {
   const handleCreateTest = async () => {
     try {
       setIsTestCreated(false)
-      const { data, error } = await supabase.rpc('create_test', {
+      const { data, error } = await supabase.rpc('create_test_australia', {
         user_id: user?.id,
         chapter_id: chapterData?.id,
         license_name: licenseName,
@@ -260,7 +260,7 @@ function LearningPage() {
       if (error) {
         console.log(error)
       } else {
-        router.push(pathname + `/${chapterId}/${data}`)
+        router.push(pathname + `/${data}`)
       }
     } catch (error: any) {
       console.log(error)
@@ -361,7 +361,10 @@ function LearningPage() {
             BẠN ĐÃ HOÀN THÀNH {chapterData?.ten_chuong}{' '}
           </p>
 
-          <button className="min-w-20 text-white h-9 text-xs uppercase font-medium rounded-[16px] bg-[#5CAAE6]">
+          <button
+            onClick={() => handleCreateTest()}
+            className="min-w-20 text-white h-9 text-xs uppercase font-medium rounded-[16px] bg-[#5CAAE6]"
+          >
             KIEM TRA
           </button>
         </div>

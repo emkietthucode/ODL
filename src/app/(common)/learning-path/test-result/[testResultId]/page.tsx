@@ -10,6 +10,7 @@ import FailImage from '../../../../../../public/images/f7.2.2-fail.svg'
 import { useEffect, useState } from 'react'
 import supabase from '@/utils/supabase/supabase'
 import { cn } from '@/lib/utils'
+import { useTranslations } from 'next-intl'
 
 function TestResult() {
   const { testResultId } = useParams<{ testResultId: string }>()
@@ -31,6 +32,8 @@ function TestResult() {
     ma_chuong: '',
   })
   const pathname = usePathname()
+  const selectedCountry = localStorage.getItem('selectedCountry') || 'vietnam'
+  const t = useTranslations('TestResultPage')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +41,14 @@ function TestResult() {
         const { data, error } = await supabase.rpc('fetch_test_result', {
           result_id: testResultId,
         })
+
+        if (selectedCountry.includes('australia')) {
+          if (data.ten_hang_bang == 'RIDER (R)') {
+            data.ten_hang_bang = 'rider'
+          } else {
+            data.ten_hang_bang = 'car'
+          }
+        }
 
         setResult(data)
       } catch (error: any) {
@@ -59,7 +70,7 @@ function TestResult() {
             result.pass ? 'text-[#93B597]' : 'text-[#C88572]'
           )}
         >
-          {result.pass ? 'ĐẠT' : 'KHÔNG ĐẠT'}
+          {result.pass ? t('passed') : t('fail')}
           {result.pass ? (
             <FaCircleCheck
               fill="#93B597"
@@ -75,28 +86,28 @@ function TestResult() {
 
         <div className="flex flex-col">
           <div className="flex items-center gap-[96px] mb-7">
-            <p className="text-[#7869AD] flex-1">Tổng số câu hỏi</p>
+            <p className="text-[#7869AD] flex-1">{t('totalQuestion')}</p>
             <p className="font-semibold text-purple text-lg text-end">
               {result.so_luong_cau_hoi}
             </p>
           </div>
 
           <div className="flex items-center gap-[96px] mb-7">
-            <p className="text-[#7869AD] flex-1">Yêu cầu</p>
+            <p className="text-[#7869AD] flex-1">{t('requirement')}</p>
             <p className="font-semibold text-purple text-lg text-end">
               {result.yeu_cau}/{result.so_luong_cau_hoi}
             </p>
           </div>
 
           <div className="flex items-center gap-[96px] mb-7">
-            <p className="text-[#7869AD] flex-1">Số câu đúng</p>
+            <p className="text-[#7869AD] flex-1">{t('correctAnswers')}</p>
             <p className="font-semibold text-custom-green text-lg text-end">
               {result.so_cau_dung}/{result.so_luong_cau_hoi}
             </p>
           </div>
 
           <div className="flex items-center gap-[96px] mb-7">
-            <p className="text-[#7869AD] flex-1">Số câu sai</p>
+            <p className="text-[#7869AD] flex-1">{t('wrongAnswers')}</p>
             <p className="font-semibold text-custom-brown text-lg text-end">
               {result.so_luong_cau_hoi - result.so_cau_dung}/
               {result.so_luong_cau_hoi}
@@ -107,7 +118,7 @@ function TestResult() {
             href={pathname + '/details'}
             className="w-60 h-10 text-2xl font-bold mx-auto bg-[#A08CE6] text-white rounded-full flex items-center justify-center"
           >
-            XEM CHI TIẾT
+            {t('showDetails')}
           </Link>
         </div>
 
@@ -122,38 +133,32 @@ function TestResult() {
 
       <div className="w-[661px] mx-auto space-y-7 my-7">
         <div className="flex justify-between items-center">
-          <p className="text-[#5297CC] font-medium">
-            Chưa hài lòng với kết quả? Làm bài lại ngay
-          </p>
+          <p className="text-[#5297CC] font-medium">{t('notSatisfied')}</p>
           <Link
-            href={`/learning-path/vietnam/${result.ten_hang_bang}/${result.ma_chuong}/${result.ma_de_thi}`}
+            href={`/learning-path/${selectedCountry}/${result.ten_hang_bang}/${result.ma_chuong}/${result.ma_de_thi}`}
             className="h-9 text-[#5297CC] bg-[#D0EBFF] rounded-full px-2 flex items-center"
           >
-            LÀM BÀI LẠI
+            {t('retestButton')}
           </Link>
         </div>
 
         <div className="flex justify-between items-center">
-          <p className="text-[#5297CC] font-medium">
-            Bạn muốn học lại chương này
-          </p>
+          <p className="text-[#5297CC] font-medium">{t('continueLearning')}</p>
           <Link
-            href={`/learning-path/vietnam/${result.ten_hang_bang}/${result.ma_chuong}`}
+            href={`/learning-path/${selectedCountry}/${result.ten_hang_bang}/${result.ma_chuong}`}
             className="h-9 text-[#5297CC] bg-[#D0EBFF] rounded-full px-2 flex items-center"
           >
-            HỌC LẠI
+            {t('learningButton')}
           </Link>
         </div>
 
         <div className="flex justify-between items-center">
-          <p className="text-[#5297CC] font-medium">
-            Ôn tập lại những câu mà bạn đã làm sai
-          </p>
+          <p className="text-[#5297CC] font-medium">{t('challengeBank')}</p>
           <Link
             href="/missed-questions"
             className="h-9 text-[#5297CC] bg-[#D0EBFF] rounded-full px-2 flex items-center"
           >
-            CHALLENGE BANK
+            {t('challengeBankButton')}
           </Link>
         </div>
       </div>

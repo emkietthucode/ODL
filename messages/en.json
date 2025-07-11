@@ -164,7 +164,8 @@
   },
   "LearningTestPage": {
     "question": "Question",
-    "submit": "Submit"
+    "submit": "Submit",
+    "testName": "Roadmap Test"
   },
   "LearningCategory": {
     "title": "DRIVING LICENSE LEARNING ROADMAP",
@@ -279,5 +280,28 @@
     "learnSigns": "LEARN TRAFFIC SIGNS",
     "learnSignsDescription": "The Traffic Signs Learning function provides a list of signs with detailed explanations, helping you memorize quickly and accurately. The system divides the content into sections, helping you gradually get acquainted with the question set and improve your skills before taking the actual exam.",
     "list": "LIST OF "
+  },
+  "TestResultPage": {
+    "pass": "Passed",
+    "fail": "Failed",
+    "totalQuestion": "Total questions",
+    "requirement": "Required",
+    "correctAnswers": "Correct answers",
+    "wrongAnswers": "Wrong answers",
+    "showDetails": "Details",
+    "notSatisfied": "Not satisfied with the results? Do it again now",
+    "retestButton": "Take the test again",
+    "continueLearning": "You want to continue learning this chapter?",
+    "learningButton": "Continue learning",
+    "challengeBank": "Review the questions you got wrong.",
+    "challengeBankButton": "Challenge Bank"
+  },
+  "TestResultDetailsPage": {
+    "title": "Test Result",
+    "pass": "Passed",
+    "fail": "Failed",
+    "point": "Points",
+    "time": "Time",
+    "testName": "Test name"
   }
 }
