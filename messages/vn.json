@@ -163,7 +163,8 @@
   },
   "LearningTestPage": {
     "question": "Câu hỏi",
-    "submit": "Nộp bài"
+    "submit": "Nộp bài",
+    "testName": "Bài thi lộ trình"
   },
   "LearningCategory": {
     "title": "LỘ TRÌNH HỌC BẰNG LÁI",
@@ -277,5 +278,28 @@
     "learnSigns": "ÔN LUYỆN BIỂN BÁO GIAO THÔNG",
     "learnSignsDescription": "Dưới đây là tên, kí hiệu và ý nghĩa của các biển báo hiện hành giúp bạn làm quen và ghi nhớ các loại biển báo giao thông một cách trực quan và dễ hiểu.",
     "list": "DANH SÁCH "
+  },
+  "TestResultPage": {
+    "pass": "Đạt",
+    "fail": "Không đạt",
+    "totalQuestion": "Tông số câu hỏi",
+    "requirement": "Yêu cầu",
+    "correctAnswers": "Số câu đúng",
+    "wrongAnswers": "Số câu sai",
+    "showDetails": "Xem chi tiết",
+    "notSatisfied": "Chưa hài lòng với kết quả? Làm bài lại ngay",
+    "retestButton": "LÀM BÀI LẠI",
+    "continueLearning": " Bạn muốn học lại chương này",
+    "learningButton": "HỌC LẠI",
+    "challengeBank": " Ôn tập lại những câu mà bạn đã làm sai.",
+    "challengeBankButton": "Challenge Bank"
+  },
+  "TestResultDetailsPage": {
+    "title": "KẾT QUẢ BÀI THI",
+    "pass": "Đạt",
+    "fail": "Không đạt",
+    "point": "Điểm",
+    "time": "Thời gian",
+    "testName": "Tên bài thi"
   }
 }

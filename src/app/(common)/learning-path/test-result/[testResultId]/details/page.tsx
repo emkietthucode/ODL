@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 // Function to get optimized image URL
 const getOptimizedImageUrl = (imageName: string, width: number = 370) => {
@@ -42,6 +43,7 @@ function ResultDetails() {
   const [imageLoadingStates, setImageLoadingStates] = useState<
     Record<number, boolean>
   >({})
+  const t = useTranslations('TestResultDetailsPage')
 
   useEffect(() => {
     const fetchResult = async () => {
@@ -200,7 +202,7 @@ function ResultDetails() {
       <div className="w-full h-[116px] py-4 px-11 mt-10 mx-auto relative bg-light-purple flex justify-between">
         <div className="flex flex-col items-center">
           <p className="uppercase text-xl text-purple font-bold">
-            KẾT QUẢ THI THỬ
+            {t('title')}
           </p>
           <p
             className={cn(
@@ -208,14 +210,12 @@ function ResultDetails() {
               result.pass ? 'text-[#93B597]' : 'text-[#C88572]'
             )}
           >
-            {result.pass ? 'ĐẠT' : 'KHÔNG ĐẠT'}
+            {result.pass ? t('pass') : t('fail')}
           </p>
         </div>
         <div className="ml-20 text-purple italic">
-          <p>Đề: 01</p>
-          <p>Hoàn thành: 12:00</p>
           <p>
-            Điểm: {result.so_cau_dung}/{result.so_luong_cau_hoi}
+            {t('point')}: {result.so_cau_dung}/{result.so_luong_cau_hoi}
           </p>
         </div>
         <div className="px-8 bg-[#F1EEFB] rounded-[18px]">

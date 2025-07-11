@@ -358,8 +358,11 @@ function LearningPage() {
             BẠN ĐÃ HOÀN THÀNH {chapterData?.ten_chuong}{' '}
           </p>
 
-          <button className="min-w-20 text-white h-9 text-xs uppercase font-medium rounded-[16px] bg-[#5CAAE6]">
-            KIEM TRA
+          <button
+            onClick={() => handleCreateTest()}
+            className="min-w-20 text-white h-9 text-xs uppercase font-medium rounded-[16px] bg-[#5CAAE6]"
+          >
+            {t('testButton')}
           </button>
         </div>
       )}
