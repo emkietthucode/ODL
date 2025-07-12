@@ -20,6 +20,7 @@ import { signInWithGoogle } from '../actions'
 import { Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { createLoginFormSchema, LoginFormType } from '@/types/schemas/login' // Adjust import path
+import Link from 'next/link'
 
 interface LoginFormProps {
   onSubmit: (data: LoginFormType) => void
@@ -95,9 +96,9 @@ function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
               {t('remember')}
             </label>
           </div>
-          <Button variant="link" className="px-0">
+          <Link href="/auth/forgot-password" className="px-0 hover:underline">
             {t('forgot')}
-          </Button>
+          </Link>
         </div>
 
         <Button
