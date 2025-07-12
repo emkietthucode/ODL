@@ -27,7 +27,7 @@ import WrongQuestions from '../../../public/images/wrong-questions.svg'
 import Fly from '../../../public/images/fly.svg'
 import { IoIosCloseCircleOutline } from 'react-icons/io'
 import { FaRegCheckCircle } from 'react-icons/fa'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6'
 import { GoClock } from 'react-icons/go'
@@ -52,27 +52,35 @@ const poppins = Poppins({
   variable: '--font-poppins',
 })
 
-const carousels = [
-  {
-    title: 'Học câu điểm liệt',
-    description: 'Những câu hỏi về tình huống vi phạm giao thông nghiêm trọng.',
-    image: Traffic,
-  },
-  {
-    title: 'Học biển báo',
-    description: 'Những câu hỏi về tình huống vi phạm giao thông nghiêm trọng.',
-    image: Sign,
-  },
-  {
-    title: 'Học những câu thường sai',
-    image: WrongQuestions,
-  },
-]
-
 const Home = () => {
   const t = useTranslations('HomePage')
   const [index, setIndex] = useState<number>(0)
 
+  const [locale, setLocale] = useState<string>('vietnam')
+  const carousels = [
+    {
+      title: t('learnCritical'),
+      description: t('learnCriticalDescription'),
+      image: Traffic,
+    },
+    {
+      title: t('learnSigns'),
+      description: t('learnSignsDescription'),
+      image: Sign,
+    },
+    {
+      title: t('challengeBank'),
+      image: WrongQuestions,
+    },
+  ]
+
+  useEffect(() => {
+    setLocale(
+      typeof window !== 'undefined'
+        ? window.localStorage.getItem('selectedCountry') || 'vietnam'
+        : 'vietnam'
+    )
+  }, [])
   return (
     <main className="text-left w-full  bg-white">
       <div className=" bg-white max-w-[1200px] mx-auto left-0 p-10">
@@ -82,15 +90,10 @@ const Home = () => {
         <p
           className={`mt-10 text-[40px] font-extrabold max-w-[391px] ${vollkorn.className}`}
         >
-          Chinh phục tay lái, vượt mọi giới hạn!
+          {t('quote')}
         </p>
 
-        <p className="max-w-[470px] mt-[26px]">
-          ODL mang đến giải pháp ôn thi bằng lái xe nhanh chóng và tiện lợi,
-          giúp bạn học mọi lúc, mọi nơi. Hệ thống bài thi sát thực tế và hỗ trợ
-          đa quốc gia, ODL đồng hành cùng bạn trên hành trình chinh phục kỳ thi
-          lái xe dễ dàng nhất.
-        </p>
+        <p className="max-w-[470px] mt-[26px]">{t('description')}</p>
         <div className="flex mt-[90px] gap-[100px] items-center">
           <Link href="/learning-path">
             <Button
@@ -98,7 +101,7 @@ const Home = () => {
               size="auto"
               className="text-[28px] h-[54px] p-[10px] rounded-full shadow-lg min-w-40"
             >
-              Luyện thi
+              {t('learnButton')}
             </Button>
           </Link>
 
@@ -106,7 +109,9 @@ const Home = () => {
             <button className="flex items-center gap-[17px]">
               <IoMdArrowDroprightCircle size={67} fill="#DF6951" />
 
-              <span className="text-[#686D77] text-[17px]">Thi thử</span>
+              <span className="text-[#686D77] text-[17px]">
+                {t('testButton')}
+              </span>
             </button>
           </Link>
         </div>
@@ -118,197 +123,111 @@ const Home = () => {
 
       <div className="pt-[38px] mt-6">
         <p className="w-full text-center uppercase font-semibold text-[#5E6282]">
-          thi thử
+          {t('testing')}
         </p>
         <p
           className={`w-full text-center text-4xl font-bold mt-[6px] ${montserratAlter.className}`}
         >
-          Các Hạng Bằng Thông Dụng
+          {t('commonLicense')}
         </p>
 
-        <div className="mt-16 flex w-full justify-center gap-[86px]">
-          <Link href="/tests/vietnam/a1">
-            <Card className="w-[267px] h-[308px] rounded-[36px] px-[50px] py-20 relative">
-              <CardHeader className="mb-8 p-0">
-                <h1 className="w-full leading-[48px]  text-center text-[48px] font-bold">
-                  A1
-                </h1>
-              </CardHeader>
-              <CardContent className="p-0">
-                <p className="text-center w-full max-w-[167px] mx-auto">
-                  Xe mô tô hai bánh có dung tích xi-lanh từ 50 đến 125 cm3.
-                </p>
-              </CardContent>
-              <div className="bg-[#FF9ABB] text-center leading-[60px] w-[60px] h-[60px] rounded-full font-bold text-4xl text-[#DF5753] absolute left-1/2 -top-[30px] -translate-x-1/2">
-                1
-              </div>
-            </Card>
-          </Link>
-
-          <Link href="/tests/vietnam/a">
-            <Card className="w-[267px] h-[308px] rounded-[36px] px-[28px] pt-20 relative">
-              <CardHeader className="mb-8 p-0">
-                <p className="w-full text-center text-[48px] leading-[48px] font-bold">
-                  A
-                </p>
-              </CardHeader>
-              <CardContent className="p-0">
-                <p className="text-center w-full  mx-auto">
-                  Xe mô tô hai bánh có dung tích xi-lanh từ 125 cm3 trở lên và
-                  các loại xe quy định cho giấy phép lái xe hạng A1.{' '}
-                </p>
-              </CardContent>
-              <div className="bg-[#BBE7D9] text-center leading-[60px] w-[60px] h-[60px] rounded-full font-bold text-4xl text-[#11513C] absolute left-1/2 -top-[30px] -translate-x-1/2">
-                2
-              </div>
-            </Card>
-          </Link>
-
-          <Link href="/tests/vietnam/b1">
-            <Card className="w-[267px] h-[308px] rounded-[36px] py-20 relative">
-              <CardHeader className="mb-8 p-0">
-                <h1 className="w-full text-center leading-[48px]  text-[48px] font-bold">
-                  B1
-                </h1>
-              </CardHeader>
-              <CardContent className="p-0">
-                <p className="text-center w-full max-w-[207px] mx-auto">
-                  Xe ô tô chở người đến 08 chỗ; xe ô tô có khối lượng theo thiết
-                  kế đến 3.500 kg; kéo rơ moóc có khối lượng theo thiết kế đến
-                  750 kg.
-                </p>
-              </CardContent>
-              <div className="bg-[#D6B07A] text-center leading-[60px] w-[60px] h-[60px] rounded-full font-bold text-4xl text-white absolute left-1/2 -top-[30px] -translate-x-1/2">
-                3
-              </div>
-            </Card>
-          </Link>
-        </div>
-
-        <div className="mt-[144px] max-w-[1116px] mx-auto flex">
-          <div className="">
-            <div>
-              <p className="uppercase text-[#5E6282] text-lg">
-                LUYỆN THI NHANH:
-              </p>
-              <p
-                className={`max-w-[625px] ${montserratAlter.className} text-[50px] font-bold`}
-              >
-                LUYỆN THI BẰNG LÁI XE THEO LỘ TRÌNH
-              </p>
-            </div>
-            <div className="mt-10 flex gap-[21px]">
-              <div className="w-12 h-12 bg-[#F0BB1F] rounded-[13px] flex items-center justify-center">
-                <FaBookOpen size={24} fill="white" />
-              </div>
-
-              <div>
-                <p className="font-bold text-[#5E6282]">
-                  Học câu hỏi theo từng chương
-                </p>
-                <p className="max-w-[355px] text-sm">
-                  Các câu hỏi được hệ thống phân loại, người dùng cần học lần
-                  lượt từng câu hỏi
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-[21px] mt-[54px]">
-              <div className="w-12 h-12 bg-[#F15A2B] rounded-[13px] flex items-center justify-center">
-                <IoPencilSharp size={24} fill="white" />
-              </div>
-
-              <div>
-                <p className="font-bold text-[#5E6282]">
-                  Làm bài kiểm tra cuối chương
-                </p>
-                <p className="max-w-[355px] text-sm">
-                  Sau khi hoàn thành toàn bộ câu hỏi của chương, hệ thống sẽ mở
-                  khóa bài kiểm tra.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-[21px] mt-[54px]">
-              <div className="w-12 h-12 bg-[#006380] rounded-[13px] flex items-center justify-center">
-                <IoCheckmarkDoneSharp size={24} color="white" />
-              </div>
-
-              <div>
-                <p className="font-bold text-[#5E6282]">
-                  Hoàn thành chương và tiếp tục học
-                </p>
-                <p className="max-w-[355px] text-sm">
-                  Vượt qua bài kiểm tra để mở khóa các chương tiếp theo.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <Card className="w-[370px] h-[400px] mt-[68px] px-6 pt-[20px] relative">
-              <CardHeader className="p-0 relative">
-                <div className="h-[161px] bg-[#F0F8FF] rounded-[24px]"></div>
-                <Image
-                  src={CardSample}
-                  alt="image"
-                  className="absolute w-[277px] h-[229px] left-[68px] -bottom-[14px]"
-                />
-              </CardHeader>
-
-              <CardContent className="p-0 ">
-                <p className="text-lg font-medium mt-[26px] mb-[13px]">
-                  Học theo lộ trình
-                </p>
-                <p className="text-[#84829A]">Chương 1/3 | A1</p>
-
-                <div className="flex gap-[18px] mt-[21px] mb-[29px]">
-                  <div className="w-9 h-9 bg-[#F5F5F5] flex items-center justify-center rounded-full">
-                    <FaBookOpen size={16} fill="#979797" />
-                  </div>
-
-                  <div className="w-9 h-9 bg-[#F5F5F5] flex items-center justify-center rounded-full">
-                    <IoPencilSharp size={16} fill="#979797" />
-                  </div>
-
-                  <div className="w-9 h-9 bg-[#F5F5F5] flex items-center justify-center rounded-full">
-                    <PiListBold size={16} fill="#979797" />
-                  </div>
-                </div>
-
-                <p className="text-[#84829A]">24 người dùng đang học</p>
-              </CardContent>
-
-              <Card className="absolute -right-1/4 bottom-12 w-[263px] h-[139px] rounded-[18px] pt-[18px] pl-[20px]">
+        {locale === 'vietnam' && (
+          <div className="mt-16 flex w-full justify-center gap-[86px]">
+            <Link href="/tests/vietnam/a1">
+              <Card className="w-[267px] h-[308px] rounded-[36px] px-[50px] py-20 relative">
+                <CardHeader className="mb-8 p-0">
+                  <h1 className="w-full leading-[48px]  text-center text-[48px] font-bold">
+                    A1
+                  </h1>
+                </CardHeader>
                 <CardContent className="p-0">
-                  <div className="flex gap-3">
-                    <Avatar>
-                      <Image
-                        src={AvatarSample}
-                        className="w-[50px] h-[50px] rounded-full"
-                        alt="Avatar"
-                      />
-                    </Avatar>
-
-                    <div>
-                      <p className="text-sm text-[#84829A]">Lộ trình</p>
-                      <p className="text-lg">Chương 1</p>
-
-                      <p className="mt-[14px] mb-[10px]">
-                        <span className="text-[#8A79DF] text-sm">40%</span>{' '}
-                        completed
-                      </p>
-
-                      <div className="h-[5px] w-[156px] rounded-full bg-[#F5F5F5]">
-                        <div className="w-[40%] h-full rounded-full bg-[#8A79DF]"></div>
-                      </div>
-                    </div>
-                  </div>
+                  <p className="text-center w-full max-w-[167px] mx-auto">
+                    {t('a1Description')}
+                  </p>
                 </CardContent>
+                <div className="bg-[#FF9ABB] text-center leading-[60px] w-[60px] h-[60px] rounded-full font-bold text-4xl text-[#DF5753] absolute left-1/2 -top-[30px] -translate-x-1/2">
+                  1
+                </div>
               </Card>
-            </Card>
+            </Link>
+
+            <Link href="/tests/vietnam/a">
+              <Card className="w-[267px] h-[308px] rounded-[36px] px-[28px] pt-20 relative">
+                <CardHeader className="mb-8 p-0">
+                  <p className="w-full text-center text-[48px] leading-[48px] font-bold">
+                    A
+                  </p>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <p className="text-center w-full  mx-auto">
+                    {t('aDescription')}
+                  </p>
+                </CardContent>
+                <div className="bg-[#BBE7D9] text-center leading-[60px] w-[60px] h-[60px] rounded-full font-bold text-4xl text-[#11513C] absolute left-1/2 -top-[30px] -translate-x-1/2">
+                  2
+                </div>
+              </Card>
+            </Link>
+
+            <Link href="/tests/vietnam/b1">
+              <Card className="w-[267px] h-[308px] rounded-[36px] py-20 relative">
+                <CardHeader className="mb-8 p-0">
+                  <h1 className="w-full text-center leading-[48px]  text-[48px] font-bold">
+                    B1
+                  </h1>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <p className="text-center w-full max-w-[207px] mx-auto">
+                    {t('b1Description')}
+                  </p>
+                </CardContent>
+                <div className="bg-[#D6B07A] text-center leading-[60px] w-[60px] h-[60px] rounded-full font-bold text-4xl text-white absolute left-1/2 -top-[30px] -translate-x-1/2">
+                  3
+                </div>
+              </Card>
+            </Link>
           </div>
-        </div>
+        )}
+
+        {locale !== 'vietnam' && (
+          <div className="mt-16 flex w-full justify-center gap-[86px]">
+            <Link href="/tests/australia/new-south-wales/rider">
+              <Card className="w-[360px] h-[308px] rounded-[36px]  py-20 relative">
+                <CardHeader className="mb-8 p-0">
+                  <h1 className="w-full leading-[48px]  text-center text-[32px] font-bold">
+                    RIDER (R)
+                  </h1>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <p className="text-center w-full mx-auto px-2">
+                    {t('riderDescription')}
+                  </p>
+                </CardContent>
+                <div className="bg-[#FF9ABB] text-center leading-[60px] w-[60px] h-[60px] rounded-full font-bold text-4xl text-[#DF5753] absolute left-1/2 -top-[30px] -translate-x-1/2">
+                  1
+                </div>
+              </Card>
+            </Link>
+
+            <Link href="/tests/australia/new-south-wales/car">
+              <Card className="w-[360px] h-[308px] rounded-[36px] px-[28px] pt-20 relative">
+                <CardHeader className="mb-8 p-0">
+                  <p className="w-full text-center text-[32px] leading-[48px] font-bold">
+                    CAR (C)
+                  </p>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <p className="text-center w-full px-2  mx-auto">
+                    {t('carDescription')}
+                  </p>
+                </CardContent>
+                <div className="bg-[#BBE7D9] text-center leading-[60px] w-[60px] h-[60px] rounded-full font-bold text-4xl text-[#11513C] absolute left-1/2 -top-[30px] -translate-x-1/2">
+                  2
+                </div>
+              </Card>
+            </Link>
+          </div>
+        )}
       </div>
 
       <div className="w-[980px] mt-[100px] mb-[65px] h-[3px] bg-[#E0E0E0] mx-auto"></div>
@@ -343,7 +262,7 @@ const Home = () => {
             <Card className="w-[300px] h-24 absolute left-1/2 ">
               <CardHeader className="p-0 h-full">
                 <div className="flex items-center h-full">
-                  <div className="relative w-full h-full ml-8">
+                  <Link href="/learn" className="relative w-full h-full ml-8">
                     <div className="w-12 h-12 rounded-full bg-[#D8F9ED] top-1/2 -translate-y-1/2 absolute"></div>
                     <Image
                       src={Fly}
@@ -354,9 +273,9 @@ const Home = () => {
                     />
 
                     <p className="font-bold text-lg absolute top-1/2 -translate-y-1/2 left-16 text-[#41BE90]">
-                      Bắt đầu ngay
+                      {t('startNow')}
                     </p>
-                  </div>
+                  </Link>
                 </div>
               </CardHeader>
             </Card>
@@ -399,21 +318,21 @@ const Home = () => {
 
         <div>
           <p className="text-[#2F327D] font-semibold text-[40px]">
-            Các chức năng hữu ích:
+            {t('usefulFeatures')}
           </p>
 
           <p className="leading-[180%] text-[22px] max-w-[489px] text-[#696984] mt-12">
-            Các chức năng giúp người dùng luyện thi nhanh:
+            {t('learnFast')}
           </p>
           <ul className="list-disc list-inside ml-6 text-[#696984] text-[22px]">
-            <li>Học câu điểm liệt.</li>
-            <li>Học biển báo.</li>
-            <li>Học những câu thường sai.</li>
+            <li>{t('learnCritical')}</li>
+            <li>{t('learnSigns')}</li>
+            <li>{t('challengeBank')}</li>
           </ul>
         </div>
       </div>
 
-      <div className="w-full bg-[#F1EEFB] h-[210px] flex px-20 py-[26px] justify-between ">
+      {/* <div className="w-full bg-[#F1EEFB] h-[210px] flex px-20 py-[26px] justify-between ">
         <div className="w-[374px] text-center">
           <GoClock size={48} className="mx-auto" />
           <p className="text-2xl font-bold my-4">500+</p>
@@ -429,15 +348,15 @@ const Home = () => {
           <p className="text-2xl font-bold my-4">15000+</p>
           <p className="text-xl">Học viên đã tham gia ôn luyện</p>
         </div>
-      </div>
+      </div> */}
 
       <div className="flex max-w-[1200px] mx-auto mt-[90px] mb-[280px] gap-[90px]">
         <div>
-          <p className="text-[#5E6282] text-lg uppercase">Đánh giá</p>
+          <p className="text-[#5E6282] text-lg uppercase">{t('review')}</p>
           <p
             className={`text-[50px] font-bold ${vollkorn.className} max-w-[443px]`}
           >
-            NHẬN XÉT TỪ NGƯỜI DÙNG
+            {t('commentFromUser')}
           </p>
         </div>
 
@@ -484,12 +403,11 @@ const Home = () => {
 
         <div className="absolute top-1/2 -translate-y-1/2 right-0 text-white">
           <p className={`font-bold text-[40px] ${montserratAlter.className}`}>
-            Tải về ứng dụng ngay
+            {t('download')}
           </p>
 
           <p className="my-6 max-w-[504px] font-lg">
-            "Ứng dụng đã chính thức ra mắt hôm nay – tải ngay để bắt đầu hành
-            trình học tập hiệu quả và thú vị hơn!"
+            "{t('downloadDescription')}"
           </p>
 
           <a
