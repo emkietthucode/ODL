@@ -138,6 +138,9 @@ const NavBar = () => {
     await signOut()
     setUser(null)
     setUserData(null)
+    localStorage.removeItem('selectedCountry')
+    localStorage.removeItem('nation')
+    localStorage.removeItem('user')
   }
 
   const handleLanguageChange = (language: string) => {
