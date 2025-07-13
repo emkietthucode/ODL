@@ -46,7 +46,7 @@ const InsertChapterModal = () => {
   const [currentQuestions, setCurrentQuestions] = useState<CauHoi[]>([])
   const [currentQuestion, setCurrentQuestion] = useState<CauHoi>()
   const [questionContent, setQuestionContent] = useState<string>()
-  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [currentPage, setCurrentPage] = useState<number>(0)
 
   const [regions, setRegions] = useState<KhuVuc[]>([])
   const [region, setRegion] = useState<KhuVuc>()
@@ -163,20 +163,26 @@ const InsertChapterModal = () => {
     setCurrentQuestions([])
     setCurrentQuestion(undefined)
     setQuestionContent(undefined)
-    setCurrentPage(1)
+    setCurrentPage(0)
 
     setRegion(undefined)
     setRegionName('')
     insertChapterModal.onClose()
   }
-  const totalPages = useMemo(() => {
-    return Math.ceil(currentQuestions.length / itemsPerPage)
-  }, [currentQuestions.length, itemsPerPage])
 
-  const getCurrentPageData = useMemo(() => {
+  const totalPages = () => {
+    return currentQuestions.length === 0
+      ? 0
+      : Math.ceil(currentQuestions.length / itemsPerPage)
+  }
+
+  const getCurrentPageData = () => {
+    if (currentPage === 0 || currentQuestions.length === 0) {
+      return []
+    }
     const startIdx = (currentPage - 1) * itemsPerPage
     return currentQuestions.slice(startIdx, startIdx + itemsPerPage)
-  }, [currentPage, itemsPerPage, currentQuestions, currentQuestions.length])
+  }
 
   const handleAddQuestion = () => {
     if (!currentQuestion) {
@@ -189,23 +195,34 @@ const InsertChapterModal = () => {
       )
 
       if (!exists) {
+        // If this is the first question being added, set currentPage to 1
+        if (prevQuestions.length === 0) {
+          setCurrentPage(1)
+        }
         return [...prevQuestions, currentQuestion]
+      } else {
+        return prevQuestions
       }
-
-      return prevQuestions
     })
 
-    if (
-      currentQuestions.some((question) => question.id === currentQuestion.id)
-    ) {
-      toast.error('Câu hỏi đã có trong danh sách')
-    }
+    // Clear the current selection after adding
+    setCurrentQuestion(undefined)
+    setQuestionContent('')
   }
 
   const handleRemoveQuestion = (currentQuestionId: string) => {
-    setCurrentQuestions((prevQuestions) =>
-      prevQuestions.filter((question) => question.id !== currentQuestionId)
-    )
+    setCurrentQuestions((prevQuestions) => {
+      const newQuestions = prevQuestions.filter(
+        (question) => question.id !== currentQuestionId
+      )
+
+      // If all questions are removed, set currentPage to 0
+      if (newQuestions.length === 0) {
+        setCurrentPage(0)
+      }
+
+      return newQuestions
+    })
   }
 
   return (
@@ -363,12 +380,11 @@ const InsertChapterModal = () => {
                                     key={item.id}
                                     value={item.noi_dung_cau_hoi}
                                     onSelect={(currentValue) => {
-                                      setCurrentQuestion(
-                                        questions.find(
-                                          (e) =>
-                                            e.noi_dung_cau_hoi === currentValue
-                                        )
+                                      const selectedQuestion = questions.find(
+                                        (e) =>
+                                          e.noi_dung_cau_hoi === currentValue
                                       )
+                                      setCurrentQuestion(selectedQuestion)
                                       setQuestionContent(currentValue)
                                       setOpenComboQuestions(false)
                                     }}
@@ -400,57 +416,67 @@ const InsertChapterModal = () => {
                       </Button>
                     </div>
                     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                      <Table>
-                        <TableHeader className="bg-gray-50">
-                          <TableRow className="border-b border-gray-100">
-                            <TableHead className="px-8 font-bold text-black w-[85%]">
-                              CÂU HỎI
-                            </TableHead>
-                            <TableHead className="font-bold w-[10%]"></TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {getCurrentPageData.map((item: CauHoi) => (
-                            <TableRow
-                              key={item.id}
-                              className="border-b border-gray-100"
-                            >
-                              <TableCell className="px-8">
-                                {item.noi_dung_cau_hoi}
-                              </TableCell>
-                              <TableCell className="pr-8 text-right">
-                                <Trash2
-                                  className="h-4 w-4 mr-2 text-red-600 cursor-pointer"
-                                  onClick={() => handleRemoveQuestion(item.id)}
-                                />
-                              </TableCell>
+                      <div className="h-[400px] overflow-y-auto">
+                        <Table>
+                          <TableHeader className="bg-gray-50 sticky top-0 z-10">
+                            <TableRow className="border-b border-gray-100">
+                              <TableHead className="px-8 font-bold text-black w-[85%]">
+                                CÂU HỎI
+                              </TableHead>
+                              <TableHead className="font-bold w-[10%]"></TableHead>
                             </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
+                          </TableHeader>
+                          <TableBody>
+                            {getCurrentPageData().map((item: CauHoi) => (
+                              <TableRow
+                                key={item.id}
+                                className="border-b border-gray-100"
+                              >
+                                <TableCell className="px-8">
+                                  {item.noi_dung_cau_hoi}
+                                </TableCell>
+                                <TableCell className="pr-8 text-right">
+                                  <Trash2
+                                    className="h-4 w-4 mr-2 text-red-600 cursor-pointer"
+                                    onClick={() =>
+                                      handleRemoveQuestion(item.id)
+                                    }
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
                       <div className="flex gap-5 justify-center items-center p-4 border-t border-gray-100">
                         <Button
                           variant="outline"
                           size="icon"
+                          type="button"
                           onClick={() =>
                             setCurrentPage((prev) => Math.max(prev - 1, 1))
                           }
-                          disabled={currentPage === 1}
+                          disabled={currentPage <= 1}
                         >
                           <ChevronLeft className="h-4 w-4" />
                         </Button>
                         <span className="text-sm">
-                          {currentPage}/{totalPages}
+                          {totalPages() === 0
+                            ? '0/0'
+                            : `${currentPage}/${totalPages()}`}
                         </span>
                         <Button
                           variant="outline"
                           size="icon"
+                          type="button"
                           onClick={() =>
                             setCurrentPage((prev) =>
-                              Math.min(prev + 1, totalPages)
+                              Math.min(prev + 1, totalPages())
                             )
                           }
-                          disabled={currentPage === totalPages}
+                          disabled={
+                            currentPage >= totalPages() || totalPages() === 0
+                          }
                         >
                           <ChevronRight className="h-4 w-4" />
                         </Button>
