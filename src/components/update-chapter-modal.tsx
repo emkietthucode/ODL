@@ -96,6 +96,9 @@ const UpdateChapterModal = () => {
         setCurrentQuestions(chapterQuestions || [])
         setInitialQuestions(chapterQuestions || [])
 
+        // Set currentPage to 1 if there are questions, otherwise 0
+        setCurrentPage(chapterQuestions && chapterQuestions.length > 0 ? 1 : 0)
+
         console.log()
         const { data: regionsData, error: regionsError } = await supabase
           .from('khu_vuc')
@@ -120,7 +123,7 @@ const UpdateChapterModal = () => {
 
   const onChange = (open: boolean) => {
     if (!open) {
-      onClose()
+      handleCancel()
     }
   }
 
@@ -149,7 +152,7 @@ const UpdateChapterModal = () => {
         return toast.error('Thêm chương mới không thành công')
       }
 
-      updateQuestions(chuong.id)
+      await updateQuestions(chuong.id)
 
       setIsLoading(false)
       toast.success('Thêm chương mới thành công.')
@@ -218,8 +221,6 @@ const UpdateChapterModal = () => {
           )
         }
       })
-
-      toast.success('Cập nhật câu hỏi thành công!')
     } catch (error) {
       console.log(error)
       toast.error('Đã xảy ra lỗi khi cập nhật câu hỏi.')
@@ -231,17 +232,22 @@ const UpdateChapterModal = () => {
     setCurrentQuestions([])
     setCurrentQuestion(undefined)
     setQuestionContent(undefined)
-    setCurrentPage(1)
+    setCurrentPage(0)
 
     setRegion(undefined)
     setRegionName('')
     onClose()
   }
   const totalPages = () => {
-    return Math.ceil(currentQuestions.length / itemsPerPage)
+    return currentQuestions.length === 0
+      ? 0
+      : Math.ceil(currentQuestions.length / itemsPerPage)
   }
 
   const getCurrentPageData = () => {
+    if (currentPage === 0 || currentQuestions.length === 0) {
+      return []
+    }
     const startIdx = (currentPage - 1) * itemsPerPage
     return currentQuestions.slice(startIdx, startIdx + itemsPerPage)
   }
@@ -257,23 +263,34 @@ const UpdateChapterModal = () => {
       )
 
       if (!exists) {
+        // If this is the first question being added, set currentPage to 1
+        if (prevQuestions.length === 0) {
+          setCurrentPage(1)
+        }
         return [...prevQuestions, currentQuestion]
+      } else {
+        return prevQuestions
       }
-
-      return prevQuestions
     })
 
-    if (
-      currentQuestions.some((question) => question.id === currentQuestion.id)
-    ) {
-      toast.error('Câu hỏi đã có trong danh sách')
-    }
+    // Clear the current selection after adding
+    setCurrentQuestion(undefined)
+    setQuestionContent('')
   }
 
   const handleRemoveQuestion = (currentQuestionId: string) => {
-    setCurrentQuestions((prevQuestions) =>
-      prevQuestions.filter((question) => question.id !== currentQuestionId)
-    )
+    setCurrentQuestions((prevQuestions) => {
+      const newQuestions = prevQuestions.filter(
+        (question) => question.id !== currentQuestionId
+      )
+
+      // If all questions are removed, set currentPage to 0
+      if (newQuestions.length === 0) {
+        setCurrentPage(0)
+      }
+
+      return newQuestions
+    })
   }
 
   return (
@@ -417,7 +434,7 @@ const UpdateChapterModal = () => {
                         <PopoverContent className="xl:w-[750px] md:w-[650px] sm:w-[450px] p-0 ">
                           <Command>
                             <CommandInput
-                              placeholder="Tìm chương.."
+                              placeholder="Tìm câu hỏi.."
                               className="h-9"
                             />
                             <CommandList>
@@ -427,12 +444,11 @@ const UpdateChapterModal = () => {
                                     key={item.id}
                                     value={item.noi_dung_cau_hoi}
                                     onSelect={(currentValue) => {
-                                      setCurrentQuestion(
-                                        currentQuestions.find(
-                                          (e) =>
-                                            e.noi_dung_cau_hoi === currentValue
-                                        )
+                                      const selectedQuestion = questions.find(
+                                        (e) =>
+                                          e.noi_dung_cau_hoi === currentValue
                                       )
+                                      setCurrentQuestion(selectedQuestion)
                                       setQuestionContent(currentValue)
                                       setOpenComboQuestions(false)
                                     }}
@@ -464,57 +480,67 @@ const UpdateChapterModal = () => {
                       </Button>
                     </div>
                     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                      <Table>
-                        <TableHeader className="bg-gray-50">
-                          <TableRow className="border-b border-gray-100">
-                            <TableHead className="px-8 font-bold text-black w-[85%]">
-                              CÂU HỎI
-                            </TableHead>
-                            <TableHead className="font-bold w-[10%]"></TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {getCurrentPageData().map((item: CauHoi) => (
-                            <TableRow
-                              key={item.id}
-                              className="border-b border-gray-100"
-                            >
-                              <TableCell className="px-8">
-                                {item.noi_dung_cau_hoi}
-                              </TableCell>
-                              <TableCell className="pr-8 text-right">
-                                <Trash2
-                                  className="h-4 w-4 mr-2 text-red-600 cursor-pointer"
-                                  onClick={() => handleRemoveQuestion(item.id)}
-                                />
-                              </TableCell>
+                      <div className="h-[400px] overflow-y-auto">
+                        <Table>
+                          <TableHeader className="bg-gray-50 sticky top-0 z-10">
+                            <TableRow className="border-b border-gray-100">
+                              <TableHead className="px-8 font-bold text-black w-[85%]">
+                                CÂU HỎI
+                              </TableHead>
+                              <TableHead className="font-bold w-[10%]"></TableHead>
                             </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
+                          </TableHeader>
+                          <TableBody>
+                            {getCurrentPageData().map((item: CauHoi) => (
+                              <TableRow
+                                key={item.id}
+                                className="border-b border-gray-100"
+                              >
+                                <TableCell className="px-8">
+                                  {item.noi_dung_cau_hoi}
+                                </TableCell>
+                                <TableCell className="pr-8 text-right">
+                                  <Trash2
+                                    className="h-4 w-4 mr-2 text-red-600 cursor-pointer"
+                                    onClick={() =>
+                                      handleRemoveQuestion(item.id)
+                                    }
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
                       <div className="flex gap-5 justify-center items-center p-4 border-t border-gray-100">
                         <Button
                           variant="outline"
                           size="icon"
+                          type="button"
                           onClick={() =>
                             setCurrentPage((prev) => Math.max(prev - 1, 1))
                           }
-                          disabled={currentPage === 1}
+                          disabled={currentPage <= 1}
                         >
                           <ChevronLeft className="h-4 w-4" />
                         </Button>
                         <span className="text-sm">
-                          {currentPage}/{totalPages()}
+                          {totalPages() === 0
+                            ? '0/0'
+                            : `${currentPage}/${totalPages()}`}
                         </span>
                         <Button
                           variant="outline"
                           size="icon"
+                          type="button"
                           onClick={() =>
                             setCurrentPage((prev) =>
                               Math.min(prev + 1, totalPages())
                             )
                           }
-                          disabled={currentPage === totalPages()}
+                          disabled={
+                            currentPage >= totalPages() || totalPages() === 0
+                          }
                         >
                           <ChevronRight className="h-4 w-4" />
                         </Button>
