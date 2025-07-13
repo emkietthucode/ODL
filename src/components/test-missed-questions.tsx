@@ -4,12 +4,12 @@ import QuestionCarousel from '@/components/question-carousel'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { LearningQuestionDTO, QuestionDTO } from '@/types/dto/types'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import supabase from '@/utils/supabase/supabase'
-import Timer from '@/components/timer-v2'
+
 import useAuth from '@/hooks/useAuth'
 import { useTranslations } from 'next-intl'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
@@ -59,6 +59,8 @@ const TestMissedQuestions = () => {
   const { user } = useAuth()
   const t = useTranslations('LearningTestPage')
   const [currentTimeLeft, setCurrentTimeLeft] = useState(0)
+  const [timeLeft, setTimeLeft] = useState(0)
+  const timeRef = useRef<NodeJS.Timeout | null>(null)
   const [testInfo, setTestInfo] = useState<{
     thoi_gian_lam_bai: number
     ten_de_thi: string
@@ -133,6 +135,7 @@ const TestMissedQuestions = () => {
           ten_de_thi: 'CÂU HỎI THƯỜNG SAI',
         })
         setCurrentTimeLeft(20 * 60)
+        setTimeLeft(20 * 60)
         setIsActive(true)
       } catch (error: any) {
         console.log('error', error.message)
@@ -327,6 +330,41 @@ const TestMissedQuestions = () => {
     }
   }, [selectedQuestion, questions])
 
+  // Timer effect
+  useEffect(() => {
+    if (isActive && timeLeft > 0) {
+      timeRef.current = setInterval(() => {
+        setTimeLeft((prevTime) => {
+          if (prevTime <= 1) {
+            clearInterval(timeRef.current!)
+            handleTimeUp()
+            return prevTime // Keep the last non-zero value
+          }
+          return prevTime - 1
+        })
+      }, 1000)
+    }
+
+    return () => {
+      if (timeRef.current) {
+        clearInterval(timeRef.current)
+      }
+    }
+  }, [isActive, timeLeft])
+
+  useEffect(() => {
+    setCurrentTimeLeft(timeLeft)
+  }, [timeLeft])
+
+  const formatTime = (time: number): string => {
+    const minutes = Math.floor(time / 60)
+    const seconds = time % 60
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(
+      2,
+      '0'
+    )}`
+  }
+
   // Preload next few images when question changes
   useEffect(() => {
     if (questions.length === 0) return
@@ -448,16 +486,7 @@ const TestMissedQuestions = () => {
         </div>
         <div className="w-[164px] h-full bg-[#F1EEFB] py-3 flex flex-col justify-between">
           <div className="mx-auto w-[106px] h-[47px] font-bold bg-light-purple text-center leading-[47px] rounded-[8px] text-[28px] text-purple">
-            <Timer
-              time={
-                testInfo?.thoi_gian_lam_bai
-                  ? testInfo?.thoi_gian_lam_bai * 60
-                  : 0
-              }
-              isActive={isActive}
-              onTimeUp={() => handleTimeUp()}
-              onTimeChange={setCurrentTimeLeft}
-            />
+            {formatTime(timeLeft)}
           </div>
 
           {timeUp ? (
