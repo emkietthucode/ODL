@@ -15,7 +15,7 @@ import useUpdateQuestionModal from '@/hooks/useUpdateQuestionModal'
 import { cn } from '@/lib/utils'
 import { Tab } from '@/components/tab'
 
-export const tabsVN = [
+const tabsVN = [
   { label: 'Tất cả' },
   { label: 'Câu điểm liệt' },
   { label: 'Luật giao thông' },
@@ -23,7 +23,7 @@ export const tabsVN = [
   { label: 'Sa hình' },
 ]
 
-export const tabsAU = [
+const tabsAU = [
   { label: 'All' },
   { label: 'Defensive' },
   { label: 'Substances' },
