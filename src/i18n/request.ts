@@ -18,13 +18,13 @@ export default getRequestConfig(async () => {
           user_id: 'b3ba76c0-1b00-4737-8395-682b8d31c039',
         })
 
-        locale = data?.language_record.ky_hieu || 'en'
+        locale = data?.language_record.ky_hieu || 'vn'
       } catch (error) {
         console.log('Error fetching user language:', error)
-        locale = 'en'
+        locale = 'vn'
       }
     } else {
-      locale = 'en'
+      locale = 'vn'
     }
   }
 
