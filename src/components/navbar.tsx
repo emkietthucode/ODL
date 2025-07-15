@@ -181,6 +181,8 @@ const NavBar = () => {
       .eq('id', nation?.id)
     if (data) {
       setLocale(data[0].ngon_ngu?.ky_hieu)
+    } else {
+      setLocale('vn')
     }
 
     router.refresh()
@@ -286,12 +288,18 @@ const NavBar = () => {
                         <MenubarSubContent>
                           {nation.regions.map((region, regionIndex) => (
                             <MenubarItem
-                              onClick={() => handleNationChange(region)}
+                              onClick={
+                                region.slug === 'australia/new-south-wales'
+                                  ? () => handleNationChange(region)
+                                  : () => {}
+                              }
                               key={'region' + regionIndex}
                               className={cn(
                                 region.id === selectedNation?.id
                                   ? 'bg-gray-200'
-                                  : 'bg-auto'
+                                  : 'bg-auto',
+                                region.slug !== 'australia/new-south-wales' &&
+                                  'opacity-50'
                               )}
                             >
                               {region.name}
