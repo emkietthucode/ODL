@@ -14,7 +14,8 @@
     "logout": "Đăng xuất",
     "adminPanel": "Trang quản trị",
     "roadMap": "Lộ trình",
-    "statistics": "Thống kê"
+    "statistics": "Thống kê",
+    "profile": "Hồ sơ cá nhân"
   },
   "LoginPage": {
     "login": "Đăng nhập",
@@ -90,7 +91,10 @@
     "addressTitle": "Địa chỉ",
     "address": "227 Đường Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh",
     "informationTitle": "Thông tin",
-    "contactTitle": "Liên hệ"
+    "contactTitle": "Liên hệ",
+    "test": "Thi thử",
+    "learn": "Luyện thi",
+    "roadmap": "Lộ trình"
   },
   "ChooseRegionPage": {
     "chooseRegion": "Chọn quốc gia",

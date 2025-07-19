@@ -260,7 +260,7 @@ const NavBar = () => {
             <Link href="/learn" className="hover:opacity-80">
               {t('learningPage')}
             </Link>
-            <Link href="#" className="hover:opacity-80">
+            <Link href="/contact" className="hover:opacity-80">
               {t('contactPage')}
             </Link>
           </nav>
@@ -328,24 +328,21 @@ const NavBar = () => {
                 <Popover>
                   <PopoverTrigger asChild>
                     <button className="flex items-center text-purple hover:opacity-80">
-                      <span className="text-[12px] w-20 items-center underline">
-                        Tài khoản
-                      </span>
                       <FaRegCircleUser className="w-6 h-6" />
                     </button>
                   </PopoverTrigger>
                   <PopoverContent align="end" className="w-40">
                     <Button
-                      onClick={handleLogout}
-                      className="w-full bg-transparent hover:bg-[#888] outline-none text-black border-none shadow-none "
-                    >
-                      {t('logout')}
-                    </Button>
-                    <Button
                       onClick={() => router.push('/statistics/general')}
                       className="w-full bg-transparent hover:bg-[#888] outline-none text-black border-none shadow-none "
                     >
                       {t('statistics')}
+                    </Button>
+                    <Button
+                      onClick={() => router.push('/profile')}
+                      className="w-full bg-transparent hover:bg-[#888] outline-none text-black border-none shadow-none "
+                    >
+                      {t('profile')}
                     </Button>
                     {userData?.vai_tro === 'admin' && (
                       <Button
@@ -355,6 +352,13 @@ const NavBar = () => {
                         {t('adminPanel')}
                       </Button>
                     )}
+
+                    <Button
+                      onClick={handleLogout}
+                      className="w-full bg-transparent hover:bg-[#888] outline-none text-black border-none shadow-none "
+                    >
+                      {t('logout')}
+                    </Button>
                   </PopoverContent>
                 </Popover>
               </div>
