@@ -130,7 +130,9 @@
     "notReadyTitle": "Bạn chưa sẵn sàng để thi thử?",
     "notReadyDescriptionP1": "Đừng lo, hãy bắt đầu với phần luyện thi bằng lái xe hạng ",
     "notReadyDescriptionP2": ". Tại đây, bạn có thể ôn lại kiến thức luật giao thông, biển báo, và thực hành các câu hỏi sát hạch để tự tin hơn.",
-    "learningButton": "Luyện thi"
+    "learningButton": "Luyện thi",
+    "riderDescription": "Cho phép bạn lái xe mô tô và xe tay ga. Người mới bắt đầu phải hoàn thành Chương trình Xe máy được phê duyệt cho người học (LAMS) trước khi nâng cấp lên giấy phép lái xe mô tô đầy đủ.",
+    "carDescription": "Cho phép bạn lái xe ô tô, xe tải nhỏ và xe bán tải có Tổng khối lượng xe (GVM) lên đến 4,5 tấn và chở tối đa 12 người bao gồm cả người lái. Bạn cũng có thể kéo theo rơ-moóc có GVM lên đến 9 tấn."
   },
   "TestPage": {
     "title": "Làm bài thi thử",
@@ -263,6 +265,20 @@
     "title": "ÔN LUYỆN THEO LỘ TRÌNH",
     "licenseClasses": "Các hạng bằng lái",
     "description": "Chức năng Ôn luyện theo lộ trình hướng dẫn người dùng ôn luyện từng câu hỏi. Hệ thống chia nhỏ nội dung thành các chương, giúp bạn từng bước làm quen với bộ câu hỏi và nâng cao kỹ năng trước khi tham gia kỳ thi thực tế.",
+    "startButton": "Thi thử",
+    "learnButton": "Luyện thi",
+    "rDescription": "Cho phép bạn lái xe máy và xe tay ga. Người mới bắt đầu phải hoàn thành Chương trình Xe máy được Người học Chấp thuận (LAMS) trước khi chuyển sang giấy phép Lái ​​xe chính thức.",
+    "cDescription": "Cho phép bạn lái xe ô tô, xe tải và xe bán tải có Tổng trọng lượng xe (GVM) lên đến 4,5 tấn và chở tối đa 12 người, bao gồm cả tài xế. Bạn cũng có thể kéo rơ moóc có GVM lên đến 9 tấn.",
+    "lrDescription": "Lái xe có tổng trọng tải toàn phần (GVM) trên 4,5 tấn nhưng không quá 8 tấn, bao gồm xe buýt trên 12 chỗ ngồi.",
+    "mrDescription": "Lái xe có hai trục và GVM trên 8 tấn, thường được sử dụng cho xe buýt cỡ trung.",
+    "hrDescription": "Lái xe có ba trục trở lên và GVM trên 8 tấn, bao gồm xe buýt có khớp nối (uốn cong).",
+    "hcDescription": "Lái xe tải nặng kéo theo rơ moóc có tổng trọng tải trên 9 tấn. Bao gồm cả sơ mi rơ moóc.",
+    "mcDescription": "Lái những tổ hợp xe lớn nhất như B-double và xe đường trường. Cần được đào tạo và kiểm tra thêm."
+  },
+  "AustraliaTestPage": {
+    "title": "THI THỬ LÝ THUYẾT",
+    "licenseClasses": "Các hạng bằng lái",
+    "description": "Chức năng Thi thử lý thuyết mô phỏng bài thi sát hạch chính thức, giúp người dùng kiểm tra kiến thức về luật giao thông, biển báo, và kỹ năng xử lý tình huống. Đề thi được xây dựng đúng cấu trúc và nội dung theo quy định, bao gồm cả câu hỏi điểm liệt (nếu có), mang lại trải nghiệm sát với kỳ thi thực tế.",
     "startButton": "Thi thử",
     "learnButton": "Luyện thi",
     "rDescription": "Cho phép bạn lái xe máy và xe tay ga. Người mới bắt đầu phải hoàn thành Chương trình Xe máy được Người học Chấp thuận (LAMS) trước khi chuyển sang giấy phép Lái ​​xe chính thức.",
