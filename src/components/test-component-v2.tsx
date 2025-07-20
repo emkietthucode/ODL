@@ -458,9 +458,13 @@ const TestComponent = () => {
           )}
         </div>
         <div className="w-[164px] h-full bg-[#F1EEFB] py-3 flex flex-col justify-between">
-          <div className="mx-auto w-[106px] h-[47px] font-bold bg-light-purple text-center leading-[47px] rounded-[8px] text-[28px] text-purple">
-            {formatTime(timeLeft)}
-          </div>
+          {timeLeft === 0 ? (
+            ''
+          ) : (
+            <div className="mx-auto w-[106px] h-[47px] font-bold bg-light-purple text-center leading-[47px] rounded-[8px] text-[28px] text-purple">
+              {formatTime(timeLeft)}
+            </div>
+          )}
 
           <Button
             onClick={() => handleSubmit(currentTimeLeft)}

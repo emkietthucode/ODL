@@ -19,7 +19,11 @@ const CountrySelection = () => {
 
   const handleCountrySelect = (country: 'vietnam' | 'australia') => {
     localStorage.setItem('selectedCountry', country)
-    router.push(`${pathname}/${country}`)
+    if (country === 'vietnam') {
+      router.push('/tests/vietnam')
+    } else {
+      router.push('/tests/australia/new-south-wales')
+    }
   }
   return (
     <div className="flex flex-col justify-between h-[900px]">
