@@ -14,13 +14,17 @@
     "logout": "Log out",
     "adminPanel": "Admin Panel",
     "roadMap": "Roadmap",
-    "statistics": "Statistics"
+    "statistics": "Statistics",
+    "profile": "Profile"
   },
   "Footer": {
     "addressTitle": "Address",
     "address": "227 Nguyen Van Cu, Ward 4, District 5, Ho Chi Minh City",
     "informationTitle": "Information",
-    "contactTitle": "Contact"
+    "contactTitle": "Contact us",
+    "test": "Take sample tests",
+    "learn": "Learn theory",
+    "roadmap": "Roadmap"
   },
   "LoginPage": {
     "login": "Account Login",

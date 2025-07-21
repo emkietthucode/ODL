@@ -42,11 +42,6 @@ function VietnameRoadmap() {
           </div>
         </div>
         <div className="w-full h-[350px] bg-custom-light-hover-blue flex justify-center relative">
-          <Image
-            src={ThreeWhiteDot}
-            alt=""
-            className="absolute top-0 left-[700px] w-[95%] h-[80%]"
-          />
           <div className="w-[80%] h-full flex flex-col justify-center items-center gap-10">
             <div className="flex w-full justify-between">
               <div

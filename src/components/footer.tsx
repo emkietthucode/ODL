@@ -24,11 +24,18 @@ const Footer = () => {
         <div className="text-[#60548A] flex-1">
           <h4 className="font-medium mt-6 mb-5">{t('informationTitle')}</h4>
           <ul>
-            <li className="opacity-60 font-normal">Làm bài thi thử</li>
-            <li className="opacity-60 font-normal">Học lý thuyết</li>
-            <li className="opacity-60 font-normal">Chọn quốc gia</li>
-            <li className="opacity-60 font-normal">Đánh giá</li>
-            <li className="opacity-60 font-normal">Về chúng tôi</li>
+            <Link href="/tests" className="opacity-60 font-normal">
+              {t('test')}
+            </Link>
+            <Link href="/learn" className="opacity-60 font-normal">
+              {t('learn')}
+            </Link>
+            <Link href="/learning-path" className="opacity-60 font-normal">
+              {t('roadmap')}
+            </Link>
+            <Link href="/contact" className="opacity-60 font-normal">
+              {t('contactTitle')}
+            </Link>
           </ul>
         </div>
 

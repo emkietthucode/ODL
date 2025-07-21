@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ChevronLeft, ChevronRight, Flame } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -11,9 +11,50 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import useAuth from '@/hooks/useAuth'
+import supabase from '@/utils/supabase/supabase'
 
 export default function StudyDashboard() {
-  const [currentDate, setCurrentDate] = useState(new Date(2025, 6, 11)) // July 11, 2025
+  const [currentDate, setCurrentDate] = useState(new Date()) // July 11, 2025
+
+  const [streak, setStreak] = useState<number>(0)
+  const { user } = useAuth()
+  const [testsData, setTestsData] = useState<any>({
+    total: 0,
+    passed: 0,
+    failed: 0,
+  })
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        try {
+          const { data, error } = await supabase.rpc('get_user_streak', {
+            user_id: user?.id,
+          })
+
+          setStreak(data || 0)
+
+          const { data: testsData, error: testsError } = await supabase.rpc(
+            'get_user_test_stats',
+            {
+              user_id: user?.id,
+            }
+          )
+
+          setTestsData({
+            total: testsData?.total_tests || 0,
+            passed: testsData?.passed_tests || 0,
+            failed: testsData?.failed_tests || 0,
+          })
+        } catch (error: any) {
+          console.error('Error fetching data:', error.message)
+        }
+      }
+    }
+
+    fetchData()
+  }, [user])
 
   // Generate calendar days for July 2025
   const generateCalendarDays = () => {
@@ -104,8 +145,13 @@ export default function StudyDashboard() {
           <div className="grid grid-cols-7 gap-1">
             {calendarDays.slice(0, 35).map((day, index) => {
               const isCurrentMonth = day.getMonth() === currentDate.getMonth()
-              const isSelected = day.getDate() === 11 && isCurrentMonth
+              const isSelected =
+                day.getDate() === currentDate.getDate() && isCurrentMonth
               const dayNumber = day.getDate()
+              const isInStreak =
+                day.getDate() > currentDate.getDate() - streak &&
+                isCurrentMonth &&
+                day.getDate() <= currentDate.getDate()
 
               return (
                 <button
@@ -113,11 +159,8 @@ export default function StudyDashboard() {
                   className={`
                     h-8 w-8 text-sm rounded-full flex items-center justify-center
                     ${isCurrentMonth ? 'text-gray-800' : 'text-gray-300'}
-                    ${
-                      isSelected
-                        ? 'bg-purple-500 text-white'
-                        : 'hover:bg-gray-100'
-                    }
+                    ${isSelected ? 'bg-purple text-white' : 'hover:bg-gray-100'}
+                    ${isInStreak ? 'underline' : ''}
                   `}
                 >
                   {dayNumber}
@@ -133,7 +176,9 @@ export default function StudyDashboard() {
               </span>
               <div className="flex items-center gap-1">
                 <Flame className="h-4 w-4 text-orange-500" />
-                <span className="text-sm font-bold text-orange-500">5</span>
+                <span className="text-sm font-bold text-orange-500">
+                  {streak}
+                </span>
               </div>
             </div>
             <p className="text-xs text-gray-500">

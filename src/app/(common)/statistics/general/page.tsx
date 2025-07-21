@@ -7,7 +7,10 @@ import ProgressCard from '@/components/user-statistics/ProgressCard'
 import SegmentedCircularChart from '@/components/user-statistics/SegmentedCircularChart'
 import StudyDashboard from '@/components/user-statistics/StudyDashboard'
 import TimeChart from '@/components/user-statistics/TimeChart'
+import useAuth from '@/hooks/useAuth'
+import supabase from '@/utils/supabase/supabase'
 import { ChevronDown } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import {
   BarChart,
   Bar,
@@ -18,6 +21,40 @@ import {
 } from 'recharts'
 
 function GeneralStatistic() {
+  const [testsData, setTestsData] = useState<any>({
+    total: 0,
+    passed: 0,
+    failed: 0,
+  })
+  const { user } = useAuth()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        try {
+          const { data: testsData, error: testsError } = await supabase.rpc(
+            'get_user_test_stats',
+            {
+              user_id: user?.id,
+            }
+          )
+
+          setTestsData({
+            total: testsData[0]?.total_tests || 0,
+            passed: testsData[0]?.passed_tests || 0,
+            failed: testsData[0]?.failed_tests || 0,
+          })
+
+          console.log('Tests Data:', testsData)
+        } catch (error: any) {
+          console.error('Error fetching data:', error.message)
+        }
+      }
+    }
+
+    fetchData()
+  }, [user])
+
   return (
     <div className="flex mt-8 gap-[44px]">
       <div className="w-[604px]">
@@ -115,7 +152,9 @@ function GeneralStatistic() {
                   Số bài thi đã hoàn thành
                 </p>
 
-                <p className="font-extrabold text-[64px] text-white">09</p>
+                <p className="font-extrabold text-[64px] text-white">
+                  {testsData.total}
+                </p>
               </div>
 
               <div className="w-[316px] h-[155px] rounded-[20px] border-[1px] border-[#D5D5D5] px-4 pt-5 pb-3 flex justify-between relative">
@@ -125,7 +164,9 @@ function GeneralStatistic() {
                     <div>
                       <div className="flex items-center gap-[6px] mb-[10px]">
                         <div className="w-[22px] h-[22px] bg-[#DFEEDB] rounded-[8px]"></div>
-                        <span className="font-semibold text-sm">2</span>
+                        <span className="font-semibold text-sm">
+                          {testsData.failed}
+                        </span>
                       </div>
 
                       <div className="text-[12px]">Không đạt</div>
@@ -134,7 +175,9 @@ function GeneralStatistic() {
                     <div>
                       <div className="flex items-center gap-[6px] mb-[10px]">
                         <div className="w-[22px] h-[22px] bg-[#A6D997] rounded-[8px]"></div>
-                        <span className="font-semibold text-sm">98</span>
+                        <span className="font-semibold text-sm">
+                          {testsData.passed}
+                        </span>
                       </div>
 
                       <div className="text-[12px]">Đạt</div>
@@ -142,7 +185,14 @@ function GeneralStatistic() {
                   </div>
                 </div>
                 <div className="w-[200px] h-[200px] absolute -right-8 top-1/2 translate-y-[-50%]">
-                  <CircularProgressChart percentage={98} rounded={true} />
+                  <CircularProgressChart
+                    percentage={
+                      testsData.total !== 0
+                        ? testsData.passed / testsData.total
+                        : 0
+                    }
+                    rounded={true}
+                  />
                 </div>
               </div>
             </div>
@@ -156,7 +206,13 @@ function GeneralStatistic() {
                   </p>
                 </div>
                 <div className="w-[180px] h-[180px] absolute -right-6 top-1/2 translate-y-[-50%]">
-                  <SegmentedCircularChart percentage={70} />
+                  <SegmentedCircularChart
+                    percentage={
+                      testsData.total !== 0
+                        ? testsData.passed / testsData.total
+                        : 0
+                    }
+                  />
                 </div>
               </div>
 
