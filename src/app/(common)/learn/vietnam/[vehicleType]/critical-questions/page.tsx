@@ -237,7 +237,7 @@ const LearnCriticalPage = () => {
               <p
                 className={`font-bold text-2xl ${montserratAlter.className} mt-2`}
               >
-                {t('car')}
+                {vehicleType === 'car' ? t('motorbike') : t('car')}
               </p>
               <p className="text-sm">{t('carCritical')}</p>
 

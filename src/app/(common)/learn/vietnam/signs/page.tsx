@@ -47,6 +47,10 @@ function LearnSigns() {
   }, [type])
 
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log('searching', search)
+    if (search.trim() === '') {
+      return
+    }
     e.preventDefault()
     try {
       const { data, error } = await supabase.rpc(
@@ -120,7 +124,7 @@ function LearnSigns() {
         </div>
 
         <div className="grid grid-cols-3 gap-2 mt-6 overflow-y-auto max-h-[650px] scrollbar-gutter-stable">
-          {signs.map((sign, index) => (
+          {signs?.map((sign, index) => (
             <SignCard
               key={index}
               id={sign.ma_bien_bao}
