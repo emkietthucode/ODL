@@ -96,7 +96,10 @@ function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
               {t('remember')}
             </label>
           </div>
-          <Link href="/auth/forgot-password" className="px-0 hover:underline">
+          <Link
+            href="/auth/forgot-password"
+            className="text-sm px-0 hover:underline"
+          >
             {t('forgot')}
           </Link>
         </div>
