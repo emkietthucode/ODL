@@ -15,10 +15,8 @@ const TestPage = () => {
     const getUserDetails = async () => {
       if (!user) {
         const selectedCountry = localStorage.getItem('selectedCountry')
-        if (selectedCountry === 'vietnam') {
-          router.push('tests/vietnam')
-        } else {
-          router.push('tests/australia/new-south-wales')
+        if (selectedCountry) {
+          router.push(`tests/${selectedCountry}`)
         }
         return
       }
@@ -35,14 +33,17 @@ const TestPage = () => {
           }
         )
 
-        if (regionData?.slug === 'vietnam') {
-          router.push('tests/vietnam')
-        } else {
-          router.push('tests/australia/new-south-wales')
+        if (regionData) {
+          router.push(`tests/${regionData.slug}`)
+        } else if (localStorage.getItem('selectedCountry')) {
+          const selectedCountry = localStorage.getItem('selectedCountry')
+          router.push(`tests/${selectedCountry}`)
         }
       } else {
-        // fallback if no region info
-        router.push('tests/australia/new-south-wales')
+        const selectedCountry = localStorage.getItem('selectedCountry')
+        if (selectedCountry) {
+          router.push(`/tests/${selectedCountry}`)
+        }
       }
     }
 
