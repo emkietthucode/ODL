@@ -41,6 +41,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log(event)
       setUser(session?.user || null)
+
+      if (session?.user) {
+        const loginDate = new Date().toLocaleDateString('en-CA', {
+          timeZone: 'UTC',
+        }) // YYYY-MM-DD in UTC
+
+        // Check for existing login today
+        const { data: existing } = await supabase
+          .from('user_logins')
+          .select('id')
+          .eq('user_id', session.user.id)
+          .eq('login_date', loginDate)
+          .single()
+
+        if (!existing) {
+          const { error } = await supabase
+            .from('user_logins')
+            .insert([{ user_id: session.user.id, login_date: loginDate }])
+
+          if (error) {
+            console.error('Error logging login:', error.message)
+          }
+        }
+      }
     })
 
     return () => {

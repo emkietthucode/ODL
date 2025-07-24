@@ -40,6 +40,11 @@ const LearnPage = () => {
           const selectedCountry = localStorage.getItem('selectedCountry')
           router.push(`/learn/${selectedCountry}`)
         }
+      } else {
+        const selectedCountry = localStorage.getItem('selectedCountry')
+        if (selectedCountry) {
+          router.push(`/learn/${selectedCountry}`)
+        }
       }
     }
 

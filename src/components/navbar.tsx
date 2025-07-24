@@ -13,7 +13,7 @@ import { Button } from './ui/button'
 import { signOut } from '@/app/auth/actions'
 import { useTranslations } from 'next-intl'
 import useLanguage from '@/hooks/use-language'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { AiOutlineGlobal } from 'react-icons/ai'
 import { cn } from '@/lib/utils'
 import { FaCheck } from 'react-icons/fa6'
@@ -42,6 +42,13 @@ const prefix =
 const defaultFlag =
   'https://cgtsomijxwpcyqgznjqx.supabase.co/storage/v1/object/public/quoc_ky//Flag_of_the_United_Kingdom_(1-2).svg.png'
 
+const patterns = [
+  /^\/tests\/vietnam\/[^/]+\/[^/]+$/, // /tests/vietnam/[licenseName]/testId
+  /^\/tests\/australia\/[^/]+\/[^/]+\/[^/]+$/, // /tests/australia/[stateName]/[licenseName]/testId
+  /^\/learning-path\/vietnam\/[^/]+\/[^/]+\/[^/]+$/, // /learning-path/vietnam/[licenseName]/[chapterId]/[testId]
+  /^\/learning-path\/australia\/[^/]+\/[^/]+\/[^/]+\/[^/]+$/, // /learning-path/australia/[stateName]/[licenseName]/[chapterId]/[testId]
+]
+
 interface Nation {
   id: string
   locale: string
@@ -62,6 +69,7 @@ const NavBar = () => {
   >(null)
 
   const { user, setUser } = useAuth()
+  const pathname = usePathname()
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -141,6 +149,8 @@ const NavBar = () => {
     localStorage.removeItem('selectedCountry')
     localStorage.removeItem('nation')
     localStorage.removeItem('user')
+
+    router.push('/')
   }
 
   const handleLanguageChange = (language: string) => {
@@ -149,6 +159,10 @@ const NavBar = () => {
   }
 
   const handleNationChange = async (nation: Nation) => {
+    const currentSlug = localStorage.getItem('selectedCountry')
+
+    let currentPath = pathname
+
     setSelectedNation(nation)
 
     localStorage.setItem('nation', JSON.stringify(nation))
@@ -185,7 +199,19 @@ const NavBar = () => {
       setLocale('vn')
     }
 
-    router.refresh()
+    if (currentPath.includes(currentSlug || 'not-found')) {
+      currentPath = currentPath.replace(
+        currentSlug ? currentSlug : 'not found',
+        nation.slug
+      )
+
+      currentPath = currentPath.split(nation.slug)[0] + nation.slug
+
+      router.push(currentPath)
+      router.refresh()
+    } else {
+      router.refresh()
+    }
   }
 
   useEffect(() => {
@@ -240,7 +266,7 @@ const NavBar = () => {
     fetchedNation()
   }, [user, nations])
 
-  console.log(nations)
+  const pathMatch = () => patterns.some((regex) => regex.test(pathname))
 
   return (
     <div className="h-10 bg-custom-light-violet flex justify-center text-purple">
@@ -260,92 +286,93 @@ const NavBar = () => {
             <Link href="/learn" className="hover:opacity-80">
               {t('learningPage')}
             </Link>
-            <Link href="#" className="hover:opacity-80">
+            <Link href="/contact" className="hover:opacity-80">
               {t('contactPage')}
             </Link>
           </nav>
           <nav className="flex gap-9 justify-end">
-            <Menubar>
-              <MenubarMenu>
-                <MenubarTrigger className="p-0 w-8 h-4 cursor-pointer">
-                  <Image
-                    width={40}
-                    height={20}
-                    src={
-                      selectedNation
-                        ? prefix + selectedNation.flag
-                        : defaultFlag
-                    }
-                    alt="flag"
-                  />
-                </MenubarTrigger>
+            {!pathMatch() && (
+              <Menubar>
+                <MenubarMenu>
+                  <MenubarTrigger className="p-0 w-8 h-4 cursor-pointer">
+                    <Image
+                      width={40}
+                      height={20}
+                      src={
+                        selectedNation
+                          ? prefix + selectedNation.flag
+                          : defaultFlag
+                      }
+                      alt="flag"
+                    />
+                  </MenubarTrigger>
 
-                <MenubarContent>
-                  {nations.map((nation, index) =>
-                    nation.regions ? (
-                      <MenubarSub key={index}>
-                        <MenubarSubTrigger>{nation.name}</MenubarSubTrigger>
-                        <MenubarSubContent>
-                          {nation.regions.map((region, regionIndex) => (
-                            <MenubarItem
-                              onClick={
-                                region.slug === 'australia/new-south-wales'
-                                  ? () => handleNationChange(region)
-                                  : () => {}
-                              }
-                              key={'region' + regionIndex}
-                              className={cn(
-                                region.id === selectedNation?.id
-                                  ? 'bg-gray-200'
-                                  : 'bg-auto',
-                                region.slug !== 'australia/new-south-wales' &&
-                                  'opacity-50'
-                              )}
-                            >
-                              {region.name}
-                            </MenubarItem>
-                          ))}
-                        </MenubarSubContent>
-                      </MenubarSub>
-                    ) : (
-                      <MenubarItem
-                        onClick={() => handleNationChange(nation)}
-                        key={index}
-                        className={cn(
-                          nation.id === selectedNation?.id ? 'bg-gray-200' : ''
-                        )}
-                      >
-                        {nation.name}
-                      </MenubarItem>
-                    )
-                  )}
-                </MenubarContent>
-              </MenubarMenu>
-            </Menubar>
+                  <MenubarContent>
+                    {nations.map((nation, index) =>
+                      nation.regions ? (
+                        <MenubarSub key={index}>
+                          <MenubarSubTrigger>{nation.name}</MenubarSubTrigger>
+                          <MenubarSubContent>
+                            {nation.regions.map((region, regionIndex) => (
+                              <MenubarItem
+                                onClick={
+                                  region.slug === 'australia/new-south-wales'
+                                    ? () => handleNationChange(region)
+                                    : () => {}
+                                }
+                                key={'region' + regionIndex}
+                                className={cn(
+                                  region.id === selectedNation?.id
+                                    ? 'bg-gray-200'
+                                    : 'bg-auto',
+                                  region.slug !== 'australia/new-south-wales' &&
+                                    'opacity-50'
+                                )}
+                              >
+                                {region.name}
+                              </MenubarItem>
+                            ))}
+                          </MenubarSubContent>
+                        </MenubarSub>
+                      ) : (
+                        <MenubarItem
+                          onClick={() => handleNationChange(nation)}
+                          key={index}
+                          className={cn(
+                            nation.id === selectedNation?.id
+                              ? 'bg-gray-200'
+                              : ''
+                          )}
+                        >
+                          {nation.name}
+                        </MenubarItem>
+                      )
+                    )}
+                  </MenubarContent>
+                </MenubarMenu>
+              </Menubar>
+            )}
 
             {user ? (
               <div className="flex gap-8">
                 <Popover>
                   <PopoverTrigger asChild>
                     <button className="flex items-center text-purple hover:opacity-80">
-                      <span className="text-[12px] w-20 items-center underline">
-                        Tài khoản
-                      </span>
                       <FaRegCircleUser className="w-6 h-6" />
                     </button>
                   </PopoverTrigger>
                   <PopoverContent align="end" className="w-40">
                     <Button
-                      onClick={handleLogout}
-                      className="w-full bg-transparent hover:bg-[#888] outline-none text-black border-none shadow-none "
-                    >
-                      {t('logout')}
-                    </Button>
-                    <Button
                       onClick={() => router.push('/statistics/general')}
                       className="w-full bg-transparent hover:bg-[#888] outline-none text-black border-none shadow-none "
                     >
                       {t('statistics')}
+                    </Button>
+                    <Button
+                      onClick={() => router.push('/profile')}
+                      className="w-full bg-transparent hover:bg-[#888] outline-none text-black border-none shadow-none "
+                    >
+                      {t('profile')}
                     </Button>
                     {userData?.vai_tro === 'admin' && (
                       <Button
@@ -355,6 +382,13 @@ const NavBar = () => {
                         {t('adminPanel')}
                       </Button>
                     )}
+
+                    <Button
+                      onClick={handleLogout}
+                      className="w-full bg-transparent hover:bg-[#888] outline-none text-black border-none shadow-none "
+                    >
+                      {t('logout')}
+                    </Button>
                   </PopoverContent>
                 </Popover>
               </div>

@@ -40,7 +40,6 @@ interface ChuongExtended extends Chuong {
 
 function LearningPathPage() {
   const { licenseName } = useParams<{ licenseName: string }>()
-  const [learningPathData, setLearningPathData] = useState<LoTrinh | null>(null)
   const [chaptersData, setChaptersData] = useState<ChuongExtended[]>([])
   const [selectedChapter, setSelectedChapter] = useState<ChuongExtended | null>(
     null
@@ -125,8 +124,6 @@ function LearningPathPage() {
       console.log(error)
     }
   }
-
-  console.log('chartData::', chartData)
 
   return (
     <div>

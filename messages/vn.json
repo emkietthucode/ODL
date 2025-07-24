@@ -14,7 +14,8 @@
     "logout": "Đăng xuất",
     "adminPanel": "Trang quản trị",
     "roadMap": "Lộ trình",
-    "statistics": "Thống kê"
+    "statistics": "Thống kê",
+    "profile": "Hồ sơ cá nhân"
   },
   "LoginPage": {
     "login": "Đăng nhập",
@@ -45,7 +46,9 @@
     "Other": "Khác",
     "invalidEmail": "Email không hợp lệ",
     "passwordRequired": "Mật khẩu phải có ít nhất 6 ký tự",
-    "nameRequired": "Tên phải có ít nhất 6 ký tự"
+    "nameRequired": "Tên phải có ít nhất 6 ký tự",
+    "emailExists": "Email đã tồn tại",
+    "internalError": "Có lỗi xảy ra, vui lòng thử lại sau."
   },
   "HomePage": {
     "riderDescription": "Cho phép bạn lái xe máy và xe tay ga. Người mới bắt đầu phải hoàn thành Chương trình Xe máy được Người học chấp thuận (LAMS) trước khi chuyển sang giấy phép lái xe chính thức.",
@@ -90,7 +93,10 @@
     "addressTitle": "Địa chỉ",
     "address": "227 Đường Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh",
     "informationTitle": "Thông tin",
-    "contactTitle": "Liên hệ"
+    "contactTitle": "Liên hệ",
+    "test": "Thi thử",
+    "learn": "Luyện thi",
+    "roadmap": "Lộ trình"
   },
   "ChooseRegionPage": {
     "chooseRegion": "Chọn quốc gia",
