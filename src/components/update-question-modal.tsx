@@ -308,6 +308,7 @@ const UpdateQuestionModal = () => {
                   bg-white
                   p-[50px]
                   focus:outline-none
+                  overflow-scroll
                 "
           >
             <Dialog.Title
