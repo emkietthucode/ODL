@@ -54,8 +54,8 @@ function TestDashboard() {
           bài test
         </h1>
       </div>
-      <div className="flex gap-10 container mx-auto p-8">
-        <div className=" flex flex-col justify-start items-center px-[11px] bg-white w-[192px] h-[735px] rounded-lg drop-shadow-lg">
+      <div className="flex gap-10 container mx-auto w-[98%] pt-8 pl-8">
+        <div className=" flex flex-col justify-start items-center px-[11px] bg-white min-w-64 h-[735px] rounded-lg drop-shadow-lg">
           <div className="mt-10 text-sm font-semibold text-purple">
             DANH SÁCH QUỐC GIA
           </div>
@@ -84,7 +84,7 @@ function TestDashboard() {
           </button>
         </div>
 
-        <div>
+        <div className="w-full">
           <div className="w-full text-end">
             <button
               onClick={insertOnOpen}
