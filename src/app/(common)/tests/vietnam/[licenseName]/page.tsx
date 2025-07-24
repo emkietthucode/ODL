@@ -135,7 +135,8 @@ const TestsLicensePage = () => {
                     bg-custom-normal-light-blue
                     hover:bg-blue-400/80
                     text-center
-                    w-[115px]
+                    w-full
+                    min-w-[115px]
                     h-[49px]`}
                   >
                     {t('exam')} {index + 1}
