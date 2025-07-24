@@ -37,7 +37,11 @@ function Signup() {
 
       router.push('/')
     } catch (error: AuthError | any) {
-      setError(error.message)
+      if (error.message === 'User already registered') {
+        setError(t('emailExists'))
+      } else {
+        setError(t('internalError'))
+      }
     }
 
     setIsLoading(false)

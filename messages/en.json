@@ -55,7 +55,9 @@
     "Other": "Other",
     "invalidEmail": "Invalid email address",
     "passwordRequired": "Password must be at least 6 characters",
-    "nameRequired": "Name must be at least 6 characters"
+    "nameRequired": "Name must be at least 6 characters",
+    "emailExists": "Email already exists",
+    "internalError": "An error occurred, please try again later."
   },
   "HomePage": {
     "riderDescription": "Allows you to ride motorcycles and scooters. Beginners must complete the Learner Approved Motorcycle Scheme (LAMS) before progressing to a full Rider licence.",

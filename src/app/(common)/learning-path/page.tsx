@@ -7,7 +7,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import useAuth from '@/hooks/useAuth'
 import { useEffect } from 'react'
 import supabase from '@/utils/supabase/supabase'
-import CountrySelection from '@/components/select-country'
+import CountrySelection from '@/components/learning-country-selection'
 
 const TestsCategoryPage = () => {
   const t = useTranslations('VietnamTestPage')
@@ -43,6 +43,11 @@ const TestsCategoryPage = () => {
         } else if (localStorage.getItem('selectedCountry')) {
           const selectedCountry = localStorage.getItem('selectedCountry')
           router.push(`learning-path/${selectedCountry}`)
+        }
+      } else {
+        const selectedCountry = localStorage.getItem('selectedCountry')
+        if (selectedCountry) {
+          router.push(`/learning-path/${selectedCountry}`)
         }
       }
     }

@@ -46,7 +46,9 @@
     "Other": "Khác",
     "invalidEmail": "Email không hợp lệ",
     "passwordRequired": "Mật khẩu phải có ít nhất 6 ký tự",
-    "nameRequired": "Tên phải có ít nhất 6 ký tự"
+    "nameRequired": "Tên phải có ít nhất 6 ký tự",
+    "emailExists": "Email đã tồn tại",
+    "internalError": "Có lỗi xảy ra, vui lòng thử lại sau."
   },
   "HomePage": {
     "riderDescription": "Cho phép bạn lái xe máy và xe tay ga. Người mới bắt đầu phải hoàn thành Chương trình Xe máy được Người học chấp thuận (LAMS) trước khi chuyển sang giấy phép lái xe chính thức.",
