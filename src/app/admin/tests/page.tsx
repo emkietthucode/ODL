@@ -19,6 +19,8 @@ const tabsVN = [
   { label: 'C' },
 ]
 
+const tabsAUS = [{ label: 'CAR (C)' }, { label: 'RIDER (R)' }]
+
 function TestDashboard() {
   const [nation, setNation] = useState<string>('vn')
   const [activeTab, setActiveTab] = useState<string>(tabsVN[0].label)
@@ -45,7 +47,7 @@ function TestDashboard() {
     router.push(url)
 
     fetchData()
-  }, [router, updateRefreshTrigger, insertRefreshTrigger, activeTab])
+  }, [router, updateRefreshTrigger, insertRefreshTrigger, activeTab, nation])
 
   return (
     <div>
@@ -63,6 +65,7 @@ function TestDashboard() {
           <button
             onClick={() => {
               setNation('vn')
+              setActiveTab(tabsVN[0].label) // Reset tab for VN
             }}
             className={cn(
               `my-3 font-semibold text-sm rounded-lg text-white bg-purple hover:bg-purple/90 flex h-[43px] items-center w-[150px] px-2`,
@@ -74,6 +77,7 @@ function TestDashboard() {
           <button
             onClick={() => {
               setNation('au')
+              setActiveTab(tabsAUS[0].label) // Reset tab for AUS
             }}
             className={cn(
               `my-3 font-semibold text-sm rounded-lg text-white bg-purple hover:bg-purple/90 flex h-[43px] items-center w-[150px] pl-2`,
@@ -94,10 +98,25 @@ function TestDashboard() {
             </button>
           </div>
 
-          {nation === 'vn' && (
+          {nation === 'vn' ? (
             <div className="flex flex-col text-sm rounded-xl flex-1 shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
               <div className="pl-[50px] pt-5 flex gap-5 justify-start items-center bg-white rounded-md border-b border-zinc-400 border-opacity-60">
                 {tabsVN.map((tab) => (
+                  <div
+                    key={tab.label}
+                    onClick={() => setActiveTab(tab.label)}
+                    className="cursor-pointer self-center"
+                  >
+                    <Tab label={tab.label} isActive={tab.label === activeTab} />
+                  </div>
+                ))}
+              </div>
+              <ChapterTestTable data={tests} />
+            </div>
+          ) : (
+            <div className="flex flex-col text-sm rounded-xl flex-1 shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+              <div className="pl-[50px] pt-5 flex gap-5 justify-start items-center bg-white rounded-md border-b border-zinc-400 border-opacity-60">
+                {tabsAUS.map((tab) => (
                   <div
                     key={tab.label}
                     onClick={() => setActiveTab(tab.label)}
