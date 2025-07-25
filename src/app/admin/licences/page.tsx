@@ -152,7 +152,7 @@ export default function LicenceDashboard() {
               <HangBangTable data={getFilterData()} />
             </div>
           ) : (
-            <div className="flex flex-col text-sm  rounded-xl w-full shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
+            <div className="flex flex-col text-sm  rounded-xl w-full h-[670px] shadow-[0px_4px_4px_rgba(0,0,0,0.25)]">
               <div className="pl-[50px] pt-5 flex gap-5 justify-start items-center w-full bg-white rounded-md border-b border-zinc-400 border-opacity-60">
                 <div className="cursor-pointer self-center">
                   <Tab label="Learner" isActive />
@@ -161,7 +161,7 @@ export default function LicenceDashboard() {
               <HangBangTable
                 data={hangBang.filter(
                   (row) =>
-                    row.ma_khu_vuc === process.env.NEXT_PUBLIC_AUSTRALIA_UUID
+                    row.ma_khu_vuc !== process.env.NEXT_PUBLIC_VIETNAM_UUID
                 )}
               />
             </div>
