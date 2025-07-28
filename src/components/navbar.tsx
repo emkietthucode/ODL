@@ -49,6 +49,14 @@ const patterns = [
   /^\/learning-path\/australia\/[^/]+\/[^/]+\/[^/]+\/[^/]+$/, // /learning-path/australia/[stateName]/[licenseName]/[chapterId]/[testId]
 ]
 
+const vietnamNation: Nation = {
+  id: "d078c695-a8b8-4bab-988f-f5bb2094b0e4",
+  flag: "quoc-ky-d078c695-a8b8-4bab-988f-f5bb2094b0e4",
+  name: "Việt Nam",
+  slug: "vietnam",
+  locale: 'vn'
+}
+
 interface Nation {
   id: string
   locale: string
@@ -93,6 +101,7 @@ const NavBar = () => {
 
   useEffect(() => {
     const fetchNations = async () => {
+      console.log("int")
       const { data, error } = await supabase.rpc('search_khu_vuc_proc', {
         search_text: '',
       })
@@ -135,6 +144,8 @@ const NavBar = () => {
           regions: regions.length > 0 ? regions : undefined,
         }
       })
+
+      console.log(nationsWithRegions)
 
       setNations(nationsWithRegions)
     }
@@ -230,7 +241,7 @@ const NavBar = () => {
         } else {
           const defaultNation = nations
             ? nations.find((n) => n.slug === 'vietnam')
-            : null
+            : vietnamNation
           console.log(defaultNation)
 
           localStorage.setItem('nation', JSON.stringify(defaultNation))
@@ -251,7 +262,7 @@ const NavBar = () => {
         } else {
           const defaultNation = nations
             ? nations.find((n) => n.slug === 'vietnam')
-            : null
+            : vietnamNation
           console.log(defaultNation)
           localStorage.setItem('nation', JSON.stringify(defaultNation))
           setSelectedNation(defaultNation)
