@@ -11,7 +11,7 @@ import { LuaChon } from '@/types/types'
 import { QuestionDTO } from '@/types/dto/types'
 import CriticalStar from './critical-star'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
-import { IoClose } from 'react-icons/io5'
+import { ArrowLeft } from 'lucide-react'
 import { useRouter, useParams } from 'next/navigation'
 
 const montserratAlternates = Montserrat_Alternates({
@@ -206,23 +206,23 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
   ]) // Add dependencies
 
   const handleClose = () => {
-    router.push(`/tests/vietnam/${params.licenseName}`)
+    router.back()
   }
 
   return (
     <main className="bg-white mx-auto max-h-full my-[32px] h-full relative">
-      {/* Close button */}
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={handleClose}
-        className="absolute top-[2px] left-[180px] z-10 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-full"
-      >
-        <IoClose className="h-8 w-8" />
-      </Button>
       <div className="flex flex-col justify-around items-center h-full">
         <div className="flex flex-col justify-start gap-5  h-full w-[75%]">
-          <div className="w-full h-[116px] bg-light-purple flex items-center">
+          <div className="w-full h-[116px] bg-light-purple flex items-center relative">
+            {/* Close button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleClose}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 text-purple hover:text-purple/80 hover:bg-purple/10 rounded-full"
+            >
+              <ArrowLeft className="h-6 w-6" />
+            </Button>
             <div className="flex justify-between items-center w-full p-10">
               <div className="flex flex-col justify-center items-center w-[23%]">
                 <div className="font-bold text-xl text-custom-normal-violet">
