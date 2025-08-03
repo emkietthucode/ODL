@@ -30,7 +30,7 @@ import { KhuVuc } from '@/types/types'
 const roles = [
   {
     value: 'admin',
-    label: 'Quản vị viên',
+    label: 'Quản trị viên',
   },
   {
     value: 'user',
@@ -117,6 +117,8 @@ const UpdateUserModal = () => {
         })
         .eq('id', nguoiDung.id)
 
+      console.log(values)
+
       if (error) {
         console.log(error)
         return toast.error('Cập nhật người dùng không thành công.')
@@ -153,7 +155,7 @@ const UpdateUserModal = () => {
           id="gender"
           disabled={isLoading}
           error={!!errors.gender}
-          {...register('gender', { required: false })}
+          {...register('gender', { required: true })}
           placeholder="Giới tính"
         />
         <div className="flex gap-5">
