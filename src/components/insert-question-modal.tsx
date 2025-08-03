@@ -472,15 +472,16 @@ const InsertQuestionModal = () => {
                             </div>
 
                             <IoMdClose
-                              className="
-                          text-neutral-400
-                          hover:text-black
-                            items-center
-                            justify-center
-                            rounded-full
-                            focus:outline-none
-                            "
-                              onClick={() => removeAnswer(index)}
+                              className={cn(
+                                'items-center justify-center rounded-full focus:outline-none',
+                                question.lua_chon.length === 1
+                                  ? 'text-gray-300 cursor-not-allowed'
+                                  : 'text-neutral-400 hover:text-black cursor-pointer'
+                              )}
+                              onClick={() =>
+                                question.lua_chon.length > 1 &&
+                                removeAnswer(index)
+                              }
                             />
                           </div>
                         </div>

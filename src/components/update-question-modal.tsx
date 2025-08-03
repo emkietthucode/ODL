@@ -97,9 +97,7 @@ const UpdateQuestionModal = () => {
     }
     if (data) {
       setQuestion({ lua_chon: data })
-      setIsShuffleAnswer(
-        question.lua_chon.some((choice) => choice.so_thu_tu === 0)
-      )
+      setIsShuffleAnswer(data.some((choice) => choice.so_thu_tu === 0))
     }
   }
 
@@ -503,6 +501,7 @@ const UpdateQuestionModal = () => {
                   </div>
                   <div className="flex flex-col gap-5">
                     <RadioGroup
+                      key={question.lua_chon.length}
                       value={question.lua_chon
                         .findIndex((a) => a.la_lua_chon_dung)
                         .toString()}
@@ -538,15 +537,16 @@ const UpdateQuestionModal = () => {
                             </div>
 
                             <IoMdClose
-                              className="
-                          text-neutral-400
-                          hover:text-black
-                            items-center
-                            justify-center
-                            rounded-full
-                            focus:outline-none
-                            "
-                              onClick={() => removeAnswer(index)}
+                              className={cn(
+                                'items-center justify-center rounded-full focus:outline-none',
+                                question.lua_chon.length === 1
+                                  ? 'text-neutral-300 cursor-not-allowed'
+                                  : 'text-neutral-400 hover:text-black cursor-pointer'
+                              )}
+                              onClick={() =>
+                                question.lua_chon.length > 1 &&
+                                removeAnswer(index)
+                              }
                             />
                           </div>
                         </div>
