@@ -152,6 +152,23 @@ const UpdateQuestionModal = () => {
         return toast.error('Cần ít nhất một đáp án đúng')
       }
 
+      // Check for empty answer content
+      const emptyAnswers = question.lua_chon.filter(
+        (choice) => !choice.noi_dung_lua_chon.trim()
+      )
+      if (emptyAnswers.length > 0) {
+        return toast.error('Không được để trống nội dung đáp án')
+      }
+
+      // Check for duplicate answers
+      const answerContents = question.lua_chon.map((choice) =>
+        choice.noi_dung_lua_chon.trim().toLowerCase()
+      )
+      const uniqueAnswers = new Set(answerContents)
+      if (uniqueAnswers.size !== answerContents.length) {
+        return toast.error('Không được có đáp án trùng lặp')
+      }
+
       if (values.hinh_anh?.[0]) {
         const { error: imageError } = await supabase.storage
           .from('hinh_anh_cau_hoi')
