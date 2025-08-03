@@ -346,7 +346,7 @@ const ResultDetailPage: React.FC<ResultDetailPageProps> = ({
               {questions[selectedQuestionIndex]?.question?.hinh_anh && (
                 <div className="mx-auto mt-4">
                   {imageLoadingStates[selectedQuestionIndex] && (
-                    <div className="max-w-[370px] mx-auto h-48 bg-gray-200 animate-pulse rounded flex items-center justify-center">
+                    <div className="w-[370px] mx-auto h-48 bg-gray-200 animate-pulse rounded flex items-center justify-center">
                       <div className="text-gray-500">Loading...</div>
                     </div>
                   )}
