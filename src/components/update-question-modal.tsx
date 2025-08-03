@@ -395,21 +395,32 @@ const UpdateQuestionModal = () => {
                             aria-expanded={openComboChapter}
                             className={cn('w-full justify-between')}
                           >
-                            {chapterUUID
-                              ? chapters?.find(
-                                  (chapter) => chapter.id === chapterUUID
-                                )
-                                ? `${
-                                    chapters.find(
-                                      (chapter) => chapter.id === chapterUUID
-                                    )?.ten_chuong
-                                  } - ${
-                                    chapters.find(
-                                      (chapter) => chapter.id === chapterUUID
-                                    )?.mo_ta_chuong
-                                  }`
-                                : 'Chương không tồn tại'
-                              : 'Chọn chương'}
+                            {chapterUUID ? (
+                              chapters?.find(
+                                (chapter) => chapter.id === chapterUUID
+                              ) ? (
+                                <div className="flex-1 min-w-0 text-left">
+                                  <div className="truncate">
+                                    {
+                                      chapters.find(
+                                        (chapter) => chapter.id === chapterUUID
+                                      )?.ten_chuong
+                                    }
+                                  </div>
+                                  <div className="text-xs text-muted-foreground truncate">
+                                    {
+                                      chapters.find(
+                                        (chapter) => chapter.id === chapterUUID
+                                      )?.mo_ta_chuong
+                                    }
+                                  </div>
+                                </div>
+                              ) : (
+                                'Chương không tồn tại'
+                              )
+                            ) : (
+                              'Chọn chương'
+                            )}
                             <ChevronsUpDown className="opacity-50" />
                           </Button>
                         </PopoverTrigger>
@@ -435,11 +446,19 @@ const UpdateQuestionModal = () => {
                                       )
                                       setOpenComboChapter(false)
                                     }}
+                                    className="flex items-center justify-between"
                                   >
-                                    {`${chapter.ten_chuong} - ${chapter.mo_ta_chuong}`}
+                                    <div className="flex-1 min-w-0">
+                                      <div className="truncate">
+                                        {chapter.ten_chuong}
+                                      </div>
+                                      <div className="text-xs text-muted-foreground truncate">
+                                        {chapter.mo_ta_chuong}
+                                      </div>
+                                    </div>
                                     <Check
                                       className={cn(
-                                        'ml-auto',
+                                        'ml-2 flex-shrink-0',
                                         chapterUUID === chapter.id
                                           ? 'opacity-100'
                                           : 'opacity-0'
