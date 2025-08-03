@@ -28,14 +28,23 @@ const DeleteQuestionModal = () => {
 
   const handleDelete = async (id: string) => {
     try {
+      // Delete related lua_chon records first
+      const { error: luaChonError } = await supabase
+        .from('lua_chon')
+        .delete()
+        .eq('ma_cau_hoi', id)
+
+      if (luaChonError) {
+        console.log(luaChonError)
+        return toast.error('Xóa lựa chọn không thành công.')
+      }
+
+      // Delete image from storage
       const { error: storageError } = await supabase.storage
         .from('hinh_anh_cau_hoi')
         .remove([`${id}`])
 
-      if (storageError) {
-        return toast.error('Xóa câu hỏi không thành công.')
-      }
-
+      // Delete the question
       const { error } = await supabase
         .from('cau_hoi')
         .delete()
