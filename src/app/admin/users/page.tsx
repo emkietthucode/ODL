@@ -60,13 +60,7 @@ export default function UserDashboard() {
 
     if (searchText !== '') {
       query = query.or(
-        `
-        email.ilike.%${searchText}%,
-        ho_ten.ilike.%${searchText}%,
-        vai_tro.ilike.%${searchText}%,
-        gioi_tinh.ilike.%${searchText}%,
-        id::text.ilike.%${searchText}%
-      `
+        `email.ilike.%${searchText}%,ho_ten.ilike.%${searchText}%,vai_tro.ilike.%${searchText}%,gioi_tinh.ilike.%${searchText}%`
       )
     }
 
