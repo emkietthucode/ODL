@@ -15,7 +15,7 @@ import { useTranslations } from 'next-intl'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { Button } from './ui/button'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react'
 
 const convertLearningQuestionsToQuestionDTO = (
   learningQuestions: LearningQuestionDTO[]
@@ -365,9 +365,20 @@ const TestComponent = () => {
     }
   }, [selectedQuestion, questions])
 
+  const handleGoBack = () => {
+    router.back()
+  }
+
   return (
     <div className="w-[960px] mx-auto">
-      <div className="bg-[#A08CE6] h-9 leading-9 text-center text-[18] font-bold text-white">
+      <div className="bg-[#A08CE6] h-9 leading-9 text-center text-[18] font-bold text-white relative">
+        <button
+          onClick={handleGoBack}
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 transition-colors"
+          disabled={!isActive}
+        >
+          <ArrowLeft size={20} />
+        </button>
         {testInfo?.ten_de_thi || ''}
       </div>
       <div className="my-2 h-80 gap-[10px] flex flex-wrap">
