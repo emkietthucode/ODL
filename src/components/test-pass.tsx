@@ -5,6 +5,8 @@ import F721TestPass from '../../public/images/f7.2.1-pass.svg'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
+import { IoClose } from 'react-icons/io5'
+
 const TestPass = ({
   totalQuestion = 0,
   requiredCorrectAnswer = 0,
@@ -13,9 +15,25 @@ const TestPass = ({
   const router = useRouter()
   const pathname = usePathname()
   const t = useTranslations('ResultPage')
+
+  const handleClose = () => {
+    // Remove the last two segments (/testId/resultId) to go back to /tests/{country}/{licence}
+    const pathSegments = pathname.split('/')
+    const parentPath = pathSegments.slice(0, -2).join('/')
+    router.push(parentPath)
+  }
+
   return (
     <div className="flex flex-col gap-10 mt-[32px] w-[60%] justify-center items-center">
       <div className="flex rounded-[64px] bg-custom-light-violet w-[800px] h-[350px] relative">
+        {/* Close button */}
+        <button
+          onClick={handleClose}
+          className="absolute top-4 left-4 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+        >
+          <IoClose className="text-custom-green text-2xl" />
+        </button>
+
         <div className="w-[50%] flex flex-col items-center mt-[32px]">
           <IoCheckmarkCircle className="text-custom-green text-4xl ml-[120px]" />
           <div className="text-custom-green font-extrabold text-5xl uppercase  ">
