@@ -60,13 +60,7 @@ export default function UserDashboard() {
 
     if (searchText !== '') {
       query = query.or(
-        `
-        email.ilike.%${searchText}%,
-        ho_ten.ilike.%${searchText}%,
-        vai_tro.ilike.%${searchText}%,
-        gioi_tinh.ilike.%${searchText}%,
-        id::text.ilike.%${searchText}%
-      `
+        `email.ilike.%${searchText}%,ho_ten.ilike.%${searchText}%,vai_tro.ilike.%${searchText}%,gioi_tinh.ilike.%${searchText}%`
       )
     }
 
@@ -211,10 +205,6 @@ export default function UserDashboard() {
                             <Pencil className="h-4 w-4 mr-2" />
                             Chỉnh sửa
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => deleteOnOpen(item)}>
-                            <Trash2 className="h-4 w-4 mr-2 text-red-600" />
-                            Xóa
-                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -301,10 +291,6 @@ export default function UserDashboard() {
                           <DropdownMenuItem onClick={() => updateOnOpen(item)}>
                             <Pencil className="h-4 w-4 mr-2" />
                             Chỉnh sửa
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => deleteOnOpen(item)}>
-                            <Trash2 className="h-4 w-4 mr-2 text-red-600" />
-                            Xóa
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>

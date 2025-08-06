@@ -106,6 +106,23 @@ const InsertQuestionModal = () => {
         return toast.error('Cần ít nhất một đáp án đúng')
       }
 
+      // Check for empty answer content
+      const emptyAnswers = question.lua_chon.filter(
+        (choice) => !choice.noi_dung_lua_chon.trim()
+      )
+      if (emptyAnswers.length > 0) {
+        return toast.error('Không được để trống nội dung đáp án')
+      }
+
+      // Check for duplicate answers
+      const answerContents = question.lua_chon.map((choice) =>
+        choice.noi_dung_lua_chon.trim().toLowerCase()
+      )
+      const uniqueAnswers = new Set(answerContents)
+      if (uniqueAnswers.size !== answerContents.length) {
+        return toast.error('Không được có đáp án trùng lặp')
+      }
+
       const uniqueID = uuidv4()
 
       if (values.hinh_anh?.[0]) {
@@ -242,6 +259,7 @@ const InsertQuestionModal = () => {
                   bg-white
                   p-[50px]
                   focus:outline-none
+                  overflow-scroll
                 "
           >
             <Dialog.Title
@@ -313,21 +331,32 @@ const InsertQuestionModal = () => {
                             aria-expanded={openComboChapter}
                             className={cn('w-full justify-between')}
                           >
-                            {chapterUUID
-                              ? chapters?.find(
-                                  (chapter) => chapter.id === chapterUUID
-                                )
-                                ? `${
-                                    chapters.find(
-                                      (chapter) => chapter.id === chapterUUID
-                                    )?.ten_chuong
-                                  } - ${
-                                    chapters.find(
-                                      (chapter) => chapter.id === chapterUUID
-                                    )?.mo_ta_chuong
-                                  }`
-                                : 'Chương không tồn tại'
-                              : 'Chọn chương'}
+                            {chapterUUID ? (
+                              chapters?.find(
+                                (chapter) => chapter.id === chapterUUID
+                              ) ? (
+                                <div className="flex-1 min-w-0 text-left">
+                                  <div className="truncate">
+                                    {
+                                      chapters.find(
+                                        (chapter) => chapter.id === chapterUUID
+                                      )?.ten_chuong
+                                    }
+                                  </div>
+                                  <div className="text-xs text-muted-foreground truncate">
+                                    {
+                                      chapters.find(
+                                        (chapter) => chapter.id === chapterUUID
+                                      )?.mo_ta_chuong
+                                    }
+                                  </div>
+                                </div>
+                              ) : (
+                                'Chương không tồn tại'
+                              )
+                            ) : (
+                              'Chọn chương'
+                            )}
                             <ChevronsUpDown className="opacity-50" />
                           </Button>
                         </PopoverTrigger>
@@ -353,11 +382,19 @@ const InsertQuestionModal = () => {
                                       )
                                       setOpenComboChapter(false)
                                     }}
+                                    className="flex items-center justify-between"
                                   >
-                                    {`${chapter.ten_chuong} - ${chapter.mo_ta_chuong}`}
+                                    <div className="flex-1 min-w-0">
+                                      <div className="truncate">
+                                        {chapter.ten_chuong}
+                                      </div>
+                                      <div className="text-xs text-muted-foreground truncate">
+                                        {chapter.mo_ta_chuong}
+                                      </div>
+                                    </div>
                                     <Check
                                       className={cn(
-                                        'ml-auto',
+                                        'ml-2 flex-shrink-0',
                                         chapterUUID === chapter.id
                                           ? 'opacity-100'
                                           : 'opacity-0'
@@ -471,15 +508,16 @@ const InsertQuestionModal = () => {
                             </div>
 
                             <IoMdClose
-                              className="
-                          text-neutral-400
-                          hover:text-black
-                            items-center
-                            justify-center
-                            rounded-full
-                            focus:outline-none
-                            "
-                              onClick={() => removeAnswer(index)}
+                              className={cn(
+                                'items-center justify-center rounded-full focus:outline-none',
+                                question.lua_chon.length === 1
+                                  ? 'text-gray-300 cursor-not-allowed'
+                                  : 'text-neutral-400 hover:text-black cursor-pointer'
+                              )}
+                              onClick={() =>
+                                question.lua_chon.length > 1 &&
+                                removeAnswer(index)
+                              }
                             />
                           </div>
                         </div>

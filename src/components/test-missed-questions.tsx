@@ -4,7 +4,7 @@ import QuestionCarousel from '@/components/question-carousel'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useRef as useReactRef } from 'react'
 import { LearningQuestionDTO, QuestionDTO } from '@/types/dto/types'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -72,6 +72,7 @@ const TestMissedQuestions = () => {
     Record<number, boolean>
   >({})
   const [timeUp, setTimeUp] = useState<boolean>(false)
+  const prevImageUrlRef = useReactRef<string | null>(null)
 
   const questionsPerPage = 25 // Number of questions to show per page
   const totalPages = Math.ceil(questions.length / questionsPerPage)
@@ -323,11 +324,13 @@ const TestMissedQuestions = () => {
     setImageLoadingStates((prev) => ({ ...prev, [questionIndex]: false }))
   }
 
-  // Set loading state when question changes
+  // Set loading state when question changes, but only if image URL changes
   useEffect(() => {
-    if (questions[selectedQuestion]?.hinh_anh) {
+    const currentImageUrl = questions[selectedQuestion]?.hinh_anh || null
+    if (currentImageUrl && prevImageUrlRef.current !== currentImageUrl) {
       setImageLoadingStates((prev) => ({ ...prev, [selectedQuestion]: true }))
     }
+    prevImageUrlRef.current = currentImageUrl
   }, [selectedQuestion, questions])
 
   // Timer effect

@@ -55,11 +55,6 @@ const SideBar = () => {
             href: '/admin/questions/chapters',
             active: pathname === '/admin/questions/chapters',
           },
-          {
-            label: 'Lộ trình',
-            href: '/admin/questions/roadmap',
-            active: pathname === '/admin/questions/roadmap',
-          },
         ],
       },
       {

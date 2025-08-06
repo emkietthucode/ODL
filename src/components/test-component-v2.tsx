@@ -4,7 +4,7 @@ import QuestionCarousel from '@/components/question-carousel'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useRef as useReactRef } from 'react'
 import { LearningQuestionDTO, QuestionDTO } from '@/types/dto/types'
 import { useParams } from 'next/navigation'
 import supabase from '@/utils/supabase/supabase'
@@ -15,7 +15,7 @@ import { useTranslations } from 'next-intl'
 import useConfirmSubmitTestModal from '@/hooks/useConfirmSubmitTestModal'
 import { Button } from './ui/button'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-react'
 
 const convertLearningQuestionsToQuestionDTO = (
   learningQuestions: LearningQuestionDTO[]
@@ -75,6 +75,7 @@ const TestComponent = () => {
   const [imageLoadingStates, setImageLoadingStates] = useState<
     Record<number, boolean>
   >({})
+  const prevImageUrlRef = useReactRef<string | null>(null)
 
   const questionsPerPage = 25 // Number of questions to show per page
   const totalPages = Math.ceil(questions.length / questionsPerPage)
@@ -296,11 +297,13 @@ const TestComponent = () => {
     setImageLoadingStates((prev) => ({ ...prev, [questionIndex]: false }))
   }
 
-  // Set loading state when question changes
+  // Set loading state when question changes, but only if image URL changes
   useEffect(() => {
-    if (questions[selectedQuestion]?.hinh_anh) {
+    const currentImageUrl = questions[selectedQuestion]?.hinh_anh || null
+    if (currentImageUrl && prevImageUrlRef.current !== currentImageUrl) {
       setImageLoadingStates((prev) => ({ ...prev, [selectedQuestion]: true }))
     }
+    prevImageUrlRef.current = currentImageUrl
   }, [selectedQuestion, questions])
 
   // Timer effect
@@ -362,9 +365,20 @@ const TestComponent = () => {
     }
   }, [selectedQuestion, questions])
 
+  const handleGoBack = () => {
+    router.back()
+  }
+
   return (
     <div className="w-[960px] mx-auto">
-      <div className="bg-[#A08CE6] h-9 leading-9 text-center text-[18] font-bold text-white">
+      <div className="bg-[#A08CE6] h-9 leading-9 text-center text-[18] font-bold text-white relative">
+        <button
+          onClick={handleGoBack}
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-white hover:text-gray-200 transition-colors"
+          disabled={!isActive}
+        >
+          <ArrowLeft size={20} />
+        </button>
         {testInfo?.ten_de_thi || ''}
       </div>
       <div className="my-2 h-80 gap-[10px] flex flex-wrap">

@@ -192,7 +192,7 @@ function ContactPage() {
               type="submit"
               className="w-[134px] h-[54px] bg-[#7869AD] text-white rounded-[5px] font-bold text-xl"
             >
-              Send
+              {t('send')}
             </button>
           </div>
         </form>

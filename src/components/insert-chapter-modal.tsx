@@ -250,6 +250,7 @@ const InsertChapterModal = () => {
                   bg-white
                   p-[50px]
                   focus:outline-none
+                  overflow-scroll
                 "
           >
             <Dialog.Title
@@ -370,7 +371,7 @@ const InsertChapterModal = () => {
                         <PopoverContent className="xl:w-[750px] md:w-[650px] sm:w-[450px] p-0 ">
                           <Command>
                             <CommandInput
-                              placeholder="Tìm chương.."
+                              placeholder="Tìm câu hỏi"
                               className="h-9"
                             />
                             <CommandList>

@@ -121,7 +121,7 @@ const TestsLicensePage = () => {
             <div className="text-purple text-2xl font-medium uppercase">
               {t('providedTitle')}
             </div>
-            <div className="mb-[128px] mt-[16px] w-[60%] flex flex-wrap gap-10 justify-center">
+            <div className="mb-[128px] mt-[16px] w-[60%] flex flex-wrap gap-10 items-center justify-center">
               {tests.map((test, index) => (
                 <Link key={index} href={`${pathname}/${test.id}`}>
                   <Button
@@ -135,7 +135,8 @@ const TestsLicensePage = () => {
                     bg-custom-normal-light-blue
                     hover:bg-blue-400/80
                     text-center
-                    w-[115px]
+                    w-full
+                    min-w-[125px]
                     h-[49px]`}
                   >
                     {t('exam')} {index + 1}
