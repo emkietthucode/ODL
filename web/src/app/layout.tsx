@@ -1,0 +1,40 @@
+import type { Metadata } from 'next'
+import { Montserrat } from 'next/font/google'
+import './globals.css'
+import { AuthProvider } from '@/contexts/AuthContext'
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
+import { LanguageProvider } from '@/contexts/LanguageContext'
+import { Toaster } from 'react-hot-toast'
+
+const montserrat = Montserrat({
+  subsets: ['vietnamese'],
+})
+
+export const metadata: Metadata = {
+  title: 'Online Driving License',
+  description: 'A platform for learning and practicing driving license tests',
+}
+
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  const locale = await getLocale()
+
+  const messages = await getMessages()
+
+  return (
+    <html lang={locale}>
+      <body className={`${montserrat.className} antialiased`}>
+        <LanguageProvider>
+          <Toaster position="top-center" reverseOrder={false} />
+          <NextIntlClientProvider messages={messages}>
+            <AuthProvider>{children}</AuthProvider>
+          </NextIntlClientProvider>
+        </LanguageProvider>
+      </body>
+    </html>
+  )
+}
